@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/device/device_utility.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
@@ -26,14 +27,17 @@ class LoginScreen extends StatelessWidget {
           child: SafeArea(
             child: Center(
               child: Container(
-                height: screenHeight * 0.4,
-                width: screenWidth * 0.9,
+                height: Sizer.hp(328),
+                width: Sizer.wp(360),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBackground,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizer.wp(24),
+                    // vertical: Sizer.hp(48),
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,35 +47,16 @@ class LoginScreen extends StatelessWidget {
                         style: AppTextStyle.textlarge(), // ✅ Updated style
                       ),
 
-                      SizedBox(height: screenHeight * 0.02),
+                      SizedBox(height: Sizer.hp(8)),
                       Text(
                         AppText.loginToProfile1,
                         style: AppTextStyle.regular().copyWith(
                           color: AppColors.textPrimary, // ✅ Updated color
-
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.05,
-                    ), // 5% of screen height for spacing
-                    ElevatedButton(
-                      onPressed: () {
-                        // context.goNamed(RouteNames.verifyMethod);
-                        context.goNamed(RouteNames.home);
-                        // Navigate to the phone login screen
-                        // Get.toNamed(AppRoute.getChooseAnotherWay());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.color1, // Button color
-                        minimumSize: Size(
-                          double.infinity,
-                          screenHeight * 0.065,
-                        ), // Full width with dynamic height
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.05),
+                      SizedBox(
+                        height: Sizer.hp(24), // ✅ Updated spacing
+                      ), // 5% of screen height for spacing
                       ElevatedButton(
                         onPressed: () {
                           context.goNamed(RouteNames.verifyMethod);
@@ -89,7 +74,10 @@ class LoginScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.phone_android, color: Colors.white),
+                            const Icon(
+                              Icons.phone_android,
+                              color: Colors.white,
+                            ),
                             const SizedBox(width: 10),
                             Text(
                               AppText.loginphone,
@@ -101,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.01),
+                      SizedBox(height: Sizer.hp(16)), // ✅ Updated spacing
                       ElevatedButton(
                         onPressed: () {
                           context.goNamed(RouteNames.loginwithemail);
@@ -123,10 +111,13 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(width: 10),
                             Text(
                               AppText.loginemail,
-                              style: AppTextStyle.baseTextStyle(
-                                fontSize: screenWidth * 0.04,
-                                fontWeight: FontWeight.w500,
-                              ).copyWith(color: AppColors.textSecondary), // ✅ Styled text
+                              style:
+                                  AppTextStyle.baseTextStyle(
+                                    fontSize: screenWidth * 0.04,
+                                    fontWeight: FontWeight.w500,
+                                  ).copyWith(
+                                    color: AppColors.textSecondary,
+                                  ), // ✅ Styled text
                             ),
                           ],
                         ),
