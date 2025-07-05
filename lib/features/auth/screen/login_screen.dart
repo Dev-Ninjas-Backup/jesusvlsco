@@ -42,11 +42,33 @@ class LoginScreen extends StatelessWidget {
                         AppText.welcome,
                         style: AppTextStyle.textlarge(), // ✅ Updated style
                       ),
+
                       SizedBox(height: screenHeight * 0.02),
                       Text(
                         AppText.loginToProfile1,
                         style: AppTextStyle.regular().copyWith(
                           color: AppColors.textPrimary, // ✅ Updated color
+
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    ), // 5% of screen height for spacing
+                    ElevatedButton(
+                      onPressed: () {
+                        // context.goNamed(RouteNames.verifyMethod);
+                        context.goNamed(RouteNames.home);
+                        // Navigate to the phone login screen
+                        // Get.toNamed(AppRoute.getChooseAnotherWay());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.color1, // Button color
+                        minimumSize: Size(
+                          double.infinity,
+                          screenHeight * 0.065,
+                        ), // Full width with dynamic height
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.05),
