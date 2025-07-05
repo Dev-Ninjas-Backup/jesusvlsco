@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/controllers/app_controller.dart';
+import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
@@ -16,5 +17,7 @@ class ControllerBinder extends Bindings {
     // You can add more controllers here as needed
     // Get.lazyPut<HomeController>(() => HomeController());
     // Get.lazyPut<SettingsController>(() => SettingsController());
+
+    Get.put(LoginController());
   }
 }

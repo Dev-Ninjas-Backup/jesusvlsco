@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 
 /// Authentication guard for protecting routes
 class AuthGuard {
@@ -9,7 +11,9 @@ class AuthGuard {
   static bool get _isAuthenticated {
     // TODO: Replace with actual authentication check
     // Example: return AuthService.instance.isLoggedIn;
-    return true; // For demo purposes
+    bool isAuthenticated = Get.find<LoginController>().isLoading;
+    // For demo purposes
+    return isAuthenticated;
   }
 
   /// Mock user onboarding state

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jesusvlsco/features/auth/screen/login_screen.dart';
 
 import '../../features/splasho_screen/screen/splasho_screen.dart';
 import '../config/route_constants.dart';
@@ -25,12 +26,19 @@ class AuthRoutes {
     GoRoute(
       path: RoutePaths.login,
       name: RouteNames.login,
-      pageBuilder: (context, state) => CustomTransitionPage<void>(
-        key: state.pageKey,
-        child: const LoginScreen(),
-        transitionsBuilder: app_router.RouterConfig.fadeTransition,
-      ),
+      builder: (context, state) {
+        return const LoginScreen();
+      },
     ),
+    // GoRoute(
+    //   path: RoutePaths.login,
+    //   name: RouteNames.login,
+    //   pageBuilder: (context, state) => CustomTransitionPage<void>(
+    //     key: state.pageKey,
+    //     child: const LoginScreen(),
+    //     transitionsBuilder: app_router.RouterConfig.fadeTransition,
+    //   ),
+    // ),
 
     // Register screen (placeholder)
     GoRoute(
@@ -60,34 +68,34 @@ class AuthRoutes {
 }
 
 /// Login Screen Widget
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+// class LoginScreen extends StatelessWidget {
+//   const LoginScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        automaticallyImplyLeading: false,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.login, size: 64),
-            SizedBox(height: 16),
-            Text(
-              'Login Screen',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text('Implement your login UI here'),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Login'),
+//         automaticallyImplyLeading: false,
+//       ),
+//       body: const Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(Icons.login, size: 64),
+//             SizedBox(height: 16),
+//             Text(
+//               'Login Screen',
+//               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text('Implement your login UI here'),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 /// Register Screen Widget (Placeholder)
 class RegisterScreen extends StatelessWidget {
