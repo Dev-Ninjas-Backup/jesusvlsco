@@ -1,7 +1,8 @@
-
 // Bottom Navigation Scaffold
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 
 class BottomNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -10,6 +11,7 @@ class BottomNavigationScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<BottomNavigationScaffoldController>();
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
@@ -18,11 +20,10 @@ class BottomNavigationScaffold extends StatelessWidget {
         onTap: (index) => _onTap(context, index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Chat'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Users'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Schedule'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Projects'),
         ],
       ),
     );

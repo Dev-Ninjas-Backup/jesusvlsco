@@ -9,19 +9,19 @@ import '../config/route_constants.dart';
 ///
 /// This module handles all routes related to the home section,
 /// including the main home page and all its sub-pages.
-class HomeRoutes {
-  HomeRoutes._();
+class UsersRoutes {
+  UsersRoutes._();
 
   /// Home section branch for the main shell
   static final StatefulShellBranch branch = StatefulShellBranch(
-    navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'home'),
+    navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'users'),
     routes: [
       GoRoute(
-        path: RoutePaths.home,
-        name: RouteNames.home,
-        builder: (context, state) => const HomeScreen(),
+        path: RoutePaths.users,
+        name: RouteNames.users,
+        builder: (context, state) => const UsersScreen(),
         routes: [
-          // Home details page
+          // Users details page
           // GoRoute(
           //   path: 'details',
           //   name: RouteNames.homeDetails,

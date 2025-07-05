@@ -15,6 +15,10 @@ class RoutePaths {
 
   // Main shell paths
   static const String home = '/home';
+  static const String chat = '/chat';
+  static const String users = '/users';
+  static const String schedule = '/schedule';
+  static const String projects = '/projects';
   static const String settings = '/settings';
   static const String profile = '/profile';
 
@@ -49,6 +53,10 @@ class RouteNames {
 
   // Main shell route names
   static const String home = 'home';
+  static const String chat = 'chat';
+  static const String users = 'users';
+  static const String schedule = 'schedule';
+  static const String projects = 'projects';
   static const String settings = 'settings';
   static const String profile = 'profile';
 
