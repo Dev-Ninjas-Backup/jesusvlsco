@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
-import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
-import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 
 class BottomNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -114,7 +114,7 @@ class BottomNavigationScaffold extends StatelessWidget {
               duration: animationDuration,
               curve: Curves.easeInOut,
               style: isActive
-                  ? AppTextStyle.f14W600().copyWith(color: AppColors.primary)
+                  ? AppTextStyle.f14W600()
                   : AppTextStyle.f14W400().copyWith(
                       color: AppColors.textSecondary,
                     ),
