@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jesusvlsco/core/utils/constants/colors.dart';
 
 TextStyle getTextStyle({
   double fontSize = 14.0,
@@ -103,7 +104,7 @@ class AppTextStyle {
   }) {
     final textStyle = fontFamily ?? GoogleFonts.workSans();
     return textStyle.copyWith(
-      color: Colors.white,
+      color: AppColors.primary,
       fontSize: fontSize,
       fontWeight: fontWeight,
       height: 1.43,

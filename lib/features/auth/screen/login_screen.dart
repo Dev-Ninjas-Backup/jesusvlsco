@@ -66,7 +66,8 @@ class LoginScreen extends StatelessWidget {
                     ), // 5% of screen height for spacing
                     ElevatedButton(
                       onPressed: () {
-                        context.goNamed(RouteNames.verifyMethod);
+                        // context.goNamed(RouteNames.verifyMethod);
+                        context.goNamed(RouteNames.home);
                         // Navigate to the phone login screen
                         // Get.toNamed(AppRoute.getChooseAnotherWay());
                       },
