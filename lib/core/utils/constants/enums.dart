@@ -1,5 +1,6 @@
 /// LIST OF Enums
 /// They cannot be created inside a class.
+library enums;
 
 enum TextSizes { small, medium, large }
 
@@ -14,5 +15,5 @@ enum PaymentMethods {
   creditCard,
   paystack,
   razorPay,
-  paytm
+  paytm,
 }

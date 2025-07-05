@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'core/bindings/controller_binder.dart';
+import 'package:jesusvlsco/core/bindings/controller_binder.dart';
+import 'package:jesusvlsco/routes/routing.dart';
+
 import 'core/utils/theme/theme.dart';
-import 'routes/app_routes.dart';
 
 class Jesusvlsco extends StatelessWidget {
   const Jesusvlsco({super.key});
 
   @override
   Widget build(BuildContext context) {
-    //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      // Use builder only if you need to use library outside ScreenUtilInit context
-      builder: (_, child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRoute.getLoginScreen(),
-          getPages: AppRoute.routes,
-          initialBinding: ControllerBinder(),
-          themeMode: ThemeMode.system,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-        );
-      },
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Jesus VLSCO',
+      themeMode: ThemeMode.system,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      initialBinding: ControllerBinder(),
+      // GetX specific configurations
+      // defaultTransition: Transition.cupertino,
+      // transitionDuration: const Duration(milliseconds: 300),
+      // enableLog: true,
+      // Use GoRouter with GetX
+      home: Router.withConfig(config: AppRouter.router),
+
+      // Alternative: You can also use this approach
+      // builder: (context, child) {
+      //   return Router.withConfig(config: AppRouter.router);
+      // },
+      // logWriterCallback: (String text, {bool isError = false}) {
+      //   // Custom logging for GetX (optional)
+      //   if (isError) {
+      //     print('GetX Error: $text');
+      //   } else {
+      //     print('GetX Log: $text');
+      //   }
+      // },
     );
   }
 }

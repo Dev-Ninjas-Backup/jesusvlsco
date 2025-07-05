@@ -1,14 +1,25 @@
-
-
 import 'package:get/get.dart';
+import 'package:jesusvlsco/core/controllers/app_controller.dart';
+import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
   void dependencies() {
+    // Put the main app controller
+    Get.put<AppController>(AppController(), permanent: true);
+
+    // Lazy put other controllers (they will be created when first accessed)
     // Get.lazyPut<LogInController>(
-    //       () => LogInController(),
+    //   () => LogInController(),
     //   fenix: true,
     // );
 
+    // You can add more controllers here as needed
+    // Get.lazyPut<HomeController>(() => HomeController());
+    // Get.lazyPut<SettingsController>(() => SettingsController());
+
+    Get.put(LoginController());
+    Get.put(BottomNavigationScaffoldController());
   }
 }
