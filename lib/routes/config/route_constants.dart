@@ -12,7 +12,23 @@ class RoutePaths {
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String onboarding = '/onboarding';
+
+
+//Auth Routes
+
+//For phone
   static const String verifyMethod = '/verify-method';
+  static const String loginwithphone = '/loginwithphone';
+  static const String loginphoneotp = '/loginphoneotp';
+  static const String verifycomplete = '/verifycomplete';
+
+//For email
+
+  static const String loginwithemail = '/loginwithemail';
+  static const String loginemailotp = '/loginemailotp';
+
+
+
 
   // Main shell paths
   static const String home = '/home';
@@ -52,6 +68,14 @@ class RouteNames {
   static const String forgotPassword = 'forgot-password';
   static const String onboarding = 'onboarding';
   static const String verifyMethod = 'verify-method';
+  static const String loginwithphone = 'loginwithphone';
+  static const String loginphoneotp = 'loginphoneotp';
+  static const String verifycomplete = 'verifycomplete';
+  static const String loginwithemail = 'loginwithemail';
+  static const String loginemailotp = 'loginemailotp';
+ 
+
+
 
   // Main shell route names
   static const String home = 'home';
