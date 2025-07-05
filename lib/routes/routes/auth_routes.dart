@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/auth/screen/login_screen.dart';
+import 'package:jesusvlsco/features/auth/screen/verify_method.dart';
 
 import '../../features/splasho_screen/screen/splasho_screen.dart';
 import '../config/route_constants.dart';
@@ -51,19 +52,27 @@ class AuthRoutes {
       ),
     ),
 
-    // Forgot password screen (placeholder)
     GoRoute(
-      path: RoutePaths.forgotPassword,
-      name: RouteNames.forgotPassword,
-      builder: (context, state) => const ForgotPasswordScreen(),
+      path: RoutePaths.verifyMethod,
+      name: RouteNames.verifyMethod,
+      builder: (context, state) {
+        return const VerifyMethodScreen();
+      },
     ),
 
+    // Forgot password screen (placeholder)
+    // GoRoute(
+    //   path: RoutePaths.forgotPassword,
+    //   name: RouteNames.forgotPassword,
+    //   builder: (context, state) => const ForgotPasswordScreen(),
+    // ),
+
     // Onboarding screen (placeholder)
-    GoRoute(
-      path: RoutePaths.onboarding,
-      name: RouteNames.onboarding,
-      builder: (context, state) => const OnboardingScreen(),
-    ),
+    // GoRoute(
+    //   path: RoutePaths.onboarding,
+    //   name: RouteNames.onboarding,
+    //   builder: (context, state) => const OnboardingScreen(),
+    // ),
   ];
 }
 

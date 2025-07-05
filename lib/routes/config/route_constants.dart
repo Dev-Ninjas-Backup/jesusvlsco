@@ -12,6 +12,7 @@ class RoutePaths {
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String onboarding = '/onboarding';
+  static const String verifyMethod = '/verify-method';
 
   // Main shell paths
   static const String home = '/home';
@@ -50,6 +51,7 @@ class RouteNames {
   static const String register = 'register';
   static const String forgotPassword = 'forgot-password';
   static const String onboarding = 'onboarding';
+  static const String verifyMethod = 'verify-method';
 
   // Main shell route names
   static const String home = 'home';

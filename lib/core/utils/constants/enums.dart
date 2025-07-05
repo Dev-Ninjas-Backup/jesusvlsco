@@ -17,3 +17,6 @@ enum PaymentMethods {
   razorPay,
   paytm,
 }
+
+// Resend method enum
+enum ResendMethod { whatsapp, sms, call, email }
