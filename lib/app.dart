@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
+import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/routes/routing.dart';
 
 import 'core/utils/theme/theme.dart';
@@ -10,6 +11,7 @@ class Jesusvlsco extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppContext.init(context); // Initialize AppContext with the current context
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Jesus VLSCO',
