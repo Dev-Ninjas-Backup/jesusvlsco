@@ -1,96 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
-TextStyle getTextStyle({
-  double fontSize = 14.0,
-  FontWeight fontWeight = FontWeight.w400,
-  double lineHeight = 21.0,
-  double height = 1.22,
-  TextAlign textAlign = TextAlign.center,
-  Color color = Colors.black,
-}) {
-  return GoogleFonts.nunito(
-    fontSize: fontSize.sp,
-    fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
-    color: color,
-  );
-}
+// TextStyle getTextStyle({
+//   double fontSize = 14.0,
+//   FontWeight fontWeight = FontWeight.w400,
+//   double lineHeight = 21.0,
+//   double height = 1.22,
+//   TextAlign textAlign = TextAlign.center,
+//   Color color = Colors.black,
+// }) {
+//   return GoogleFonts.nunito(
+//     fontSize: fontSize.sp,
+//     fontWeight: fontWeight,
+//     height: fontSize.sp / lineHeight.sp,
+//     color: color,
+//   );
+// }
 
-TextStyle getTextStyle1({
-  double fontSize = 14.0,
-  FontWeight fontWeight = FontWeight.w400,
-  double lineHeight = 21.0,
-  double height = 1.22,
-  double letterSpacing = -0.05,
-  TextAlign textAlign = TextAlign.center,
-  textDecoration = TextDecoration.underline,
-  Color color = Colors.black,
-}) {
-  return GoogleFonts.workSans(
-    fontSize: fontSize.sp,
-    fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
-    color: color,
-  );
-}
+// TextStyle getTextStyle1({
+//   double fontSize = 14.0,
+//   FontWeight fontWeight = FontWeight.w400,
+//   double lineHeight = 21.0,
+//   double height = 1.22,
+//   double letterSpacing = -0.05,
+//   TextAlign textAlign = TextAlign.center,
+//   textDecoration = TextDecoration.underline,
+//   Color color = Colors.black,
+// }) {
+//   return GoogleFonts.workSans(
+//     fontSize: fontSize.sp,
+//     fontWeight: fontWeight,
+//     height: fontSize.sp / lineHeight.sp,
+//     color: color,
+//   );
+// }
 
-TextStyle getTextStyle2({
-  double fontSize = 14.0,
-  FontWeight fontWeight = FontWeight.w400,
-  double lineHeight = 21.0,
-  double height = 1.22,
-  double letterSpacing = -0.05,
-  TextAlign textAlign = TextAlign.center,
-  textDecoration = TextDecoration.underline,
-  Color color = Colors.black,
-}) {
-  return GoogleFonts.montserrat(
-    fontSize: fontSize.sp,
-    fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
-    color: color,
-  );
-}
+// TextStyle getTextStyle2({
+//   double fontSize = 14.0,
+//   FontWeight fontWeight = FontWeight.w400,
+//   double lineHeight = 21.0,
+//   double height = 1.22,
+//   double letterSpacing = -0.05,
+//   TextAlign textAlign = TextAlign.center,
+//   textDecoration = TextDecoration.underline,
+//   Color color = Colors.black,
+// }) {
+//   return GoogleFonts.montserrat(
+//     fontSize: fontSize.sp,
+//     fontWeight: fontWeight,
+//     height: fontSize.sp / lineHeight.sp,
+//     color: color,
+//   );
+// }
 
-// text style Inter
-TextStyle getTextStyleInter({
-  double fontSize = 14.0,
-  FontWeight fontWeight = FontWeight.w400,
-  double lineHeight = 12.0,
-  double height = 1.06,
-  double letterSpacing = -0.05,
-  TextAlign textAlign = TextAlign.center,
-  textDecoration = TextDecoration.underline,
-  Color color = Colors.black,
-}) {
-  return GoogleFonts.inter(
-    fontSize: fontSize.sp,
-    fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
-    color: color,
-  );
-}
 
-// work sans
-TextStyle getTextStyleWorkSans({
-  double fontSize = 14.0,
-  FontWeight fontWeight = FontWeight.w400,
-  double lineHeight = 21.0,
-  double height = 1.22,
-  double letterSpacing = -0.05,
-  TextAlign textAlign = TextAlign.center,
-  textDecoration = TextDecoration.underline,
-  Color color = Colors.black,
-}) {
-  return GoogleFonts.workSans(
-    fontSize: fontSize.sp,
-    fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
-    color: color,
-  );
-}
+// // this is use for this app
+// // text style Inter
+// TextStyle getTextStyleInter({
+//   double fontSize = 14.0,
+//   FontWeight fontWeight = FontWeight.w400,
+//   double lineHeight = 12.0,
+//   double height = 1.06,
+//   double letterSpacing = -0.05,
+//   TextAlign textAlign = TextAlign.center,
+//   textDecoration = TextDecoration.underline,
+//   Color color = Colors.black,
+// }) {
+//   return GoogleFonts.inter(
+//     fontSize: fontSize.sp,
+//     fontWeight: fontWeight,
+//     height: fontSize.sp / lineHeight.sp,
+//     color: color,
+//   );
+// }
+
+// // work sans
+// TextStyle getTextStyleWorkSans({
+//   double fontSize = 14.0,
+//   FontWeight fontWeight = FontWeight.w400,
+//   double lineHeight = 21.0,
+//   double height = 1.22,
+//   double letterSpacing = -0.05,
+//   TextAlign textAlign = TextAlign.center,
+//   textDecoration = TextDecoration.underline,
+//   Color color = Colors.black,
+// }) {
+//   return GoogleFonts.workSans(
+//     fontSize: fontSize.sp,
+//     fontWeight: fontWeight,
+//     height: fontSize.sp / lineHeight.sp,
+//     color: color,
+//   );
+// }
 
 // -------------------------- Text Style --------------------------
 class AppTextStyle {
@@ -101,9 +104,9 @@ class AppTextStyle {
     double fontSize = 14.0,
     FontWeight fontWeight = FontWeight.w400,
   }) {
-    final textStyle = fontFamily ?? GoogleFonts.workSans();
+    final textStyle = fontFamily ?? GoogleFonts.inter();
     return textStyle.copyWith(
-      color: Colors.white,
+      color: AppColors.primary,
       fontSize: fontSize,
       fontWeight: fontWeight,
       height: 1.43,
@@ -188,4 +191,58 @@ class AppTextStyle {
     fontSize: 36,
     fontWeight: FontWeight.w600,
   );
+
+    // font size 16 and font weight 600
+  static TextStyle textlarge({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: Sizer.wp(32),
+    fontWeight: FontWeight.w600,
+  );
+
+     static TextStyle textbold({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: Sizer.wp(17),
+    fontWeight: FontWeight.w400,
+  );
+       static TextStyle semibold({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: Sizer.wp(18),
+    fontWeight: FontWeight.w600,
+  );
+         static TextStyle regular({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: Sizer.wp(16),
+    fontWeight: FontWeight.w400,
+  );
+           static TextStyle semiregular({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: Sizer.wp(14),
+    fontWeight: FontWeight.w400,
+  );
+
+
+
+// TextStyle baseTextStyle({
+//   double? fontSize,
+//   FontWeight? fontWeight,
+//   TextStyle? fontFamily,
+//   Color? color,
+// }) {
+//   return GoogleFonts.inter( // ← Inter font apply
+//     textStyle: fontFamily,
+//     fontSize: fontSize,
+//     fontWeight: fontWeight,
+//     color: color,
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
 }

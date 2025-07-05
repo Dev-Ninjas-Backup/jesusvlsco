@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
+import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+// Import for AppTextStyle
 
 class VerificationComplete extends StatelessWidget {
   const VerificationComplete({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body:  Container(
+    return Scaffold(
+      body: Container(
         decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: SafeArea(
           child: Column(
@@ -42,35 +42,29 @@ class VerificationComplete extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            
-// Welcome title
-                            const Text(
+                            // ✅ Title using textlarge
+                            Text(
                               "Verification Complete",
-                              style: TextStyle(
-                                fontSize: 28,
+                              style: AppTextStyle.textbold().copyWith(
+                                fontSize: Sizer.wp(20),
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF6B5B95),
+                                color: const Color(0xFF6B5B95),
                               ),
                             ),
                             const SizedBox(height: 8),
 
-
-
+                            // ✅ Button using semibold and color from AppColors
                             SizedBox(
                               width: double.infinity,
                               height: 50,
                               child: CupertinoButton(
                                 onPressed: () {
-                                  
-                                  
+                                
                                 },
-
                                 color: AppColors.color1,
-                                child: const Text(
+                                child: Text(
                                   "Lets Go !",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
+                                  style: AppTextStyle.semiregular().copyWith(
                                     color: AppColors.backgroundLight,
                                   ),
                                 ),

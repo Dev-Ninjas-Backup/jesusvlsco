@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/enums.dart';
+import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class VerifyMethodScreen extends StatefulWidget {
   const VerifyMethodScreen({super.key});
@@ -11,7 +14,7 @@ class VerifyMethodScreen extends StatefulWidget {
 }
 
 class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
-  ResendMethod? _selectedMethod = ResendMethod.sms; // Default to SMS
+  ResendMethod? _selectedMethod = ResendMethod.sms;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +24,12 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Main content
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Resend Code Card
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
@@ -37,7 +38,6 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              // ignore: deprecated_member_use
                               color: Colors.black.withOpacity(0.1),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
@@ -45,16 +45,15 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                           ],
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             // Title
-                            const Text(
+                            Text(
                               AppText.chooseAnotherWay,
-                              style: TextStyle(
+                              style: AppTextStyle.baseTextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
+                                fontWeight: FontWeight.w600,
+                              ).copyWith(color: AppColors.textSecondary),
                             ),
                             const SizedBox(height: 24),
 
@@ -95,34 +94,33 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                             ),
                             const SizedBox(height: 32),
 
-                            // Resend code button
+                            // Resend Button
                             SizedBox(
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (_selectedMethod == ResendMethod.email) {
-                                    // Get.toNamed(AppRoute.getemailotpverify());
+                                    // context.goNamed(RouteNames.emailotp);
                                   }
                                   if (_selectedMethod == ResendMethod.call) {
-                                    // Get.toNamed(AppRoute.getphoneverifymethod());
+                                    context.goNamed(RouteNames.loginwithphone);
                                   }
-                                  // Handle phone number login
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.color1,
+                                  backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text(
+                                child: Text(
                                   AppText.resendCode,
-                                  style: TextStyle(
+                                  style: AppTextStyle.baseTextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                  ),
+                                  ).copyWith(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -168,7 +166,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AppColors.color1 : Colors.grey.shade400,
+                  color: isSelected ? AppColors.primary : Colors.grey.shade400,
                   width: 2,
                 ),
               ),
@@ -177,9 +175,9 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                       child: Container(
                         width: 10,
                         height: 10,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFF6B5B95),
+                          color: AppColors.primary,
                         ),
                       ),
                     )
@@ -191,7 +189,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
             Icon(
               icon,
               size: 20,
-              color: isSelected ? AppColors.color1 : Colors.grey.shade600,
+              color: isSelected ? AppColors.primary : Colors.grey.shade600,
             ),
             const SizedBox(width: 12),
 
@@ -199,10 +197,11 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(
+                style: AppTextStyle.baseTextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: isSelected ? AppColors.color1 : AppColors.color3,
+                  fontWeight: FontWeight.w600,
+                ).copyWith(
+                  color: isSelected ? AppColors.primary : AppColors.color3,
                 ),
               ),
             ),
