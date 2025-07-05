@@ -5,7 +5,7 @@ class AppColors {
 
   // Brand Colors
   static const Color primary = Color(
-    0xFF1E3A5F,
+    0xFF4E53B1,
   ); // Darker primary for a more professional look
   static const Color secondary = Color(
     0xFFFEC601,
