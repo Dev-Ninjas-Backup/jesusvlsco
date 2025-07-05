@@ -17,4 +17,7 @@ class Sizer {
   static double hp(double height) {
     return (height / figmaScreenHeight) * size.height;
   }
+
+  static const EdgeInsets defaultPadding = EdgeInsets.symmetric(horizontal: 30);
+  static const EdgeInsets smallpadding = EdgeInsets.symmetric(horizontal: 10);
 }

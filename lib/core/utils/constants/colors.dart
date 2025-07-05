@@ -5,7 +5,7 @@ class AppColors {
 
   // Brand Colors
   static const Color primary = Color(
-    0xFF4E53B1,
+    0xFF1E3A5F,
   ); // Darker primary for a more professional look
   static const Color secondary = Color(
     0xFFFEC601,
@@ -18,8 +18,38 @@ class AppColors {
   static const Gradient linearGradient = LinearGradient(
     begin: Alignment(0.0, 0.0),
     end: Alignment(0.707, -0.707),
-    colors: [Color(0xFFF9A9E9), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
+    colors: [Color(0xFFFFF9A9E), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
   );
+
+  // Gradient Colors
+  static const Gradient loginGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.topRight, // Horizontal right shift
+    colors: [Color(0xFF4E53B1), Color(0xFF767BD5), Color(0xFF2C2D32)],
+  );
+
+  //button colors
+  static const Color color1 = Color(0xFF4E53B1); // Dark blue color
+  static const Color color2 = Color(0xFF767BD5); // Light purple color
+  static const Color color3 = Color(0xFF2C2D32); // Dark grey color
+
+  // // Brand Colors
+  // static const Color primary = Color(
+  //   0xFF4E53B1,
+  // ); // Darker primary for a more professional look
+  // static const Color secondary = Color(
+  //   0xFFFEC601,
+  // ); // Bright yellow for highlights and accents
+  // static const Color accent = Color(
+  //   0xFF89A7FF,
+  // ); // Softer blue for a modern touch
+
+  // // Gradient Colors
+  // static const Gradient linearGradient = LinearGradient(
+  //   begin: Alignment(0.0, 0.0),
+  //   end: Alignment(0.707, -0.707),
+  //   colors: [Color(0xFFF9A9E9), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
+  // );
   // Text Colors
   static const Color textPrimary = Color(
     0xFF212121,
