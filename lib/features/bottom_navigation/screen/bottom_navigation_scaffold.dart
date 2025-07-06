@@ -52,6 +52,10 @@ class BottomNavigationScaffold extends StatelessWidget {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.primaryBackground,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(Sizer.wp(12)),
+            topRight: Radius.circular(Sizer.wp(12)),
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.textSecondary.withOpacity(0.1),
@@ -63,8 +67,8 @@ class BottomNavigationScaffold extends StatelessWidget {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: Sizer.wp(16),
-              vertical: Sizer.hp(8),
+              horizontal: Sizer.wp(12),
+              vertical: Sizer.hp(12),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -91,18 +95,14 @@ class BottomNavigationScaffold extends StatelessWidget {
       child: AnimatedContainer(
         duration: animationDuration,
         curve: Curves.easeInOut,
+        width: Sizer.wp(73),
+        height: Sizer.hp(65),
 
-        width: Sizer.wp(60),
-        height: Sizer.hp(60),
-        padding: EdgeInsets.symmetric(
-          horizontal: Sizer.wp(8),
-          vertical: Sizer.hp(6),
-        ),
         decoration: BoxDecoration(
           color: isActive
               ? AppColors.primary.withOpacity(0.1)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(Sizer.wp(20)),
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -114,16 +114,11 @@ class BottomNavigationScaffold extends StatelessWidget {
               duration: animationDuration,
               curve: Curves.easeInOut,
               style: isActive
-                  ? AppTextStyle.f14W600()
+                  ? AppTextStyle.f14W700()
                   : AppTextStyle.f14W400().copyWith(
                       color: AppColors.textSecondary,
                     ),
-              child: Text(
-                item.label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text(item.label),
             ),
           ],
         ),

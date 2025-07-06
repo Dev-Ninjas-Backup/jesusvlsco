@@ -8,11 +8,12 @@ class AppColors {
     0xFF4E53B1,
   ); // Darker primary for a more professional look
   static const Color secondary = Color(0xFFF5F5F5);
-   static const Color textSecondary = Color(0xFF5B5B5B);
+  static const Color textSecondary = Color(0xFF5B5B5B);
+  static const Color textSecondaryGrey = Color(0xFF949494);
+  static const Color progressIndicatorColor = Color(0xFF41BD5D);
+  static const Color requestListItemColor = Color(0xFFC8CAE7);
 
-
-  
-   // Bright yellow for highlights and accents
+  // Bright yellow for highlights and accents
   static const Color accent = Color(
     0xFF89A7FF,
   ); // Softer blue for a modern touch
@@ -54,9 +55,9 @@ class AppColors {
   //   colors: [Color(0xFFF9A9E9), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
   // );
   // Text Colors
-  static const Color textPrimary = Color(
-    0xFF212121,
-  ); // Darker shade for better readability
+  static const Color textPrimary = Color(0xFF212121);
+  static const Color textBlackShade = Color(0xFF484848);
+  // Darker shade for better readability
   // static const Color textSecondary = Color(
   //   0xFF757575,
   // ); // Neutral grey for secondary text
@@ -73,6 +74,10 @@ class AppColors {
     0xFFFFFFFF,
   ); // Pure white for primary content areas
 
+  static const Color secondaryBackground = Color(
+    0xFFF9F9F9,
+  ); // Light grey for secondary content areas
+
   // Surface Colors
   static const Color surfaceLight = Color(
     0xFFE0E0E0,
@@ -81,6 +86,7 @@ class AppColors {
     0xFF2C2C2C,
   ); // Dark grey for elevated surfaces in dark mode
 
+  static const Color dividerColor = Color(0xFFE4E5F3);
   // Container Colors
   static const Color lightContainer = Color(
     0xFFF1F8E9,
