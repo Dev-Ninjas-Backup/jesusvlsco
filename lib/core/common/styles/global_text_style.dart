@@ -56,7 +56,6 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 //   );
 // }
 
-
 // // this is use for this app
 // // text style Inter
 // TextStyle getTextStyleInter({
@@ -134,6 +133,12 @@ class AppTextStyle {
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );
+  // font size 14 and font weight 600
+  static TextStyle f14W700({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
   // font size 16 and font weight 400
   static TextStyle f16W400({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
@@ -193,57 +198,45 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
   );
 
-    // font size 16 and font weight 600
+  // font size 16 and font weight 600
   static TextStyle textlarge({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
     fontSize: Sizer.wp(32),
     fontWeight: FontWeight.w600,
   );
 
-     static TextStyle textbold({TextStyle? fontFamily}) => baseTextStyle(
+  static TextStyle textbold({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
     fontSize: Sizer.wp(17),
     fontWeight: FontWeight.w400,
   );
-       static TextStyle semibold({TextStyle? fontFamily}) => baseTextStyle(
+  static TextStyle semibold({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
     fontSize: Sizer.wp(18),
     fontWeight: FontWeight.w600,
   );
-         static TextStyle regular({TextStyle? fontFamily}) => baseTextStyle(
+  static TextStyle regular({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
     fontSize: Sizer.wp(16),
     fontWeight: FontWeight.w400,
   );
-           static TextStyle semiregular({TextStyle? fontFamily}) => baseTextStyle(
+  static TextStyle semiregular({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
     fontSize: Sizer.wp(14),
     fontWeight: FontWeight.w400,
   );
 
-
-
-// TextStyle baseTextStyle({
-//   double? fontSize,
-//   FontWeight? fontWeight,
-//   TextStyle? fontFamily,
-//   Color? color,
-// }) {
-//   return GoogleFonts.inter( // ← Inter font apply
-//     textStyle: fontFamily,
-//     fontSize: fontSize,
-//     fontWeight: fontWeight,
-//     color: color,
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
+  // TextStyle baseTextStyle({
+  //   double? fontSize,
+  //   FontWeight? fontWeight,
+  //   TextStyle? fontFamily,
+  //   Color? color,
+  // }) {
+  //   return GoogleFonts.inter( // ← Inter font apply
+  //     textStyle: fontFamily,
+  //     fontSize: fontSize,
+  //     fontWeight: fontWeight,
+  //     color: color,
+  //   );
+  // }
 }
