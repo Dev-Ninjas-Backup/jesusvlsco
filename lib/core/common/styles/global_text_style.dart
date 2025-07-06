@@ -114,7 +114,11 @@ class AppTextStyle {
   }
 
   // font Size 12 and font weight 400
-
+  static TextStyle f12W400({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
   // font size 14 and font weight 400
   static TextStyle f14W400({TextStyle? fontFamily}) => baseTextStyle(
     fontFamily: fontFamily,
@@ -174,6 +178,11 @@ class AppTextStyle {
     fontFamily: fontFamily,
     fontSize: 18,
     fontWeight: FontWeight.w600,
+  );
+  static TextStyle f20W700({TextStyle? fontFamily}) => baseTextStyle(
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
   );
   // font size 20 and font weight 400
   // font size 20 and font weight 500

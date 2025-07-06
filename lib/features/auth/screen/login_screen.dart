@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                       ), // 5% of screen height for spacing
                       ElevatedButton(
                         onPressed: () {
-                          context.goNamed(RouteNames.verifyMethod);
+                          context.goNamed(RouteNames.home);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary, // ✅ Updated color
