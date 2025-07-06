@@ -1,58 +1,63 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
-
-// Importing app-specific constants and controllers
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/auth/controller/phone_controller.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
-// Phone number verification screen
 class Phoneverifymethod extends StatefulWidget {
-  const Phoneverifymethod({Key? key}) : super(key: key);
+  const Phoneverifymethod({super.key});
 
   @override
   State<Phoneverifymethod> createState() => _PhoneverifymethodState();
 }
 
 class _PhoneverifymethodState extends State<Phoneverifymethod> {
-  // Default selected country code (Bangladesh)
   CountryCode _selectedCountryCode = CountryCode.fromCountryCode('BD');
-
-  // Controller to handle phone number input
   final Numbercontroller _numbercontroller = Get.put(Numbercontroller());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // Allows scroll on keyboard open
       body: Container(
-        // Background gradient for login screen
         decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Main content of the screen
-              Expanded(
-                child: Padding(
-                  padding: Sizer.defaultPadding,
+              // Use Flexible to avoid overflow
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16,
+                    top: 264.5,
+                    bottom: 226.5,
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // White card containing login form
                       Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(32),
+                        width: Sizer.wp(360),
+                        height: Sizer.hp(361),
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          top: 48,
+                          bottom: 48,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
-                            // Drop shadow for elevation
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
                               blurRadius: 20,
@@ -63,23 +68,20 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // Welcome heading
                             Text(
                               AppText.welcome,
                               style: AppTextStyle.textlarge(),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: Sizer.hp(8)),
 
-                            // Subtitle below welcome
                             Text(
                               AppText.loginToProfile,
                               style: AppTextStyle.regular().copyWith(
                                 color: AppColors.textSecondary,
                               ),
                             ),
-                            const SizedBox(height: 32),
+                            SizedBox(height: Sizer.hp(24)),
 
-                            // Phone number input section
                             Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -90,7 +92,6 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                               ),
                               child: Row(
                                 children: [
-                                  // Country code picker dropdown
                                   CountryCodePicker(
                                     onChanged: (CountryCode code) {
                                       setState(() {
@@ -109,11 +110,8 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                     textStyle: AppTextStyle.regular().copyWith(
                                       color: AppColors.textSecondary,
                                     ),
-
                                     dialogTextStyle: AppTextStyle.regular()
-                                        .copyWith(
-                                          color: AppColors.textSecondary,
-                                        ),
+                                        .copyWith(color: AppColors.textSecondary),
                                     searchStyle: const TextStyle(
                                       fontSize: 16,
                                       color: AppColors.color3,
@@ -135,7 +133,6 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            // Country code abbreviation (e.g., BD)
                                             Text(
                                               countryCode?.code ?? 'BD',
                                               style: AppTextStyle.textlarge()
@@ -155,15 +152,12 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                       );
                                     },
                                   ),
-
-                                  // Text input for phone number
                                   Expanded(
                                     child: TextField(
                                       controller:
                                           _numbercontroller.phoneController,
                                       keyboardType: TextInputType.phone,
                                       inputFormatters: [
-                                        // Allows digits only, max 15 characters
                                         FilteringTextInputFormatter.digitsOnly,
                                         LengthLimitingTextInputFormatter(15),
                                       ],
@@ -179,9 +173,9 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                         ),
                                         contentPadding:
                                             const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 16,
-                                            ),
+                                          horizontal: 12,
+                                          vertical: 16,
+                                        ),
                                       ),
                                       style: const TextStyle(
                                         fontSize: 16,
@@ -193,9 +187,8 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: Sizer.hp(8)),
 
-                            // Instructional info text
                             const Text(
                               AppText.verifyNumberMessage,
                               style: TextStyle(
@@ -204,17 +197,15 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            SizedBox(height: Sizer.hp(20)),
 
-                            // Verify button
                             SizedBox(
-                              width: double.infinity,
-                              height: 50,
+                              width: Sizer.wp(312),
+                              height: Sizer.hp(48),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Validate input and navigate to OTP screen
                                   _numbercontroller.validatePhoneNumber();
-                                  context.goNamed(RouteNames.loginphoneotp);
+                                  context.pushNamed(RouteNames.loginphoneotp);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.color1,
@@ -223,18 +214,17 @@ class _PhoneverifymethodState extends State<Phoneverifymethod> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text(
+                                child: Text(
                                   AppText.verify,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textWhite,
-                                    letterSpacing: 0.5,
-                                  ),
+                                  style: AppTextStyle.semibold(
+                                   
+                                  ).copyWith(
+                                    fontSize: Sizer.wp(16),
+                                     color: AppColors.backgroundLight,
                                 ),
                               ),
                             ),
-                          ],
+                        )],
                         ),
                       ),
                     ],

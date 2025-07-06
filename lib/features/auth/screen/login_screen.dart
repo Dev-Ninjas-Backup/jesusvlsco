@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/device/device_utility.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
@@ -16,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = AppDeviceUtility.getScreenHeight();
-    double screenWidth = AppDeviceUtility.getScreenWidth(context);
+
     final loginController = Get.find<LoginController>();
     loginController.login();
 
@@ -59,7 +60,11 @@ class LoginScreen extends StatelessWidget {
                       ), // 5% of screen height for spacing
                       ElevatedButton(
                         onPressed: () {
+
                           context.goNamed(RouteNames.home);
+
+//                           context.pushNamed(RouteNames.verifyMethod);
+
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary, // ✅ Updated color
@@ -74,16 +79,17 @@ class LoginScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.phone_android,
+                            Image.asset(
+                              height: Sizer.hp(24),
+                              width: Sizer.wp(24),
+                              'assets/icons/device.png',
                               color: Colors.white,
                             ),
                             const SizedBox(width: 10),
                             Text(
                               AppText.loginphone,
-                              style: AppTextStyle.baseTextStyle(
-                                fontSize: screenWidth * 0.04,
-                                fontWeight: FontWeight.w500,
+                              style: AppTextStyle.semibold(
+                                
                               ).copyWith(color: Colors.white), // ✅ Styled text
                             ),
                           ],
@@ -92,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(height: Sizer.hp(16)), // ✅ Updated spacing
                       ElevatedButton(
                         onPressed: () {
-                          context.goNamed(RouteNames.loginwithemail);
+                          context.pushNamed(RouteNames.loginwithemail);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.secondary, // ✅ Updated
@@ -107,14 +113,18 @@ class LoginScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.email, color: AppColors.textSecondary),
+                          Image.asset(
+                              height: Sizer.hp(24),
+                              width: Sizer.wp(24),
+                              IconPath.mailicon,
+                              
+                            ),
                             SizedBox(width: 10),
                             Text(
                               AppText.loginemail,
                               style:
-                                  AppTextStyle.baseTextStyle(
-                                    fontSize: screenWidth * 0.04,
-                                    fontWeight: FontWeight.w500,
+                                  AppTextStyle.semibold(
+                                    
                                   ).copyWith(
                                     color: AppColors.textSecondary,
                                   ), // ✅ Styled text

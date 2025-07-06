@@ -1,9 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-// Import for AppTextStyle
 
 class VerificationComplete extends StatelessWidget {
   const VerificationComplete({super.key});
@@ -14,20 +17,25 @@ class VerificationComplete extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Main content
-              Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: IntrinsicHeight(
                 child: Padding(
                   padding: Sizer.defaultPadding,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Login Card
                       Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(32),
+                        width: Sizer.wp(360),
+                        height: Sizer.hp(280),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Sizer.wp(20),
+                          vertical: Sizer.hp(24),
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
@@ -40,36 +48,48 @@ class VerificationComplete extends StatelessWidget {
                           ],
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            // ✅ Title using textlarge
+                            SizedBox(height: Sizer.hp(16)),
+                            Image.asset(
+                              IconPath.success,
+                              width: Sizer.wp(60),
+                              height: Sizer.hp(60),
+                            ),
+                            SizedBox(height: Sizer.hp(24)),
                             Text(
-                              "Verification Complete",
-                              style: AppTextStyle.textbold().copyWith(
+                              AppText.verificationComplete,
+                              style: AppTextStyle.semibold().copyWith(
                                 fontSize: Sizer.wp(20),
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF6B5B95),
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.color1,
                               ),
                             ),
-                            const SizedBox(height: 8),
-
-                            // ✅ Button using semibold and color from AppColors
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: CupertinoButton(
-                                onPressed: () {
-                                
-                                },
-                                color: AppColors.color1,
-                                child: Text(
-                                  "Lets Go !",
-                                  style: AppTextStyle.semiregular().copyWith(
-                                    color: AppColors.backgroundLight,
+                            SizedBox(height: Sizer.hp(16)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Sizer.wp(12),
+                              ),
+                              child: SizedBox(
+                                width: Sizer.wp(312),
+                                height: Sizer.hp(48),
+                                child: CupertinoButton(
+                                  onPressed: () {
+                                    // Your next screen logic
+                                  },
+                                  color: AppColors.color1,
+                                  padding: EdgeInsets.zero,
+                                  child: Text(
+                                    AppText.checkMessage,
+                                    style: AppTextStyle.semiregular().copyWith(
+                                      fontSize: Sizer.wp(14),
+                                      color: AppColors.backgroundLight,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                            SizedBox(height: Sizer.hp(16)),
                           ],
                         ),
                       ),
@@ -77,7 +97,7 @@ class VerificationComplete extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
