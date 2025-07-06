@@ -37,8 +37,8 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           gradient: AppColors.loginGradient,
         ),
@@ -47,11 +47,11 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
+            Padding(
+              padding:  EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
               child: Container(
-                  width: Sizer.wp(360),
-                  height: 386,
+                  // width: Sizer.wp(360),
+                  // height: 386,
                   padding: EdgeInsets.symmetric(
                     horizontal: Sizer.wp(24),
                     vertical: Sizer.hp(48),
@@ -102,13 +102,19 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
                               color: AppColors.textSecondary,
                             ),
                           ),
-                          Text(
-                            AppText.moreOptions,
-                            style: AppTextStyle.regular().copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          GestureDetector(
+                            onTap: (){
+                              context.pushNamed(RouteNames.verifyMethod);
+                            },
+                            child: Text(
+                                AppText.moreOptions,
+                                style: AppTextStyle.regular().copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                           ),
+                          
                         ],
                       ),
                       SizedBox(height: Sizer.hp(24)),

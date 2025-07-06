@@ -30,132 +30,131 @@ class _EmailotpverifyMethodState extends State<EmailotpverifyMethod> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Main content
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Login Card
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Container(
-                        width: Sizer.wp(360),
-                        height: 312,
-                      
-                        padding: EdgeInsets.only(
-                          left: Sizer.wp(24),
-                          right: Sizer.wp(24),
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: Sizer.hp(48)),
-                            // Welcome title
-                            RichText(
-                              text: TextSpan(
-                                text: AppText.verifyEmail,
-                                style: AppTextStyle.semibold().copyWith(
-                                  color: AppColors.backgroundDark,
-                                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Login Card
+                  Padding(
+                    padding:  EdgeInsets.only(left: Sizer.wp(24), right: Sizer.wp(24)),
+                    child: Container(
+                      // width: Sizer.wp(360),
+                      // // height: MediaQuery.of(context).size.height * (361/852),
+                      // height: Sizer.hp(361),
+                    
+                      // padding: EdgeInsets.only(
+                      //   left: Sizer.wp(24),
+                      //   right: Sizer.wp(24),
+                      // ),
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundLight,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: Sizer.hp(48)),
+                          // Welcome title
+                          RichText(
+                            text: TextSpan(
+                              text: AppText.verifyEmail,
+                              style: AppTextStyle.semibold().copyWith(
+                                color: AppColors.backgroundDark,
                               ),
                             ),
-                            SizedBox(height: Sizer.hp(12)),
-                      
-                            // Subtitle
-                            const Text(
-                              overflow: TextOverflow.ellipsis,
-                              AppText.enterEmail, 
-                              style: TextStyle(
-                                
-                                fontSize: 16,
-                                color: AppColors.color3,
-                                fontWeight: FontWeight.w400,
-                              ),
+                          ),
+                          SizedBox(height: Sizer.hp(12)),
+                    
+                          // Subtitle
+                          const Text(
+                            overflow: TextOverflow.ellipsis,
+                            AppText.enterEmail, 
+                            style: TextStyle(
+                              
+                              fontSize: 16,
+                              color: AppColors.color3,
+                              fontWeight: FontWeight.w400,
                             ),
-                            // Verify button
-                            SizedBox(height: Sizer.hp(24)),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Sizer.wp(24),
-                                right: Sizer.wp(24),
-                              ),
-                              child: TextFormField(
-
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                  hintText: AppText.emailname,
-                                  hintStyle: AppTextStyle.semiregular().copyWith(
+                          ),
+                          // Verify button
+                          SizedBox(height: Sizer.hp(24)),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: Sizer.wp(24),
+                              right: Sizer.wp(24),
+                            ),
+                            child: TextFormField(
+                                  
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
                                     color: AppColors.textSecondary,
                                   ),
-                                 
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.textSecondary,
-                                    ),
+                                ),
+                                hintText: AppText.emailname,
+                                hintStyle: AppTextStyle.semiregular().copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                               
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
-                                keyboardType: TextInputType.emailAddress,
-                                onFieldSubmitted: (value) {
-                                  context.goNamed(RouteNames.loginemailotp);
-                                },
                               ),
+                              keyboardType: TextInputType.emailAddress,
+                              onFieldSubmitted: (value) {
+                                context.goNamed(RouteNames.loginemailotp);
+                              },
                             ),
-                            SizedBox(height: Sizer.hp(24)),
-                      
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Sizer.wp(24),
-                                right: Sizer.wp(24),
-                              ),
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  shape:
-                                      WidgetStateProperty.all<
-                                        RoundedRectangleBorder
-                                      >(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8.0,
-                                          ),
+                          ),
+                          SizedBox(height: Sizer.hp(24)),
+                    
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: Sizer.wp(24),
+                              right: Sizer.wp(24),
+                            ),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape:
+                                    WidgetStateProperty.all<
+                                      RoundedRectangleBorder
+                                    >(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          8.0,
                                         ),
                                       ),
-                                ),
-                                onPressed: () {
-                                  context.pushNamed(RouteNames.loginemailotp);
-                                },
-                                child: Text(
-                                    AppText.verify,
-                                    style: AppTextStyle.semiregular(
-                                     
-                                    ).copyWith(
-                                      fontSize: Sizer.wp(16),
-                                       color: AppColors.backgroundLight,
-                                  ),
+                                    ),
+                              ),
+                              onPressed: () {
+                                context.pushNamed(RouteNames.loginemailotp);
+                              },
+                              child: Text(
+                                  AppText.verify,
+                                  style: AppTextStyle.semiregular(
+                                   
+                                  ).copyWith(
+                                    fontSize: Sizer.wp(16),
+                                     color: AppColors.backgroundLight,
                                 ),
                               ),
                             ),
-                                SizedBox(height: Sizer.hp(48)),
-                          ],
-                        ),
+                          ),
+                              SizedBox(height: Sizer.hp(48)),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
