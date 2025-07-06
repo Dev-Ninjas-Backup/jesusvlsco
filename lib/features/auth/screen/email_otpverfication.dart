@@ -34,29 +34,30 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScreenUtilInit(
+      
         child: Container(
-          width: double.infinity,
+          // width: double.infinity,
           height: double.infinity,
           decoration: const BoxDecoration(gradient: AppColors.loginGradient),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Sizer.wp(16),
-                        vertical: Sizer.hp(16),
-                      ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Sizer.wp(16),
+                      vertical: Sizer.hp(16),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
                       child: Container(
                         width: Sizer.wp(360),
-                        height: Sizer.hp(312),
+                        height: Sizer.wp(316),
                         decoration: BoxDecoration(
                           color: AppColors.backgroundLight,
                           borderRadius: BorderRadius.circular(16),
@@ -77,7 +78,7 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: Sizer.hp(8)),
-          
+                                
                               /// Title
                               Text(
                                 AppText.check,
@@ -86,7 +87,7 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
                                 ),
                               ),
                               SizedBox(height: Sizer.hp(12)),
-          
+                                
                               /// Subtitle
                               Text(
                                 AppText.toconfirm,
@@ -96,7 +97,7 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
                                 ),
                               ),
                               SizedBox(height: Sizer.hp(24)),
-          
+                                
                               /// OTP Fields
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +107,7 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
                                 ),
                               ),
                               SizedBox(height: Sizer.hp(24)),
-          
+                                
                               /// Verify Button
                               SizedBox(
                                 width: Sizer.wp(312),
@@ -137,8 +138,8 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
