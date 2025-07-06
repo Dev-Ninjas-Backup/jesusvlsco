@@ -1,9 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/enums.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
+import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class VerifyMethodScreen extends StatefulWidget {
@@ -19,119 +23,113 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
+          child: SingleChildScrollView( 
+            child: Column(
+              children: [
+                SizedBox(height: Sizer.hp(205)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    width: Sizer.wp(360),
+                    height: Sizer.hp(480),
+                    decoration: BoxDecoration(
+                      color: AppColors.backgroundLight,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Title
-                            Text(
-                              AppText.chooseAnotherWay,
-                              style: AppTextStyle.baseTextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ).copyWith(color: AppColors.textSecondary),
-                            ),
-                            const SizedBox(height: 24),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: Sizer.hp(48)),
 
-                            // WhatsApp Option
-                            _buildResendOption(
-                              method: ResendMethod.whatsapp,
-                              icon: Icons.chat_bubble_outline,
-                              text: AppText.resendViaWhatsapp,
-                              isSelected:
-                                  _selectedMethod == ResendMethod.whatsapp,
-                            ),
-                            const SizedBox(height: 16),
+                        // Title
+                        Text(
+                          AppText.chooseAnotherWay,
+                          style: AppTextStyle.baseTextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ).copyWith(color: AppColors.textSecondary),
+                        ),
+                        SizedBox(height: Sizer.hp(32)),
 
-                            // SMS Option
-                            _buildResendOption(
-                              method: ResendMethod.sms,
-                              icon: Icons.sms_outlined,
-                              text: AppText.resendViaSMS,
-                              isSelected: _selectedMethod == ResendMethod.sms,
-                            ),
-                            const SizedBox(height: 16),
+                        // Options
+                        _buildResendOption(
+                          method: ResendMethod.whatsapp,
+                          imagePath: IconPath.whatsapp,
+                          text: AppText.resendViaWhatsapp,
+                        ),
+                        SizedBox(height: Sizer.hp(16)),
 
-                            // Call Option
-                            _buildResendOption(
-                              method: ResendMethod.call,
-                              icon: Icons.phone_outlined,
-                              text: AppText.resendViaCall,
-                              isSelected: _selectedMethod == ResendMethod.call,
-                            ),
-                            const SizedBox(height: 16),
+                        _buildResendOption(
+                          method: ResendMethod.sms,
+                          imagePath: IconPath.sms,
+                          text: AppText.resendViaSMS,
+                        ),
+                        SizedBox(height: Sizer.hp(16)),
 
-                            // Email Option
-                            _buildResendOption(
-                              method: ResendMethod.email,
-                              icon: Icons.email_outlined,
-                              text: AppText.resendViaEmail,
-                              isSelected: _selectedMethod == ResendMethod.email,
-                            ),
-                            const SizedBox(height: 32),
+                        _buildResendOption(
+                          method: ResendMethod.call,
+                           imagePath: IconPath.call,
+                          text: AppText.resendViaCall,
+                        ),
+                        SizedBox(height: Sizer.hp(16)),
 
-                            // Resend Button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_selectedMethod == ResendMethod.email) {
-                                    // context.goNamed(RouteNames.emailotp);
-                                  }
-                                  if (_selectedMethod == ResendMethod.call) {
-                                    context.goNamed(RouteNames.loginwithphone);
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: Text(
-                                  AppText.resendCode,
-                                  style: AppTextStyle.baseTextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ).copyWith(color: Colors.white),
-                                ),
+                        _buildResendOption(
+                          method: ResendMethod.email,
+                          imagePath: IconPath.mail,
+                          text: AppText.resendViaEmail,
+                        ),
+                        SizedBox(height: Sizer.hp(32)),
+
+                        // Resend Button
+                        SizedBox(
+                          width: Sizer.wp(312),
+                          height: Sizer.hp(48),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_selectedMethod == ResendMethod.email) {
+                                context.pushNamed(RouteNames.loginwithemail);
+                              }
+                              if (_selectedMethod == ResendMethod.call) {
+                                context.pushNamed (RouteNames.loginwithphone);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                          ],
+                            child: Text(
+                              AppText.resendCode,
+                              style: AppTextStyle.semibold(
+                           
+                              ).copyWith(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: Sizer.hp(48)),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: Sizer.hp(48)),
+              ],
+            ),  
           ),
         ),
       ),
@@ -140,10 +138,11 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
 
   Widget _buildResendOption({
     required ResendMethod method,
-    required IconData icon,
+    required String imagePath,
     required String text,
-    required bool isSelected,
   }) {
+    bool isSelected = _selectedMethod == method;
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -151,7 +150,9 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        height: Sizer.hp(48),
+        width: Sizer.wp(312),
+        padding: const EdgeInsets.only(left: 16),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.color3, width: 1),
           borderRadius: BorderRadius.circular(8),
@@ -159,41 +160,30 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
         ),
         child: Row(
           children: [
-            // Radio button
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.grey.shade400,
-                  width: 2,
-                ),
+            SizedBox(
+              width: Sizer.wp(24),
+              height: Sizer.hp(24),
+              child: Radio<ResendMethod>(
+                value: method,
+                groupValue: _selectedMethod,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedMethod = value!;
+                  });
+                },
+                activeColor: AppColors.primary,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
               ),
-              child: isSelected
-                  ? Center(
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    )
-                  : null,
             ),
             const SizedBox(width: 12),
-
-            // Icon
-            Icon(
-              icon,
-              size: 20,
-              color: isSelected ? AppColors.primary : Colors.grey.shade600,
+            Image.asset(
+              imagePath,
+              width:Sizer.wp(24),
+              height: Sizer.hp(24),
+              color: isSelected ? AppColors.primary : AppColors.textSecondary 
             ),
             const SizedBox(width: 12),
-
-            // Text
             Expanded(
               child: Text(
                 text,

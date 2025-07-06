@@ -23,4 +23,13 @@ class IconPath {
   // Bottom Navigation Icons - Projects
   static const String projectsActive = 'assets/icons/projects_active.png';
   static const String projectsInactive = 'assets/icons/projects_inactive.png';
+
+  //Authentications Icons
+  static const String call = 'assets/icons/call.png';
+  static const String whatsapp = 'assets/icons/whatsapp.png';
+  static const String mail = 'assets/icons/mail.png';
+  static const String sms = 'assets/icons/sms.png';
+  static const String device = 'assets/icons/device.png';
+  static const String mailicon = 'assets/icons/mailicon.png';
+  static const String success = 'assets/icons/Icons.png';
 }
