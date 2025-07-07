@@ -13,25 +13,22 @@ class RoutePaths {
   static const String forgotPassword = '/forgot-password';
   static const String onboarding = '/onboarding';
 
+  //Auth Routes
 
-//Auth Routes
-
-//For phone
+  //For phone
   static const String verifyMethod = '/verify-method';
   static const String loginwithphone = '/loginwithphone';
   static const String loginphoneotp = '/loginphoneotp';
   static const String verifycomplete = '/verifycomplete';
 
-//For email
+  //For email
 
   static const String loginwithemail = '/loginwithemail';
   static const String loginemailotp = '/loginemailotp';
 
-
-
-
   // Main shell paths
   static const String home = '/home';
+  static const String drawer = '/drawer';
   static const String chat = '/chat';
   static const String users = '/users';
   static const String schedule = '/schedule';
@@ -73,9 +70,6 @@ class RouteNames {
   static const String verifycomplete = 'verifycomplete';
   static const String loginwithemail = 'loginwithemail';
   static const String loginemailotp = 'loginemailotp';
- 
-
-
 
   // Main shell route names
   static const String home = 'home';
@@ -99,4 +93,7 @@ class RouteNames {
   // Profile section route names (for future expansion)
   static const String profileEdit = 'profile-edit';
   static const String profileSecurity = 'profile-security';
+
+  //for dashbaord drawer
+  static const String drawer = 'drawer';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
@@ -8,6 +9,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/admin/admin_dashboard/controllers/dashboard_controller.dart';
 import 'package:jesusvlsco/features/admin/admin_dashboard/widgets/dashboard_appbar.dart';
+import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   AdminDashboardScreen({super.key});
@@ -19,7 +21,9 @@ class AdminDashboardScreen extends StatelessWidget {
       appBar: DashboardAppBar(
         onSearchTap: () {},
         onNotificationTap: () {},
-        onMenuTap: () {},
+        onMenuTap: () {
+          context.pushNamed(RouteNames.drawer);
+        },
       ),
       body: Padding(
         padding: EdgeInsets.all(Sizer.wp(16)),
