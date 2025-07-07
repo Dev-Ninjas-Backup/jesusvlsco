@@ -9,6 +9,7 @@ class AppColors {
   ); // Darker primary for a more professional look
   static const Color secondary = Color(0xFFF5F5F5);
    static const Color textSecondary = Color(0xFF5B5B5B);
+   static const Color background = Color(0xFFEDEEF7);
 
 
   
