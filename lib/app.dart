@@ -29,7 +29,7 @@ class Jesusvlsco extends StatelessWidget {
       // enableLog: true,
       // Use GoRouter with GetX
       // home: Router.withConfig(config: AppRouter.router),
-home: TestPage(),
+home: AnnouncementDashboard(),
       // Alternative: You can also use this approach
       // builder: (context, child) {
       //   return Router.withConfig(config: AppRouter.router);
