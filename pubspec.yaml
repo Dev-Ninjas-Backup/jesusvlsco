@@ -61,6 +61,8 @@ dependencies:
   timezone: ^0.9.4
   firebase_messaging: ^15.2.9
   flutter_local_notifications: ^17.0.0
+  flutter_svg: ^2.2.0
+  
 
 dev_dependencies:
   flutter_test:

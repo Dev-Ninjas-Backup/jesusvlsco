@@ -1,155 +1,156 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+// AppNotification model to hold notification data
+class AppNotification {
+  final RemoteMessage message;
+  bool isRead;
 
-
+  AppNotification({required this.message, this.isRead = false});
+}
 
 class NotificationController extends GetxController {
+  final RxList<AppNotification> _notifications = <AppNotification>[].obs;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  List<AppNotification> get notifications => _notifications.toList();
 
   @override
   void onInit() {
     super.onInit();
-    initNotification();
+    _initializeNotifications();
+    _setupFCMListeners();
   }
 
-  /// 🔔 Initialize notifications and create channel
-  Future<void> initNotification() async {
+  // Initialize local notifications
+  Future<void> _initializeNotifications() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    // Android settings
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Android setup (make sure the icon is placed in res/drawable folder)
+    const initializationSettingsAndroid = AndroidInitializationSettings('ic_notification'); // Refer to icon without .png extension
+    const initializationSettingsIOS = DarwinInitializationSettings();
 
-
-
-    // iOS/Mac
-    const DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings();
-
-    // Full platform settings
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-          android: initializationSettingsAndroid,
-          iOS: initializationSettingsDarwin,
-          macOS: initializationSettingsDarwin,
-        );
-
-    // Create notification channel (Android)
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'custom_sound_channel',
-      'Custom Sound Channel',
-      description: 'Channel for custom sound',
-      importance: Importance.high,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('notification_sound'),
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
     );
 
-    // Register channel
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.createNotificationChannel(channel);
+    // Initialize the plugin
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-    // Initialize plugin
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        // Optional tap handler
-      },
-    );
-
-    // 🔐 Request permission
-    await requestNotificationPermission();
-    // print("FCM tokennnnn: $FCMtoken");
+    // Request notification permission
+    await _requestNotificationPermission();
   }
 
-  /// 📢 Show instant notification
-  Future<void> showInstantNotification({
-    required int id,
-    required String title,
-    required String body,
-  }) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
-          'custom_sound_channel',
-          'Custom Sound Channel',
-          importance: Importance.high,
-          priority: Priority.high,
-          playSound: true,
-          sound: RawResourceAndroidNotificationSound('notification_sound'),
-        );
+  // Set up Firebase Cloud Messaging listeners
+  Future<void> _setupFCMListeners() async {
+    // Foreground message handler
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _addNotification(message);
+    });
 
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: androidDetails,
-    );
+    // Background message handler (requires top-level function)
+    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessageHandler);
 
-    await flutterLocalNotificationsPlugin.show(
-      id,
-      title,
-      body,
-      notificationDetails,
-    );
+    // Handle notification tap from background or terminated state
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleMessageTap(message);
+    });
+
+    // Handle app launch from a terminated state (if notification was tapped)
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) _addNotification(initialMessage);
   }
 
-  /// ✅ Ask for notification permission
-Future<String?> requestNotificationPermission() async {
-  try {
-    // Android permission
-    if (Platform.isAndroid) {
-      await Permission.notification.request();
+  // Add a new notification to the list (ensure no duplicates)
+  void _addNotification(RemoteMessage message) {
+    final existingNotification = _notifications.firstWhereOrNull(
+      (notif) => notif.message.messageId == message.messageId,
+    );
+
+    if (existingNotification == null) {
+      _notifications.add(AppNotification(message: message, isRead: false));
+    } else {
+      existingNotification.isRead = false;  // Optionally mark as unread again if needed
+      _notifications.refresh();
     }
-    
-    // // iOS permission
-    // if (Platform.isIOS) {
-    //   await FirebaseMessaging.instance.requestPermission();
-    // }
-    
-    // Get FCM token
-    String? fcmToken = await FirebaseMessaging.instance.getToken();
-    
-    if (fcmToken != null) {
-      print("FCM Token: $fcmToken");
-      return fcmToken;
+  }
+
+  // Handle notification tap (mark as read)
+  void _handleMessageTap(RemoteMessage message) {
+    final existingNotification = _notifications.firstWhereOrNull(
+      (notif) => notif.message.messageId == message.messageId,
+    );
+
+    if (existingNotification == null) {
+      _addNotification(message);
+    } else {
+      existingNotification.isRead = true;
+      _notifications.refresh();
     }
-    
-    return null;
-  } catch (e) {
-    print("Error: $e");
-    return null;
+  }
+
+  // Request notification permission for iOS and Android
+  Future<void> _requestNotificationPermission() async {
+    try {
+      if (Platform.isAndroid) {
+        await Permission.notification.request();
+      }
+
+      await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      // Get the FCM token
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken != null) print("FCM Token: $fcmToken");
+    } catch (e) {
+      print("Error requesting permission or getting token: $e");
+    }
+  }
+
+  // Method to toggle the read status for a specific notification by its message ID
+  void toggleReadStatus(String messageId) {
+    final index = _notifications.indexWhere(
+      (notif) => notif.message.messageId == messageId,
+    );
+    if (index != -1) {
+      _notifications[index].isRead = !_notifications[index].isRead;
+      _notifications.refresh();
+    }
   }
 }
 
-  // Future<void> shedule_alarm(
-  //   int id,
-  //   String title,
-  //   String? body,
-  //   DateTime dateTime,
-  // ) async {
-  //   await flutterLocalNotificationsPlugin.zonedSchedule(
-  //     id,
-  //     title,
-  //     body,
-  //     tz.TZDateTime.from(dateTime, tz.local),
-  //     NotificationDetails(
-  //       android: AndroidNotificationDetails(
-  //         'alarm_channel',
-  //         'Alarm Channel',
-  //         channelDescription: 'Channel for scheduled alarms',
-  //         importance: Importance.max,
-  //         priority: Priority.high,
-  //       ),
-  //     ),
+// This must be a top-level function
+Future<void> _firebaseBackgroundMessageHandler(RemoteMessage message) async {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  //     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //     matchDateTimeComponents: DateTimeComponents.dateAndTime,
-  //     // uiLocalNotificationDateInterpretation:
-  //     //     UILocalNotificationDateInterpretation.absoluteTime,
-  //   );
-  // }
+  const androidDetails = AndroidNotificationDetails(
+    'high_importance_channel',
+    'High Importance Channel',
+    channelDescription: 'Channel for high priority notifications',
+    importance: Importance.high,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('notification_sound'),
+    icon: 'ic_notification', // Custom icon
+    channelShowBadge: true,
+    enableVibration: true,
+    priority: Priority.high,
+  );
+
+  const platformDetails = NotificationDetails(android: androidDetails);
+
+  // Show notification
+  await flutterLocalNotificationsPlugin.show(
+    message.messageId.hashCode,
+    message.notification?.title,
+    message.notification?.body,
+    platformDetails,
+    payload: message.data.toString(),
+  );
 }

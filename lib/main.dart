@@ -14,8 +14,7 @@ void main() async {
   NotificationController notificationController = Get.put(
     NotificationController(),
   );
-  notificationController.initNotification();
-  notificationController.requestNotificationPermission();
+  notificationController.onInit();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
