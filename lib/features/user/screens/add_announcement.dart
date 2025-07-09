@@ -484,22 +484,27 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   }
 
   Widget _buildFieldLabel(String label, {bool isRequired = false}) {
-    return RichText(
-      text: TextSpan(
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Color(0xFF374151),
-        ),
-        children: [
-          TextSpan(text: label),
-          if (isRequired)
-            const TextSpan(
-              text: '*',
-              style: TextStyle(color: Color(0xFFEF4444)),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF374151),
             ),
-        ],
-      ),
+            children: [
+              TextSpan(text: label),
+              if (isRequired)
+                const TextSpan(
+                  text: '*',
+                  style: TextStyle(color: Color(0xFFEF4444)),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
