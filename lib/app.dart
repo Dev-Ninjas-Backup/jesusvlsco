@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
+import 'package:jesusvlsco/features/user/screens/add_announcement.dart';
 import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
-import 'package:jesusvlsco/features/user/screens/notification_page.dart';
 import 'package:jesusvlsco/features/user/screens/test_page.dart';
-
-
-
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -29,7 +26,7 @@ class Jesusvlsco extends StatelessWidget {
       // enableLog: true,
       // Use GoRouter with GetX
       // home: Router.withConfig(config: AppRouter.router),
-home: AnnouncementDashboard(),
+home: AddAnnouncement(),
       // Alternative: You can also use this approach
       // builder: (context, child) {
       //   return Router.withConfig(config: AppRouter.router);

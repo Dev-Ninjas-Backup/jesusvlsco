@@ -1,255 +1,245 @@
+// ignore_for_file: unused_element
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/user/controllers/announcement_controller.dart';
+import 'package:jesusvlsco/features/user/screens/add_announcement.dart';
+import 'package:jesusvlsco/features/user/screens/test_page.dart';
+import 'package:jesusvlsco/features/user/screens/widgets/announcement_card.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class AnnouncementDashboard extends StatelessWidget {
+// Announcement Model
+
+class AnnouncementDashboard extends StatefulWidget {
   const AnnouncementDashboard({super.key});
+
+  @override
+  State<AnnouncementDashboard> createState() => _AnnouncementDashboardState();
+}
+
+class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
+  final AnnouncementController _announcementController = Get.put(
+    AnnouncementController(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        shadowColor: AppColors.textWhite,
-        backgroundColor: Colors.white,
-        elevation: 4,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Announcement',
-          style: AppTextStyle.regular().copyWith(
-            fontSize: Sizer.wp(20),
-            color: AppColors.primary,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            onPressed: () {
-              // Handle menu action if needed
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Search Bar Widget
-          _buildSearchBarWidget(),
-
-          SizedBox(height: Sizer.hp(16)),
-
-          // Announcement Card Widget
-          _buildAnnouncementCard(),
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            _buildSearchBarWidget(),
             SizedBox(height: Sizer.hp(16)),
-          _buildAnnouncementCard(),
-             SizedBox(height: Sizer.hp(16)),
-          _buildAnnouncementCard(),
-          
-        ],
+            _buildAnnouncementsList(),
+          ],
+        ),
       ),
     );
   }
 
-  // Search Bar Widget
-  Widget _buildSearchBarWidget() {
-    return Column(
-      children: [
-        // Search TextField
-        Padding(
-          padding: EdgeInsets.only(
-            left: Sizer.wp(16),
-            right: Sizer.wp(16),
-            top: Sizer.hp(24),
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      shadowColor: AppColors.textWhite,
+      backgroundColor: Colors.white,
+      elevation: 4,
+      leading:  Icon(
+            CupertinoIcons.arrow_left,
+            color: AppColors.backgroundDark,
+            size: Sizer.wp(24),
           ),
-          child: Container(
-            height: Sizer.hp(48),
-            width: Sizer.wp(360),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Sizer.wp(8)),
-              border: Border.all(
-                color: AppColors.textSecondary.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                hintText: 'Search articles',
-                hintStyle: AppTextStyle.regular().copyWith(
-                  fontSize: Sizer.wp(14),
-                  color: AppColors.textSecondary.withOpacity(0.6),
-                ),
-                suffixIcon: Container(
-                  padding: EdgeInsets.all(
-                    8,
-                  ), // This creates smaller visual appearance
-                  child: SvgPicture.asset(
-                    'assets/icons/search-normal.svg',
-                    height: Sizer.hp(20),
-                    width: Sizer.wp(20),
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: Sizer.wp(16),
-                  vertical: Sizer.hp(12),
-                ),
-              ),
-            ),
-          ),
+      title: Text(
+        'Announcement',
+        style: AppTextStyle.regular().copyWith(
+          fontSize: Sizer.wp(20),
+          color: AppColors.primary,
+          fontWeight: FontWeight.w700,
         ),
-    
-        SizedBox(height: Sizer.hp(16)),
-    _filter()
+      ),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          icon:  Icon(
+              CupertinoIcons.bars,
+              color: AppColors.backgroundDark,
+              size: Sizer.wp(24),
+            ),
+          onPressed: () {
+            // Handle menu action if needed
+          },
+        ),
       ],
     );
   }
 
+  Widget _buildSearchBarWidget() {
+    return Column(
+      children: [
+        _buildSearchTextField(),
+        SizedBox(height: Sizer.hp(16)),
+        _buildFilterButtons(),
+      ],
+    );
+  }
 
-
-
-
-
-
-
-
-  // Announcement Card Widget
-  Widget _buildAnnouncementCard() {
+  Widget _buildSearchTextField() {
     return Padding(
-      padding:  EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
+      padding: EdgeInsets.only(
+        left: Sizer.wp(16),
+        right: Sizer.wp(16),
+        top: Sizer.hp(24),
+      ),
       child: Container(
+        height: Sizer.hp(48),
         width: Sizer.wp(360),
-        // margin: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(Sizer.wp(12)),
+          color: AppColors.primaryBackground,
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.textSecondary.withOpacity(0.1),
+              blurRadius: 3,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: TextField(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            hintText: 'Search articles',
+            hintStyle: AppTextStyle.regular().copyWith(
+              fontSize: Sizer.wp(14),
+              color: AppColors.textSecondary.withOpacity(0.6),
+            ),
+            suffixIcon: Container(
+              padding: const EdgeInsets.all(8),
+              child: SvgPicture.asset(
+                'assets/icons/search-normal.svg',
+                height: Sizer.hp(20),
+                width: Sizer.wp(20),
+              ),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: Sizer.wp(16),
+              vertical: Sizer.hp(12),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterButtons() {
+    return Padding(
+      padding: EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
+      child: SizedBox(
+        width: Sizer.wp(360),
+        child: Row(
           children: [
-            // Time and Date
-            Padding(
-              padding: EdgeInsets.all(Sizer.wp(16)),
-              child: Text(
-                'Today at 03:00 pm',
-                style: AppTextStyle.regular().copyWith(
-                  fontSize: Sizer.wp(12),
-                  color: AppColors.textSecondary.withOpacity(0.7),
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+            _buildAddButton(context,
+            onpress: () {
+              Get.to(() => const AddAnnouncement());
+            },
+            
             ),
-      
-            // Title
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
-              child: Text(
-                'New Leave Policy Effective July 2025',
-                style: AppTextStyle.regular().copyWith(
-                  fontSize: Sizer.wp(16),
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+            SizedBox(width: Sizer.wp(12)),
+            _buildFilterButton(
+              context,
+              onpress: () {
+                _showCustomDialog(context);
+              },
             ),
-      
-            // Description
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Sizer.wp(16),
-                vertical: Sizer.hp(8),
-              ),
-              child: Text(
-                'We have updated our leave policy to...',
-                style: AppTextStyle.regular().copyWith(
-                  fontSize: Sizer.wp(14),
-                  color: AppColors.textSecondary.withOpacity(0.8),
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+            SizedBox(width: Sizer.wp(12)),
+            _buildDateButton(
+              onpress: () {
+                // Handle date action
+                //  Navigator.push(context, MaterialPageRoute(builder: (_) =>  TestPage()));
+              },
             ),
-      
-            // Buttons Row
-            Padding(
-              padding: EdgeInsets.all(Sizer.wp(16)),
-              child: Row(
-                children: [
-                  // Response Button
-                  Container(
-                    height: Sizer.hp(36),
-                    padding: EdgeInsets.symmetric(horizontal: Sizer.wp(20)),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(Sizer.wp(18)),
-                      border: Border.all(
-                        color: AppColors.primary.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        // Handle response action
-                      },
-                      borderRadius: BorderRadius.circular(Sizer.wp(18)),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.remove_red_eye_outlined,
-                            color: AppColors.primary,
-                            size: Sizer.wp(16),
-                          ),
-                          SizedBox(width: Sizer.wp(6)),
-                          Text(
-                            'Response',
-                            style: AppTextStyle.regular().copyWith(
-                              fontSize: Sizer.wp(13),
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+            SizedBox(width: Sizer.wp(12)),
+            _deleteButton(() {}),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterButton(BuildContext context, {VoidCallback? onpress}) {
+    return Expanded(
+      child: InkWell(
+        onTap: onpress,
+        child: Container(
+          height: Sizer.hp(40),
+          width: Sizer.wp(94.67),
+          decoration: BoxDecoration(
+            color: AppColors.textWhite,
+            borderRadius: BorderRadius.circular(Sizer.wp(8)),
+            border: Border.all(
+              color: AppColors.primary,
+              width: 1,
+            ),
+          ),
+          child: InkWell(
+            onTap: onpress,
+            borderRadius: BorderRadius.circular(Sizer.wp(8)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.filter_list,
+                  color: AppColors.primary,
+                  size: Sizer.wp(18),
+                ),
+                SizedBox(width: Sizer.wp(8)),
+                Text(
+                  'Filter',
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: Sizer.wp(14),
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w500,
                   ),
-      
-                  SizedBox(width: Sizer.wp(12)),
-      
-                  // Read Receipt Button
-                  Expanded(
-                    child: Container(
-                      height: Sizer.hp(36),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(Sizer.wp(18)),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // Handle read receipt action
-                        },
-                        borderRadius: BorderRadius.circular(Sizer.wp(18)),
-                        child: Center(
-                          child: Text(
-                            'Read receipt',
-                            style: AppTextStyle.regular().copyWith(
-                              fontSize: Sizer.wp(13),
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddButton(BuildContext context, {VoidCallback? onpress}) {
+    return Container(
+      height: Sizer.hp(40),
+      width: Sizer.wp(94.67),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(Sizer.wp(8)),
+      ),
+      child: InkWell(
+        onTap: onpress,
+        borderRadius: BorderRadius.circular(Sizer.wp(8)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add, color: Colors.white, size: Sizer.wp(18)),
+            SizedBox(width: Sizer.wp(8)),
+            Text(
+              'Add',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -257,108 +247,190 @@ class AnnouncementDashboard extends StatelessWidget {
       ),
     );
   }
-}
 
+  Widget _deleteButton(VoidCallback onpress) {
+    return InkWell(
+      onTap: onpress,
+      child: Container(
+        height: Sizer.hp(40),
+        width: Sizer.wp(40),
+        decoration: BoxDecoration(
+          // color: AppColors.primary,
+          borderRadius: BorderRadius.circular(Sizer.wp(6)),
+          border: Border.all(color: AppColors.primary, width: 1),
+        ),
+        child: InkWell(
+          onTap: onpress,
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                child: SvgPicture.asset(
+                  'assets/icons/delete.svg',
+                  height: Sizer.hp(20),
+                  width: Sizer.wp(20),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-Widget _filter(){
-  return 
-          // Filter and Date Buttons Row
-          Padding(
-            padding:  EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
-            child: Container(
-          
-              width: Sizer.wp(360),
-              child: Row(
-                children: [
-                  // Filter Button
-                  Expanded(
-                    child: Container(
-                      height: Sizer.hp(40),
-                      decoration: BoxDecoration(
-                        color: AppColors.textWhite,
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // Handle filter action
-                        },
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.filter_list,
-                              color: AppColors.primary,
-                              size: Sizer.wp(18),
-                            ),
-                            SizedBox(width: Sizer.wp(8)),
-                            Text(
-                              'Filter',
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-              
-                  SizedBox(width: Sizer.wp(12)),
-              
-                  // Date Button
-                  Expanded(
-                    child: Container(
-                      height: Sizer.hp(40),
-                      decoration: BoxDecoration(
-                        color: AppColors.textWhite,
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // Handle date action
-                        },
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.calendar_today,
-                              color: AppColors.primary,
-                              size: Sizer.wp(18),
-                            ),
-                            SizedBox(width: Sizer.wp(8)),
-                            Text(
-                              'Date',
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(width: Sizer.wp(4)),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.primary,
-                              size: Sizer.wp(18),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+  Widget _buildDateButton({VoidCallback? onpress}) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          // When the button is pressed, show the calendar
+          _showCalendarDialog(context);
+        },
+        child: Container(
+          height: Sizer.hp(40),
+          width: Sizer.wp(94.67),
+          decoration: BoxDecoration(
+            color: AppColors.textWhite,
+            borderRadius: BorderRadius.circular(Sizer.wp(8)),
+            border: Border.all(
+              color: AppColors.primary,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.calendar_today,
+                color: AppColors.primary,
+                size: Sizer.wp(18),
+              ),
+              SizedBox(width: Sizer.wp(8)),
+              Text(
+                'Date',
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(14),
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: Sizer.wp(4)),
+              Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.primary,
+                size: Sizer.wp(18),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnnouncementsList() {
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: _announcementController.announcements.length,
+      separatorBuilder: (context, index) => SizedBox(height: Sizer.hp(16)),
+      itemBuilder: (context, index) => AnnouncementCard(
+        announcement: _announcementController.announcements[index],
+      ),
+    );
+  }
+
+  Widget _buildAlertBox(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColors.backgroundLight,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizer.wp(12)),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton(
+            onPressed: () {
+              // Handle button press
+              Get.back();
+            },
+            child: Text(
+              'Category wise',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          );
+          ),
+          TextButton(
+            onPressed: () {
+              // Handle button press
+              Get.back();
+            },
+            child: Text(
+              'Team wise',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return _buildAlertBox(context);
+      },
+    );
+  }
+}
+
+void _showCalendarDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: AppColors.primaryBackground,
+        content: SizedBox(
+          width: Sizer.wp(360),
+          height: Sizer.hp(367),
+          child: TableCalendar(
+            calendarStyle: CalendarStyle(
+              todayDecoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+
+              selectedDecoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+            ),
+            currentDay: DateTime.now(),
+            firstDay: DateTime.utc(2020, 1, 1),
+            lastDay: DateTime.utc(2030, 12, 31),
+            focusedDay: DateTime.now(),
+            calendarFormat: CalendarFormat.month,
+            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+            onDaySelected: (selectedDay, focusedDay) {
+              // Close dialog and perform action on date selection
+              Navigator.of(context).pop();
+              print('Selected date: $selectedDay');
+            },
+            onPageChanged: (focusedDay) {
+              // Optional: Update the calendar's focused day if needed
+            },
+          ),
+        ),
+      );
+    },
+  );
 }
