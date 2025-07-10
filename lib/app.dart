@@ -4,6 +4,9 @@ import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/features/user/screens/add_announcement.dart';
 import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/features/user/screens/response_page.dart';
+import 'package:jesusvlsco/features/user/screens/test_page.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {

@@ -76,201 +76,203 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       ),
       body: Padding(
         padding: EdgeInsets.all(Sizer.wp(16)),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Create New Announcement",
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(18),
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Create New Announcement",
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(18),
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(8)),
-            Row(
-              children: [
-                Text(
-                  "Fill out the form below to create a new  company\nannouncement",
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(12),
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w400,
+                ],
+              ),
+              SizedBox(height: Sizer.hp(8)),
+              Row(
+                children: [
+                  Text(
+                    "Fill out the form below to create a new  company\nannouncement",
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(12),
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(24)),
-            Row(
-              children: [
-                Text(
-                  "Announcement Title",
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(16),
-                    color: AppColors.backgroundDark,
-                    fontWeight: FontWeight.w600,
+                ],
+              ),
+              SizedBox(height: Sizer.hp(24)),
+              Row(
+                children: [
+                  Text(
+                    "Announcement Title",
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      color: AppColors.backgroundDark,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(8)),
-            Row(
-              children: [
-                Container(
-                  height: Sizer.hp(45),
-                  width: Sizer.wp(360),
-                  child: TextField(
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      hintText: "Enter announcement title here",
-                      hintStyle: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(14),
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        borderSide: BorderSide(
-                          color: AppColors.border,
-                          width: 1,
+                  Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
+                ],
+              ),
+              SizedBox(height: Sizer.hp(8)),
+              Row(
+                children: [
+                  Container(
+                    height: Sizer.hp(45),
+                    width: Sizer.wp(360),
+                    child: TextField(
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        hintText: "Enter announcement title here",
+                        hintStyle: AppTextStyle.regular().copyWith(
+                          fontSize: Sizer.wp(14),
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                        borderSide: BorderSide(
-                          color: AppColors.primary,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+                          borderSide: BorderSide(
+                            color: AppColors.border,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(24)),
-            Row(
-              children: [
-                Text(
-                  "Category",
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(16),
-                    color: AppColors.backgroundDark,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(8)),
-            SizedBox(
-              height: Sizer.hp(45),
-              width: Sizer.wp(360),
-              child: _buildDropdown(
-                items: categories,
-                value: selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
+                ],
               ),
-            ),
-            SizedBox(height: Sizer.hp(24)),
-            Row(
-              children: [
-                Text(
-                  "Audience",
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(16),
-                    color: AppColors.backgroundDark,
-                    fontWeight: FontWeight.w600,
+              SizedBox(height: Sizer.hp(24)),
+              Row(
+                children: [
+                  Text(
+                    "Category",
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      color: AppColors.backgroundDark,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(8)),
-            SizedBox(
-              height: Sizer.hp(45),
-              width: Sizer.wp(360),
-              child: _buildDropdown(
-                items: audiences,
-                value: selectedAudience,
-                onChanged: (value) {
-                  setState(() {
-                    selectedAudience = value;
-                  });
-                },
+                  Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
+                ],
               ),
-            ),
-            SizedBox(height: Sizer.hp(24)),
-            Row(
-              children: [
-                _buildRadioOption(
-                  'Publish now',
-                  isActive,
-                  () => setState(() => isActive = true),
+              SizedBox(height: Sizer.hp(8)),
+              SizedBox(
+                height: Sizer.hp(45),
+                width: Sizer.wp(360),
+                child: _buildDropdown(
+                  items: categories,
+                  value: selectedCategory,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value;
+                    });
+                  },
                 ),
-                const SizedBox(width: 24),
-                _buildRadioOption(
-                  'Select date & time',
-                  !isActive,
-                  () => setState(() => isActive = false),
+              ),
+              SizedBox(height: Sizer.hp(24)),
+              Row(
+                children: [
+                  Text(
+                    "Audience",
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      color: AppColors.backgroundDark,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
+                ],
+              ),
+              SizedBox(height: Sizer.hp(8)),
+              SizedBox(
+                height: Sizer.hp(45),
+                width: Sizer.wp(360),
+                child: _buildDropdown(
+                  items: audiences,
+                  value: selectedAudience,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedAudience = value;
+                    });
+                  },
                 ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            _buildFieldLabel('Attachment'),
-            const SizedBox(height: 12),
-            _buildAttachmentArea(),
-            const SizedBox(height: 24),
-            _buildFieldLabel('Notification Settings'),
-            const SizedBox(height: 12),
-            _buildCheckboxOption(
-              'Send email notifications to recipients',
-              emailNotifications,
-              (value) => setState(() => emailNotifications = value ?? false),
-            ),
-            const SizedBox(height: 8),
-            _buildCheckboxOption(
-              'Enable read receipt tracking',
-              readReceiptTracking,
-              (value) => setState(() => readReceiptTracking = value ?? false),
-            ),
-            const SizedBox(height: 32),
-            Row(
-              children: [
-                _buildActionButton(
-                  'Preview',
-                  Icons.visibility_outlined,
-                  Colors.white,
-                  const Color(0xFF6366F1),
-                  true,
-                ),
-                const SizedBox(width: 12),
-                _buildActionButton(
-                  'Publish',
-                  Icons.publish,
-                  const Color(0xFF6366F1),
-                  Colors.white,
-                  false,
-                ),
-                const SizedBox(width: 12),
-                _buildActionButton(
-                  'Cancel',
-                  null,
-                  Colors.white,
-                  const Color(0xFF6B7280),
-                  true,
-                ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: Sizer.hp(24)),
+              Row(
+                children: [
+                  _buildRadioOption(
+                    'Publish now',
+                    isActive,
+                    () => setState(() => isActive = true),
+                  ),
+                  const SizedBox(width: 24),
+                  _buildRadioOption(
+                    'Select date & time',
+                    !isActive,
+                    () => setState(() => isActive = false),
+                  ),
+                ],
+              ),
+               SizedBox(height: Sizer.hp(24)),
+              _buildFieldLabel('Attachment'),
+               SizedBox(height: Sizer.hp(24)),
+              _buildAttachmentArea(),
+          SizedBox(height: Sizer.hp(24)),
+              _buildFieldLabel('Notification Settings'),
+             SizedBox(height: Sizer.hp(16)),
+              _buildCheckboxOption(
+                'Send email notifications to recipients',
+                emailNotifications,
+                (value) => setState(() => emailNotifications = value ?? false),
+              ),
+              SizedBox(height: Sizer.hp(16)),
+              _buildCheckboxOption(
+                'Enable read receipt tracking',
+                readReceiptTracking,
+                (value) => setState(() => readReceiptTracking = value ?? false),
+              ),
+             SizedBox(height: Sizer.hp(24)),
+              Row(
+                children: [
+                  _buildActionButton(
+                    'Preview',
+                    Icons.visibility_outlined,
+                    Colors.white,
+                    const Color(0xFF6366F1),
+                    true,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildActionButton(
+                    'Publish',
+                    Icons.upload_file,
+                    const Color(0xFF6366F1),
+                    Colors.white,
+                    false,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildActionButton(
+                    'Cancel',
+                    null,
+                    Colors.white,
+                    const Color(0xFF6B7280),
+                    true,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -364,11 +366,11 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
 
   Widget _buildAttachmentArea() {
     return Container(
-      width: double.infinity,
-      height: 120,
+      width: Sizer.wp(360),
+      height: Sizer.hp(166),
       decoration: BoxDecoration(
         border: Border.all(
-          color: const Color(0xFFD1D5DB),
+          color:  AppColors.border,
           style: BorderStyle.solid,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -378,23 +380,23 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         children: [
           Icon(
             Icons.cloud_upload_outlined,
-            size: 32,
-            color: const Color(0xFF9CA3AF),
+            size: Sizer.wp(40),
+            color: AppColors.text,
           ),
           const SizedBox(height: 8),
-          const Text(
+           Text(
             'Click to upload files or drag and drop',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF6B7280),
+            style: AppTextStyle.regular().copyWith(
+              fontSize: Sizer.wp(12),
+              color:AppColors.text,
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
+           Text(
             'PDF, DOC, DOCX, JPG, PNG up to 10MB',
             style: TextStyle(
-              fontSize: 12,
-              color: Color(0xFF9CA3AF),
+                 fontSize: Sizer.wp(14),
+             color:AppColors.text,
             ),
           ),
         ],
@@ -443,7 +445,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   ) {
     return Expanded(
       child: Container(
-        height: 40,
+        height:  Sizer.hp(40),
+        width: Sizer.wp(112) ,
         decoration: BoxDecoration(
           color: backgroundColor,
           border: isOutlined ? Border.all(color: textColor) : null,
@@ -470,9 +473,9 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
               ],
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(14),
+                  fontWeight: FontWeight.w400,
                   color: textColor,
                 ),
               ),
@@ -489,10 +492,10 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       children: [
         RichText(
           text: TextSpan(
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF374151),
+            style:  AppTextStyle.regular().copyWith(
+              fontSize: Sizer.wp(16),
+              fontWeight: FontWeight.w600,
+              color: AppColors.backgroundDark,
             ),
             children: [
               TextSpan(text: label),

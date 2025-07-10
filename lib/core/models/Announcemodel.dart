@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 
 class AnnouncementModel {
   final String id;
@@ -6,6 +7,7 @@ class AnnouncementModel {
   final String dateTime;
   final bool isRead;
   final bool hasResponse;
+  final String category; // Added category field
 
   AnnouncementModel({
     required this.id,
@@ -14,5 +16,6 @@ class AnnouncementModel {
     required this.dateTime,
     this.isRead = false,
     this.hasResponse = false,
+    required this.category, // Make sure to add category to constructor
   });
 }

@@ -168,7 +168,9 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
               },
             ),
             SizedBox(width: Sizer.wp(12)),
-            _deleteButton(() {}),
+            _deleteButton(() {
+          
+            }),
           ],
         ),
       ),
@@ -329,14 +331,27 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
   }
 
   Widget _buildAnnouncementsList() {
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: _announcementController.announcements.length,
-      separatorBuilder: (context, index) => SizedBox(height: Sizer.hp(16)),
-      itemBuilder: (context, index) => AnnouncementCard(
-        announcement: _announcementController.announcements[index],
-      ),
+    return FutureBuilder(
+      future: _announcementController.fetchAnnouncements(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: snapshot.data!.length,
+            separatorBuilder: (context, index) =>
+                SizedBox(height: Sizer.hp(16)),
+            itemBuilder: (context, index) => AnnouncementCard(
+              announcement:
+                  snapshot.data![index],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 
