@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/app.dart';
-import 'package:jesusvlsco/features/user/controllers/notification_controller.dart';
+import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
 
 void main() async {

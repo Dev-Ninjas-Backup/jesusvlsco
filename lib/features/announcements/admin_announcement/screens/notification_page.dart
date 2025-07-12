@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/user/controllers/notification_controller.dart'; // Ensure this import is correct
+import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart'; // Ensure this import is correct
 
 class Notificationpage extends StatefulWidget {
   const Notificationpage({Key? key}) : super(key: key);
