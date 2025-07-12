@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                       AppText.welcome,
                       style: AppTextStyle.textlarge(), // ✅ Updated style
                     ),
-          
+
                     SizedBox(height: Sizer.hp(8)),
                     Text(
                       AppText.loginToProfile1,
@@ -73,6 +73,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: Sizer.wp(12),
                         children: [
                           Image.asset(
                             height: Sizer.hp(24),
@@ -80,12 +81,12 @@ class LoginScreen extends StatelessWidget {
                             'assets/icons/device.png',
                             color: Colors.white,
                           ),
-                          const SizedBox(width: 10),
+
                           Text(
                             AppText.loginphone,
-                            style: AppTextStyle.semibold(
-                              
-                            ).copyWith(color: Colors.white), // ✅ Styled text
+                            style: AppTextStyle.semibold().copyWith(
+                              color: Colors.white,
+                            ), // ✅ Styled text
                           ),
                         ],
                       ),
@@ -107,22 +108,18 @@ class LoginScreen extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: Sizer.wp(12),
                         children: [
-                        Image.asset(
+                          Image.asset(
                             height: Sizer.hp(24),
                             width: Sizer.wp(24),
                             IconPath.mailicon,
-                            
                           ),
-                          SizedBox(width: 10),
                           Text(
                             AppText.loginemail,
-                            style:
-                                AppTextStyle.semibold(
-                                  
-                                ).copyWith(
-                                  color: AppColors.textSecondary,
-                                ), // ✅ Styled text
+                            style: AppTextStyle.semibold().copyWith(
+                              color: AppColors.textSecondary,
+                            ), // ✅ Styled text
                           ),
                         ],
                       ),

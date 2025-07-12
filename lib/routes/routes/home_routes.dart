@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/admin/admin_dashboard/screens/dashboard_screen.dart';
 
 // import '../../features/test/home_page.dart';
 import '../config/route_constants.dart';
@@ -19,7 +20,7 @@ class HomeRoutes {
       GoRoute(
         path: RoutePaths.home,
         name: RouteNames.home,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => AdminDashboardScreen(),
         routes: [
           // Home details page
           // GoRoute(
