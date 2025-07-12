@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
 
 class BottomNavigationScaffoldController extends GetxController {
   final List<Widget> screens = [
-    const HomeScreen(),
+    UserDashboardScreen(),
     const ChatScreen(),
     const UsersScreen(),
     const ScheduleScreen(),
@@ -11,14 +12,14 @@ class BottomNavigationScaffoldController extends GetxController {
   ];
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+// class HomeScreen extends StatelessWidget {
+//   const HomeScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Home Screen'));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Center(child: Text('Home Screen'));
+//   }
+// }
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
