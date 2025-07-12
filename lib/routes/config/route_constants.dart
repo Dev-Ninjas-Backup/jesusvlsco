@@ -71,6 +71,14 @@ class RouteNames {
   static const String loginwithemail = 'loginwithemail';
   static const String loginemailotp = 'loginemailotp';
 
+ 
+
+ //users route names
+   static const String userdashboard = 'userdashboard';
+
+
+  
+
   // Main shell route names
   static const String home = 'home';
   static const String chat = 'chat';
@@ -96,4 +104,5 @@ class RouteNames {
 
   //for dashbaord drawer
   static const String drawer = 'drawer';
+
 }
