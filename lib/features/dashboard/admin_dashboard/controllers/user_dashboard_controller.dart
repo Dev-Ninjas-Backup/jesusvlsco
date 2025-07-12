@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserDashboardController extends GetxController {
@@ -86,28 +85,28 @@ class UserDashboardController extends GetxController {
       <Map<String, dynamic>>[
         {
           'title': 'Employee of the Month: John Doe',
-          'description': 'Recognized for outstanding performance',
-          'icon': 'assets/icons/crown.png',
+          'description': 'Badge received by You on June 17, 2025',
+          'imagePath': 'assets/icons/crown.png',
         },
         {
           'title': 'Team Achievement: Project Alpha Completed',
-          'description': 'Celebrating successful project delivery',
-          'icon': 'assets/icons/crown.png',
+          'description': 'Badge received by You on June 17, 2025',
+          'imagePath': 'assets/icons/crown.png',
         },
         {
           'title': 'Innovation Award: Sarah Johnson',
-          'description': 'Awarded for creative problem-solving approach',
-          'icon': 'assets/icons/crown.png',
+          'description': 'Badge received by You on June 17, 2025',
+          'imagePath': 'assets/icons/crown.png',
         },
         {
           'title': 'Customer Service Excellence: Mike Chen',
-          'description': 'Outstanding customer satisfaction ratings',
-          'icon': 'assets/icons/crown.png',
+          'description': 'Badge received by You on June 17, 2025',
+          'imagePath': 'assets/icons/crown.png',
         },
         {
           'title': 'Team Collaboration: Marketing Team',
-          'description': 'Exceptional cross-department cooperation',
-          'icon': 'assets/icons/crown.png',
+          'description': 'Badge received by You on June 17, 2025',
+          'imagePath': 'assets/icons/crown.png',
         },
       ].obs;
 }

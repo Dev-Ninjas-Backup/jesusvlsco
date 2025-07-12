@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
 
 class SplashoScreen extends StatefulWidget {
   const SplashoScreen({super.key});
@@ -18,7 +19,12 @@ class _SplashoScreenState extends State<SplashoScreen> {
   void _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
-      context.goNamed('home'); // Adjust the route as needed
+      // Navigate based on admin/user condition
+      if (AppRouter.isTestingAdmin) {
+        context.goNamed('admin-home'); // Navigate to admin home
+      } else {
+        context.goNamed('home'); // Navigate to user home
+      }
     }
   }
 

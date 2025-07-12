@@ -1,4 +1,4 @@
-// Bottom Navigation Scaffold
+// Admin Bottom Navigation Scaffold
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -6,35 +6,38 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
 
-class BottomNavigationScaffold extends StatelessWidget {
+class AdminBottomNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const BottomNavigationScaffold({super.key, required this.navigationShell});
+  const AdminBottomNavigationScaffold({
+    super.key,
+    required this.navigationShell,
+  });
 
-  final List<BottomNavItem> bottomNavItems = const [
-    BottomNavItem(
+  final List<AdminBottomNavItem> bottomNavItems = const [
+    AdminBottomNavItem(
       activeIcon: IconPath.homeActive,
       inactiveIcon: IconPath.homeInactive,
       label: 'Home',
     ),
-    BottomNavItem(
+    AdminBottomNavItem(
       activeIcon: IconPath.chatActive,
       inactiveIcon: IconPath.chatInactive,
       label: 'Chat',
     ),
-    BottomNavItem(
+    AdminBottomNavItem(
       activeIcon: IconPath.usersActive,
       inactiveIcon: IconPath.usersInactive,
       label: 'Users',
     ),
-    BottomNavItem(
+    AdminBottomNavItem(
       activeIcon: IconPath.scheduleActive,
       inactiveIcon: IconPath.scheduleInactive,
       label: 'Schedule',
     ),
-    BottomNavItem(
+    AdminBottomNavItem(
       activeIcon: IconPath.projectsActive,
       inactiveIcon: IconPath.projectsInactive,
       label: 'Projects',
@@ -45,7 +48,7 @@ class BottomNavigationScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<BottomNavigationScaffoldController>();
+    final controller = Get.find<AdminBottomNavigationScaffoldController>();
 
     return Scaffold(
       body: navigationShell,
@@ -97,7 +100,6 @@ class BottomNavigationScaffold extends StatelessWidget {
         curve: Curves.easeInOut,
         width: Sizer.wp(73),
         height: Sizer.hp(65),
-
         decoration: BoxDecoration(
           color: isActive
               ? AppColors.primary.withOpacity(0.1)
@@ -108,7 +110,7 @@ class BottomNavigationScaffold extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildIocnsView(isActive, item),
+            _buildIconsView(isActive, item),
             SizedBox(height: Sizer.hp(4)),
             AnimatedDefaultTextStyle(
               duration: animationDuration,
@@ -126,7 +128,7 @@ class BottomNavigationScaffold extends StatelessWidget {
     );
   }
 
-  AnimatedContainer _buildIocnsView(bool isActive, BottomNavItem item) {
+  AnimatedContainer _buildIconsView(bool isActive, AdminBottomNavItem item) {
     return AnimatedContainer(
       duration: animationDuration,
       curve: Curves.easeInOut,
@@ -139,6 +141,9 @@ class BottomNavigationScaffold extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
+    print('Admin Navigation: Tapping index $index');
+    print('Current index: ${navigationShell.currentIndex}');
+
     // Don't navigate if already on the same tab
     if (index == navigationShell.currentIndex) {
       return; // Just return, don't do anything
@@ -148,12 +153,12 @@ class BottomNavigationScaffold extends StatelessWidget {
   }
 }
 
-class BottomNavItem {
+class AdminBottomNavItem {
   final String activeIcon;
   final String inactiveIcon;
   final String label;
 
-  const BottomNavItem({
+  const AdminBottomNavItem({
     required this.activeIcon,
     required this.inactiveIcon,
     required this.label,
