@@ -6,8 +6,8 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/models/Announcemodel.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/user/controllers/announcement_controller.dart';
-import 'package:jesusvlsco/features/user/screens/response_page.dart';
+import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/announcement_controller.dart';
+import 'package:jesusvlsco/features/announcements/admin_announcement/screens/response_page.dart';
 
 // Announcement Model (if not already in a separate models file)
 
