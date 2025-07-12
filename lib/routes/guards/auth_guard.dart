@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
 
 /// Authentication guard for protecting routes
 class AuthGuard {
@@ -45,7 +46,8 @@ class AuthGuard {
 
     // If user is authenticated and trying to access auth routes, redirect to home
     if (_isAuthenticated && isAuthRoute) {
-      return '/home';
+      // Dynamic redirect based on current mode
+      return AppRouter.isTestingAdmin ? '/admin/home' : '/home';
     }
 
     return null; // No redirect needed

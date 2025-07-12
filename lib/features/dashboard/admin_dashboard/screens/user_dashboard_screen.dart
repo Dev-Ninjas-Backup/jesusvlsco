@@ -68,7 +68,7 @@ class UserDashboardScreen extends StatelessWidget {
   Widget _buildRecognitionEngagementContent() {
     return Obx(
       () => SizedBox(
-        height: Sizer.hp(275),
+        height: Sizer.hp(300),
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -82,7 +82,7 @@ class UserDashboardScreen extends StatelessWidget {
               child: _buildRecognitionItemWithIcon(
                 item['title']!,
                 item['description']!,
-                item['icon']!,
+                item['imagePath']!,
               ),
             );
           },
@@ -93,13 +93,13 @@ class UserDashboardScreen extends StatelessWidget {
 
   Widget _buildRecognitionItemWithIcon(
     String title,
-    String time,
+    String description,
     String imagePath,
   ) {
     return Container(
       padding: EdgeInsets.all(Sizer.wp(12)),
       decoration: BoxDecoration(
-        color: AppColors.shiftCardColor,
+        color: AppColors.recognitionColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
       ),
       child: Padding(
@@ -121,7 +121,7 @@ class UserDashboardScreen extends StatelessWidget {
                   ),
                   SpacingHelper.h4(),
                   Text(
-                    '($time)',
+                    description,
                     style: AppTextStyle.f14W400().copyWith(
                       color: Colors.grey.shade600,
                     ),
@@ -211,14 +211,16 @@ class UserDashboardScreen extends StatelessWidget {
         SpacingHelper.h8(),
         Text(
           update['departmentName']!,
-          style: AppTextStyle.f14W400().copyWith(
+          style: AppTextStyle.f16W600().copyWith(
             color: AppColors.textBlackShade,
           ),
         ),
         SpacingHelper.h4(),
         Text(
           update['message']!,
-          style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
+          style: AppTextStyle.f14W400().copyWith(
+            color: AppColors.textBlackShade,
+          ),
         ),
         SpacingHelper.h4(),
         Text(
@@ -254,7 +256,7 @@ class UserDashboardScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Sizer.wp(20)),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.secondary,
         borderRadius: BorderRadius.circular(Sizer.wp(16)),
       ),
       child: Column(

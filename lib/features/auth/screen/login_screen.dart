@@ -94,7 +94,8 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: Sizer.hp(16)), // ✅ Updated spacing
                     ElevatedButton(
                       onPressed: () {
-                        context.pushNamed(RouteNames.loginwithemail);
+                        // context.pushNamed(RouteNames.loginwithemail);
+                        context.pushNamed(RouteNames.adminHome);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.secondary, // ✅ Updated
