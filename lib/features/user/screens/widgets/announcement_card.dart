@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -22,10 +23,11 @@ class AnnouncementCard extends StatelessWidget {
     this.onResponseTap,
     this.onReadReceiptTap,
   });
+ 
 
   @override
   Widget build(BuildContext context) {
-
+ final AnnouncementController announcementcontroller = Get.find();
    
     return Padding(
       padding: EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
@@ -39,7 +41,7 @@ class AnnouncementCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildCardHeader(),
+            _buildCardHeader(announcementcontroller.announcements.indexOf(announcement)),
             _buildCardTitle(),
             _buildCardDescription(),
             _buildCardActions(),
@@ -48,47 +50,45 @@ class AnnouncementCard extends StatelessWidget {
       ),
     );
   }
+Widget _buildCardHeader(int index) {
+  final AnnouncementController _announcementcontroller = Get.find();
+  // final announcement = _announcementcontroller.announcements[index]; // Get the announcement for the specific index
 
-  Widget _buildCardHeader() {
-     final AnnouncementController _announcementcontroller = Get.find();
-    return Padding(
-      padding: EdgeInsets.all(Sizer.wp(16)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            announcement.dateTime,
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(12),
-              color: AppColors.textSecondary.withOpacity(0.7),
-              fontWeight: FontWeight.w400,
+  return Padding(
+    padding: EdgeInsets.all(Sizer.wp(16)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          announcement.dateTime,
+          style: AppTextStyle.regular().copyWith(
+            fontSize: Sizer.wp(12),
+            color: AppColors.textSecondary.withOpacity(0.7),
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Obx(
+          () => _announcementcontroller.isdelete.value ? Container() : Container(
+            width: Sizer.wp(16),
+            height: Sizer.hp(16),
+            child: Checkbox(
+              value: _announcementcontroller.announcements[index].isChecked.value, // Bind to the RxBool of the specific announcement
+              onChanged: (value) {
+                // Toggle the checkbox state for the specific index
+                _announcementcontroller.toggleCheckbox(index);
+                print("Checkbox value for index $index: ${_announcementcontroller.announcements[index].isChecked.value}");
+              },
+              activeColor: AppColors.primary,
+              checkColor: Colors.white,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
-          Obx(
-            ()=> SizedBox(
-              width: Sizer.wp(16),
-              height: Sizer.hp(16),
-              child: Checkbox(
-                value: _announcementcontroller.ischecked.value,
-                onChanged: (value) {
-                  // _announcementcontroller.ischek();
-                  // if (value!) {
-                  //   _announcementcontroller.selectedIndex =
-                  //       _announcementcontroller.announcementList.indexOf(announcement);
-                  // }
-                  
-                },
-                activeColor: AppColors.primary,
-                checkColor: Colors.white,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-            ),
-          ),
-          
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildCardTitle() {
     return Padding(

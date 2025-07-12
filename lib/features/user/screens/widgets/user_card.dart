@@ -3,7 +3,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/models/user_model.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/user/screens/test_page.dart';
+
 
 class userdata extends StatelessWidget {
   const userdata({

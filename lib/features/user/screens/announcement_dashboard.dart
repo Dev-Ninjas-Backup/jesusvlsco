@@ -1,6 +1,5 @@
 // ignore_for_file: unused_element
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +10,6 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/user/controllers/announcement_controller.dart';
 import 'package:jesusvlsco/features/user/screens/add_announcement.dart';
-import 'package:jesusvlsco/features/user/screens/test_page.dart';
 import 'package:jesusvlsco/features/user/screens/widgets/announcement_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -163,13 +161,14 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
             SizedBox(width: Sizer.wp(12)),
             _buildDateButton(
               onpress: () {
-                // Handle date action
-                //  Navigator.push(context, MaterialPageRoute(builder: (_) =>  TestPage()));
+               
               },
             ),
             SizedBox(width: Sizer.wp(12)),
             _deleteButton(() {
           
+_announcementController.toggleDelete();
+// _announcementController.clickdelete();
             }),
           ],
         ),

@@ -1,21 +1,28 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jesusvlsco/core/models/Announcemodel.dart';
-import 'package:jesusvlsco/features/user/screens/widgets/announcement_card.dart';
 
 class AnnouncementController extends GetxController {
-  AnnouncementModel? announcement;
-  final RxBool ischecked = false.obs;
-  final RxInt selectedIndex = 0.obs;
-  final RxBool isdeleted = false.obs;
+  RxBool isdelete = false.obs;
 
   final RxList<AnnouncementModel> announcements = <AnnouncementModel>[].obs;
 
-  void ischek() {
-    ischecked.value =! ischecked.value;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAnnouncements();
+  }
+
+  void toggleDelete() {
+    isdelete.value = !isdelete.value;
     
     update();
   }
+
+void clickdelete(){
+  announcements.removeWhere((element) => element.isChecked.value == true);
+  update();
+}
 
   // Dummy data for announcements with category
   Future<List<AnnouncementModel>> fetchAnnouncements() async {
@@ -23,7 +30,7 @@ class AnnouncementController extends GetxController {
     await Future.delayed(Duration(seconds: 2));
 
     // Returning the list of announcements after the delay
-    return [
+    announcements.addAll([
       AnnouncementModel(
         id: '1',
         title: 'New Leave Policy Effective July 2025',
@@ -32,7 +39,8 @@ class AnnouncementController extends GetxController {
         dateTime: 'Today at 03:00 pm',
         isRead: false,
         hasResponse: true,
-        category: 'Updates', // Category added here
+        category: 'Updates',
+        isChecked: false.obs,  // Add RxBool for check state
       ),
       AnnouncementModel(
         id: '2',
@@ -42,7 +50,8 @@ class AnnouncementController extends GetxController {
         dateTime: 'Yesterday at 10:30 am',
         isRead: true,
         hasResponse: false,
-        category: 'Announcements', // Category added here
+        category: 'Announcements',
+        isChecked: false.obs,  // Add RxBool for check state
       ),
       AnnouncementModel(
         id: '3',
@@ -52,28 +61,18 @@ class AnnouncementController extends GetxController {
         dateTime: '2 days ago at 02:15 pm',
         isRead: false,
         hasResponse: true,
-        category: 'Announcements', // Category added here
+        category: 'Announcements',
+        isChecked: false.obs,  // Add RxBool for check state
       ),
-      AnnouncementModel(
-        id: '4',
-        title: 'New Health Insurance Benefits',
-        description:
-            'We are pleased to announce enhanced health insurance coverage for all employees...',
-        dateTime: '3 days ago at 09:45 am',
-        isRead: true,
-        hasResponse: false,
-        category: 'Updates', // Category added here
-      ),
-      AnnouncementModel(
-        id: '5',
-        title: 'Quarterly Performance Review Schedule',
-        description:
-            'Performance review meetings will be conducted from July 20-25. Please check your calendar...',
-        dateTime: '1 week ago at 11:20 am',
-        isRead: false,
-        hasResponse: true,
-        category: 'Reports', // Category added here
-      ),
-    ];
+      // Add more announcements...
+    ]);
+    return announcements;
+  }
+
+  // Function to toggle checkbox state for a specific index
+  void toggleCheckbox(int index) {
+    // Correctly toggle the value of the existing RxBool
+    announcements[index].isChecked.value = !announcements[index].isChecked.value;
+    update(); // Notifies the UI of the change
   }
 }
