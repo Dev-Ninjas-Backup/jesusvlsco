@@ -32,4 +32,16 @@ class IconPath {
   static const String device = 'assets/icons/device.png';
   static const String mailicon = 'assets/icons/mailicon.png';
   static const String success = 'assets/icons/Icons.png';
+
+
+//Announcements icons
+
+ static const String delete = 'assets/icons/delete.svg';
+ static const String search = 'assets/icons/search-normal.svg';
+
+
+
+
+
+
 }

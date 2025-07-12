@@ -75,6 +75,9 @@ class RouteNames {
   static const String loginemailotp = 'loginemailotp';
  
 
+ //users route names
+   static const String userdashboard = 'userdashboard';
+
 
 
   // Main shell route names
@@ -99,4 +102,10 @@ class RouteNames {
   // Profile section route names (for future expansion)
   static const String profileEdit = 'profile-edit';
   static const String profileSecurity = 'profile-security';
+
+
+
+
+
+  
 }

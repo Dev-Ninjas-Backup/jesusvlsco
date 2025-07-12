@@ -8,6 +8,17 @@ class AppColors {
     0xFF4E53B1,
   ); // Darker primary for a more professional look
   static const Color secondary = Color(0xFFF5F5F5);
+
+   static const Color textSecondary = Color(0xFF5B5B5B);
+   static const Color background = Color(0xFFEDEEF7);
+   static const Color border = Color(0xFFC8CAE7);
+   static const Color text = Color(0xFF484848);
+
+ static const Color progress1 = Color(0xFF06843F);
+ static const Color progress2 = Color(0xFFDC1E28);
+ static const Color progresstext = Color(0xFF1EBD66);
+ static const Color viewcolor = Color(0xFFD9F0E4);
+
   static const Color textSecondary = Color(0xFF5B5B5B);
   static const Color textSecondaryGrey = Color(0xFF949494);
   static const Color progressIndicatorColor = Color(0xFF41BD5D);

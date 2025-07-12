@@ -51,4 +51,16 @@ class AppText {
 
   static const String verificationComplete = 'Verification Complete';
   static const String toconfirm = 'To confirm your email address, tap the button in the email we sent you';
+
+
+
+//Announcements screen 
+
+
+
+
+
+
+
+
 }
