@@ -4,6 +4,7 @@ library app_router;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jesusvlsco/routes/routes/drawer_routes.dart';
 
 import 'config/router_config.dart' as app_config;
 import 'guards/auth_guard.dart';
@@ -40,6 +41,7 @@ class AppRouter {
 
       // Main application shell with bottom navigation
       MainShellRoutes.shell,
+      ...DrawerRoutes.routes,
     ],
   );
 
