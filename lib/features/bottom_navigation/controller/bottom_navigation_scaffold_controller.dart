@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/screens/dashboard_screen.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
 
 class BottomNavigationScaffoldController extends GetxController {
   final List<Widget> screens = [
-    AdminDashboardScreen(),
+    // AdminDashboardScreen(),
+    UserDashboardScreen(),
     const ChatScreen(),
     const UsersScreen(),
     const ScheduleScreen(),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/widgets/dashboard_drawer.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/screens/dashboard_screen.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
 
 // import '../../features/test/home_page.dart';
 import '../config/route_constants.dart';
@@ -21,7 +22,8 @@ class HomeRoutes {
       GoRoute(
         path: RoutePaths.home,
         name: RouteNames.home,
-        builder: (context, state) => AdminDashboardScreen(),
+        // builder: (context, state) => AdminDashboardScreen(),
+        builder: (context, state) => UserDashboardScreen(),
         routes: [
           // Home details page
           // GoRoute(

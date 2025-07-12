@@ -7,8 +7,8 @@ import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/controllers/dashboard_controller.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/widgets/dashboard_appbar.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class AdminDashboardScreen extends StatelessWidget {

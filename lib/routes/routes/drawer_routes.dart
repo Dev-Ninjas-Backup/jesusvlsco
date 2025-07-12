@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/admin/admin_dashboard/widgets/dashboard_drawer.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class DrawerRoutes {

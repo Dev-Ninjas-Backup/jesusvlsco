@@ -8,10 +8,13 @@ class AppColors {
     0xFF4E53B1,
   ); // Darker primary for a more professional look
   static const Color secondary = Color(0xFFF5F5F5);
+  static const Color recognitionColor = Color(0xFFBF8C45);
+  static const Color taskCard = Color(0xFFFFE7DA);
   static const Color textSecondary = Color(0xFF5B5B5B);
   static const Color textSecondaryGrey = Color(0xFF949494);
   static const Color progressIndicatorColor = Color(0xFF41BD5D);
   static const Color requestListItemColor = Color(0xFFC8CAE7);
+  static const Color shiftCardColor = Color(0xFFEDEEF7);
 
   // Bright yellow for highlights and accents
   static const Color accent = Color(
