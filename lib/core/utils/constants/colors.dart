@@ -12,6 +12,7 @@ class AppColors {
    static const Color background = Color(0xFFEDEEF7);
    static const Color border = Color(0xFFC8CAE7);
    static const Color text = Color(0xFF484848);
+   static const Color quill = Color(0xFFC8CAE7);
 
    //progress bar colors
  static const Color progress1 = Color(0xFF06843F);

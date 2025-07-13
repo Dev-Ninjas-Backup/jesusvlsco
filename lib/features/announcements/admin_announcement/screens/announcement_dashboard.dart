@@ -97,7 +97,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
         width: Sizer.wp(360),
         decoration: BoxDecoration(
           color: AppColors.primaryBackground,
-          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+          // borderRadius: BorderRadius.circular(Sizer.wp(8)),
           boxShadow: [
             BoxShadow(
               color: AppColors.textSecondary.withOpacity(0.1),

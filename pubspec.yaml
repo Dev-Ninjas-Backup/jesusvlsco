@@ -41,6 +41,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   google_fonts: ^6.2.1
   shared_preferences: ^2.3.2
+  google_maps_flutter: ^2.12.3
   # Icons
   iconsax: ^0.0.8
 
@@ -65,6 +66,8 @@ dependencies:
   intl: ^0.20.2
   number_pagination: ^1.1.6
   percent_indicator: ^4.2.5
+  flutter_quill: ^11.4.1
+  rich_editor: ^0.1.1
   
   
   

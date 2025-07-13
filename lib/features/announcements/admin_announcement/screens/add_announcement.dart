@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/announcements/admin_announcement/widgets/text_editor.dart';
 
 class AddAnnouncement extends StatefulWidget {
   const AddAnnouncement({super.key});
@@ -18,6 +20,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   bool isActive = true;
   bool emailNotifications = false;
   bool readReceiptTracking = false;
+
+  final QuillController _controller = QuillController.basic();
 
   final List<String> categories = [
     'Select category',
@@ -119,6 +123,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                   Icon(Icons.star, color: Colors.red, size: Sizer.wp(10)),
                 ],
               ),
+
               SizedBox(height: Sizer.hp(8)),
               Row(
                 children: [
@@ -153,6 +158,26 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                   ),
                 ],
               ),
+
+              SizedBox(height: Sizer.hp(24)),
+
+              //description
+              Row(
+                children: [
+                  Text(
+                    "Description",
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      color: AppColors.backgroundDark,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: Sizer.hp(8)),
+
+              TextEditor(controller: _controller),
+
               SizedBox(height: Sizer.hp(24)),
               Row(
                 children: [
@@ -225,13 +250,13 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                   ),
                 ],
               ),
-               SizedBox(height: Sizer.hp(24)),
+              SizedBox(height: Sizer.hp(24)),
               _buildFieldLabel('Attachment'),
-               SizedBox(height: Sizer.hp(24)),
+              SizedBox(height: Sizer.hp(24)),
               _buildAttachmentArea(),
-          SizedBox(height: Sizer.hp(24)),
+              SizedBox(height: Sizer.hp(24)),
               _buildFieldLabel('Notification Settings'),
-             SizedBox(height: Sizer.hp(16)),
+              SizedBox(height: Sizer.hp(16)),
               _buildCheckboxOption(
                 'Send email notifications to recipients',
                 emailNotifications,
@@ -243,7 +268,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                 readReceiptTracking,
                 (value) => setState(() => readReceiptTracking = value ?? false),
               ),
-             SizedBox(height: Sizer.hp(24)),
+              SizedBox(height: Sizer.hp(24)),
               Row(
                 children: [
                   _buildActionButton(
@@ -337,7 +362,9 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: isSelected ? const Color(0xFF6366F1) : const Color(0xFFD1D5DB),
+                color: isSelected
+                    ? const Color(0xFF6366F1)
+                    : const Color(0xFFD1D5DB),
                 width: 2,
               ),
             ),
@@ -354,10 +381,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           const SizedBox(width: 8),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF374151),
-            ),
+            style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
           ),
         ],
       ),
@@ -369,10 +393,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       width: Sizer.wp(360),
       height: Sizer.hp(166),
       decoration: BoxDecoration(
-        border: Border.all(
-          color:  AppColors.border,
-          style: BorderStyle.solid,
-        ),
+        border: Border.all(color: AppColors.border, style: BorderStyle.solid),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -384,20 +405,17 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
             color: AppColors.text,
           ),
           const SizedBox(height: 8),
-           Text(
+          Text(
             'Click to upload files or drag and drop',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(12),
-              color:AppColors.text,
+              color: AppColors.text,
             ),
           ),
           const SizedBox(height: 4),
-           Text(
+          Text(
             'PDF, DOC, DOCX, JPG, PNG up to 10MB',
-            style: TextStyle(
-                 fontSize: Sizer.wp(14),
-             color:AppColors.text,
-            ),
+            style: TextStyle(fontSize: Sizer.wp(14), color: AppColors.text),
           ),
         ],
       ),
@@ -426,10 +444,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF374151),
-            ),
+            style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
           ),
         ),
       ],
@@ -445,8 +460,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   ) {
     return Expanded(
       child: Container(
-        height:  Sizer.hp(40),
-        width: Sizer.wp(112) ,
+        height: Sizer.hp(40),
+        width: Sizer.wp(112),
         decoration: BoxDecoration(
           color: backgroundColor,
           border: isOutlined ? Border.all(color: textColor) : null,
@@ -492,7 +507,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       children: [
         RichText(
           text: TextSpan(
-            style:  AppTextStyle.regular().copyWith(
+            style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(16),
               fontWeight: FontWeight.w600,
               color: AppColors.backgroundDark,
