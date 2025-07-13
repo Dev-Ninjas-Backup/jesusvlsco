@@ -4,7 +4,10 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
-import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
+
+import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
+
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -25,6 +28,7 @@ class Jesusvlsco extends StatelessWidget {
       // transitionDuration: const Duration(milliseconds: 300),
       // enableLog: true,
       // Use GoRouter with GetX
+
       // home: Router.withConfig(config: AppRouter.router),
       home: AnnouncementDashboard(),
 
@@ -34,6 +38,10 @@ class Jesusvlsco extends StatelessWidget {
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+
+
+      home: Router.withConfig(config: AppRouter.router),
+      // home: AnnouncementDashboard(),
 
       // Alternative: You can also use this approach
       // builder: (context, child) {
