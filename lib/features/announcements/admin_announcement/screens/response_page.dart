@@ -176,7 +176,7 @@ class ResponsePage extends StatelessWidget {
       border: Border.all(color: AppColors.border, width: 1),
     ),
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

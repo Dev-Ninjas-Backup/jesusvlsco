@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
@@ -26,8 +28,21 @@ class Jesusvlsco extends StatelessWidget {
       // transitionDuration: const Duration(milliseconds: 300),
       // enableLog: true,
       // Use GoRouter with GetX
+
+      // home: Router.withConfig(config: AppRouter.router),
+      home: AnnouncementDashboard(),
+
+      localizationsDelegates: const [
+        DefaultCupertinoLocalizations.delegate,
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
+
+
       home: Router.withConfig(config: AppRouter.router),
       // home: AnnouncementDashboard(),
+
       // Alternative: You can also use this approach
       // builder: (context, child) {
       //   return Router.withConfig(config: AppRouter.router);

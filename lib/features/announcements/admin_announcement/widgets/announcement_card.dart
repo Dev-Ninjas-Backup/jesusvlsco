@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/models/Announcemodel.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -51,8 +52,8 @@ class AnnouncementCard extends StatelessWidget {
     );
   }
 Widget _buildCardHeader(int index) {
-  final AnnouncementController _announcementcontroller = Get.find();
-  // final announcement = _announcementcontroller.announcements[index]; // Get the announcement for the specific index
+  final AnnouncementController announcementcontroller = Get.find();
+  
 
   return Padding(
     padding: EdgeInsets.all(Sizer.wp(16)),
@@ -68,15 +69,15 @@ Widget _buildCardHeader(int index) {
           ),
         ),
         Obx(
-          () => _announcementcontroller.isdelete.value ? Container() : Container(
+          () => announcementcontroller.isdelete.value ? Container() : SizedBox(
             width: Sizer.wp(16),
             height: Sizer.hp(16),
             child: Checkbox(
-              value: _announcementcontroller.announcements[index].isChecked.value, // Bind to the RxBool of the specific announcement
+              value: announcementcontroller.announcements[index].isChecked.value, // Bind to the RxBool of the specific announcement
               onChanged: (value) {
                 // Toggle the checkbox state for the specific index
-                _announcementcontroller.toggleCheckbox(index);
-                print("Checkbox value for index $index: ${_announcementcontroller.announcements[index].isChecked.value}");
+                announcementcontroller.toggleCheckbox(index);
+                print("Checkbox value for index $index: ${announcementcontroller.announcements[index].isChecked.value}");
               },
               activeColor: AppColors.primary,
               checkColor: Colors.white,
@@ -189,18 +190,17 @@ Widget _buildCardHeader(int index) {
       child: Container(
         height: Sizer.hp(36),
         decoration: BoxDecoration(
-          color: announcement.isRead ? AppColors.primary.withOpacity(0.7) : AppColors.primary,
+          color:  AppColors.primary,
           borderRadius: BorderRadius.circular(Sizer.wp(18)),
         ),
         child: InkWell(
           onTap: onReadReceiptTap ?? () {
-            // Default action
-            print('Read receipt tapped for announcement: ${announcement.id}');
+           
           },
           borderRadius: BorderRadius.circular(Sizer.wp(18)),
           child: Center(
             child: Text(
-              announcement.isRead ? 'Read' : 'Read receipt',
+             'Read receipt',
               style: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(13),
                 color: Colors.white,
