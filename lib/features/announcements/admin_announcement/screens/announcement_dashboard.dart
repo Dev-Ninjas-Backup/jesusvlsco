@@ -1,8 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/models/Announcemodel.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/announcement_controller.dart';
@@ -18,11 +21,11 @@ class AnnouncementDashboard extends StatefulWidget {
   State<AnnouncementDashboard> createState() => _AnnouncementDashboardState();
 }
 
-class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
-  final AnnouncementController _announcementController = Get.put(
-    AnnouncementController(),
-  );
+final AnnouncementController _announcementController = Get.put(
+  AnnouncementController(),
+);
 
+class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,13 +37,13 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
             _buildSearchBarWidget(),
             SizedBox(height: Sizer.hp(16)),
             _buildAnnouncementsList(),
+            SizedBox(height: Sizer.hp(24)),
+            _pagination(),
           ],
         ),
       ),
     );
   }
-
-
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
@@ -80,7 +83,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
     return Column(
       children: [
         _buildSearchTextField(),
-        SizedBox(height: Sizer.hp(16)),
+        // SizedBox(height: Sizer.hp(16)),
         _buildFilterButtons(),
       ],
     );
@@ -97,7 +100,9 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
         width: Sizer.wp(360),
         decoration: BoxDecoration(
           color: AppColors.primaryBackground,
-          // borderRadius: BorderRadius.circular(Sizer.wp(8)),
+          border: Border.all(color: AppColors.border),
+          borderRadius: BorderRadius.circular(Sizer.wp(10)),
+
           boxShadow: [
             BoxShadow(
               color: AppColors.textSecondary.withOpacity(0.1),
@@ -107,7 +112,10 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
           ],
         ),
         child: TextField(
+          textAlign: TextAlign.start,
           decoration: InputDecoration(
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
             border: InputBorder.none,
             hintText: 'Search articles',
             hintStyle: AppTextStyle.regular().copyWith(
@@ -161,7 +169,6 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
           _deleteButton(() {
             _announcementController.toggleDelete();
             _showDeleteDialog(context);
-         
           }),
         ],
       ),
@@ -230,25 +237,29 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
   }
 
   Widget _buildAnnouncementsList() {
-    return FutureBuilder(
-      future: _announcementController.fetchAnnouncements(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: snapshot.data!.length,
-            separatorBuilder: (context, index) =>
-                SizedBox(height: Sizer.hp(16)),
-            itemBuilder: (context, index) =>
-                AnnouncementCard(announcement: snapshot.data![index]),
-          );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return const Center(child: CircularProgressIndicator());
+    return Container(
+      height: Sizer.hp(500),
+      child: Obx(() {
+        // Fetch paginated announcements from the controller
+        List<AnnouncementModel> pagedAnnouncements = _announcementController
+            .getPagedAnnouncements();
+
+        if (pagedAnnouncements.isEmpty) {
+          return const Center(child: Text('No announcements available.'));
         }
-      },
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: pagedAnnouncements.length,
+          itemBuilder: (context, index) {
+            // Build the announcement card using the paginated data
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: Sizer.hp(8)),
+              child: AnnouncementCard(announcement: pagedAnnouncements[index]),
+            );
+          },
+        );
+      }),
     );
   }
 
@@ -292,119 +303,113 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
     );
   }
 
+  void showCategoryChecklistPopup(BuildContext context) {
+    // List to store checkbox state for each category
+    List<bool> _checkboxStates = List.generate(
+      _announcementController.categories.length,
+      (index) => false,
+    );
 
-void showCategoryChecklistPopup(BuildContext context) {
-
-  // List to store checkbox state for each category
-  List<bool> _checkboxStates = List.generate(_announcementController.categories.length, (index) => false);
-
-  // Show the AlertDialog
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return AlertDialog(
-
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        content: SizedBox(
-          width: Sizer.wp(328),
-          height: Sizer.hp(208),
-    
-          child: ListView.builder(
-            itemCount: _announcementController.categories.length,
-            itemBuilder: (context, index) {
-              return CheckboxListTile(
-                title: Text(_announcementController.categories[index]),
-                value: _checkboxStates[index],
-                onChanged: (bool? value) {
-                  _checkboxStates[index] = value!;
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              );
-            },
+    // Show the AlertDialog
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-         
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Done',
-              style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.w600,
-              ),
+          content: SizedBox(
+            width: Sizer.wp(328),
+            height: Sizer.hp(208),
+
+            child: ListView.builder(
+              itemCount: _announcementController.categories.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(_announcementController.categories[index]),
+                  value: _checkboxStates[index],
+                  onChanged: (bool? value) {
+                    _checkboxStates[index] = value!;
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+              },
             ),
           ),
-        ],
-      );
-    },
-  );
-}
-
-void showteamChecklistPopup(BuildContext context) {
-
-
-  // List to store checkbox state for each category
-  List<bool> _checkboxStates = List.generate(_announcementController.teams.length, (index) => false);
-
-  // Show the AlertDialog
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return AlertDialog(
-
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        content: SizedBox(
-          width: Sizer.wp(328),
-          height: Sizer.hp(208),
-    
-          child: ListView.builder(
-            itemCount: _announcementController.teams.length,
-            itemBuilder: (context, index) {
-              return CheckboxListTile(
-                title: Text(_announcementController.teams[index]),
-                value: _checkboxStates[index],
-                onChanged: (bool? value) {
-                  _checkboxStates[index] = value!;
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              );
-            },
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-         
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Done',
-              style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.w600,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Done',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showteamChecklistPopup(BuildContext context) {
+    // List to store checkbox state for each category
+    List<bool> checkboxStates = List.generate(
+      _announcementController.teams.length,
+      (index) => false,
+    );
+
+    // Show the AlertDialog
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        ],
-      );
-    },
-  );
-}
+          content: SizedBox(
+            width: Sizer.wp(328),
+            height: Sizer.hp(208),
 
-
-
-
+            child: ListView.builder(
+              itemCount: _announcementController.teams.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(_announcementController.teams[index]),
+                  value: checkboxStates[index],
+                  onChanged: (bool? value) {
+                    checkboxStates[index] = value!;
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Done',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _buildDeleteAlert(BuildContext context) {
     return AlertDialog(
@@ -451,7 +456,10 @@ void showteamChecklistPopup(BuildContext context) {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: () => Get.back(),
+                onPressed: () {
+                  _announcementController.clickdelete();
+                  Get.back();
+                },
               ),
             ),
             Expanded(
@@ -533,4 +541,59 @@ void showteamChecklistPopup(BuildContext context) {
       },
     );
   }
+}
+
+Widget _pagination() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: List.generate(
+      2, // Assuming there are 2 pages
+      (index) {
+        return GestureDetector(
+          onTap: () {
+            _announcementController.changePage(
+              index + 1,
+            ); // Set current page to tapped index (1-based)
+          },
+          child: Obx(
+            () => Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 8,
+              ), // Add space between boxes
+              width: Sizer.wp(36), // Width of the box
+              height: Sizer.hp(36), // Height of the box
+              decoration: BoxDecoration(
+                color: _announcementController.currentPage.value == index + 1
+                    ? AppColors
+                          .primary // Highlight selected page with blue
+                    : Colors
+                          .transparent, // Default color for non-selected pages
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+                border: Border.all(
+                  color: _announcementController.currentPage.value == index + 1
+                      ? AppColors.primary
+                      : AppColors.border, // Border color
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  '${index + 1}', // Display page number (index + 1 for 1-based indexing)
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: 14,
+                    color:
+                        _announcementController.currentPage.value == index + 1
+                        ? Colors
+                              .white // White text for selected page
+                        : Colors.black, // Black text for non-selected pages
+                    fontWeight: FontWeight.bold, // Bold text
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }
