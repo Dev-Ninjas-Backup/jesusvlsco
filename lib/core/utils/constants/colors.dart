@@ -4,28 +4,28 @@ class AppColors {
   AppColors._();
 
   // Brand Colors
-  static const Color primary = Color( 0xFF4E53B1); 
+  static const Color primary = Color(0xFF4E53B1);
   static const Color secondary = Color(0xFFF5F5F5);
-
-   static const Color textSecondary = Color(0xFF5B5B5B);
-   static const Color background = Color(0xFFEDEEF7);
-   static const Color border = Color(0xFFC8CAE7);
-   static const Color text = Color(0xFF484848);
-   static const Color quill = Color(0xFFEDEEF7);
-  static const Color recognitionColor = Color(0xFFBF8C45);
-  static const Color taskCard = Color(0xFFFFE7DA);
 
   static const Color textSecondary = Color(0xFF5B5B5B);
   static const Color background = Color(0xFFEDEEF7);
   static const Color border = Color(0xFFC8CAE7);
   static const Color text = Color(0xFF484848);
+  static const Color quill = Color(0xFFEDEEF7);
+  static const Color recognitionColor = Color(0xFFBF8C45);
+  static const Color taskCard = Color(0xFFFFE7DA);
+
+  // static const Color textSecondary = Color(0xFF5B5B5B);
+  // static const Color background = Color(0xFFEDEEF7);
+  // static const Color border = Color(0xFFC8CAE7);
+  // static const Color text = Color(0xFF484848);
 
   //button colors
   static const Color color1 = Color(0xFF4E53B1); // Dark blue color
   static const Color color2 = Color(0xFF767BD5); // Light purple color
   static const Color color3 = Color(0xFF2C2D32); // Dark grey color
-  
-   // Bright yellow for highlights and accents
+
+  // Bright yellow for highlights and accents
 
   static const Color progress1 = Color(0xFF06843F);
   static const Color progress2 = Color(0xFFDC1E28);
@@ -56,7 +56,6 @@ class AppColors {
     end: Alignment.topRight, // Horizontal right shift
     colors: [Color(0xFF4E53B1), Color(0xFF767BD5), Color(0xFF2C2D32)],
   );
-
 
   // // Brand Colors
   // static const Color primary = Color(
