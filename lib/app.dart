@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 
-import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
+// import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
 
 import 'core/utils/theme/theme.dart';
@@ -23,6 +23,7 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
+
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),
@@ -30,15 +31,13 @@ class Jesusvlsco extends StatelessWidget {
       // Use GoRouter with GetX
 
       // home: Router.withConfig(config: AppRouter.router),
-      home: AnnouncementDashboard(),
-
+      // home: AnnouncementDashboard(),
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
-
 
       home: Router.withConfig(config: AppRouter.router),
       // home: AnnouncementDashboard(),
