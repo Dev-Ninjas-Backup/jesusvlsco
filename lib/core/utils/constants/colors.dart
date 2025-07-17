@@ -22,6 +22,16 @@ class AppColors {
   static const Color color1 = Color(0xFF4E53B1); // Dark blue color
   static const Color color2 = Color(0xFF767BD5); // Light purple color
   static const Color color3 = Color(0xFF2C2D32); // Dark grey color
+  static const Color button1 = Color(0xFFFFE6E7); // Dark grey color
+  
+
+
+
+
+
+
+
+
   
    // Bright yellow for highlights and accents
   static const Color accent = Color(
