@@ -7,11 +7,40 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
-class TaskmanagementDashboard extends StatelessWidget {
+class TaskmanagementDashboard extends StatefulWidget {
   const TaskmanagementDashboard({super.key});
 
   @override
+  State<TaskmanagementDashboard> createState() =>
+      _TaskmanagementDashboardState();
+}
+
+class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
+  @override
   Widget build(BuildContext context) {
+    final double maxScroll = 500.0;
+    final ScrollController _horizontalController = ScrollController();
+    double _scrollValue = 0.0;
+
+    final List<String> titles = List.generate(
+      20,
+      (index) => "Riverside Apartments",
+    );
+
+    @override
+    void dispose() {
+      _horizontalController.dispose();
+      super.dispose();
+    }
+
+    void _onSliderChanged(double value) {
+      setState(() {
+        _scrollValue = value;
+        // Use jumpTo to update the horizontal scroll position
+        _horizontalController.jumpTo(value);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
@@ -51,29 +80,38 @@ class TaskmanagementDashboard extends StatelessWidget {
             padding: EdgeInsets.only(left: Sizer.wp(16.0)),
             child: Row(
               children: [
-                _customButton(
-                  width: Sizer.wp(155),
-                  color: AppColors.button1,
-                  text: "Overdue tasks",
-                  onPressed: () {},
+                Flexible(
+                  child: _customButton(
+                    width: Sizer.wp(155),
+                    color: AppColors.button1,
+                    text: "Overdue tasks",
+                    onPressed: () {},
+                  ),
                 ),
                 SizedBox(width: Sizer.wp(8)),
-                _customButton1(
-                  width: Sizer.wp(120),
-                  color: AppColors.primary,
-                  text: "Add Task",
-                  onPressed: () {},
+                Flexible(
+                  child: _customButton1(
+                    width: Sizer.wp(120),
+                    color: AppColors.primary,
+                    text: "Add Task",
+                    onPressed: () {},
+                  ),
                 ),
                 SizedBox(width: Sizer.wp(8)),
-                _customButton1(
-                  width: Sizer.wp(100),
-                  color: AppColors.primary,
-                  text: "Activity",
-                  onPressed: () {},
+                Flexible(
+                  child: _customButton1(
+                    width: Sizer.wp(100),
+                    color: AppColors.primary,
+                    text: "Activity",
+                    onPressed: () {},
+                  ),
                 ),
               ],
             ),
           ),
+          SizedBox(height: Sizer.hp(16)),
+
+          //List items start
           Row(
             children: [
               Padding(
@@ -119,72 +157,148 @@ class TaskmanagementDashboard extends StatelessWidget {
               ),
             ],
           ),
-         Expanded(
-  child: ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: 10,
-    itemBuilder: (context, index) {
-      return Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: Sizer.wp(16.0),
-          vertical: Sizer.hp(8.0),
-        ),
-        child: Container(
-          width: Sizer.wp(300), // Fixed width instead of double.infinity
-          height: Sizer.hp(72),
-          decoration: BoxDecoration(
-            color: AppColors.textWhite,
-            border: Border(
-              bottom: BorderSide(color: AppColors.border),
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(Sizer.wp(16)),
-            child: ListTile(
-              leading: Checkbox(value: true, onChanged: (value) {}),
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Task ${index + 1}',
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(16),
-                        color: AppColors.backgroundDark,
-                        fontWeight: FontWeight.w400,
+
+          //list elements
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical, // Table scrolls vertically
+                child: SingleChildScrollView(
+                  controller: _horizontalController,
+                  scrollDirection:
+                      Axis.horizontal, // Horizontal scroll controlled by slider
+                  child: Table(
+                    columnWidths: {
+                      0: FixedColumnWidth(
+                        100,
+                      ), // Adjust column width for the first column
+                      1: FixedColumnWidth(
+                        100,
+                      ), // Adjust column width for the second column
+                      2: FixedColumnWidth(
+                        100,
+                      ), // Adjust column width for the third column
+                      3: FixedColumnWidth(
+                        100,
+                      ), // Adjust column width for the fourth column
+                      4: FixedColumnWidth(
+                        100,
+                      ), // Adjust column width for the fifth column
+                      5: FixedColumnWidth(
+                        100,
+                      ), // Extra column for horizontal scrolling
+                    },
+                    // border: TableBorder.all(width: 1, color: Colors.grey), // Border for the table
+                    children: [
+                      // Header Row
+                      TableRow(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Checkbox",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Title",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Icon",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Avatar",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Extra 1",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Extra 2",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                      // Data Rows with Dividers
+                      for (var i = 0; i < titles.length; i++)
+                        TableRow(
+                          children: [
+                            // Checkbox Column
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Checkbox(value: false, onChanged: (_) {}),
+                            ),
+                            // Title Column
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Text(titles[i]),
+                            ),
+                            // Icon Column
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.message_outlined),
+                            ),
+                            // Avatar Column
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.greenAccent.withOpacity(0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                            // Extra Columns
+                            for (
+                              var j = 0;
+                              j < 2;
+                              j++
+                            ) // Two extra columns for horizontal scrolling
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text("Extra $j"),
+                              ),
+                          ],
+                        ),
+
+                      // Divider Row (used after every row to simulate a divider)
+                    ],
                   ),
-                  Icon(
-                    Icons.message_sharp,
-                    color: AppColors.backgroundDark,
-                    size: Sizer.wp(24),
-                  ),
-                  SizedBox(width: Sizer.wp(16)),
-                  Container(
-                    width:45 ,
-                    padding: EdgeInsets.all(34.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.button1,
-                    ),
-                    child: Text(
-                      'done',
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(25),
-                        color: AppColors.backgroundDark,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    },
-  ),
-),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Slider(
+              value: _scrollValue,
+              min: 0,
+              max: maxScroll, // Define max scroll value
+              onChanged: _onSliderChanged,
+            ),
+          ),
         ],
       ),
     );
@@ -247,46 +361,47 @@ Widget _customButton({
   required VoidCallback onPressed,
   required double width,
 }) {
-  return Stack(
-    alignment: AlignmentDirectional.centerStart,
-    children: [
-      SizedBox(
-        width: width,
-        height: Sizer.hp(40),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizer.wp(8)),
-            ),
-          ),
-          onPressed: onPressed,
-          child: Text(
-            text,
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(16),
-              color: AppColors.error,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+  return SizedBox(
+    width: Sizer.wp(155),
+    height: Sizer.hp(40),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.button1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),
       ),
-      Padding(
-        padding: EdgeInsets.only(left: Sizer.wp(5)),
-        child: CircleAvatar(
-          radius: Sizer.wp(10),
-          backgroundColor: AppColors.error,
-          child: Text(
-            '1',
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(12),
-              color: AppColors.textWhite,
-              fontWeight: FontWeight.w600,
+      onPressed: () {},
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: Sizer.wp(10),
+            backgroundColor: AppColors.error,
+            child: Text(
+              '1',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(12),
+                color: AppColors.textWhite,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
+          SizedBox(width: Sizer.wp(8)),
+          Flexible(
+            child: Text(
+              "Overdue tasks",
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                color: AppColors.error,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
-    ],
+    ),
   );
 }
 
