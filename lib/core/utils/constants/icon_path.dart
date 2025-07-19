@@ -41,6 +41,9 @@ class IconPath {
 
 
 
+//Activity  logs icons
+ static const String celender = 'assets/icons/calendar_month.svg';
+ static const String nestclock = 'assets/icons/nest_clock_farsight_analog.svg';
 
 
 

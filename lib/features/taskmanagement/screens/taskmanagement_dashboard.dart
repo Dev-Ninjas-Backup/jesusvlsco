@@ -21,11 +21,34 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
     final double maxScroll = 500.0;
     final ScrollController _horizontalController = ScrollController();
     double _scrollValue = 0.0;
-
-    final List<String> titles = List.generate(
-      20,
-      (index) => "Riverside Apartments",
-    );
+// Dummy data for the table rows
+  final List<Map<String, dynamic>> data = [
+    {
+      "checkbox": false,
+      "title": "Metro Soppping center",
+      "icon": 'assets/icons/sms.png',
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-1",
+      "extra2": "Extra 2-1",
+    },
+    {
+      "checkbox": true,
+      "title": "Title 2",
+      "icon": "assets/icons/sms.png",
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-2",
+      "extra2": "Extra 2-2",
+    },
+    {
+      "checkbox": false,
+      "title": "Title 3",
+      "icon": "assets/icons/sms.png",
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-3",
+      "extra2": "Extra 2-3",
+    },
+    // Add more dummy data as needed
+  ];
 
     @override
     void dispose() {
@@ -159,137 +182,69 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
           ),
 
           //list elements
-          Container(
-            height: 200,
-            width: double.infinity,
-            child: Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical, // Table scrolls vertically
-                child: SingleChildScrollView(
-                  controller: _horizontalController,
-                  scrollDirection:
-                      Axis.horizontal, // Horizontal scroll controlled by slider
-                  child: Table(
-                    columnWidths: {
-                      0: FixedColumnWidth(
-                        100,
-                      ), // Adjust column width for the first column
-                      1: FixedColumnWidth(
-                        100,
-                      ), // Adjust column width for the second column
-                      2: FixedColumnWidth(
-                        100,
-                      ), // Adjust column width for the third column
-                      3: FixedColumnWidth(
-                        100,
-                      ), // Adjust column width for the fourth column
-                      4: FixedColumnWidth(
-                        100,
-                      ), // Adjust column width for the fifth column
-                      5: FixedColumnWidth(
-                        100,
-                      ), // Extra column for horizontal scrolling
-                    },
-                    // border: TableBorder.all(width: 1, color: Colors.grey), // Border for the table
+         Container(
+        
+        height: 200,
+        width: double.infinity,
+        child: Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical, // Table scrolls vertically
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection:
+                  Axis.horizontal, // Horizontal scroll controlled by slider
+              child: Table(
+              border: TableBorder(
+                bottom: BorderSide(color: AppColors.border1, width: 1.0),
+                horizontalInside: BorderSide(color: AppColors.border1, width: 1.0),
+              ),
+                columnWidths: {
+                  0: FixedColumnWidth(150), // Adjust column width for the first column
+                  1: FixedColumnWidth(150), // Adjust column width for the second column
+                  2: FixedColumnWidth(150), // Adjust column width for the third column
+                  3: FixedColumnWidth(150), // Adjust column width for the fourth column
+                  4: FixedColumnWidth(150), // Adjust column width for the fifth column
+                  5: FixedColumnWidth(150), // Extra column for horizontal scrolling
+                },
+                children: [
+           //table header
+                  TableRow(
+                    decoration: BoxDecoration(
+                      color: AppColors.border1,),
                     children: [
-                      // Header Row
-                      TableRow(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Checkbox",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Title",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Icon",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Avatar",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Extra 1",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Extra 2",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Data Rows with Dividers
-                      for (var i = 0; i < titles.length; i++)
-                        TableRow(
-                          children: [
-                            // Checkbox Column
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Checkbox(value: false, onChanged: (_) {}),
-                            ),
-                            // Title Column
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Text(titles[i]),
-                            ),
-                            // Icon Column
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Icon(Icons.message_outlined),
-                            ),
-                            // Avatar Column
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withOpacity(0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                            // Extra Columns
-                            for (
-                              var j = 0;
-                              j < 2;
-                              j++
-                            ) // Two extra columns for horizontal scrolling
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                child: Text("Extra $j"),
-                              ),
-                          ],
-                        ),
 
-                      // Divider Row (used after every row to simulate a divider)
-                    ],
-                  ),
-                ),
+                      _buildTableHeaderCell('Checkbox'),
+                      // _buildTableHeaderCell('Title'),
+                      // _buildTableHeaderCell('Icon'),
+                      // _buildTableHeaderCell('Avatar'),
+                      // _buildTableHeaderCell('Extra 1'),
+                      // _buildTableHeaderCell('Extra 2'),
+                    
+                  ]),
+                  // Data Rows
+                  ...data.map((item) {
+                    return TableRow(
+                      children: [
+                        // Checkbox Column
+                      // 
+                        _buildTableHeaderCell('Checkbox'),
+                      // _buildTableHeaderCell('Title'),
+                      // _buildTableHeaderCell('Icon'),
+                      // _buildTableHeaderCell('Avatar'),
+                      // _buildTableHeaderCell('Extra 1'),
+                      // _buildTableHeaderCell('Extra 2'),
+                      ],
+                    );
+                  }).toList(),
+
+
+           
+                ],
               ),
             ),
           ),
+        ),
+      ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Slider(
@@ -298,6 +253,51 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
               max: maxScroll, // Define max scroll value
               onChanged: _onSliderChanged,
             ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  height: 40,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: Sizer.hp(30),
+                        width: Sizer.wp(30),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Add Task',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -433,3 +433,35 @@ Widget _customButton1({
     ),
   );
 }
+
+  // Helper function to build table header cells
+  Widget _buildTableHeaderCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Checkbox(value: true, onChanged: (value){}),
+         
+             Text(
+              text,
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: AppColors.backgroundDark,
+              ),
+            ),
+          
+        ],
+      ),
+    );
+  }
+
+  // Helper function to build table data cells
+  Widget _buildTableDataCell(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: EdgeInsets.all(8),
+        child: child,
+      ),
+    );
+  }
