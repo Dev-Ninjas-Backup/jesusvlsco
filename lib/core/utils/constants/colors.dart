@@ -6,6 +6,17 @@ class AppColors {
   // Brand Colors
   static const Color primary = Color(0xFF4E53B1);
   static const Color secondary = Color(0xFFF5F5F5);
+   static const Color textSecondary = Color(0xFF5B5B5B);
+   static const Color background = Color(0xFFEDEEF7);
+
+   static const Color text = Color(0xFF484848);
+   static const Color quill = Color(0xFFEDEEF7);
+
+   //progress bar colors
+ static const Color progress1 = Color(0xFF06843F);
+ static const Color progress2 = Color(0xFFDC1E28);
+ static const Color progresstext = Color(0xFF1EBD66);
+ static const Color viewcolor = Color(0xFFD9F0E4);
 
   static const Color textSecondary = Color(0xFF5B5B5B);
   static const Color background = Color(0xFFEDEEF7);
@@ -24,6 +35,21 @@ class AppColors {
   static const Color color1 = Color(0xFF4E53B1); // Dark blue color
   static const Color color2 = Color(0xFF767BD5); // Light purple color
   static const Color color3 = Color(0xFF2C2D32); // Dark grey color
+  static const Color button1 = Color(0xFFFFE6E7); // Dark grey color
+  static const Color button2 = Color(0xFFDDD9FF); // Dark grey color
+  
+
+//border colors
+   static const Color border = Color(0xFFC8CAE7);
+      static const Color border1 = Color(0xFFF5F5F5);
+      static const Color border2 = Color(0xFFC5C5C5);
+
+
+
+
+
+  
+   // Bright yellow for highlights and accents
 
   // Bright yellow for highlights and accents
 

@@ -1,0 +1,467 @@
+// ignore_for_file: sort_child_properties_last
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+
+class TaskmanagementDashboard extends StatefulWidget {
+  const TaskmanagementDashboard({super.key});
+
+  @override
+  State<TaskmanagementDashboard> createState() =>
+      _TaskmanagementDashboardState();
+}
+
+class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
+  @override
+  Widget build(BuildContext context) {
+    final double maxScroll = 500.0;
+    final ScrollController _horizontalController = ScrollController();
+    double _scrollValue = 0.0;
+// Dummy data for the table rows
+  final List<Map<String, dynamic>> data = [
+    {
+      "checkbox": false,
+      "title": "Metro Soppping center",
+      "icon": 'assets/icons/sms.png',
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-1",
+      "extra2": "Extra 2-1",
+    },
+    {
+      "checkbox": true,
+      "title": "Title 2",
+      "icon": "assets/icons/sms.png",
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-2",
+      "extra2": "Extra 2-2",
+    },
+    {
+      "checkbox": false,
+      "title": "Title 3",
+      "icon": "assets/icons/sms.png",
+      "avatar": "https://via.placeholder.com/150",
+      "extra1": "Extra 1-3",
+      "extra2": "Extra 2-3",
+    },
+    // Add more dummy data as needed
+  ];
+
+    @override
+    void dispose() {
+      _horizontalController.dispose();
+      super.dispose();
+    }
+
+    void _onSliderChanged(double value) {
+      setState(() {
+        _scrollValue = value;
+        // Use jumpTo to update the horizontal scroll position
+        _horizontalController.jumpTo(value);
+      });
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        shadowColor: AppColors.textWhite,
+        backgroundColor: Colors.white,
+        elevation: 4,
+        leading: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        title: Text(
+          'Task & Project Management',
+          style: AppTextStyle.regular().copyWith(
+            fontSize: Sizer.wp(20),
+            color: AppColors.primary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              CupertinoIcons.bars,
+              color: AppColors.backgroundDark,
+              size: Sizer.wp(24),
+            ),
+            onPressed: () {
+              // Handle menu action if needed
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          _buildSearchTextField(),
+          Padding(
+            padding: EdgeInsets.only(left: Sizer.wp(16.0)),
+            child: Row(
+              children: [
+                Flexible(
+                  child: _customButton(
+                    width: Sizer.wp(155),
+                    color: AppColors.button1,
+                    text: "Overdue tasks",
+                    onPressed: () {},
+                  ),
+                ),
+                SizedBox(width: Sizer.wp(8)),
+                Flexible(
+                  child: _customButton1(
+                    width: Sizer.wp(120),
+                    color: AppColors.primary,
+                    text: "Add Task",
+                    onPressed: () {},
+                  ),
+                ),
+                SizedBox(width: Sizer.wp(8)),
+                Flexible(
+                  child: _customButton1(
+                    width: Sizer.wp(100),
+                    color: AppColors.primary,
+                    text: "Activity",
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: Sizer.hp(16)),
+
+          //List items start
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: Sizer.wp(16.0)),
+                child: Text(
+                  'Views by:',
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: Sizer.wp(16),
+                    color: AppColors.backgroundDark,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.menu_open_sharp,
+                  color: AppColors.backgroundDark,
+                ),
+              ),
+              Text(
+                'List',
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  color: AppColors.backgroundDark,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: AppColors.backgroundDark,
+                ),
+              ),
+              Text(
+                'Dates',
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  color: AppColors.backgroundDark,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+
+          //list elements
+         Container(
+        
+        height: 200,
+        width: double.infinity,
+        child: Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical, // Table scrolls vertically
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection:
+                  Axis.horizontal, // Horizontal scroll controlled by slider
+              child: Table(
+              border: TableBorder(
+                bottom: BorderSide(color: AppColors.border1, width: 1.0),
+                horizontalInside: BorderSide(color: AppColors.border1, width: 1.0),
+              ),
+                columnWidths: {
+                  0: FixedColumnWidth(150), // Adjust column width for the first column
+                  1: FixedColumnWidth(150), // Adjust column width for the second column
+                  2: FixedColumnWidth(150), // Adjust column width for the third column
+                  3: FixedColumnWidth(150), // Adjust column width for the fourth column
+                  4: FixedColumnWidth(150), // Adjust column width for the fifth column
+                  5: FixedColumnWidth(150), // Extra column for horizontal scrolling
+                },
+                children: [
+           //table header
+                  TableRow(
+                    decoration: BoxDecoration(
+                      color: AppColors.border1,),
+                    children: [
+
+                      _buildTableHeaderCell('Checkbox'),
+                      // _buildTableHeaderCell('Title'),
+                      // _buildTableHeaderCell('Icon'),
+                      // _buildTableHeaderCell('Avatar'),
+                      // _buildTableHeaderCell('Extra 1'),
+                      // _buildTableHeaderCell('Extra 2'),
+                    
+                  ]),
+                  // Data Rows
+                  ...data.map((item) {
+                    return TableRow(
+                      children: [
+                        // Checkbox Column
+                      // 
+                        _buildTableHeaderCell('Checkbox'),
+                      // _buildTableHeaderCell('Title'),
+                      // _buildTableHeaderCell('Icon'),
+                      // _buildTableHeaderCell('Avatar'),
+                      // _buildTableHeaderCell('Extra 1'),
+                      // _buildTableHeaderCell('Extra 2'),
+                      ],
+                    );
+                  }).toList(),
+
+
+           
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Slider(
+              value: _scrollValue,
+              min: 0,
+              max: maxScroll, // Define max scroll value
+              onChanged: _onSliderChanged,
+            ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  height: 40,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: Sizer.hp(30),
+                        width: Sizer.wp(30),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Add Task',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Widget _buildSearchTextField() {
+  return Padding(
+    padding: EdgeInsets.symmetric(
+      horizontal: Sizer.wp(16),
+      vertical: Sizer.hp(24),
+    ),
+    child: Container(
+      height: Sizer.hp(48),
+      width: Sizer.wp(360),
+      decoration: BoxDecoration(
+        color: AppColors.primaryBackground,
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(Sizer.wp(10)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.textSecondary.withOpacity(0.1),
+            blurRadius: 3,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: TextField(
+        textAlign: TextAlign.start,
+        decoration: InputDecoration(
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
+          hintText: 'Search articles',
+          hintStyle: AppTextStyle.regular().copyWith(
+            fontSize: Sizer.wp(14),
+            color: AppColors.textSecondary.withOpacity(0.6),
+          ),
+          suffixIcon: Container(
+            padding: const EdgeInsets.all(8),
+            child: SvgPicture.asset(
+              'assets/icons/search-normal.svg',
+              height: Sizer.hp(20),
+              width: Sizer.wp(20),
+            ),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: Sizer.wp(16),
+            vertical: Sizer.hp(12),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _customButton({
+  required Color color,
+  required String text,
+  required VoidCallback onPressed,
+  required double width,
+}) {
+  return SizedBox(
+    width: Sizer.wp(155),
+    height: Sizer.hp(40),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.button1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+        ),
+      ),
+      onPressed: () {},
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: Sizer.wp(10),
+            backgroundColor: AppColors.error,
+            child: Text(
+              '1',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(12),
+                color: AppColors.textWhite,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          SizedBox(width: Sizer.wp(8)),
+          Flexible(
+            child: Text(
+              "Overdue tasks",
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                color: AppColors.error,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _customButton1({
+  required Color color,
+  required String text,
+  required VoidCallback onPressed,
+  required double width,
+}) {
+  return SizedBox(
+    width: width,
+    height: Sizer.hp(40),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizer.wp(8)),
+        ),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: AppTextStyle.regular().copyWith(
+          fontSize: Sizer.wp(16),
+          color: AppColors.textWhite,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+  );
+}
+
+  // Helper function to build table header cells
+  Widget _buildTableHeaderCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Checkbox(value: true, onChanged: (value){}),
+         
+             Text(
+              text,
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: AppColors.backgroundDark,
+              ),
+            ),
+          
+        ],
+      ),
+    );
+  }
+
+  // Helper function to build table data cells
+  Widget _buildTableDataCell(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: EdgeInsets.all(8),
+        child: child,
+      ),
+    );
+  }
