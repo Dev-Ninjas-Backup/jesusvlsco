@@ -11,6 +11,10 @@ import 'package:jesusvlsco/features/taskmanagement/screens/overduetask.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/task_commnets.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/task_details.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
+
+// import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
+
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -26,6 +30,7 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
+
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),
@@ -34,12 +39,18 @@ class Jesusvlsco extends StatelessWidget {
       // home: Router.withConfig(config: AppRouter.router),
       home: OverdueTask(),
 
+
+      // home: Router.withConfig(config: AppRouter.router),
+      // home: AnnouncementDashboard(),
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+
+      home: Router.withConfig(config: AppRouter.router),
+      // home: AnnouncementDashboard(),
 
       // Alternative: You can also use this approach
       // builder: (context, child) {
