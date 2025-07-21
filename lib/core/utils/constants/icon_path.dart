@@ -45,6 +45,11 @@ class IconPath {
  static const String celender = 'assets/icons/calendar_month.svg';
  static const String nestclock = 'assets/icons/nest_clock_farsight_analog.svg';
 
+// recognitiion Icons
+static const String teamplayer = 'assets/icons/team-player.svg';
+static const String creative = 'assets/icons/Group 427318848.png';
+static const String likes = 'assets/icons/thumb_up.svg';
+static const String message = 'assets/icons/forum.svg';
 
 
 }
