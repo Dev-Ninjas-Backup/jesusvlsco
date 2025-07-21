@@ -4,7 +4,21 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
+
 import 'package:jesusvlsco/features/recognition/screens/send_recognition.dart';
+
+import 'package:jesusvlsco/features/taskmanagement/screens/activity_log.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/add_moredetails.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/overduetask.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/task_commnets.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/task_details.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
+
+// import 'package:jesusvlsco/features/user/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/routes/app_router.dart';
+
+
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -20,6 +34,7 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
+
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),
@@ -28,12 +43,18 @@ class Jesusvlsco extends StatelessWidget {
       // home: Router.withConfig(config: AppRouter.router),
       home: SendRecognition(),
 
+
+      // home: Router.withConfig(config: AppRouter.router),
+      // home: AnnouncementDashboard(),
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+
+      home: Router.withConfig(config: AppRouter.router),
+      // home: AnnouncementDashboard(),
 
       // Alternative: You can also use this approach
       // builder: (context, child) {
