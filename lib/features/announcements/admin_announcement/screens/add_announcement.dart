@@ -132,7 +132,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     width: Sizer.wp(360),
                     child: TextField(
                       maxLines: 2,
-                      decoration: InputDecoration(
+                      decoration: InputDecoration( 
                         hintText: "Enter announcement title here",
                         hintStyle: AppTextStyle.regular().copyWith(
                           fontSize: Sizer.wp(14),

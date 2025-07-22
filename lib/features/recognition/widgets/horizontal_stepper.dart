@@ -23,6 +23,24 @@ class HorizontalStepper extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
+          Padding(
+            padding: EdgeInsets.only(top: Sizer.hp(16), bottom: Sizer.hp(16)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                currentStep > 0
+                    ? cutombutton(
+                        width: Sizer.wp(150),
+                        textcolor: AppColors.primary,
+                        text: "Badge library",
+                        bgcolor: Colors.transparent,
+                        brcolor: AppColors.primary,
+                        onPressed: onCancel,
+                      )
+                    : const SizedBox(),
+              ],
+            ),
+          ),
           // Row for step circles and separators
           Row(
             children: List.generate(steps.length * 2 - 1, (index) {
@@ -143,25 +161,27 @@ class HorizontalStepper extends StatelessWidget {
 }
 
 Widget cutombutton({
-  required Color bgcolor,
-  required Color brcolor,
-  required String text,
-  required Color textcolor,
-  required VoidCallback onPressed,
+  Color? bgcolor,
+  Color? brcolor,
+  String? text,
+  Color? textcolor,
+  VoidCallback? onPressed,
+  double? width,
 }) {
   return SizedBox(
+    width: width,
     height: Sizer.hp(40),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: bgcolor,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: brcolor, width: 1),
+          side: BorderSide(color: brcolor!, width: 1),
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),
       ),
       onPressed: onPressed,
       child: Text(
-        text,
+        text!,
         style: AppTextStyle.regular().copyWith(
           fontSize: Sizer.wp(16),
           color: textcolor,
