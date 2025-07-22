@@ -5,7 +5,6 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/recognition/controllers/recognition_controller.dart';
 import 'package:jesusvlsco/features/recognition/widgets/horizontal_stepper.dart';
-import 'package:jesusvlsco/features/recognition/widgets/send_recognitation_pages.dart';
 
 class SendRecognition extends StatefulWidget {
   const SendRecognition({super.key});

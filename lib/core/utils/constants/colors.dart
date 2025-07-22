@@ -12,6 +12,7 @@ class AppColors {
 
    static const Color text = Color(0xFF484848);
    static const Color quill = Color(0xFFEDEEF7);
+   static const Color textfield = Color(0xFF949494);
 
    //progress bar colors
  static const Color progress1 = Color(0xFF06843F);
@@ -37,6 +38,7 @@ class AppColors {
       //list colors
 
       static const Color list = Color(0xFFD9F0E4);
+      static const Color gridcard = Color(0xFFE8E6FF);
     
    
 
