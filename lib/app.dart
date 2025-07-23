@@ -4,7 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
-import 'package:jesusvlsco/features/recognition/screens/create_bridge.dart';
+import 'package:jesusvlsco/features/communication/screens/chat_screen.dart';
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -26,7 +26,7 @@ class Jesusvlsco extends StatelessWidget {
       // enableLog: true,
       // Use GoRouter with GetX
       // home: Router.withConfig(config: AppRouter.router),
-      home: CreateBridge(),
+      home: ChatScreen(),
 
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
