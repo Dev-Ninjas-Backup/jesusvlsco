@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/recognition/controllers/badge_controller.dart';
 import 'package:jesusvlsco/features/recognition/widgets/gridview_card.dart';
 
-class CreateBridge extends StatelessWidget {
-  const CreateBridge({super.key});
+class EditBadge extends StatelessWidget {
+  const EditBadge({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +87,31 @@ class CreateBridge extends StatelessWidget {
 
   // Badge Icon Section
   Widget _buildBadgeIconSection() {
+    final badgeController = Get.put(BadgeController());
+
     return Padding(
       padding: EdgeInsets.all(Sizer.wp(16)),
       child: Container(
         height: Sizer.hp(329),
         width: double.infinity,
         decoration: BoxDecoration(
+          color: AppColors.gridcard,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.border, width: 1),
         ),
-        child: Center(
-          child: Text(
-            "Select icon from the list",
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(14),
-              fontWeight: FontWeight.w400,
-              color: AppColors.textPrimary,
+        child: Obx(() {
+          // Show the selected badge icon based on the current selected index
+          final selectedItem =
+              badgeController.items[badgeController.selectedIndex.value];
+
+          return Center(
+            child: SvgPicture.asset(
+              selectedItem.icon,
+              height: Sizer.hp(200),
+              width: Sizer.wp(200),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
@@ -224,7 +234,7 @@ class CreateBridge extends StatelessWidget {
         size: Sizer.wp(24),
       ),
       title: Text(
-        'Create Bridge',
+        'Edit Bridge',
         style: TextStyle(
           fontSize: Sizer.wp(20),
           color: AppColors.primary,

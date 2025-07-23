@@ -6,19 +6,19 @@ class AppColors {
   // Brand Colors
   static const Color primary = Color(0xFF4E53B1);
   static const Color secondary = Color(0xFFF5F5F5);
-   static const Color textSecondary = Color(0xFF5B5B5B);
-   static const Color background = Color(0xFFEDEEF7);
+  static const Color textSecondary = Color(0xFF5B5B5B);
+  static const Color background = Color(0xFFF9F9F9);
 
+  static const Color text = Color(0xFF484848);
+  static const Color quill = Color(0xFFEDEEF7);
+  static const Color textfield = Color(0xFF949494);
 
-   static const Color text = Color(0xFF484848);
-   static const Color quill = Color(0xFFEDEEF7);
-   static const Color textfield = Color(0xFF949494);
-
-   //progress bar colors
- static const Color progress1 = Color(0xFF06843F);
- static const Color progress2 = Color(0xFFDC1E28);
- static const Color progresstext = Color(0xFF1EBD66);
- static const Color viewcolor = Color(0xFFD9F0E4);
+  //progress bar colors
+  static const Color progress1 = Color(0xFF06843F);
+  static const Color progress2 = Color(0xFFDC1E28);
+  static const Color progresstext = Color(0xFF1EBD66);
+  static const Color viewcolor = Color(0xFFD9F0E4);
+  static const Color circle = Color(0xFFFF9200);
 
   static const Color textSecondary = Color(0xFF5B5B5B);
   static const Color background = Color(0xFFEDEEF7);
@@ -40,20 +40,17 @@ class AppColors {
   static const Color color3 = Color(0xFF2C2D32); // Dark grey color
   static const Color button1 = Color(0xFFFFE6E7); // Dark grey color
   static const Color button2 = Color(0xFFDDD9FF); // Dark grey color
-  
 
-//border colors
-   static const Color border = Color(0xFFC8CAE7);
-      static const Color border1 = Color(0xFFF5F5F5);
-      static const Color border2 = Color(0xFFC5C5C5);
+  //border colors
+  static const Color border = Color(0xFFC8CAE7);
+  static const Color border1 = Color(0xFFF5F5F5);
+  static const Color border2 = Color(0xFFC5C5C5);
+  static const Color border3 = Color(0xFFEDEEF7); // Dark grey color
 
+  //list colors
 
-      //list colors
-
-      static const Color list = Color(0xFFD9F0E4);
-      static const Color gridcard = Color(0xFFE8E6FF);
-    
-   
+  static const Color list = Color(0xFFD9F0E4);
+  static const Color gridcard = Color(0xFFE8E6FF);
 
 
 
@@ -74,6 +71,7 @@ class AppColors {
   static const Color progressIndicatorColor = Color(0xFF41BD5D);
   static const Color requestListItemColor = Color(0xFFC8CAE7);
   static const Color shiftCardColor = Color(0xFFEDEEF7);
+
 
   // Bright yellow for highlights and accents
   static const Color accent = Color(

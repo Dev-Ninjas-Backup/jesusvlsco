@@ -64,14 +64,7 @@ class RecognitionCard extends StatelessWidget {
             ],
           ),
         ),
-        Text(
-          "All user can see this recognition",
-          style: AppTextStyle.regular().copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.text,
-          ),
-        ),
+        
       ],
     );
   }
