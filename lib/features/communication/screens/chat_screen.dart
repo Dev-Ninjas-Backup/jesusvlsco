@@ -1,6 +1,12 @@
-import 'dart:math';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -10,7 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  String _currentMessage = '';
+  final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [
     ChatMessage(
       text: "Hey! How is the new project coming along?",
@@ -19,7 +25,8 @@ class ChatScreenState extends State<ChatScreen> {
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     ),
     ChatMessage(
-      text: "Going great! Just finished the wireframes... Will share them with you shortly.",
+      text:
+          "Going great! Just finished the wireframes... Will share them with you shortly.",
       isMe: true,
       time: "9:41",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
@@ -31,7 +38,8 @@ class ChatScreenState extends State<ChatScreen> {
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     ),
     ChatMessage(
-      text: "Going great! Just finished the wireframes... Will share them with you shortly.",
+      text:
+          "Going great! Just finished the wireframes... Will share them with you shortly.",
       isMe: true,
       time: "9:41",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
@@ -43,142 +51,156 @@ class ChatScreenState extends State<ChatScreen> {
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     ),
     ChatMessage(
-      text: "Going great! Just finished the wireframes... Will share them with you shortly.",
+      text:
+          "Going great! Just finished the wireframes... Will share them with you shortly.",
       isMe: true,
       time: "9:41",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     ),
   ];
 
-  void _sendMessage() {
-    if (_currentMessage.trim().isNotEmpty) {
+  void _sendMessage(String message) {
+    if (message.trim().isNotEmpty) {
       setState(() {
-
         _messages.add(
           ChatMessage(
-            text: _currentMessage,
+            text: message,
             isMe: true,
             time: TimeOfDay.now().format(context),
             avatar: "https://randomuser.me/api/portraits/women/44.jpg",
           ),
         );
-        _currentMessage = '';
+        _messageController.clear();
       });
     }
   }
 
-  void disspose(){
-    
+  @override
+  void dispose() {
+    _messageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
+      backgroundColor: AppColors.background,
+      appBar: Custom_appbar(title: "Chat"),
       body: Column(
         children: [
+          // Custom Header Container
+          _buildCustomHeader(),
           // Chat messages
           Expanded(
-            child: Container(
-              color: const Color(0xFFF5F5F5),
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: _messages.length,
-                itemBuilder: (context, index) {
-                  final message = _messages[index];
-                  return _buildMessageBubble(message);
-                },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBackground,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final message = _messages[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _buildMessageBubble(message, index),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-          // Message input area
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          // Message input area using MessageBar from chat_bubbles
+          Padding(
+            padding: EdgeInsets.all(Sizer.wp(16)),
             child: Row(
               children: [
-                // Text input field
                 Expanded(
                   child: Container(
+                    height: Sizer.hp(48),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          _currentMessage = value;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Write Something...',
-                        hintStyle: TextStyle(
-                          color: Color(0xFF999999),
-                          fontSize: 16,
+                      color: AppColors.primaryBackground,
+                      borderRadius: BorderRadius.circular(12),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.border1,
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
                         ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: Sizer.wp(16)),
+                            child: TextField(
+                              textAlign: TextAlign.start,
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                hintText: 'Write Something ...',
+                                hintStyle: AppTextStyle.regular().copyWith(
+                                  fontSize: Sizer.wp(14),
+                                  color: AppColors.textSecondary,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        SvgPicture.asset(
+                          "assets/icons/add_reaction.svg",
+                          height: Sizer.hp(24),
+                          width: Sizer.wp(24),
+                          color: AppColors.textPrimary,
+                        ),
+                        SizedBox(width: Sizer.wp(8)),
+                        SvgPicture.asset(
+                          "assets/icons/attachment.svg",
+                          height: Sizer.hp(24),
+                          width: Sizer.wp(24),
+                          color: AppColors.textPrimary,
+                        ),
+                        SizedBox(width: Sizer.wp(8)),
+                        SvgPicture.asset(
+                          "assets/icons/mic.svg",
+                          height: Sizer.hp(24),
+                          width: Sizer.wp(24),
+                          color: AppColors.textPrimary,
+                        ),
+                        SizedBox(width: Sizer.wp(8)),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                // Attachment button
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF5F5F5),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.attach_file,
-                      color: Color(0xFF666666),
-                      size: 20,
+                SizedBox(width: Sizer.wp(8)),
+                GestureDetector(
+                  onTap: () => _sendMessage(_messageController.text),
+                  child: Container(
+                    height: Sizer.hp(48),
+                    width: Sizer.wp(48),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onPressed: () {},
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Microphone button
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF5F5F5),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.mic,
-                      color: Color(0xFF666666),
-                      size: 20,
+                    padding: EdgeInsets.all(Sizer.wp(12)),
+                    child: SvgPicture.asset(
+                      "assets/icons/material-symbols_send.svg",
+                      height: Sizer.hp(20),
+                      width: Sizer.wp(20),
                     ),
-                    onPressed: () {},
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Send button
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF4A90E2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    onPressed: _sendMessage,
                   ),
                 ),
               ],
@@ -189,54 +211,44 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildMessageBubble(ChatMessage message) {
+  Widget _buildMessageBubble(ChatMessage message, int index) {
+    // Check if this message should have a tail (last message in a sequence from the same sender)
+    bool shouldShowTail = true;
+    if (index < _messages.length - 1) {
+      shouldShowTail = _messages[index + 1].isMe != message.isMe;
+    }
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: message.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: message.isMe
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           if (!message.isMe) ...[
             CircleAvatar(
               radius: 16,
               backgroundImage: NetworkImage(message.avatar),
             ),
-            const SizedBox(width: 8),
+            // const SizedBox(width: 8),
           ],
           Flexible(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.7,
+            child: BubbleNormal(
+              text: message.text,        
+              isSender: message.isMe,
+              color: AppColors.border3,
+              tail: shouldShowTail,
+              textStyle: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 14,
+                height: 1.3,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: message.isMe ? const Color(0xFF4A90E2) : Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(18),
-                  topRight: const Radius.circular(18),
-                  bottomLeft: Radius.circular(message.isMe ? 18 : 4),
-                  bottomRight: Radius.circular(message.isMe ? 4 : 18),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                message.text,
-                style: TextStyle(
-                  color: message.isMe ? Colors.white : const Color(0xFF333333),
-                  fontSize: 15,
-                  height: 1.3,
-                ),
-              ),
+              bubbleRadius: 8,
             ),
           ),
           if (message.isMe) ...[
-            const SizedBox(width: 8),
+            // const SizedBox(width: 8),
             CircleAvatar(
               radius: 16,
               backgroundImage: NetworkImage(message.avatar),
@@ -247,77 +259,95 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 1,
-      shadowColor: Colors.grey.withOpacity(0.3),
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Color(0xFF333333),
-          size: 20,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      title: Row(
-        children: [
-          CircleAvatar(
-            radius: 18,
-            backgroundImage: const NetworkImage(
-              'https://randomuser.me/api/portraits/men/1.jpg',
-            ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Project ABC',
-                style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-              const Text(
-                'Online',
-                style: TextStyle(
-                  color: Color(0xFF4A90E2),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
+  Widget _buildCustomHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.border3,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 1,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.phone,
-            color: Color(0xFF666666),
-            size: 22,
-          ),
-          onPressed: () {},
+      child: Padding(
+        padding: EdgeInsets.all(Sizer.wp(16)),
+        child: Row(
+          children: [
+            // Profile avatar
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  width: Sizer.wp(40),
+                  height: Sizer.wp(40),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFE8E8EE),
+                    border: Border.all(color: AppColors.primary, width: 2),
+                  ),
+                  child: CircleAvatar(
+                    radius: 15,
+                    backgroundImage: const NetworkImage(
+                      'https://randomuser.me/api/portraits/men/1.jpg',
+                    ),
+                  ),
+                ),
+
+                Container(
+                  width: Sizer.wp(10),
+                  height: Sizer.wp(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.primaryBackground,
+                      width: 1,
+                    ),
+                    shape: BoxShape.circle,
+                    color: AppColors.progresstext,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 12),
+            // Name and status
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Project ABC',
+                    style: TextStyle(
+                      color: Color(0xFF333333),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    'Online',
+                    style: TextStyle(
+                      color: Color(0xFF4A90E2),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Action buttons
+            SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
+            const SizedBox(width: 8),
+            SvgPicture.asset('assets/icons/Camera.svg', width: 24, height: 24),
+            const SizedBox(width: 8),
+            SvgPicture.asset(
+              'assets/icons/more_vert.svg',
+              width: 24,
+              height: 24,
+            ),
+          ],
         ),
-        IconButton(
-          icon: const Icon(
-            Icons.videocam,
-            color: Color(0xFF666666),
-            size: 24,
-          ),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(
-            Icons.more_horiz,
-            color: Color(0xFF333333),
-            size: 24,
-          ),
-          onPressed: () {},
-        ),
-      ],
+      ),
     );
   }
 }

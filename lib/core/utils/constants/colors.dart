@@ -47,16 +47,13 @@ class AppColors {
   static const Color border2 = Color(0xFFC5C5C5);
   static const Color border3 = Color(0xFFEDEEF7); // Dark grey color
 
+
   //list colors
 
   static const Color list = Color(0xFFD9F0E4);
   static const Color gridcard = Color(0xFFE8E6FF);
 
 
-
-
-
-  
    // Bright yellow for highlights and accents
 
   // Bright yellow for highlights and accents
@@ -71,6 +68,7 @@ class AppColors {
   static const Color progressIndicatorColor = Color(0xFF41BD5D);
   static const Color requestListItemColor = Color(0xFFC8CAE7);
   static const Color shiftCardColor = Color(0xFFEDEEF7);
+
 
 
   // Bright yellow for highlights and accents
