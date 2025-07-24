@@ -34,10 +34,21 @@ class AppColors {
   static const Color border2 = Color(0xFFC5C5C5);
   static const Color border3 = Color(0xFFEDEEF7); // Dark grey color
 
+
   //list colors
 
   static const Color list = Color(0xFFD9F0E4);
   static const Color gridcard = Color(0xFFE8E6FF);
+
+
+//chat colors
+
+
+
+
+
+
+
 
   // Bright yellow for highlights and accents
   static const Color accent = Color(
