@@ -231,7 +231,7 @@ class ChatScreenState extends State<ChatScreen> {
               radius: 16,
               backgroundImage: NetworkImage(message.avatar),
             ),
-            // const SizedBox(width: 8),
+            // const SizedBox(width: 8 ),
           ],
           Flexible(
             child: BubbleNormal(
