@@ -6,6 +6,7 @@ import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/features/communication/screens/chat_screen.dart';
 import 'package:jesusvlsco/features/communication/screens/create_new.dart';
+import 'package:jesusvlsco/features/communication/screens/new_team.dart';
 import 'package:jesusvlsco/features/recognition/screens/create_bridge.dart';
 import 'package:jesusvlsco/features/recognition/screens/send_recognition.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/activity_log.dart';
@@ -38,7 +39,7 @@ class Jesusvlsco extends StatelessWidget {
       // enableLog: true,
       // Use GoRouter with GetX
       // home: Router.withConfig(config: AppRouter.router),
-      home: CreateNew(),
+      home: NewTeam(),
 
 
       // home: Router.withConfig(config: AppRouter.router),
