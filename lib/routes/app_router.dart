@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/routes/routes/admin/admin_shell_routes.dart';
 import 'package:jesusvlsco/routes/routes/drawer_routes.dart';
-
 import 'config/router_config.dart' as app_config;
 import 'guards/auth_guard.dart';
 import 'routes/auth_routes.dart';
 import 'routes/main_shell_routes.dart';
-
 /// Main application router
 ///
 /// This class provides the centralized router configuration for the entire app.

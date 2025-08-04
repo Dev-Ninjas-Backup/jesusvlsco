@@ -50,10 +50,15 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
       shadowColor: AppColors.textWhite,
       backgroundColor: Colors.white,
       elevation: 4,
-      leading: Icon(
-        CupertinoIcons.arrow_left,
-        color: AppColors.backgroundDark,
-        size: Sizer.wp(24),
+      leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        onPressed: () {
+          Get.back();
+        },
       ),
       title: Text(
         'Announcement',
@@ -72,7 +77,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
             size: Sizer.wp(24),
           ),
           onPressed: () {
-            // Handle menu action if needed
+        
           },
         ),
       ],
@@ -237,6 +242,9 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
   }
 
   Widget _buildAnnouncementsList() {
+    final AnnouncementController _announcementController = Get.put(
+  AnnouncementController(),
+);
     return Container(
       height: Sizer.hp(500),
       child: Obx(() {
@@ -510,7 +518,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
           backgroundColor: AppColors.primaryBackground,
           content: SizedBox(
             width: Sizer.wp(360),
-            height: Sizer.hp(367),
+            height: Sizer.hp(380),
             child: TableCalendar(
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(

@@ -12,7 +12,7 @@ class NewTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Custom_appbar(title: "New Team"),
+      appBar: Custom_appbar(title: "New Team",),
       body: Column(
         children: [
           InkWell(

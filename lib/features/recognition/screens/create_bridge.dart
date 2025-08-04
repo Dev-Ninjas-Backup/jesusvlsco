@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/recognition/screens/badge_library.dart';
 import 'package:jesusvlsco/features/recognition/widgets/gridview_card.dart';
 
 class CreateBridge extends StatelessWidget {
@@ -148,7 +150,9 @@ class CreateBridge extends StatelessWidget {
       children: [
         Flexible(
           child: _buildButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(BadgeLibrary());
+            },
             text: "Create Bridge",
             bgcolor: AppColors.primary,
             brcolor: AppColors.primary,
@@ -158,7 +162,9 @@ class CreateBridge extends StatelessWidget {
         SizedBox(width: Sizer.wp(8)),
         Flexible(
           child: _buildButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
             text: "Close",
             bgcolor: AppColors.primaryBackground,
             brcolor: AppColors.border2,
@@ -218,10 +224,15 @@ class CreateBridge extends StatelessWidget {
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 4,
-      leading: Icon(
-        CupertinoIcons.arrow_left,
-        color: AppColors.backgroundDark,
-        size: Sizer.wp(24),
+      leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        onPressed: () {
+          Get.back();
+        },
       ),
       title: Text(
         'Create Bridge',

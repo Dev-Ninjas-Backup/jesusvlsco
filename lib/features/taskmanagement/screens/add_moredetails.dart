@@ -80,6 +80,7 @@ class Adddetails extends StatelessWidget {
                 // First Button
                 Flexible(
                   child: customButton(
+                         textcolor: AppColors.primaryBackground,
                     bgcolor: AppColors.primary,
                     brcolor: Colors.transparent,
                     text: 'Publish Task',
@@ -117,11 +118,16 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
     shadowColor: AppColors.textWhite,
     backgroundColor: Colors.white,
     elevation: 4,
-    leading: Icon(
-      CupertinoIcons.arrow_left,
-      color: AppColors.backgroundDark,
-      size: Sizer.wp(24),
-    ),
+      leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: AppColors.backgroundDark,
+            size: Sizer.wp(24),
+          ),
+          onPressed: () {
+          Get.back();
+          },
+        ),
     title: Text(
       'Add Task',
       style: AppTextStyle.regular().copyWith(

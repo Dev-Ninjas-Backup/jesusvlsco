@@ -23,10 +23,15 @@ class WeeklyCalender extends StatelessWidget {
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
         elevation: 4,
-        leading: Icon(
-          CupertinoIcons.arrow_left,
-          color: AppColors.backgroundDark,
-          size: Sizer.wp(24),
+        leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: AppColors.backgroundDark,
+            size: Sizer.wp(24),
+          ),
+          onPressed: () {
+            Get.back();
+          },
         ),
         title: Text(
           'Task & Project Management',

@@ -283,6 +283,7 @@ Widget _button_row(BuildContext context) {
     children: [
       Flexible(
         child: customButton(
+       textcolor: AppColors.primaryBackground,
           bgcolor: AppColors.progress1,
           brcolor: AppColors.primary,
           text: "Mark task as done",
@@ -293,6 +294,7 @@ Widget _button_row(BuildContext context) {
       SizedBox(width: Sizer.wp(16)),
       Flexible(
         child: customButton(
+            textcolor: AppColors.primaryBackground,
           bgcolor: Colors.transparent,
           brcolor: AppColors.primary,
           text: "Edit",

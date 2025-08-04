@@ -3,9 +3,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/activity_log.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/overduetask.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/weekly_calender.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/wide_list.dart';
 
 class TaskmanagementDashboard extends StatefulWidget {
@@ -28,10 +34,15 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
         elevation: 4,
-        leading: Icon(
-          CupertinoIcons.arrow_left,
-          color: AppColors.backgroundDark,
-          size: Sizer.wp(24),
+        leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: AppColors.backgroundDark,
+            size: Sizer.wp(24),
+          ),
+          onPressed: () {
+          Get.back();
+          },
         ),
         title: Text(
           'Task & Project Management',
@@ -68,7 +79,9 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                       // width: Sizer.wp(155),
                       color: AppColors.button1,
                       text: "Overdue tasks",
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(OverdueTask());
+                      },
                     ),
                   ),
                   SizedBox(width: Sizer.wp(8)),
@@ -77,7 +90,9 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                       width: Sizer.wp(120),
                       color: AppColors.primary,
                       text: "Add Task",
-                      onPressed: () {},
+                      onPressed: () {
+                          Get.to(AddTaskPage());
+                      },
                     ),
                   ),
                   SizedBox(width: Sizer.wp(8)),
@@ -86,7 +101,9 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                       width: Sizer.wp(100),
                       color: AppColors.primary,
                       text: "Activity",
-                      onPressed: () {},
+                      onPressed: () {
+                          Get.to(ActivityFeedScreen());
+                      },
                     ),
                   ),
                 ],
@@ -130,12 +147,17 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                     color: AppColors.backgroundDark,
                   ),
                 ),
-                Text(
-                  'Dates',
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(16),
-                    color: AppColors.backgroundDark,
-                    fontWeight: FontWeight.w400,
+                InkWell(
+                  onTap: (){
+                    Get.to(WeeklyCalender());
+                  },
+                  child: Text(
+                    'Dates',
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      color: AppColors.backgroundDark,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],
@@ -221,7 +243,7 @@ Widget _customButton({
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -246,7 +268,7 @@ Widget _customButton({
                 color: AppColors.error,
                 fontWeight: FontWeight.w500,
               ),
-         
+                     
             ),
           ),
         ],

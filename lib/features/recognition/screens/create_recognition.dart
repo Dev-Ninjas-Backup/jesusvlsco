@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/recognition/screens/create_bridge.dart';
 import 'package:jesusvlsco/features/recognition/widgets/gridview_card.dart';
 class CreateRecognition extends StatelessWidget {
   const CreateRecognition({super.key});
@@ -93,7 +96,9 @@ class CreateRecognition extends StatelessWidget {
             _categoryButton(() {}),
             SizedBox(width: Sizer.wp(8)),
             _commonButton(
-              () {},
+              () {
+                Get.to(CreateBridge());
+              },
               text: "Create",
               bgcolor: AppColors.textWhite,
               brcolor: AppColors.primary,
