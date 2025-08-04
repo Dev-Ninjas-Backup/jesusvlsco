@@ -8,6 +8,7 @@ Widget customButton({
   required Color bgcolor,
   required Color brcolor,
   required String text,
+  Color? textcolor,
   required VoidCallback onPressed,
   required double width,
 }) {
@@ -27,7 +28,7 @@ Widget customButton({
         text,
         style: AppTextStyle.regular().copyWith(
           fontSize: Sizer.wp(16),
-          color: AppColors.textWhite,
+          color: textcolor,
           fontWeight: FontWeight.w500,
         ),
       ),

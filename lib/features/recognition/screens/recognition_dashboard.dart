@@ -7,6 +7,8 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/recognition/controllers/recognition_controller.dart';
+import 'package:jesusvlsco/features/recognition/screens/badge_library.dart';
+import 'package:jesusvlsco/features/recognition/screens/send_recognition.dart';
 
 class RecognitionDashboard extends StatelessWidget {
   const RecognitionDashboard({super.key});
@@ -31,7 +33,10 @@ final RecognitionController controller = Get.put(RecognitionController());
                     textcolor: AppColors.textWhite,
                     bgcolor: AppColors.primary,
                     brcolor: AppColors.primary,
-                    onPressed: () {},
+                    onPressed: () {
+
+                    Get.to(SendRecognition());
+                    },
                   ),
                 ),
                 SizedBox(width: Sizer.wp(16)),
@@ -41,7 +46,9 @@ final RecognitionController controller = Get.put(RecognitionController());
                     text: "Badge library",
                     bgcolor: Colors.transparent,
                     brcolor: AppColors.primary,
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(BadgeLibrary());
+                    },
                   ),
                 ),
               ],
@@ -188,10 +195,15 @@ final RecognitionController controller = Get.put(RecognitionController());
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 4,
-      leading: Icon(
-        CupertinoIcons.arrow_left,
-        color: AppColors.backgroundDark,
-        size: Sizer.wp(24),
+     leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        onPressed: () {
+          Get.back();
+        },
       ),
       title: Text(
         'Recognition',
@@ -233,12 +245,14 @@ final RecognitionController controller = Get.put(RecognitionController());
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: AppTextStyle.regular().copyWith(
-            fontSize: Sizer.wp(16),
-            color: textcolor,
-            fontWeight: FontWeight.w500,
+        child: FittedBox(
+          child: Text(
+            text,
+            style: AppTextStyle.regular().copyWith(
+              fontSize: Sizer.wp(16),
+              color: textcolor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

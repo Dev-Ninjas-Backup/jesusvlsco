@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
 
 import '../../config/route_constants.dart';
 
@@ -18,7 +18,7 @@ class AdminChatRoutes {
       GoRoute(
         path: RoutePaths.adminChat,
         name: RouteNames.adminChat,
-        builder: (context, state) => const AdminChatScreen(),
+        builder: (context, state) => const CommunicationDashboard(),
         routes: [
           // Admin Chat details page
           // GoRoute(

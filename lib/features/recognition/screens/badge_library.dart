@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/recognition/screens/add_topic.dart';
+import 'package:jesusvlsco/features/recognition/screens/send_recognition.dart';
 import 'package:jesusvlsco/features/recognition/widgets/gridview_card.dart';
 
 class BadgeLibrary extends StatelessWidget {
@@ -36,7 +39,9 @@ class BadgeLibrary extends StatelessWidget {
       child: Row(
         children: [
           _buildButton(
-            onPressed: () {},
+            onPressed: () {
+                Get.to(SendRecognition());
+            },
             text: "Send recognition",
             bgcolor: AppColors.textWhite,
             brcolor: AppColors.primary,
@@ -44,7 +49,9 @@ class BadgeLibrary extends StatelessWidget {
           ),
           SizedBox(width: Sizer.wp(8)),
           _buildButton(
-            onPressed: () {},
+            onPressed: () {
+                   Get.to(BadgeLibrary());
+            },
             text: "Badge library",
             bgcolor: AppColors.primary,
             brcolor: AppColors.primary,
@@ -93,7 +100,9 @@ class BadgeLibrary extends StatelessWidget {
           ),
           _buildCategoryButton(
             iconsuffix: Icons.add,
-            onPress: () {},
+            onPress: () {
+              Get.to(AddTopic()); 
+            },
             iconprefix: Icons.add,
             text: buttonText,
             bgcolor: AppColors.textWhite,
@@ -123,10 +132,15 @@ class BadgeLibrary extends StatelessWidget {
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 4,
-      leading: Icon(
-        CupertinoIcons.arrow_left,
-        color: AppColors.backgroundDark,
-        size: Sizer.wp(24),
+      leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        onPressed: () {
+          Get.back();
+        },
       ),
       title: Text(
         'Badge Library',
@@ -171,12 +185,14 @@ class BadgeLibrary extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(Sizer.wp(10)),
             child: Center(
-              child: Text(
-                text,
-                style: AppTextStyle.regular().copyWith(
-                  fontSize: Sizer.wp(14),
-                  fontWeight: FontWeight.w400,
-                  color: textcolor,
+              child: FittedBox(
+                child: Text(
+                  text,
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: Sizer.wp(14),
+                    fontWeight: FontWeight.w400,
+                    color: textcolor,
+                  ),
                 ),
               ),
             ),

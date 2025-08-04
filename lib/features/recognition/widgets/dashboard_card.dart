@@ -54,14 +54,16 @@ class DashboardCard extends StatelessWidget {
               width: Sizer.wp(24),
             ),
             const SizedBox(height: 8),
-            Text(
-              item.title,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.regular().copyWith(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                color: AppColors.primary,
-                height: 1.2,
+            FittedBox(
+              child: Text(
+                item.title,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.primary,
+                  height: 1.2,
+                ),
               ),
             ),
           ],

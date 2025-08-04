@@ -3,10 +3,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
+import 'package:jesusvlsco/features/communication/screens/create_new.dart';
 import 'package:jesusvlsco/features/communication/widgets/chat_dashboard.dart';
+import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class CommunicationDashboard extends StatefulWidget {
   const CommunicationDashboard({super.key});
@@ -22,7 +27,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: _buildAppBar(),
+      appBar:_buildAppBar(),
       body: Column(
         children: [
           Padding(
@@ -40,38 +45,48 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                 ),
                 Row(
                   children: [
-                    Container(
-                      height: Sizer.hp(34),
-                      width: Sizer.wp(34),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(Sizer.wp(8)),
-                        child: SvgPicture.asset(
-                          "assets/icons/edit.svg",
-
-                          height: Sizer.hp(18),
-                          width: Sizer.wp(18),
+                    InkWell(
+                      onTap: () {
+                        Get.to(CreateNew()); 
+                      },
+                      child: Container(
+                        height: Sizer.hp(34),
+                        width: Sizer.wp(34),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(Sizer.wp(8)),
+                          child: SvgPicture.asset(
+                            "assets/icons/edit.svg",
+                      
+                            height: Sizer.hp(18),
+                            width: Sizer.wp(18),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(width: Sizer.wp(8)),
-                    Container(
-                      height: Sizer.hp(34),
-                      width: Sizer.wp(34),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(Sizer.wp(8)),
-                        child: SvgPicture.asset(
-                          "assets/icons/settings.svg",
-
-                          height: Sizer.hp(18),
-                          width: Sizer.wp(18),
+                    InkWell(
+                      onTap: (){
+                        //Settings here 
+                      },
+                      child: Container(
+                        height: Sizer.hp(34),
+                        width: Sizer.wp(34),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(Sizer.wp(8)),
+                          child: SvgPicture.asset(
+                            "assets/icons/settings.svg",
+                      
+                            height: Sizer.hp(18),
+                            width: Sizer.wp(18),
+                          ),
                         ),
                       ),
                     ),
@@ -153,7 +168,11 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
   Widget _buildTabContent() {
     switch (_selectedTabIndex) {
       case 0:
-        return ChatDashboard();
+        return InkWell(
+          onTap: (){
+            Get.to(Admin_chatscreen());
+          },
+          child: ChatDashboard());
       case 1:
         return _buildUnreadContent();
       case 2:
@@ -164,9 +183,6 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
   }
 
   // Placeholder for 'All' tab content
-  Widget _buildAllContent() {
-    return Center(child: Text('All Content Goes Here'));
-  }
 
   // Placeholder for 'Unread' tab content
   Widget _buildUnreadContent() {
@@ -223,13 +239,20 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
   // AppBar Widget
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+   
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 4,
-      leading: Icon(
-        CupertinoIcons.arrow_left,
-        color: AppColors.backgroundDark,
-        size: Sizer.wp(24),
+      leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
+        ),
+        onPressed: () {
+          Get.back();
+         
+        },
       ),
       title: Text(
         'Communication',
@@ -247,7 +270,9 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
             color: AppColors.backgroundDark,
             size: Sizer.wp(24),
           ),
-          onPressed: () {},
+          onPressed: () {
+             context.pushNamed(RouteNames.drawer);
+          },
         ),
       ],
     );

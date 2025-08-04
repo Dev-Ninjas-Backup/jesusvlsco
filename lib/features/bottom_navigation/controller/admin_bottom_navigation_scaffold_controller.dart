@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
 
 class AdminBottomNavigationScaffoldController extends GetxController {
   final List<Widget> screens = [
     AdminDashboardScreen(),
-    const AdminChatScreen(),
+    const CommunicationDashboard(),// for communications
     const AdminUsersScreen(),
     const AdminScheduleScreen(),
-    const AdminProjectsScreen(),
+    const TaskmanagementDashboard(),
   ];
 }
 
-class AdminChatScreen extends StatelessWidget {
-  const AdminChatScreen({super.key});
+// class AdminChatScreen extends StatelessWidget {
+//   const AdminChatScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Admin Chat Screen'));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Center(child: Text('Admin Chat Screen'));
+//   }
+// }
 
 class AdminUsersScreen extends StatelessWidget {
   const AdminUsersScreen({super.key});
@@ -39,11 +41,11 @@ class AdminScheduleScreen extends StatelessWidget {
   }
 }
 
-class AdminProjectsScreen extends StatelessWidget {
-  const AdminProjectsScreen({super.key});
+// class AdminProjectsScreen extends StatelessWidget {
+//   const AdminProjectsScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Admin Projects Management Screen'));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Center(child: Text('Admin Projects Management Screen'));
+//   }
+// }

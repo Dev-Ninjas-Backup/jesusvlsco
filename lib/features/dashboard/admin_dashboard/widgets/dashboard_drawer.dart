@@ -5,7 +5,8 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
+import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -30,7 +31,8 @@ class CustomDrawer extends StatelessWidget {
               imagePath: "assets/icons/drawer_notification.png",
               text: 'Announcement',
               onTap: () {
-                context.go('/home');
+                Get.to(AnnouncementDashboard());
+                // context.go('/home');
               },
             ),
             SizedBox(height: Sizer.hp(24)),
@@ -47,7 +49,9 @@ class CustomDrawer extends StatelessWidget {
             _buildDrawerItem(
               imagePath: 'assets/icons/drawer_recognition.png',
               text: 'Recognition',
-              onTap: () {},
+              onTap: () {
+                Get.to(RecognitionDashboard());
+              },
             ),
             SizedBox(height: Sizer.hp(24)),
             const CommonDivider(height: 5),

@@ -1,6 +1,7 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/features/recognition/controllers/badge_controller.dart';
 import 'package:jesusvlsco/features/recognition/widgets/dashboard_card.dart';
 

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
@@ -42,7 +44,9 @@ class AddTopic extends StatelessWidget {
                       children: [
                         Flexible(
                           child: _commonButton(
-                            () {},
+                            () {
+                               Get.back();
+                            },
                             bgcolor: AppColors.primary,
                             textcolor: AppColors.textWhite,
                             text: 'Create topic',
@@ -89,10 +93,15 @@ PreferredSizeWidget _buildAppBar() {
     shadowColor: Colors.white,
     backgroundColor: Colors.white,
     elevation: 4,
-    leading: Icon(
-      CupertinoIcons.arrow_left,
-      color: AppColors.backgroundDark,
-      size: Sizer.wp(24),
+    leading: IconButton(
+      icon: Icon(
+        CupertinoIcons.arrow_left,
+        color: AppColors.backgroundDark,
+        size: Sizer.wp(24),
+      ),
+      onPressed: () {
+        Get.back();
+      },
     ),
     title: Text(
       'Add Topic',

@@ -6,6 +6,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/taskmanagement/controller/taskcontroller.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/add_moredetails.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/common_button.dart';
 
 // Your custom color class
@@ -83,12 +84,17 @@ class AddTaskPage extends StatelessWidget {
                                   ),
                                 ),
 
-                                Text(
-                                  'Add more details',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.color1,
+                                InkWell(
+                                  onTap: (){
+                                     Get.to(Adddetails());
+                                  },
+                                  child: Text(
+                                    'Add more details',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.color1,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -107,10 +113,13 @@ class AddTaskPage extends StatelessWidget {
                     // First Button
                     Flexible(
                       child: customButton(
+                          textcolor: AppColors.primaryBackground,
                         bgcolor: AppColors.primary,
                     brcolor: Colors.transparent,
                         text: 'Publish Task',
-                        onPressed: () => {},
+                        onPressed: () => {
+
+                        },
                         width: Sizer.wp(
                           176,
                         ), // Adjusted width for the first button
@@ -123,6 +132,8 @@ class AddTaskPage extends StatelessWidget {
                     // Second Button
                     Flexible(
                       child: customButton(
+                        textcolor: AppColors.textPrimary,
+
                        bgcolor: AppColors.primaryBackground,
                     brcolor: AppColors.primary,
                         text: 'Draft Task',
@@ -146,11 +157,16 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
     shadowColor: AppColors.textWhite,
     backgroundColor: Colors.white,
     elevation: 4,
-    leading: Icon(
-      CupertinoIcons.arrow_left,
-      color: AppColors.backgroundDark,
-      size: Sizer.wp(24),
-    ),
+     leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: AppColors.backgroundDark,
+            size: Sizer.wp(24),
+          ),
+          onPressed: () {
+          Get.back();
+          },
+        ),
     title: Text(
       'Add Task',
       style: AppTextStyle.regular().copyWith(

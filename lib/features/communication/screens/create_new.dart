@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/communication/screens/new_team.dart';
 import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
 
 class CreateNew extends StatelessWidget {
@@ -32,12 +35,17 @@ class CreateNew extends StatelessWidget {
                   width: Sizer.wp(20),
                 ),
                 SizedBox(width: Sizer.wp(8)),
-                Text(
-                  'New Team',
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(16),
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
+                TextButton(
+                  onPressed: () {
+                    Get.to(NewTeam());
+                  },
+                  child: Text(
+                    'New Team',
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
               ],

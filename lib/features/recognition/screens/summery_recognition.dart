@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
-import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
 class RecognitionCard extends StatelessWidget {
@@ -11,7 +9,7 @@ class RecognitionCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.all(16),
+   
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: const Color(0xFFFEF3E2),
@@ -22,8 +20,7 @@ class RecognitionCard extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              
-                
+
                 children: [
                   const Text(
                     'XYZ recognized',
@@ -34,7 +31,7 @@ class RecognitionCard extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(left: Sizer.wp(16)),
+                    padding: EdgeInsets.only(left: Sizer.wp(16)),
                     child: Container(
                       width: 32,
                       height: 32,
@@ -51,7 +48,7 @@ class RecognitionCard extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -64,7 +61,6 @@ class RecognitionCard extends StatelessWidget {
             ],
           ),
         ),
-        
       ],
     );
   }
@@ -112,4 +108,4 @@ class _UserRow extends StatelessWidget {
   }
 }
 
-// Minimal usage example
+

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, camel_case_types
 
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
@@ -8,14 +8,14 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+class Admin_chatscreen extends StatefulWidget {
+  const Admin_chatscreen({super.key});
 
   @override
-  ChatScreenState createState() => ChatScreenState();
+  Admin_chatscreenState createState() => Admin_chatscreenState();
 }
 
-class ChatScreenState extends State<ChatScreen> {
+class Admin_chatscreenState extends State<Admin_chatscreen> {
   final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [
     ChatMessage(
