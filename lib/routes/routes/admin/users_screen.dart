@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -18,7 +19,7 @@ class AdminUsersRoutes {
       GoRoute(
         path: RoutePaths.adminUsers,
         name: RouteNames.adminUsers,
-        builder: (context, state) => const AdminUsersScreen(),
+        builder: (context, state) =>  EmployeeListScreen(),
         routes: [
           // Admin Users details page
           // GoRoute(

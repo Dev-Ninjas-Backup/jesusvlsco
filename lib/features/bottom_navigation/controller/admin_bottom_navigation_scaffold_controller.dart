@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
+import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
 
 class AdminBottomNavigationScaffoldController extends GetxController {
   final List<Widget> screens = [
     AdminDashboardScreen(),
     const CommunicationDashboard(),// for communications
-    const AdminUsersScreen(),
+    EmployeeListScreen(),
     const AdminScheduleScreen(),
     const TaskmanagementDashboard(),
   ];
@@ -23,14 +24,14 @@ class AdminBottomNavigationScaffoldController extends GetxController {
 //   }
 // }
 
-class AdminUsersScreen extends StatelessWidget {
-  const AdminUsersScreen({super.key});
+// class AdminUsersScreen extends StatelessWidget {
+//   const AdminUsersScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Admin Users Management Screen'));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Center(child: Text('Admin Users Management Screen'));
+//   }
+// }
 
 class AdminScheduleScreen extends StatelessWidget {
   const AdminScheduleScreen({super.key});
