@@ -23,7 +23,7 @@ class BuildRoleSelectionButton extends StatelessWidget {
           children: List.generate(_controller.roleButtonList.length, (index) {
             return Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.only(right: 12.0),
                 child: InkWell(
                   onTap: () {
                     _controller.roleSelectedButton.value = index;
@@ -35,7 +35,7 @@ class BuildRoleSelectionButton extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.shade200,
-                            blurRadius: 10, // how soft the shadow is
+                            blurRadius: 7, // how soft the shadow is
                             offset: const Offset(
                               0,
                               4,
