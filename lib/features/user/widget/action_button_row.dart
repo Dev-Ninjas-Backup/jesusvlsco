@@ -16,7 +16,7 @@ class ActionButtonsRow extends StatelessWidget {
           final isSelected = controller.selectedIndex.value == index;
           final data = controller.buttons[index];
           return Padding(
-            padding: const EdgeInsets.only(right: 12.0),
+            padding: index == 3 ? EdgeInsets.zero : const EdgeInsets.only(right: 12.0),
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 backgroundColor: isSelected ? AppColors.primary : Colors.white,
