@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
@@ -41,7 +40,7 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
             size: Sizer.wp(24),
           ),
           onPressed: () {
-          Get.back();
+            Get.back();
           },
         ),
         title: Text(
@@ -91,7 +90,7 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                       color: AppColors.primary,
                       text: "Add Task",
                       onPressed: () {
-                          Get.to(AddTaskPage());
+                        Get.to(AddTaskPage());
                       },
                     ),
                   ),
@@ -102,7 +101,7 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                       color: AppColors.primary,
                       text: "Activity",
                       onPressed: () {
-                          Get.to(ActivityFeedScreen());
+                        Get.to(ActivityFeedScreen());
                       },
                     ),
                   ),
@@ -110,7 +109,7 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
               ),
             ),
             SizedBox(height: Sizer.hp(16)),
-        
+
             //List items start
             Row(
               children: [
@@ -148,7 +147,7 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                   ),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     Get.to(WeeklyCalender());
                   },
                   child: Text(
@@ -162,14 +161,9 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                 ),
               ],
             ),
-        
+
             SizedBox(height: Sizer.hp(400), child: WideList()),
             SizedBox(height: Sizer.hp(400), child: WideList()),
-          
-        
-            
-        
-           
           ],
         ),
       ),
@@ -234,7 +228,6 @@ Widget _customButton({
   // required double width,
 }) {
   return SizedBox(
-
     height: Sizer.hp(40),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -262,13 +255,12 @@ Widget _customButton({
           SizedBox(width: Sizer.wp(8)),
           Flexible(
             child: Text(
-             text,
+              text,
               style: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(16),
                 color: AppColors.error,
                 fontWeight: FontWeight.w500,
               ),
-                     
             ),
           ),
         ],
