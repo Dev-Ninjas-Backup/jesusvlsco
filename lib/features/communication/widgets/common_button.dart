@@ -9,7 +9,7 @@ Widget customButton({
   required Color brcolor,
   required String text,
   required VoidCallback onPressed,
-  required double width,
+  required double width, required Color textcolor,
 }) {
   return SizedBox(
     width: width,

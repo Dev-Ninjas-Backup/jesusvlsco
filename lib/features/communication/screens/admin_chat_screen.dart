@@ -102,7 +102,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                 ),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
+                    horizontal: 6,
                     vertical: 8,
                   ),
                   itemCount: _messages.length,
