@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_details.dart';
+import 'package:jesusvlsco/features/settings/screens/employee_management.dart';
 import 'package:jesusvlsco/features/settings/screens/company_profile.dart';
+import 'package:jesusvlsco/features/settings/screens/project_management.dart';
 
 class Settings_screen extends StatelessWidget {
   const Settings_screen({super.key});
@@ -16,7 +17,11 @@ class Settings_screen extends StatelessWidget {
       appBar: Custom_appbar(title: "Settings"),
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 16.0, right: 16.0, top: 16.0, bottom: 24),
+          left: 16.0,
+          right: 16.0,
+          top: 16.0,
+          bottom: 24,
+        ),
         child: Container(
           height: double.infinity,
           width: double.infinity,
@@ -48,12 +53,33 @@ class Settings_screen extends StatelessWidget {
                     );
                   },
                 ),
-                _buildrows(context, title: "Admin Details",onTap: (){
-                  Get.to(AdminDetails());
-                }),
-                _buildrows(context, title: "Project Management",),
-                _buildrows(context, title: "API & intregations",),
-                _buildrows(context, title: "Notifications",),
+                _buildrows(
+                  context,
+                  title: "Admin Details",
+                  onTap: () {
+                    Get.to(AdminDetails());
+                  },
+                ),
+                _buildrows(
+                  context,
+                  title: "Project Management",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProjectManagement(),
+                      ),
+                    );
+                  },
+                ),
+                _buildrows(
+                  context,
+                  title: "Employee Management",
+                  onTap: () {
+                    Get.to(EmployeeManagement());
+                  },
+                ),
+                _buildrows(context, title: "Notifications"),
               ],
             ),
           ),
@@ -79,7 +105,7 @@ class Settings_screen extends StatelessWidget {
               color: AppColors.textPrimary,
               fontWeight: FontWeight.bold,
             ),
-  ),
+          ),
         ),
         Divider(color: AppColors.dividerColor),
       ],

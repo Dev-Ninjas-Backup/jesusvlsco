@@ -15,7 +15,12 @@ class _CompanyProfileState extends State<CompanyProfile> {
     Branch(location: 'New York City', manager: 'Manager 3'),
   ];
 
-  final List<String> _managers = ['Manager 1', 'Manager 2', 'Manager 3', 'Manager 4'];
+  final List<String> _managers = [
+    'Manager 1',
+    'Manager 2',
+    'Manager 3',
+    'Manager 4',
+  ];
 
   void _addBranch() {
     setState(() {
@@ -40,7 +45,11 @@ class _CompanyProfileState extends State<CompanyProfile> {
           children: [
             _buildTextField(label: 'Company Name', hint: 'Type Here'),
             const SizedBox(height: 16),
-            _buildTextField(label: 'Location', hint: 'Type Here', isLocation: true),
+            _buildTextField(
+              label: 'Location',
+              hint: 'Type Here',
+              isLocation: true,
+            ),
             const SizedBox(height: 24),
             _buildBranchHeader(),
             const SizedBox(height: 16),
@@ -68,7 +77,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4A55A2),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 15,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -85,16 +97,25 @@ class _CompanyProfileState extends State<CompanyProfile> {
     );
   }
 
-  Widget _buildTextField({required String label, required String hint, bool isLocation = false}) {
+  Widget _buildTextField({
+    required String label,
+    required String hint,
+    bool isLocation = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           decoration: InputDecoration(
             hintText: hint,
-            suffixIcon: isLocation ? const Icon(Icons.location_on_outlined) : null,
+            suffixIcon: isLocation
+                ? const Icon(Icons.location_on_outlined)
+                : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.grey),
@@ -103,7 +124,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Color(0xFF4A55A2)),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
         ),
       ],
@@ -114,11 +138,24 @@ class _CompanyProfileState extends State<CompanyProfile> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Branch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF4A55A2))),
+        const Text(
+          'Branch',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Color(0xFF4A55A2),
+          ),
+        ),
         TextButton.icon(
           onPressed: _addBranch,
           icon: const Icon(Icons.add, color: Color(0xFF4A55A2)),
-          label: const Text('Add Branch', style: TextStyle(color: Color(0xFF4A55A2), fontWeight: FontWeight.bold)),
+          label: const Text(
+            'Add Branch',
+            style: TextStyle(
+              color: Color(0xFF4A55A2),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );
@@ -158,7 +195,13 @@ class BranchCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Branch $branchNumber', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(
+                'Branch $branchNumber',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
               IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: onDelete,
@@ -179,20 +222,23 @@ class BranchCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: Color(0xFF4A55A2)),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          const Text('Manager', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            'Manager',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             value: branch.manager,
             onChanged: onManagerChanged,
             items: managers.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
+              return DropdownMenuItem<String>(value: value, child: Text(value));
             }).toList(),
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -203,7 +249,10 @@ class BranchCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: Color(0xFF4A55A2)),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
             ),
           ),
         ],
