@@ -9,6 +9,8 @@ import 'package:jesusvlsco/features/announcements/admin_announcement/screens/ann
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
 
+import '../../../poll/create_new_poll/screen/create_new_poll_screen.dart';
+
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
@@ -42,7 +44,9 @@ class CustomDrawer extends StatelessWidget {
             _buildDrawerItem(
               imagePath: "assets/icons/drawer_survey.png",
               text: 'Survey & Poll',
-              onTap: () {},
+              onTap: () {
+                Get.to(CreateNewPollScreen());
+              },
             ),
             SizedBox(height: Sizer.hp(24)),
             const CommonDivider(height: 5),

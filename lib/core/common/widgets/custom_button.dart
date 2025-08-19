@@ -15,6 +15,8 @@ class CustomButton extends StatelessWidget {
   final double? borderRadius;
   final double? horizontalPadding;
   final double? verticalPadding;
+  final bool isExpanded; // ✅ new param
+
   const CustomButton({
     super.key,
     required this.onPressed,
@@ -29,6 +31,7 @@ class CustomButton extends StatelessWidget {
     this.borderRadius,
     this.horizontalPadding,
     this.verticalPadding,
+    this.isExpanded = false, // ✅ default false (so old screens won't break)
   });
 
   @override
@@ -47,6 +50,7 @@ class CustomButton extends StatelessWidget {
             ? BorderRadius.circular(borderRadius!)
             : null,
         child: Container(
+          width: isExpanded ? double.infinity : null, // ✅ full width if needed
           padding: EdgeInsets.symmetric(
             horizontal: horizontalPadding ?? Sizer.wp(16),
             vertical: verticalPadding ?? Sizer.hp(12),
