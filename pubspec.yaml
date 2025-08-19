@@ -73,6 +73,8 @@ dependencies:
   flutter_chat_ui: ^2.8.1
   flutter_chat_core: ^2.7.1
   chat_bubbles: ^1.7.0
+  dropdown_button2: ^2.3.9
+
   
 
   

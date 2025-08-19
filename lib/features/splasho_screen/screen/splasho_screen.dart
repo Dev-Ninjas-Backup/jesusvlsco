@@ -30,6 +30,29 @@ class _SplashoScreenState extends State<SplashoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('Splasho Screen')));
+    return Scaffold(
+      body: Container(
+        color: const Color(0xFF4E53B1), // Light purple background
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'JesusVLSco',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Purple shade for text
+                ),
+              ),
+              const SizedBox(height: 20),
+              const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
