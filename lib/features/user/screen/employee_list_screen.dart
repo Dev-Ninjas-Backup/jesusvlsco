@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 import 'package:jesusvlsco/features/user/controller/employee_list_screen_controller.dart';
 import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';

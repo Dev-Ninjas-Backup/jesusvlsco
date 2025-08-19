@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 
 class Admin_chatscreen extends StatefulWidget {
   const Admin_chatscreen({super.key});
@@ -102,7 +102,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                 ),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
+                    horizontal: 6,
                     vertical: 8,
                   ),
                   itemCount: _messages.length,

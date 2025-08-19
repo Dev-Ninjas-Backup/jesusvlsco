@@ -9,6 +9,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
+import 'package:jesusvlsco/features/communication/screens/chat_info.dart';
 import 'package:jesusvlsco/features/communication/screens/create_new.dart';
 import 'package:jesusvlsco/features/communication/widgets/chat_dashboard.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
@@ -70,7 +71,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                     SizedBox(width: Sizer.wp(8)),
                     InkWell(
                       onTap: (){
-                        //Settings here 
+                   Get.to(ChatInfoScreen());
                       },
                       child: Container(
                         height: Sizer.hp(34),

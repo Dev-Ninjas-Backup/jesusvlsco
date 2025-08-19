@@ -45,7 +45,10 @@ class AdminDashboardScreen extends StatelessWidget {
               SpacingHelper.h24(),
               _buildShiftNotificationView(),
               SpacingHelper.h24(),
+
               //_buildMapLocationView(),
+
+
             ],
           ),
         ),

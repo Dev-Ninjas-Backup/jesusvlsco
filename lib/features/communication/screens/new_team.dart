@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/common_button.dart';
 
 class NewTeam extends StatelessWidget {
@@ -110,6 +110,7 @@ class NewTeam extends StatelessWidget {
                     bgcolor: AppColors.primary,
                     brcolor: AppColors.primary,
                     text: "Create New Team",
+                    textcolor: AppColors.textWhite,
                     onPressed: () {},
                     width: double.infinity,
                   ),
