@@ -20,7 +20,6 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
-
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),

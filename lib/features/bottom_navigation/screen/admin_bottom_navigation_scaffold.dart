@@ -1,4 +1,6 @@
 // Admin Bottom Navigation Scaffold
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +50,7 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AdminBottomNavigationScaffoldController>();
+    Get.find<AdminBottomNavigationScaffoldController>();
 
     return Scaffold(
       body: navigationShell,
@@ -141,8 +143,7 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
-    print('Admin Navigation: Tapping index $index');
-    print('Current index: ${navigationShell.currentIndex}');
+  
 
     // Don't navigate if already on the same tab
     if (index == navigationShell.currentIndex) {
