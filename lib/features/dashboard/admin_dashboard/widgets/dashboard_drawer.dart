@@ -8,6 +8,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
+import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -68,7 +69,10 @@ class CustomDrawer extends StatelessWidget {
             _buildDrawerItem(
               imagePath: 'assets/icons/drawer_timelock.png',
               text: 'Timeclock',
-              onTap: () {},
+                  onTap: () {(
+                    Get.to(TimeSheet())
+                  );
+              },
             ),
             SizedBox(height: Sizer.hp(24)),
             const CommonDivider(height: 5),

@@ -1,44 +1,51 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/features/communication/controllers/chat_controller.dart';
+import 'package:jesusvlsco/features/communication/widgets/fullscreen_image_view.dart';
+
 
 class ChatInfoScreen extends StatelessWidget {
   const ChatInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ChatController());
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Content
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 32),
-                    // Chat Header Section
-                     _buildChatHeaderSection(context),
-                    const SizedBox(height: 24),
-                    // Members List
-                     _buildMembersListSection(context),
-                    const SizedBox(height: 24),
-                    // Media Section
-                     _buildMediaSection(context),
-                     SizedBox(height: 24),
-                    // Files Section
-                     _buildFilesSection(context),
-                     SizedBox(height: 24),
-                    // Links Section
-                     _buildLinksSection(context),
-                     SizedBox(height: 96), // Bottom padding for navigation
-                  ],
-                ),
+      appBar: Custom_appbar(title: "Chat Info"),
+      body: Column(
+        children: [
+          // Content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+          
+                  // Chat Header Section
+                   _buildChatHeaderSection(context),
+                  const SizedBox(height: 24),
+                  // Members List
+                   _buildMembersListSection(context),
+                  const SizedBox(height: 24),
+                  // Media Section
+                   _buildMediaSection(context),
+                   SizedBox(height: 24),
+                  // Files Section
+                   _buildFilesSection(context),
+                   SizedBox(height: 24),
+                  // Links Section
+                   _buildLinksSection(context),
+                   SizedBox(height: 96), // Bottom padding for navigation
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
      
     );
@@ -133,19 +140,9 @@ Widget _buildChatHeaderSection(BuildContext context) {
   );
 }
 
-final List<String> members = const [
-  'Theresa Webb',
-  'Robert Fox',
-  'Cody Fisher',
-  'Kristin Watson',
-  'Robert Fox',
-  'Jacob Jones',
-  'Theresa Webb',
-  'Wade Warren',
-];
-
 @override
 Widget _buildMembersListSection(BuildContext context) {
+  final chatController = Get.find<ChatController>();
   return Container(
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
@@ -161,9 +158,9 @@ Widget _buildMembersListSection(BuildContext context) {
     ),
     child: ListView.builder(
       shrinkWrap: true,
-      itemCount: members.length,
+      itemCount: chatController.members.length,
       itemBuilder: (context, index) {
-        final member = members[index];
+        final member = chatController.members[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Row(
@@ -200,6 +197,7 @@ Widget _buildMembersListSection(BuildContext context) {
 
 @override
 Widget _buildMediaSection(BuildContext context) {
+  final chatController = Get.find<ChatController>();
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -253,15 +251,29 @@ Widget _buildMediaSection(BuildContext context) {
                 mainAxisSpacing: 16,
                 childAspectRatio: 1,
               ),
-              itemCount: 12,
+              itemCount: chatController.mediaUrls.length,
               itemBuilder: (context, index) {
-                return Container(
-                  height: 84,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE5E7EB),
-                    borderRadius: BorderRadius.circular(8),
+                final imageUrl = chatController.mediaUrls[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FullScreenImageViewer(imageUrl: imageUrl),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 84,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  child: const Icon(Icons.image, color: Color(0xFF9CA3AF)),
                 );
               },
             ),
@@ -272,29 +284,9 @@ Widget _buildMediaSection(BuildContext context) {
   );
 }
 
-final List<Map<String, String>> files = const [
-  {
-    'name': 'Project_X_Progress_Report_March_2025.pdf',
-    'size': '18 MB',
-    'type': 'PDF',
-    'date': '13/06/2025',
-  },
-  {
-    'name': 'Machinery_Lnvent_List_Site_A_March_2025.docx',
-    'size': '18 MB',
-    'type': 'DOCX',
-    'date': '13/06/2025',
-  },
-  {
-    'name': 'Construction_Site_Milestones_Overview.xl',
-    'size': '18 MB',
-    'type': 'XLS',
-    'date': '13/06/2025',
-  },
-];
-
 @override
 Widget _buildFilesSection(BuildContext context) {
+  final chatController = Get.find<ChatController>();
   return Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
@@ -322,7 +314,7 @@ Widget _buildFilesSection(BuildContext context) {
         ),
         const SizedBox(height: 12),
         Column(
-          children: files.map((file) {
+          children: chatController.files.map((file) {
             return Column(
               children: [
                 const SizedBox(height: 16),
@@ -422,11 +414,17 @@ Widget _buildLinksSection(BuildContext context) {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        
+          Divider(
+              color: const Color(0xFFE4E5F3),
+              height: 1,
+            ),
+const SizedBox(height: 14),
         Row(
           children: [
             const Icon(Icons.link, size: 20, color: Color(0xFF5B5B5B)),
             const SizedBox(width: 8),
+          
             const Text(
               'http://drive.google.com',
               style: TextStyle(fontSize: 12, color: Color(0xFF484848)),

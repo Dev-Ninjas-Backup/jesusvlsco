@@ -110,6 +110,7 @@ class NewTeam extends StatelessWidget {
                     bgcolor: AppColors.primary,
                     brcolor: AppColors.primary,
                     text: "Create New Team",
+                    textcolor: AppColors.textWhite,
                     onPressed: () {},
                     width: double.infinity,
                   ),
