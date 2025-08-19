@@ -7,6 +7,7 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
+import 'package:jesusvlsco/features/settings/screens/settings.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -83,7 +84,9 @@ class CustomDrawer extends StatelessWidget {
             _buildDrawerItem(
               imagePath: 'assets/icons/drawer_settings.png',
               text: 'Settings',
-              onTap: () {},
+              onTap: () {
+                Get.to(Settings_screen());
+              },
             ),
           ],
         ),

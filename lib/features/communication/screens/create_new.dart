@@ -7,7 +7,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/communication/screens/new_team.dart';
-import 'package:jesusvlsco/features/communication/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 
 class CreateNew extends StatelessWidget {
   const CreateNew({super.key});
