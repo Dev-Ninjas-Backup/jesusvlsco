@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/user/screen/add_user_screen.dart';
 import 'package:jesusvlsco/features/user/widget/action_button_row.dart';
 
 class ActionButtonsController extends GetxController {
@@ -14,5 +15,41 @@ class ActionButtonsController extends GetxController {
 
   void selectButton(int index) {
     selectedIndex.value = index;
+
+    switch (index) {
+      case 0:
+        Get.to(AddUserScreen());
+        break;
+      case 1:
+        Get.snackbar(
+          'Action',
+          'Filter button pressed',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: const Color(0xFF6366F1),
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        break;
+      case 2:
+        Get.snackbar(
+          'Action',
+          'Date button pressed',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: const Color(0xFF6366F1),
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        break;
+      case 3:
+        Get.snackbar(
+          'Action',
+          'More options button pressed',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: const Color(0xFF6366F1),
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        break;
+    }
   }
 }
