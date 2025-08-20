@@ -19,38 +19,121 @@ class EmployeeListview extends StatelessWidget {
     required this.contacts,
     required this.onDelete,
     required this.onSelectionChanged,
-  }) : super(key: key); // Removed the unnecessary 'employees' parameter
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: contacts.length,
-      itemBuilder: (context, index) {
-        final contact = contacts[index];
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: contact.isSelected ? Colors.blue[50] : Colors.white,
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: SingleChildScrollView(
-            child: ListTile(
-              leading: CustomCheckbox(
-                value: contact.isSelected,
-                onChanged: (value) => onSelectionChanged(index, value),
-              ),
-              title: Text(contact.name),
-              subtitle: Text(contact.id),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
-                onPressed: () => onDelete(index),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 60, // Fixed width for checkbox column
+              alignment: Alignment.centerLeft,
+              child: CustomCheckbox(
+                value: _selectAllValue(contacts),
+                onChanged: (value) =>
+                    _toggleSelectAll(value, contacts, onSelectionChanged),
               ),
             ),
-          ),
-        );
-      },
+            Expanded(
+              flex: 2, // Name column takes more space
+              child: Text(
+                'Name',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              flex: 1, // ID column
+              child: Text('ID', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            Container(
+              width: 100, // Fixed width for actions column
+              alignment: Alignment.center,
+              child: Text(
+                'Actions',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        Divider(color: Colors.grey, thickness: 1, height: 20),
+
+        // List of employees
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(), // For nested ListView
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            final contact = contacts[index];
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Checkbox
+                    Container(
+                      width: 60,
+                      alignment: Alignment.centerLeft,
+                      child: CustomCheckbox(
+                        value: contact.isSelected,
+                        onChanged: (value) => onSelectionChanged(index, value),
+                      ),
+                    ),
+
+                    // Name
+                    Expanded(
+                      flex: 2,
+                      child: Text(contact.name, style: TextStyle(fontSize: 16)),
+                    ),
+
+                    // ID
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        contact.id,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                      ),
+                    ),
+
+                    Container(
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => onDelete(index),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(color: Colors.grey, thickness: 1, height: 20),
+              ],
+            );
+          },
+        ),
+      ],
     );
+  }
+
+  bool _selectAllValue(List<Contact> contacts) {
+    if (contacts.isEmpty) return false;
+    final selectedCount = contacts
+        .where((contact) => contact.isSelected)
+        .length;
+    if (selectedCount == 0) return false;
+    return selectedCount == contacts.length ? true : false;
+  }
+
+  void _toggleSelectAll(
+    bool? value,
+    List<Contact> contacts,
+    Function(int, bool) onSelectionChanged,
+  ) {
+    if (value != null) {
+      for (int i = 0; i < contacts.length; i++) {
+        onSelectionChanged(i, value);
+      }
+    }
   }
 }

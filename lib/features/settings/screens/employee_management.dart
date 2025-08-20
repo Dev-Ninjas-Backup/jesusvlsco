@@ -20,7 +20,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
 
   bool _isChecked = false;
 
-  // Add contacts list
   List<Contact> contacts = [
     Contact(name: 'John Doe', id: 'EMP001'),
     Contact(name: 'Jane Smith', id: 'EMP002'),
@@ -33,7 +32,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
     valueNotifier.value = value;
   }
 
-  // Add delete handler
   void _handleDelete(int index) {
     setState(() {
       contacts.removeAt(index);
@@ -135,33 +133,10 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     ),
                   ],
                 ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomCheckbox(
-                          value: _isChecked,
-                          onChanged: (value) {
-                            setState(() {
-                              _isChecked = value;
-                            });
-                          },
-                        ),
-                        Text('Name'),
-                        SizedBox(width: 150),
-                        Text('ID'),
-                        Text('Actions'),
-                      ],
-                    ),
-                    Divider(color: Colors.grey, thickness: 1, height: 20),
-
-                    EmployeeListview(
-                      contacts: contacts,
-                      onDelete: _handleDelete,
-                      onSelectionChanged: _handleSelectionChanged,
-                    ),
-                  ],
+                child: EmployeeListview(
+                  contacts: contacts,
+                  onDelete: _handleDelete,
+                  onSelectionChanged: _handleSelectionChanged,
                 ),
               ),
             ],
@@ -171,4 +146,3 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
     );
   }
 }
-// Contact class is now imported from models/contact.dart Contact({required this.name, required this.id, this.isSelected = false});

@@ -6,6 +6,8 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final String? imagePath;
+  final Widget? leadingIcon;   // ✅ new
+  final Widget? trailingIcon;  // ✅ new
   final Color? decorationColor;
   final Color? borderColor;
   final double? fontSize;
@@ -15,13 +17,15 @@ class CustomButton extends StatelessWidget {
   final double? borderRadius;
   final double? horizontalPadding;
   final double? verticalPadding;
-  final bool isExpanded; // ✅ new param
+  final bool isExpanded;
 
   const CustomButton({
     super.key,
     required this.onPressed,
-    this.imagePath,
     required this.text,
+    this.imagePath,
+    this.leadingIcon,
+    this.trailingIcon,
     this.decorationColor,
     this.borderColor,
     this.fontSize,
@@ -31,13 +35,13 @@ class CustomButton extends StatelessWidget {
     this.borderRadius,
     this.horizontalPadding,
     this.verticalPadding,
-    this.isExpanded = false, // ✅ default false (so old screens won't break)
+    this.isExpanded = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = (fontFamily ?? GoogleFonts.inter()).copyWith(
-      fontSize: fontSize ?? Sizer.wp(14),
+    final textStyle = (fontFamily ?? const TextStyle()).copyWith(
+      fontSize: fontSize ?? 14,
       color: textColor ?? Colors.black,
       fontWeight: fontWeight ?? FontWeight.w400,
     );
@@ -46,37 +50,33 @@ class CustomButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: borderRadius != null
-            ? BorderRadius.circular(borderRadius!)
-            : null,
+        borderRadius:
+        borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
         child: Container(
-          width: isExpanded ? double.infinity : null, // ✅ full width if needed
+          width: isExpanded ? double.infinity : null,
+          height: 40,
           padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding ?? Sizer.wp(16),
-            vertical: verticalPadding ?? Sizer.hp(12),
+            horizontal: horizontalPadding ?? 12,
+            vertical: verticalPadding ?? 8,
           ),
           decoration: BoxDecoration(
-            color: decorationColor,
-            border: borderColor != null
-                ? Border.all(color: borderColor!)
-                : null,
-            borderRadius: borderRadius != null
-                ? BorderRadius.circular(borderRadius!)
-                : null,
+            color: decorationColor ?? Colors.white,
+            border: Border.all(color: borderColor ?? Colors.transparent),
+            borderRadius: BorderRadius.circular(borderRadius ?? 8),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (imagePath != null) ...[
-                Image.asset(
-                  imagePath!,
-                  width: Sizer.wp(28),
-                  height: Sizer.hp(28),
-                ),
-                SizedBox(width: Sizer.wp(8)),
+              if (leadingIcon != null) ...[
+                leadingIcon!,
+                const SizedBox(width: 6),
               ],
               Text(text, style: textStyle),
+              if (trailingIcon != null) ...[
+                const SizedBox(width: 6),
+                trailingIcon!,
+              ],
             ],
           ),
         ),
@@ -84,3 +84,4 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+

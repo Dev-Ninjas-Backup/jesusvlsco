@@ -4,8 +4,10 @@ import 'package:get/instance_manager.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_details.dart';
+import 'package:jesusvlsco/features/settings/screens/api_and_integration.dart';
 import 'package:jesusvlsco/features/settings/screens/employee_management.dart';
 import 'package:jesusvlsco/features/settings/screens/company_profile.dart';
+import 'package:jesusvlsco/features/settings/screens/notifications.dart';
 import 'package:jesusvlsco/features/settings/screens/project_management.dart';
 
 class Settings_screen extends StatelessWidget {
@@ -79,7 +81,20 @@ class Settings_screen extends StatelessWidget {
                     Get.to(EmployeeManagement());
                   },
                 ),
-                _buildrows(context, title: "Notifications"),
+                _buildrows(
+                  context,
+                  title: "Api & Integrations",
+                  onTap: () {
+                    Get.to(ApiAndIntegration());
+                  },
+                ),
+                _buildrows(
+                  context,
+                  title: "Notifications",
+                  onTap: () {
+                    Get.to(NotificationScreen());
+                  },
+                ),
               ],
             ),
           ),

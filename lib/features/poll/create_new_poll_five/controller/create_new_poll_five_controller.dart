@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../../../survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
+
 class CreateNewPollFiveController extends GetxController {
   // Fake summary data (will usually come from previous steps)
   var publishDate = "21/06/2025".obs;
@@ -15,6 +17,7 @@ class CreateNewPollFiveController extends GetxController {
 
   void createPoll() {
     // Final action to create the poll
+    Get.to(SurveyAndPollScreen());
     Get.snackbar("Poll Created", "Your survey is now live!");
   }
 }

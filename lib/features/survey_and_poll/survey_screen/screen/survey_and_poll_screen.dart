@@ -8,6 +8,9 @@ import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/proposa
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/servey_linear.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/survey_poll_statistic_cirle.dart';
+import 'package:jesusvlsco/features/survey_and_poll/view_eye/screen/view_eye_screen.dart';
+
+import '../../response_screen/screen/response_screen.dart';
 
 // ignore: must_be_immutable
 class SurveyAndPollScreen extends StatelessWidget {
@@ -119,7 +122,9 @@ class SurveyAndPollScreen extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(ResponseScreen());
+                              },
                               icon: Icon(Icons.more_vert),
                             ),
                             //Spacer(flex: 1),
@@ -164,6 +169,7 @@ class SurveyAndPollScreen extends StatelessWidget {
                 progressColor: Color(0xFF084298),
                 onViewPressed: () {
                   // Handle view action
+                  Get.to(ViewEyeScreen());
                 },
               ),
               SizedBox(height: 16),
@@ -176,6 +182,7 @@ class SurveyAndPollScreen extends StatelessWidget {
                 progressColor: Color(0xFFFF9200),
                 onViewPressed: () {
                   // Handle view action
+                  Get.to(ViewEyeScreen());
                 },
               ),
               SizedBox(height: 16),
@@ -188,7 +195,11 @@ class SurveyAndPollScreen extends StatelessWidget {
                 progressColor: Color(0xFF0D6EFD),
                 onViewPressed: () {
                   // Handle view action
+
                   Get.to(SurveyResponseScreen());
+
+                  Get.to(ViewEyeScreen());
+
                 },
               ),
               SizedBox(height: 16),

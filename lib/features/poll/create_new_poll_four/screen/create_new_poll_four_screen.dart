@@ -4,8 +4,6 @@ import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import '../../create_new_poll_five/screen/create_new_poll_five_screen.dart';
 import '../../create_new_poll_two/widgets/progress_indicator.dart';
 import '../controller/create_new_poll_four_controller.dart';
-
-// Reusable Widgets
 import '../widgets/custom_option_selector.dart';
 import '../widgets/custom_checkbox_tile.dart';
 import '../widgets/custom_date_time_picker_row.dart';

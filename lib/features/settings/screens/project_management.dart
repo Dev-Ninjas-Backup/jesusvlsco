@@ -56,23 +56,11 @@ class ProjectManagement extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            ProjectManagerSelection(
-              items: items,
-              selectedProjectValue: selectedProjectValue,
-              selectedManagerValue: selectedManagerValue,
-            ),
+            ProjectManagerSelection(items: items),
             SizedBox(height: 20),
-            ProjectManagerDelete(
-              items: items,
-              selectedProjectValue: selectedProjectValue,
-              selectedManagerValue: selectedManagerValue,
-            ),
+            ProjectManagerDelete(items: items),
             SizedBox(height: 20),
-            ProjectManagerDelete(
-              items: items,
-              selectedProjectValue: selectedProjectValue,
-              selectedManagerValue: selectedManagerValue,
-            ),
+            ProjectManagerDelete(items: items),
             SizedBox(height: 20),
             Align(
               alignment: Alignment.bottomRight,
