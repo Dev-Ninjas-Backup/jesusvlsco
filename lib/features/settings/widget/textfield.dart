@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
       height: 50,
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Type here',
+          hintText: hintText,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.deepPurple.shade100),
