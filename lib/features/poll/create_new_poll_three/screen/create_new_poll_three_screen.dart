@@ -123,39 +123,51 @@ class CreateNewPollThreeScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 12),
 
             /// 🔹 Pagination
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                8,
-                    (index) => GestureDetector(
-                  onTap: () => controller.setPage(index + 1),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: controller.currentPage.value == index + 1
-                          ? const Color(0xFF4E53B1)
-                          : Colors.white,
-                      border: Border.all(color: const Color(0xFF4E53B1)),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      "${index + 1}",
-                      style: TextStyle(
-                        color: controller.currentPage.value == index + 1
-                            ? Colors.white
-                            : const Color(0xFF4E53B1),
-                      ),
+            Obx(() {
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16), // side padding
+                    child: Row(
+                      children: List.generate(8, (index) {
+                        final page = index + 1;
+                        final isActive = controller.currentPage.value == page;
+                        return GestureDetector(
+                          onTap: () => controller.setPage(page),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: isActive ? const Color(0xFF4E53B1) : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: isActive
+                                    ? Colors.transparent
+                                    : const Color(0xFF4E53B1).withOpacity(0.3),
+                                width: 1.2,
+                              ),
+                            ),
+                            child: Text(
+                              page.toString(),
+                              style: TextStyle(
+                                color: isActive ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
+              );
+            }),
 
             /// 🔹 Bottom Buttons
             Row(
