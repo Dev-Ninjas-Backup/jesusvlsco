@@ -112,10 +112,10 @@ class CustomDrawer extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return GestureDetector(
-      //onTap: onTap,
-      onTap: () {
-        onTap;
-      },
+      onTap: onTap,
+      // onTap: () {
+      //   onTap;
+      // },
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: double.infinity,

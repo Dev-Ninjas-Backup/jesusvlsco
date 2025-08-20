@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CreateNewPollScreen extends StatelessWidget {
-  const CreateNewPollScreen({super.key});
+class CreateNewSurveyScreen extends StatelessWidget {
+  const CreateNewSurveyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

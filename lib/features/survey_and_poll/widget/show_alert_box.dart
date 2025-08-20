@@ -22,7 +22,7 @@ void showCustomAlertBox(BuildContext context) {
                 Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      Get.to(CreateNewPollScreen());
+                      Get.to(CreateNewSurveyScreen());
                     },
                     child: Container(
                       //height: 90,
