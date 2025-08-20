@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/widget/custom_survey_button.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_report/screen/survey_report_screen.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/widget/first_green_circular_container.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/widget/question_1_container.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/widget/second_red_circular_container.dart';
@@ -24,11 +26,12 @@ class SurveyResponseScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CustomSurveyButton(
-                      textTitle: "Survey Response",
+                      textTitle: "Survey Report",
                       bgColor: Color(0xFF4E53B1),
                       fgColor: Colors.white,
                       onPressedAction: () {
                         // Handle survey response action
+                        Get.to(SurveyReportScreen());
                       },
                     ),
                   ),
