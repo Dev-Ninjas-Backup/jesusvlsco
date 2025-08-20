@@ -38,7 +38,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
     });
   }
 
-  // Add selection handler
   void _handleSelectionChanged(int index, bool isSelected) {
     setState(() {
       contacts[index].isSelected = isSelected;

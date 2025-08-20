@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../create_new_poll_screen/screen/create_new_poll_screen.dart';
+import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/screen/create_new_servey_screen.dart';
 import '../../create_new_poll_two/screen/create_new_poll_two_screen.dart';
 import '../../poll_list_template/screen/poll_list_template_screen.dart';
 
@@ -64,8 +64,10 @@ class CreateNewPollController extends GetxController {
 
   // Save poll template (Dummy for now)
   Future<void> saveTemplate() async {
-    debugPrint("TODO: Save Template API call with data: ${titleController.text}");
-    Get.to(() => const PollListTemplateScreen(isPoll: true,));
+    debugPrint(
+      "TODO: Save Template API call with data: ${titleController.text}",
+    );
+    Get.to(() => const PollListTemplateScreen(isPoll: true));
   }
 
   // Publish poll (Dummy for now)

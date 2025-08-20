@@ -3,14 +3,15 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
+import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
 import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
 
 class AdminBottomNavigationScaffoldController extends GetxController {
   final List<Widget> screens = [
     AdminDashboardScreen(),
-    const CommunicationDashboard(),// for communications
+    const CommunicationDashboard(), // for communications
     EmployeeListScreen(),
-    const AdminScheduleScreen(),
+    const TimeSheetScreen(),
     const TaskmanagementDashboard(),
   ];
 }

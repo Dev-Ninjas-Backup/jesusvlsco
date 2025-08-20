@@ -106,33 +106,30 @@ class ApiAndIntegration extends StatelessWidget {
                 icon: Icons.add,
                 bgcolor: Colors.green,
               ),
-
+              SizedBox(height: 20),
               Text(
                 'API Access',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Text('API Key', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 8),
+              SizedBox(height: 5),
               TextFieldWithDropDown(
-                hintText: 'Type here',
+                hintText: '•••••••••',
                 items: items,
                 valueNotifier: valueNotifier,
                 onChanged: onChanged,
                 controller: controller,
               ),
+              SizedBox(height: 5),
               Text(
                 'Your API key is used to authenticate API requests.',
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
               ),
-
-              Text(
-                'Webhook URL',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: 20),
-              Text('API Key', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 8),
+
+              Text('Web URL', style: TextStyle(fontSize: 18)),
+              SizedBox(height: 5),
               TextFieldWithDropDown(
                 hintText: 'https://example.com/webhook',
                 items: items,
@@ -140,10 +137,12 @@ class ApiAndIntegration extends StatelessWidget {
                 onChanged: onChanged,
                 controller: controller,
               ),
+              SizedBox(height: 5),
               Text(
                 'YThe URL where we will send webhook notifications.',
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
               ),
+              SizedBox(height: 30),
             ],
           ),
         ),

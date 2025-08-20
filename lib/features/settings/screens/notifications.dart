@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/settings/widget/notification_container.dart';
 
@@ -11,7 +12,7 @@ class NotificationScreen extends StatelessWidget {
       appBar: Custom_appbar(title: 'Notification Settings'),
 
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -27,21 +28,29 @@ class NotificationScreen extends StatelessWidget {
             SizedBox(height: 10),
             Row(
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.email_outlined),
-                    SizedBox(width: 5),
-                    Text('Email'),
-                  ],
+                GestureDetector(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      Icon(Icons.email_outlined, size: 28),
+                      SizedBox(width: 5),
+                      Text('Email'),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 50),
 
-                Row(
-                  children: [
-                    Icon(Icons.email_outlined),
-                    SizedBox(width: 5),
-                    Text('In-App'),
-                  ],
+                SizedBox(width: 50),
+                GestureDetector(
+                  onTap: () {
+                    Get.snackbar('title', 'message');
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.notifications_active_outlined, size: 28),
+                      SizedBox(width: 5),
+                      Text('In-App'),
+                    ],
+                  ),
                 ),
               ],
             ),
