@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart';
 
-class ProjectManagerDelete extends StatelessWidget {
+class ProjectManagerDelete extends StatefulWidget {
   final List<String> items;
-  final ValueNotifier<String?> selectedProjectValue;
-  final ValueNotifier<String?> selectedManagerValue;
+  final VoidCallback? onDelete; // Optional delete callback
 
-  const ProjectManagerDelete({
-    Key? key,
-    required this.items,
-    required this.selectedProjectValue,
-    required this.selectedManagerValue,
-  }) : super(key: key);
+  const ProjectManagerDelete({Key? key, required this.items, this.onDelete})
+    : super(key: key);
+
+  @override
+  State<ProjectManagerDelete> createState() => _ProjectManagerDeleteState();
+}
+
+class _ProjectManagerDeleteState extends State<ProjectManagerDelete> {
+  late final ValueNotifier<String?> selectedProjectValue;
+  late final ValueNotifier<String?> selectedManagerValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedProjectValue = ValueNotifier<String?>(null);
+    selectedManagerValue = ValueNotifier<String?>(null);
+  }
+
+  @override
+  void dispose() {
+    selectedProjectValue.dispose();
+    selectedManagerValue.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,7 @@ class ProjectManagerDelete extends StatelessWidget {
             valueListenable: selectedProjectValue,
             builder: (context, value, child) {
               return TextFieldWithDropDown(
-                items: items,
+                items: widget.items,
                 valueNotifier: selectedProjectValue,
                 onChanged: (newValue) {
                   selectedProjectValue.value = newValue;
@@ -60,7 +77,7 @@ class ProjectManagerDelete extends StatelessWidget {
                   valueListenable: selectedManagerValue,
                   builder: (context, value, child) {
                     return TextFieldWithDropDown(
-                      items: items,
+                      items: widget.items,
                       valueNotifier: selectedManagerValue,
                       onChanged: (newValue) {
                         selectedManagerValue.value = newValue;
@@ -73,7 +90,7 @@ class ProjectManagerDelete extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: widget.onDelete, // Use the provided callback
                 icon: Icon(Icons.delete, color: Colors.red),
               ),
             ],
