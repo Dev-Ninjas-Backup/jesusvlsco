@@ -6,9 +6,6 @@ import 'package:jesusvlsco/features/survey_and_poll/widget/proposal_card.dart';
 import 'package:jesusvlsco/features/survey_and_poll/widget/servey_linear.dart';
 import 'package:jesusvlsco/features/survey_and_poll/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/survey_and_poll/widget/survey_poll_statistic_cirle.dart';
-import 'package:jesusvlsco/features/user/widget/action_button_row.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 // ignore: must_be_immutable
 class SurveyAndPollScreen extends StatelessWidget {

@@ -114,7 +114,7 @@ class CustomDrawer extends StatelessWidget {
     return GestureDetector(
       //onTap: onTap,
       onTap: () {
-        Get.to(SurveyAndPollScreen());
+        onTap;
       },
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
