@@ -8,7 +8,8 @@ import '../controller/poll_list_template_controller.dart';
 import '../widget/search_bar.dart';
 
 class PollListTemplateScreen extends StatelessWidget {
-  const PollListTemplateScreen({super.key});
+  final bool isPoll;
+  const PollListTemplateScreen({super.key,required this.isPoll});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,8 @@ class PollListTemplateScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Dropdown
-              const Text("Type"),
-              const SizedBox(height: 8),
+              Text("Type"),
+              SizedBox(height: 8),
               CustomDropdownField(
                 value: controller.pollType.value,
                 items: controller.pollTypes,
