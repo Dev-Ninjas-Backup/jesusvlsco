@@ -9,11 +9,12 @@ class Numbercontroller extends GetxController {
   TextEditingController get phoneController => _phoneController;
 
   // Optional: Reactive state for validation or other uses (for example, valid phone number)
-  var isValidPhone = true.obs;  // Reactive state to track phone number validity
+  var isValidPhone = true.obs; // Reactive state to track phone number validity
 
   @override
   void dispose() {
-    _phoneController.dispose();  // Properly dispose the controller when not in use
+    _phoneController
+        .dispose(); // Properly dispose the controller when not in use
     super.dispose();
   }
 
@@ -22,11 +23,11 @@ class Numbercontroller extends GetxController {
     // Simple phone number validation (this can be expanded as needed)
     if (_phoneController.text.length == 10) {
       isValidPhone.value = true;
-        // Get.toNamed(AppRoute.getphoneotpverifymethod());
-        // Get.snackbar("Success", "Phone number is valid");
+      // Get.toNamed(AppRoute.getphoneotpverifymethod());
+      // Get.snackbar("Success", "Phone number is valid");
     } else {
       isValidPhone.value = false;
-       Get.snackbar("Failed", "Phone number isnot valid");
+      //  Get.snackbar("Failed", "Phone number isnot valid");
     }
   }
 }
