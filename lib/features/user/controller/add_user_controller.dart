@@ -4,9 +4,12 @@ import 'package:jesusvlsco/features/user/screen/add_user_education_screen.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_experience_screen.dart';
 
 import '../screen/add_user_payroll_screen.dart';
+import '../screen/view_user_screen.dart';
 
 class AddUserController extends GetxController {
   // Observable variables
+  final RxString firstName = ''.obs;
+  final RxString lastName = ''.obs;
   var selectedRole = Rx<String?>(null);
   var currentStep = 1.obs;
   var isCurrentlyWorking = false.obs;
@@ -39,6 +42,13 @@ class AddUserController extends GetxController {
   final sickLeaveController = TextEditingController();
   final offDayController = TextEditingController();
   final breakTimeController = TextEditingController();
+
+  // Observable form values
+  var selectedGender = Rx<String?>(null);
+  var selectedJobTitle = Rx<String?>(null);
+  var selectedCity = Rx<String?>(null);
+  var selectedState = Rx<String?>(null);
+  var selectedDateOfBirth = Rx<DateTime?>(null);
 
   var selectedPayRateType = Rx<String?>(null);
   var selectedOvertimeRateType = Rx<String?>(null);
@@ -81,8 +91,29 @@ class AddUserController extends GetxController {
     'Saturday',
   ];
 
+  // Dropdown options
+  final List<String> genderOptions = ['Male', 'Female', 'Other'];
+  final List<String> jobTitleOptions = [
+    '1901 Thornridge Cir, Shiloh, Hawaii, 811063',
+    'Other Location',
+  ];
+  final List<String> cityOptions = ['America', 'Canada', 'UK'];
+  final List<String> stateOptions = ['Los angeles', 'New York', 'California'];
+
   // Break time options
   final List<String> breakTimeOptions = ['30 min', '1 hour', '3 hour'];
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Initialize controllers
+    firstNameController.addListener(() {
+      firstName.value = firstNameController.text;
+    });
+    lastNameController.addListener(() {
+      lastName.value = lastNameController.text;
+    });
+  }
 
   void setRole(String role) {
     selectedRole.value = role;
@@ -160,56 +191,10 @@ class AddUserController extends GetxController {
   }
 
   void saveUser() {
-    // if (_validateForm()) {
-    //   // Create user data
-    //   final userData = {
-    //     'role': selectedRole.value,
-    //     'firstName': firstNameController.text.trim(),
-    //     'lastName': lastNameController.text.trim(),
-    //     'phone': phoneController.text.trim(),
-    //     'email': emailController.text.trim(),
-    //     'employeeId': employeeIdController.text.trim(),
-    //     'address': addressController.text.trim(),
-    //     'createdAt': DateTime.now().toIso8601String(),
-    //   };
-
-    //   print('Saving user: $userData');
-
-    //   // Clear form
-    //   _clearForm();
-
-    //   // Navigate back
-
-    // }
-
     Get.to(AddUserEducationScreen());
   }
 
   void saveEducation() {
-    // if (_validateEducationForm()) {
-    //   final educationData = {
-    //     'role': selectedRole.value,
-    //     'program': programController.text.trim(),
-    //     'institution': institutionController.text.trim(),
-    //     'year': yearController.text.trim(),
-    //     'createdAt': DateTime.now().toIso8601String(),
-    //   };
-
-    //   print('Saving education: $educationData');
-
-    //   Get.snackbar(
-    //     'Success',
-    //     'Education details saved successfully!',
-    //     snackPosition: SnackPosition.BOTTOM,
-    //     backgroundColor: Colors.green,
-    //     colorText: Colors.white,
-    //     duration: const Duration(seconds: 3),
-    //   );
-
-    //   _clearEducationForm();
-    //   Get.back();
-    // }
-
     Get.to(AddUserExperienceScreen());
   }
 
@@ -269,7 +254,7 @@ class AddUserController extends GetxController {
   }
 
   void savePayroll() {
-    Get.back();
+    Get.to(ViewUserScreen());
   }
 
   void setCurrentlyWorking(bool value) {
