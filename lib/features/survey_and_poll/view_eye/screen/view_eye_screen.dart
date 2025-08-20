@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/screen/survey_response_screen.dart';
 import '../../../../core/common/widgets/custom_appbar.dart';
 import '../../survey_report/screen/survey_report_screen.dart';
 import '../controller/view_eye_controller.dart';
@@ -43,7 +44,8 @@ class ViewEyeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       //  Navigate to responses screen
-                      Get.to(SurveyReportScreen());
+                      //Get.to(SurveyReportScreen());
+                      Get.to(SurveyResponseScreen());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4E53B1),
