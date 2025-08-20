@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:jesusvlsco/features/poll/create_new_poll_two/screen/create_new_poll_two_screen.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/widget/custom_survey_button.dart';
 
 class SaveTemplateScreen extends StatelessWidget {
@@ -168,6 +170,7 @@ class SaveTemplateScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       onPressedAction: () {
                         // Add your publish action here
+                        Get.to(CreateNewPollTwoScreen());
                       },
                     ),
                   ),

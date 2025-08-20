@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/screen/survey_response_screen.dart';
 
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/controller/survey_and_poll_screen_controller.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/filter_dialog.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/proposal_card.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/servey_linear.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
@@ -18,7 +20,10 @@ class SurveyAndPollScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Survey & Poll", style: TextStyle(color: Color(0XFF4E53B1))),
+        title: Text(
+          "Survey & Poll",
+          style: TextStyle(color: Color(0XFF4E53B1)),
+        ),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
       ),
       body: SingleChildScrollView(
@@ -43,6 +48,10 @@ class SurveyAndPollScreen extends StatelessWidget {
                 },
                 onFilterPressed: () {
                   // Handle filter action
+                  showDialog(
+                    context: context,
+                    builder: (_) => const FilterDialog(),
+                  );
                 },
                 onDatePressed: () {
                   // Handle date action
@@ -74,6 +83,7 @@ class SurveyAndPollScreen extends StatelessWidget {
                       itemCount: controller.surveys.length,
                       itemBuilder: (context, index) {
                         final survey = controller.surveys[index];
+                        // ignore: unused_local_variable
                         final isActive = survey.status == "Active";
 
                         return Row(
@@ -178,6 +188,7 @@ class SurveyAndPollScreen extends StatelessWidget {
                 progressColor: Color(0xFF0D6EFD),
                 onViewPressed: () {
                   // Handle view action
+                  Get.to(SurveyResponseScreen());
                 },
               ),
               SizedBox(height: 16),
