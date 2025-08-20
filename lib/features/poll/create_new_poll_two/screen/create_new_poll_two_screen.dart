@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import '../../create_new_poll_three/screen/create_new_poll_three_screen.dart';
 import '../controller/create_new_poll_two_controller.dart';
 import '../widgets/progress_indicator.dart';
 
@@ -21,12 +22,12 @@ class CreateNewPollTwoScreen extends StatelessWidget {
           children: [
             SizedBox(height: 16,),
             /// 🔹 Custom Progress Indicator
-            Obx(() => Center(
+            Center(
               child: ProgressIndicatorWithLabels(
-                currentStep: controller.currentStep.value + 1,
+                currentStep: 1,
                 steps: steps,
               ),
-            )),
+            ),
             const SizedBox(height: 40),
 
             /// 🔹 Centered Option Buttons
@@ -116,6 +117,7 @@ class CreateNewPollTwoScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       controller.nextStep();
+                      Get.to(() => const CreateNewPollThreeScreen());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4E53B1),

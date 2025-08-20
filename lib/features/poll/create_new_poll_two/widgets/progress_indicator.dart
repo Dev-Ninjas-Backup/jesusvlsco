@@ -12,17 +12,19 @@ class ProgressIndicatorWithLabels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(steps.length, (index) {
-        final isActive = index + 1 <= currentStep;
-
-        return Expanded(
-          child: Column(
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          /// 🔹 Top Row: Dots + Lines
+          Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              // 🔹 Dot + Line
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(steps.length, (index) {
+              final isActive = index + 1 <= currentStep;
+
+              return Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Dot
                   Container(
@@ -38,41 +40,46 @@ class ProgressIndicatorWithLabels extends StatelessWidget {
 
                   // Line (only if not last step)
                   if (index != steps.length - 1)
-                    Expanded(
-                      child: Container(
-                        height: 2,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        color: (index + 1 < currentStep)
-                            ? const Color(0xFF4E53B1)
-                            : Colors.grey.shade300,
-                      ),
+                    Container(
+                      width: 60, // 🔹 Fixed line width
+                      height: 2,
+                      color: (index + 1 < currentStep)
+                          ? const Color(0xFF4E53B1)
+                          : Colors.grey.shade300,
                     ),
                 ],
-              ),
+              );
+            }),
+          ),
 
-              const SizedBox(height: 6),
+          const SizedBox(height: 6),
 
-              // 🔹 Label under Dot (centered)
-              Align(
-                alignment: Alignment.centerLeft,
+          /// 🔹 Bottom Row: Labels
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(steps.length, (index) {
+              final isActive = index + 1 == currentStep;
+
+              return Container(
+                width: 74, // 🔹 fixed width per label
+                alignment: Alignment.center,
                 child: Text(
                   steps[index],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: currentStep == index + 1
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                    color: currentStep == index + 1
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                    color: isActive
                         ? const Color(0xFF4E53B1)
                         : Colors.grey,
                   ),
                 ),
-              ),
-            ],
+              );
+            }),
           ),
-        );
-      }),
+        ],
+      ),
     );
   }
 }

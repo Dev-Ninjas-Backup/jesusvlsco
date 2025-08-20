@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/poll/create_new_poll_two/screen/create_new_poll_two_screen.dart';
-
+import '../../../create_new_poll_screen/screen/create_new_poll_screen.dart';
+import '../../create_new_poll_two/screen/create_new_poll_two_screen.dart';
 import '../../poll_list_template/screen/poll_list_template_screen.dart';
 
 class CreateNewPollController extends GetxController {
@@ -24,10 +24,17 @@ class CreateNewPollController extends GetxController {
   }
 
   void setPollType(String? type) {
-    if (type != null) pollType.value = type;
+    if (type != null) {
+      if (type == "Survey") {
+        // 🔹 Direct navigate to Survey Screen
+        Get.off(() => const CreateNewSurveyScreen());
+      } else {
+        pollType.value = type;
+      }
+    }
   }
 
-  /// 🔑 Computed labels (Poll/Survey dynamic)
+  /// 🔑 Computed labels (Poll only)
   String get titleLabel => "${pollType.value} Title";
   String get descriptionLabel => "${pollType.value} Description";
   String get detailsLabel => "${pollType.value} details";
@@ -57,7 +64,6 @@ class CreateNewPollController extends GetxController {
 
   // Save poll template (Dummy for now)
   Future<void> saveTemplate() async {
-    // TODO: Implement Save Template API
     debugPrint("TODO: Save Template API call with data: ${titleController.text}");
     Get.to(() => const PollListTemplateScreen());
   }
@@ -71,9 +77,8 @@ class CreateNewPollController extends GetxController {
       "questions": questions.map((q) => q.toJson()).toList(),
     };
 
-    // TODO: Implement Publish Poll API
     debugPrint("TODO: Publish Poll API call with data: $pollData");
-    Get.to(() =>  CreateNewPollTwoScreen());
+    Get.to(() => const CreateNewPollTwoScreen());
   }
 }
 
