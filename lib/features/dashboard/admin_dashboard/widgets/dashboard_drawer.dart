@@ -14,7 +14,6 @@ import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
 
-
 import '../../../poll/create_new_poll/screen/create_new_poll_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -78,9 +77,8 @@ class CustomDrawer extends StatelessWidget {
             _buildDrawerItem(
               imagePath: 'assets/icons/drawer_timelock.png',
               text: 'Timeclock',
-                  onTap: () {(
-                    Get.to(TimeSheet())
-                  );
+              onTap: () {
+                (Get.to(TimeSheetScreen()));
               },
             ),
             SizedBox(height: Sizer.hp(24)),
