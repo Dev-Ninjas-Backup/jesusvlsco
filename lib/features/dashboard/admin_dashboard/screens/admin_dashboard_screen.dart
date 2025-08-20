@@ -9,7 +9,11 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
+
+import '../../../announcements/admin_announcement/screens/add_announcement.dart';
+import '../../../user/screen/add_user_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   AdminDashboardScreen({super.key});
@@ -47,8 +51,6 @@ class AdminDashboardScreen extends StatelessWidget {
               SpacingHelper.h24(),
 
               //_buildMapLocationView(),
-
-
             ],
           ),
         ),
@@ -931,7 +933,9 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildSendUpdateView() {
     return Expanded(
       child: CustomButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(AddAnnouncement());
+        },
         imagePath: 'assets/icons/space_dashboard.png',
         text: 'Send an update',
         fontSize: Sizer.wp(16),
@@ -949,7 +953,9 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildAddTaskView() {
     return Expanded(
       child: CustomButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(AddTaskPage());
+        },
         imagePath: 'assets/icons/add_task.png',
         text: 'Add a task',
         fontSize: Sizer.wp(16),
@@ -966,7 +972,9 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildAddUserView() {
     return Expanded(
       child: CustomButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(() => const AddUserScreen());
+        },
         imagePath: 'assets/icons/user.png',
         text: 'Add users',
         fontSize: Sizer.wp(16),

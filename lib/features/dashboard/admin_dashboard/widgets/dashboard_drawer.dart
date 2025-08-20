@@ -50,8 +50,7 @@ class CustomDrawer extends StatelessWidget {
               imagePath: "assets/icons/drawer_survey.png",
               text: 'Survey & Poll',
               onTap: () {
-                //Get.to(CreateNewPollScreen());
-                showSurveyCustomAlertBox(context);
+                Get.to(SurveyAndPollScreen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),

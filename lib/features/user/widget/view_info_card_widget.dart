@@ -7,22 +7,23 @@ class ViewInfoCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(
-      AddUserController(),
-    ); // Use Get.find to access existing controller
+    final controller =
+        Get.find<
+          AddUserController
+        >(); // Use Get.find to access existing controller
 
     return Obx(
       () => Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 2),
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -55,56 +56,64 @@ class ViewInfoCardWidget extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.min, // Prevent unnecessary height expansion
-                children: [
-                  Flexible(
-                    child: Text(
-                      '${controller.firstName.value} ${controller.lastName.value}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: double.infinity),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'Leslie Alexander',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis, // Truncate long text
-                      maxLines: 1, // Limit to one line
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Flexible(
-                    child: Text(
-                      controller.selectedJobTitle.value ??
-                          'Senior Software Engineer',
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                      overflow: TextOverflow.ellipsis, // Truncate long text
-                      maxLines: 1, // Limit to one line
+                    const SizedBox(height: 4),
+                    Flexible(
+                      child: Text(
+                        controller.selectedJobTitle.value ??
+                            'Senior Software Engineer',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to an edit profile screen
-                Get.toNamed('/edit-profile'); // Replace with actual route
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6366F1),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 8,
+            Flexible(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to an edit profile screen
+                  Get.toNamed('/edit-profile'); // Replace with actual route
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6366F1),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  minimumSize: const Size(60, 40), // Constrain button size
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                child: const Text(
+                  'Edit',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
-              ),
-              child: const Text(
-                'Edit',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ),
           ],
