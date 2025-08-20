@@ -59,7 +59,7 @@ class CreateNewPollController extends GetxController {
   Future<void> saveTemplate() async {
     // TODO: Implement Save Template API
     debugPrint("TODO: Save Template API call with data: ${titleController.text}");
-    Get.to(() => const PollListTemplateScreen());
+    Get.to(() => const PollListTemplateScreen(isPoll: true,));
   }
 
   // Publish poll (Dummy for now)

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/create_new_poll_screen/screen/create_new_poll_screen.dart';
-import 'package:jesusvlsco/features/survey_and_poll/controller/survey_and_poll_screen_controller.dart';
-import 'package:jesusvlsco/features/survey_and_poll/widget/proposal_card.dart';
-import 'package:jesusvlsco/features/survey_and_poll/widget/servey_linear.dart';
-import 'package:jesusvlsco/features/survey_and_poll/widget/show_alert_box.dart';
-import 'package:jesusvlsco/features/survey_and_poll/widget/survey_poll_statistic_cirle.dart';
+
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/controller/survey_and_poll_screen_controller.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/proposal_card.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/servey_linear.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/survey_poll_statistic_cirle.dart';
 
 // ignore: must_be_immutable
 class SurveyAndPollScreen extends StatelessWidget {
@@ -38,7 +38,7 @@ class SurveyAndPollScreen extends StatelessWidget {
               ProposalCard(
                 onCreatePressed: () {
                   // Handle create action
-                  showCustomAlertBox(context);
+                  showSurveyCustomAlertBox(context);
                   //Get.to(CreateNewPollScreen());
                 },
                 onFilterPressed: () {

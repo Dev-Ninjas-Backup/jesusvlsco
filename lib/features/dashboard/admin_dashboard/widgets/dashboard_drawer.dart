@@ -8,9 +8,10 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 
-import 'package:jesusvlsco/features/survey_and_poll/screen/survey_and_poll_screen.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
 
 
@@ -50,7 +51,8 @@ class CustomDrawer extends StatelessWidget {
               imagePath: "assets/icons/drawer_survey.png",
               text: 'Survey & Poll',
               onTap: () {
-                Get.to(CreateNewPollScreen());
+                //Get.to(CreateNewPollScreen());
+                showSurveyCustomAlertBox(context);
               },
             ),
             SizedBox(height: Sizer.hp(24)),

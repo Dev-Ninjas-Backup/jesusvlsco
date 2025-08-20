@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/create_new_poll_screen/screen/create_new_poll_screen.dart';
-import 'package:jesusvlsco/features/template/screen/template_screen.dart';
 
-void showCustomAlertBox(BuildContext context) {
+
+import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/screen/create_new_servey_screen.dart';
+import 'package:jesusvlsco/features/poll/poll_list_template/screen/poll_list_template_screen.dart';
+
+void showSurveyCustomAlertBox(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
@@ -21,7 +23,8 @@ void showCustomAlertBox(BuildContext context) {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: ()async{
+                      Get.back();
                       Get.to(CreateNewSurveyScreen());
                     },
                     child: Container(
@@ -42,8 +45,9 @@ void showCustomAlertBox(BuildContext context) {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
-                      Get.to(TemplateScreen());
+                    onTap: ()async{
+                      Get.back();
+                      Get.to(PollListTemplateScreen(isPoll: true));
                     },
                     child: Container(
                       //height: 90,
