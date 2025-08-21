@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SurveyAndPollScreenController extends GetxController {
   var surveys = <Survey>[].obs;
+  var selectedDate = ''.obs;
 
   @override
   void onInit() {
@@ -19,6 +22,18 @@ class SurveyAndPollScreenController extends GetxController {
       Survey(title: "Survey D", status: "Completed"),
       Survey(title: "Survey D", status: "Completed"),
     ];
+  }
+  void pickDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      selectedDate.value = DateFormat('yyyy-MM-dd').format(picked);
+    }
   }
 }
 
