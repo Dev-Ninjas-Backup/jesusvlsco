@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 
 // import '../../features/test/home_page.dart';
+import '../../features/user/screen/user_communication_screen.dart';
 import '../config/route_constants.dart';
 
 /// Home section routes with all sub-routes
@@ -19,7 +20,7 @@ class ChatRoutes {
       GoRoute(
         path: RoutePaths.chat,
         name: RouteNames.chat,
-        builder: (context, state) => const ChatScreen(),
+        builder: (context, state) =>  UserCommunicationScreen(),
         routes: [
           // Chat details page
           // GoRoute(

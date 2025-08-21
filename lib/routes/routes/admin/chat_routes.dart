@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
+import 'package:jesusvlsco/features/user/screen/user_communication_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -19,6 +20,7 @@ class AdminChatRoutes {
         path: RoutePaths.adminChat,
         name: RouteNames.adminChat,
         builder: (context, state) => const CommunicationDashboard(),
+        // builder: (context, state) => UserCommunicationScreen(),
         routes: [
           // Admin Chat details page
           // GoRoute(
