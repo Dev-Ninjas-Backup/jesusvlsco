@@ -127,7 +127,6 @@ class _TimeSheetScreenState extends State<TimeSheetScreen> {
                 ),
               ),
             ),
-
           ],
         ),
         SizedBox(height: 20),
@@ -196,56 +195,60 @@ class _TimeSheetScreenState extends State<TimeSheetScreen> {
                     CircleAvatar(
                       backgroundColor: Colors.orange,
                       child: Text('1', style: TextStyle(color: Colors.white)),
-
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Time Period:', style: TextStyle(fontSize: 16)),
-                SizedBox(width: 10),
-                DatePickerContainer(),
-                SizedBox(width: 10),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Row(
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.orange,
-                          child: Text(
-                            '1',
-                            style: TextStyle(color: Colors.white),
+                        Text('Time Period:', style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 10),
+                        DatePickerContainer(),
+                        SizedBox(width: 10),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.orange,
+                                  child: Text(
+                                    '1',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                Text(
+                                  'Pending Req.',
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+
                         Text(
                           'Pending Req.',
                           style: TextStyle(color: Colors.orange, fontSize: 16),
                         ),
                       ],
-
-                    ),
-                    Text(
-                      'Pending Req.',
-                      style: TextStyle(color: Colors.orange, fontSize: 16),
                     ),
                   ],
                 ),
               ),
             ),
-
-            SizedBox(height: 20),
-            CustomTimeCounter(),
-            SizedBox(height: 20),
-            CustomSearchBar(),
-
           ],
         ),
+        SizedBox(height: 20),
+        CustomTimeCounter(),
+        SizedBox(height: 20),
+        CustomSearchBar(),
         SizedBox(height: 20),
         CustomTimeCounter(
           text: 'Total Paid Hours- 202.75',
