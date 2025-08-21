@@ -21,7 +21,7 @@ class AdminScheduleRoutes {
       GoRoute(
         path: RoutePaths.adminSchedule,
         name: RouteNames.adminSchedule,
-        builder: (context, state) => const TimeSheetScreen(),
+        builder: (context, state) => TimeSheetScreen(),
         routes: [
           // Add Project route
           GoRoute(

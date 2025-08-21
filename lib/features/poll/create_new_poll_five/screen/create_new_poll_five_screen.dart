@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_text_field.dart';
 import '../../create_new_poll_two/widgets/progress_indicator.dart';
 import '../controller/create_new_poll_five_controller.dart';
 
@@ -55,21 +57,20 @@ class CreateNewPollFiveScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "Asset will be published on ${controller.publishDate.value} at ${controller.publishTime.value}",
+                    "Asset will be published on ${controller.publishDate.value} "
+                        "at ${controller.publishTime.value}",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  if (controller.notifyUsers.value) const Text("User will be notified"),
+                  if (controller.notifyUsers.value)
+                    const Text("User will be notified"),
                   const SizedBox(height: 12),
-                  TextField(
-                    readOnly: true,
+
+                  /// 🔹 Notification Message Preview
+                  CustomTextField(
+                    hintText: controller.notificationMessage.value,
+                    controller: TextEditingController(),
                     maxLines: 2,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      hintText: controller.notificationMessage.value,
-                    ),
                   ),
                 ],
               )),
@@ -81,31 +82,27 @@ class CreateNewPollFiveScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: CustomButton(
                     onPressed: () => Get.back(),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF4E53B1)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(color: Color(0xFF4E53B1)),
-                    ),
+                    text: "Cancel",
+                    textColor: const Color(0xFF4E53B1),
+                    borderColor: const Color(0xFF4E53B1),
+                    decorationColor: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    borderRadius: 8,
+                    isExpanded: true,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton(
+                  child: CustomButton(
                     onPressed: controller.createPoll,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4E53B1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text("Create Poll"),
+                    text: "Create Poll",
+                    textColor: Colors.white,
+                    decorationColor: const Color(0xFF4E53B1),
+                    fontWeight: FontWeight.w600,
+                    borderRadius: 8,
+                    isExpanded: true,
                   ),
                 ),
               ],

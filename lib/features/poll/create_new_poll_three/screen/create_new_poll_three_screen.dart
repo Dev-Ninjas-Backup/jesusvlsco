@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/poll/create_new_poll_four/screen/create_new_poll_four_screen.dart';
+import '../../../../core/common/widgets/custom_button.dart';
+import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../create_new_poll_two/widgets/progress_indicator.dart';
 import '../controller/create_new_poll_three_controller.dart';
 
@@ -45,25 +47,25 @@ class CreateNewPollThreeScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search articles",
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      prefixIcon: const Icon(Icons.search),
-                    ),
+                  child: CustomTextField(
+                    hintText: "Search users...",
+                    controller: controller.searchController,
+                    onChanged: controller.updateSearch,
                   ),
                 ),
                 const SizedBox(width: 8),
-                OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.filter_list, color: Color(0xFF4E53B1)),
-                  label: const Text("Filter"),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF4E53B1)),
-                  ),
+                CustomButton(
+                  onPressed: () {
+                    // TODO: handle filter logic
+                  },
+                  text: "Filter",
+                  leadingIcon:
+                  const Icon(Icons.filter_list, color: Color(0xFF4E53B1)),
+                  decorationColor: Colors.white,
+                  borderColor: const Color(0xFF4E53B1),
+                  textColor: const Color(0xFF4E53B1),
+                  fontWeight: FontWeight.w500,
+                  borderRadius: 8,
                 )
               ],
             ),
@@ -74,53 +76,64 @@ class CreateNewPollThreeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade300),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(8)),
                 color: Colors.grey.shade100,
               ),
               child: Row(
                 children: const [
-                  SizedBox(width: 30, child: Checkbox(value: false, onChanged: null)),
-                  Expanded(child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold))),
-                  SizedBox(width: 80, child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold))),
+                  SizedBox(
+                      width: 30, child: Checkbox(value: false, onChanged: null)),
+                  Expanded(
+                      child: Text("Name",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  SizedBox(
+                      width: 80,
+                      child: Text("ID",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
             ),
 
+
             /// 🔹 User List
             Expanded(
-              child: ListView.builder(
-                itemCount: controller.users.length,
-                itemBuilder: (context, index) {
-                  final user = controller.users[index];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(color: Colors.grey.shade300),
-                        right: BorderSide(color: Colors.grey.shade300),
-                        bottom: BorderSide(color: Colors.grey.shade300),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Obx(() => Checkbox(
-                          value: controller.selectedUsers.contains(user["id"]),
-                          onChanged: (val) {
-                            controller.toggleUser(user["id"] as int);
-                          },
-                        )),
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(user["avatar"] as String),
-                          radius: 16,
+              child: Obx(() {
+                final users = controller.filteredUsers;
+                return ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(color: Colors.grey.shade300),
+                          right: BorderSide(color: Colors.grey.shade300),
+                          bottom: BorderSide(color: Colors.grey.shade300),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(user["name"] as String)),
-                        SizedBox(width: 80, child: Text(user["id"].toString())),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      ),
+                      child: Row(
+                        children: [
+                          Obx(() => Checkbox(
+                            value: controller.selectedUsers.contains(user["id"]),
+                            onChanged: (val) {
+                              controller.toggleUser(user["id"] as int);
+                            },
+                          )),
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(user["avatar"] as String),
+                            radius: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(user["name"] as String)),
+                          SizedBox(width: 80, child: Text(user["id"].toString())),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
 
 
@@ -131,7 +144,7 @@ class CreateNewPollThreeScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16), // side padding
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: List.generate(8, (index) {
                         final page = index + 1;
@@ -144,12 +157,14 @@ class CreateNewPollThreeScreen extends StatelessWidget {
                             height: 40,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: isActive ? const Color(0xFF4E53B1) : Colors.white,
+                              color: isActive
+                                  ? const Color(0xFF4E53B1)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: isActive
                                     ? Colors.transparent
-                                    : const Color(0xFF4E53B1).withOpacity(0.3),
+                                    : const Color(0xFF4E53B1).withValues(alpha: 0.3),
                                 width: 1.2,
                               ),
                             ),
@@ -173,31 +188,28 @@ class CreateNewPollThreeScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: CustomButton(
                     onPressed: () => Get.back(),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF4E53B1)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text("Cancel", style: TextStyle(color: Color(0xFF4E53B1))),
+                    text: "Cancel",
+                    textColor: const Color(0xFF4E53B1),
+                    borderColor: const Color(0xFF4E53B1),
+                    decorationColor: Colors.white,
+                    borderRadius: 8,
+                    isExpanded: true,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton(
+                  child: CustomButton(
                     onPressed: () {
                       controller.goToNextStep();
-                      Get.to(CreateNewPollFourScreen());
+                      Get.to(() => const CreateNewPollFourScreen());
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4E53B1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text("Next step"),
+                    text: "Next step",
+                    textColor: Colors.white,
+                    decorationColor: const Color(0xFF4E53B1),
+                    borderRadius: 8,
+                    isExpanded: true,
                   ),
                 ),
               ],

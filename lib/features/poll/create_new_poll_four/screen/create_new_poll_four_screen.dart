@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
 import '../../create_new_poll_five/screen/create_new_poll_five_screen.dart';
 import '../../create_new_poll_two/widgets/progress_indicator.dart';
 import '../controller/create_new_poll_four_controller.dart';
@@ -28,7 +29,7 @@ class CreateNewPollFourScreen extends StatelessWidget {
             /// 🔹 Progress Indicator
             Center(
               child: ProgressIndicatorWithLabels(
-                currentStep: 3, // fixed: Publish settings step
+                currentStep: 3,
                 steps: steps,
               ),
             ),
@@ -87,35 +88,28 @@ class CreateNewPollFourScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: CustomButton(
                     onPressed: () => Get.back(),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF4E53B1)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(color: Color(0xFF4E53B1)),
-                    ),
+                    text: "Cancel",
+                    textColor: const Color(0xFF4E53B1),
+                    borderColor: const Color(0xFF4E53B1),
+                    decorationColor: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    borderRadius: 8,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton(
+                  child: CustomButton(
                     onPressed: () {
-                      // TODO: go to next (Summary screen)
                       controller.nextStep();
-                      Get.to(CreateNewPollFiveScreen());
+                      Get.to(const CreateNewPollFiveScreen());
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4E53B1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text("Next"),
+                    text: "Next",
+                    textColor: Colors.white,
+                    decorationColor: const Color(0xFF4E53B1),
+                    fontWeight: FontWeight.w600,
+                    borderRadius: 8,
                   ),
                 ),
               ],

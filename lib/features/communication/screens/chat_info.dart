@@ -6,7 +6,6 @@ import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/communication/controllers/chat_controller.dart';
 import 'package:jesusvlsco/features/communication/widgets/fullscreen_image_view.dart';
 
-
 class ChatInfoScreen extends StatelessWidget {
   const ChatInfoScreen({super.key});
 
@@ -25,29 +24,27 @@ class ChatInfoScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-          
                   // Chat Header Section
-                   _buildChatHeaderSection(context),
+                  _buildChatHeaderSection(context),
                   const SizedBox(height: 24),
                   // Members List
-                   _buildMembersListSection(context),
+                  _buildMembersListSection(context),
                   const SizedBox(height: 24),
                   // Media Section
-                   _buildMediaSection(context),
-                   SizedBox(height: 24),
+                  _buildMediaSection(context),
+                  SizedBox(height: 24),
                   // Files Section
-                   _buildFilesSection(context),
-                   SizedBox(height: 24),
+                  _buildFilesSection(context),
+                  SizedBox(height: 24),
                   // Links Section
-                   _buildLinksSection(context),
-                   SizedBox(height: 96), // Bottom padding for navigation
+                  _buildLinksSection(context),
+                  SizedBox(height: 96), // Bottom padding for navigation
                 ],
               ),
             ),
           ),
         ],
       ),
-     
     );
   }
 }
@@ -89,7 +86,7 @@ Widget _buildChatHeaderSection(BuildContext context) {
                 child: Container(
                   alignment: Alignment.center,
                   height: 50,
-                
+
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
@@ -102,7 +99,7 @@ Widget _buildChatHeaderSection(BuildContext context) {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:   (8.0)),
+                    padding: const EdgeInsets.symmetric(horizontal: (8.0)),
                     child: Row(
                       children: [
                         const Expanded(
@@ -414,17 +411,15 @@ Widget _buildLinksSection(BuildContext context) {
             ),
           ],
         ),
-        
-          Divider(
-              color: const Color(0xFFE4E5F3),
-              height: 1,
-            ),
-const SizedBox(height: 14),
+
+        Divider(color: const Color(0xFFE4E5F3), height: 1),
+        const SizedBox(height: 14),
+
         Row(
           children: [
             const Icon(Icons.link, size: 20, color: Color(0xFF5B5B5B)),
             const SizedBox(width: 8),
-          
+
             const Text(
               'http://drive.google.com',
               style: TextStyle(fontSize: 12, color: Color(0xFF484848)),
