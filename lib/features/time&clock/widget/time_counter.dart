@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:jesusvlsco/core/utils/constants/colors.dart';
-
 
 class CustomTimeCounter extends StatelessWidget {
   final String? hintText1;
@@ -100,7 +98,7 @@ class CustomTimeCounter extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
 
-          child: Center(child: Text(text!, style: TextStyle(fontSize: 16))),
+          child: Center(child: Text(text ?? '', style: TextStyle(fontSize: 16))),
 
         ),
       ],
