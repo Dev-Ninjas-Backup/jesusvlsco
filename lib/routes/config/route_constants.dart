@@ -39,6 +39,7 @@ class RoutePaths {
   // Schedule section paths
   static const String timeSheet = '/schedule/timesheet';
   static const String addProject = '/schedule/add-project';
+  static const String accessSchedule = '/schedule/access-schedule';
 
   // Home section paths
   static const String homeDetails = '/home/details';
@@ -81,6 +82,7 @@ class RoutePaths {
   static const String adminScheduleDetails = '/admin/schedule/details';
   static const String adminScheduleCreate = '/admin/schedule/create';
   static const String adminScheduleManage = '/admin/schedule/manage';
+  static const String adminAccessSchedule = '/admin/schedule/access-schedule';
 
   // Admin Projects management paths
   static const String adminProjectsDetails = '/admin/projects/details';
@@ -138,6 +140,7 @@ class RouteNames {
   // Schedule section route names
   static const String timeSheet = 'timesheet';
   static const String addProject = 'add-project';
+  static const String accessSchedule = 'access-schedule';
 
   // Home section route names
   static const String homeDetails = 'home-details';
@@ -185,6 +188,7 @@ class RouteNames {
   static const String adminScheduleDetails = 'admin-schedule-details';
   static const String adminScheduleCreate = 'admin-schedule-create';
   static const String adminScheduleManage = 'admin-schedule-manage';
+  static const String adminAccessSchedule = 'admin-schedule-access-schedule';
 
   // Admin Projects management route names
   static const String adminProjectsDetails = 'admin-projects-details';

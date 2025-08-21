@@ -193,7 +193,7 @@ class TimeSheetScreen extends StatelessWidget {
           return ProjectCardWidget(
             project: project,
             onMorePressed: () => controller.showProjectOptions(project),
-            onAccessSchedule: () => controller.accessSchedule(project),
+            onAccessSchedule: () => controller.accessSchedule(project, context),
           );
         },
       );

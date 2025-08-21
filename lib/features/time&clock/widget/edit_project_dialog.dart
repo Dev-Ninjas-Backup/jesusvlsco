@@ -9,7 +9,7 @@ import 'package:jesusvlsco/features/time&clock/controller/time_sheet_controller.
 /// EditProjectDialog allows users to edit project title
 /// Shows a text field with current project name and confirm button
 class EditProjectDialog extends StatelessWidget {
-  const EditProjectDialog({Key? key}) : super(key: key);
+  const EditProjectDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

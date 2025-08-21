@@ -8,7 +8,7 @@ import 'package:jesusvlsco/features/time&clock/controller/time_sheet_controller.
 /// ProjectOptionsDialog shows options for project actions
 /// Displays Edit and Delete options in a simple dialog
 class ProjectOptionsDialog extends StatelessWidget {
-  const ProjectOptionsDialog({Key? key}) : super(key: key);
+  const ProjectOptionsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

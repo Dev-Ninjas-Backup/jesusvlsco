@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/time&clock/widget/project_options_dialog.dart';
 import 'package:jesusvlsco/features/time&clock/widget/edit_project_dialog.dart';
 import 'package:jesusvlsco/features/time&clock/widget/delete_project_dialog.dart';
+import '../../../routes/config/route_constants.dart';
 
 /// TimeSheetController manages the business logic for time sheet operations
 /// This includes handling project management and dialog states
@@ -220,17 +221,20 @@ class TimeSheetController extends GetxController {
   }
 
   /// Navigate to project schedule
-  void accessSchedule(ProjectModel project) {
+  void accessSchedule(ProjectModel project, BuildContext context) {
     _logger.i('Accessing schedule for project: ${project.projectName}');
-    // TODO: Implement navigation to schedule screen
-    EasyLoading.showInfo('Navigating to ${project.projectName} schedule');
+    // Navigate to access schedule screen using GoRouter
+    context.go(
+      RoutePaths.adminAccessSchedule,
+      extra: {'projectId': project.id, 'projectName': project.projectName},
+    );
   }
 
   /// Add new project - Navigate to Add Project Screen
   void addNewProject(BuildContext context) {
     _logger.i('Navigating to Add Project screen');
     // Use GoRouter for navigation - required for StatefulShellRoute
-    context.go('/admin/schedule/add-project');
+    context.go(RoutePaths.addProject);
   }
 }
 
