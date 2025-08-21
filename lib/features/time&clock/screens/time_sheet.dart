@@ -5,6 +5,7 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/features/time&clock/controller/date_pick_controller.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
 import 'package:jesusvlsco/features/time&clock/widget/date_picker_container.dart';
+import 'package:jesusvlsco/features/time&clock/widget/search_bar.dart';
 import 'package:jesusvlsco/features/time&clock/widget/time_counter.dart';
 
 class TimeSheetScreen extends StatelessWidget {
@@ -49,7 +50,7 @@ class TimeSheetScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Time Period:'),
+                Text('Time Period:', style: TextStyle(fontSize: 16)),
                 SizedBox(width: 10),
                 DatePickerContainer(),
                 SizedBox(width: 10),
@@ -73,7 +74,7 @@ class TimeSheetScreen extends StatelessWidget {
                         ),
                         Text(
                           'Pending Req.',
-                          style: TextStyle(color: Colors.orange),
+                          style: TextStyle(color: Colors.orange, fontSize: 16),
                         ),
                       ],
                     ),
@@ -83,6 +84,8 @@ class TimeSheetScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             CustomTimeCounter(),
+            SizedBox(height: 20),
+            CustomSearchBar(),
           ],
         ),
       ),

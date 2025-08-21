@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart';
-import 'package:jesusvlsco/features/settings/widget/textfield.dart';
 
 class CustomTimeCounter extends StatelessWidget {
   const CustomTimeCounter({super.key});
@@ -14,7 +11,11 @@ class CustomTimeCounter extends StatelessWidget {
           padding: EdgeInsets.only(left: 30, right: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text('data'), Text('data'), Text('data')],
+            children: [
+              Text('Regular', style: TextStyle(fontSize: 16)),
+              Text('Overtime', style: TextStyle(fontSize: 16)),
+              Text('Paid time off', style: TextStyle(fontSize: 16)),
+            ],
           ),
         ),
 
@@ -28,10 +29,10 @@ class CustomTimeCounter extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                  constraints: BoxConstraints.tightFor(height: 40),
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter text here',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  hintText: '8h',
                   hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
                   alignLabelWithHint: true,
                 ),
@@ -39,23 +40,47 @@ class CustomTimeCounter extends StatelessWidget {
             ),
             Icon(Icons.add),
             Expanded(
-              child: Column(children: [CustomTextField(hintText: 'text')]),
+              child: TextField(
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  hintText: '0h',
+                  hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
+                  alignLabelWithHint: true,
+                ),
+              ),
             ),
             Icon(Icons.add),
             Expanded(
-              child: Column(children: [CustomTextField(hintText: 'text')]),
+              child: TextField(
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  hintText: 'Oh',
+                  hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
+                  alignLabelWithHint: true,
+                ),
+              ),
             ),
           ],
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
         Container(
-          height: 40,
+          height: 50,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.indigo.shade50,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(child: Text('data')),
+          child: Center(
+            child: Text('Total Paid Hours- 8h', style: TextStyle(fontSize: 16)),
+          ),
         ),
       ],
     );

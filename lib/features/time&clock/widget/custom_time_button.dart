@@ -42,7 +42,8 @@ class CustomTimeButton extends StatelessWidget {
           children: [
             if (icon != null) Icon(icon, size: size),
             if (icon != null && text != null) SizedBox(width: 4),
-            if (text != null) Text(text!, style: TextStyle(color: textcolor)),
+            if (text != null)
+              Text(text!, style: TextStyle(color: textcolor, fontSize: 16)),
           ],
         ),
       ),
