@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/time&clock/screens/add_project_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/access_schedule_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/assign_employee_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -21,6 +23,27 @@ class AdminScheduleRoutes {
         name: RouteNames.adminSchedule,
         builder: (context, state) => TimeSheetScreen(),
         routes: [
+          // Add Project route
+          GoRoute(
+            path: 'add-project',
+            name: 'admin-schedule-add-project',
+            builder: (context, state) => const AddProjectScreen(),
+          ),
+
+          // Access Schedule route
+          GoRoute(
+            path: 'access-schedule',
+            name: RouteNames.adminAccessSchedule,
+            builder: (context, state) => const AccessScheduleScreen(),
+          ),
+
+          // Assign Employee route
+          GoRoute(
+            path: 'assign-employee',
+            name: RouteNames.adminAssignEmployee,
+            builder: (context, state) => const AssignEmployeeScreen(),
+          ),
+
           // Admin Schedule details page
           // GoRoute(
           //   path: 'details',

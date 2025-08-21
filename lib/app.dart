@@ -26,6 +26,11 @@ class Jesusvlsco extends StatelessWidget {
       // transitionDuration: const Duration(milliseconds: 300),
       // enableLog: true,
       // Use GoRouter with GetX
+
+      // home: SubmittedTask(),
+
+
+
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
