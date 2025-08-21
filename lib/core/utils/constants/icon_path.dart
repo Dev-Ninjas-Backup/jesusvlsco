@@ -33,23 +33,21 @@ class IconPath {
   static const String mailicon = 'assets/icons/mailicon.png';
   static const String success = 'assets/icons/Icons.png';
 
+  //Announcements icons
 
-//Announcements icons
+  static const String delete = 'assets/icons/delete.svg';
+  static const String search = 'assets/icons/search-normal.svg';
 
- static const String delete = 'assets/icons/delete.svg';
- static const String search = 'assets/icons/search-normal.svg';
+  //Activity  logs icons
+  static const String celender = 'assets/icons/calendar_month.svg';
+  static const String nestclock = 'assets/icons/nest_clock_farsight_analog.svg';
 
+  // recognitiion Icons
+  static const String teamplayer = 'assets/icons/team-player.svg';
+  static const String creative = 'assets/icons/Group 427318848.png';
+  static const String likes = 'assets/icons/thumb_up.svg';
+  static const String message = 'assets/icons/forum.svg';
 
-
-//Activity  logs icons
- static const String celender = 'assets/icons/calendar_month.svg';
- static const String nestclock = 'assets/icons/nest_clock_farsight_analog.svg';
-
-// recognitiion Icons
-static const String teamplayer = 'assets/icons/team-player.svg';
-static const String creative = 'assets/icons/Group 427318848.png';
-static const String likes = 'assets/icons/thumb_up.svg';
-static const String message = 'assets/icons/forum.svg';
-
-
+  static String visibility = 'assets/icons/visibility.svg';
+  static String searchIcon = 'assets/icons/search_icon.svg';
 }

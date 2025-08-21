@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomTimeButton extends StatelessWidget {
   final IconData? icon;
+  final Color? iconColor;
   final Color? bgColor;
   final Color? textcolor;
   final Color? brColor;
@@ -22,6 +23,7 @@ class CustomTimeButton extends StatelessWidget {
     this.icon,
     this.bgColor,
     this.onTap,
+    this.iconColor,
   });
 
   @override
@@ -40,9 +42,10 @@ class CustomTimeButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) Icon(icon, size: size),
+            if (icon != null) Icon(icon, size: size, color: iconColor),
             if (icon != null && text != null) SizedBox(width: 4),
-            if (text != null) Text(text!, style: TextStyle(color: textcolor)),
+            if (text != null)
+              Text(text!, style: TextStyle(color: textcolor, fontSize: 16)),
           ],
         ),
       ),

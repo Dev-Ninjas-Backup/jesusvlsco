@@ -10,6 +10,7 @@ import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
+import 'package:jesusvlsco/features/time_off_request/time_off_request_project_overView_screen/screen/time_off_request_project_overview_screen.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 import '../../../announcements/admin_announcement/screens/add_announcement.dart';
 import '../../../user/screen/add_user_screen.dart';
@@ -567,7 +568,11 @@ class AdminDashboardScreen extends StatelessWidget {
           style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            // Navigate to Time-Off Requests List
+            Get.to(TimeOffRequestProjectOverviewScreen());
+            
+          },
           child: Text(
             'View all',
             style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
@@ -782,7 +787,9 @@ class AdminDashboardScreen extends StatelessWidget {
           style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            //
+          },
           child: Text(
             'View all',
             style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
