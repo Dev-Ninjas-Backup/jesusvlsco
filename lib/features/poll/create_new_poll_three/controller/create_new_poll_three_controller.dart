@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateNewPollThreeController extends GetxController {
-  var currentPage = 3.obs;
+  /// 🔹 Pagination
+  var currentPage = 1.obs;
 
-  var users = [
+  /// 🔹 Search
+  final searchController = TextEditingController();
+  final searchQuery = ''.obs;
+
+  /// 🔹 Users (mock data - replace with API later)
+  final users = [
     {"id": 21389, "name": "Jenny Wilson", "avatar": "https://i.pravatar.cc/150?img=1"},
     {"id": 21390, "name": "Theresa Webb", "avatar": "https://i.pravatar.cc/150?img=2"},
     {"id": 21391, "name": "Courtney Henry", "avatar": "https://i.pravatar.cc/150?img=3"},
@@ -14,8 +21,10 @@ class CreateNewPollThreeController extends GetxController {
     {"id": 21396, "name": "Jacob Jones", "avatar": "https://i.pravatar.cc/150?img=8"},
   ];
 
+  /// 🔹 Selected users
   var selectedUsers = <int>[].obs;
 
+  /// 🔹 Toggle selection
   void toggleUser(int id) {
     if (selectedUsers.contains(id)) {
       selectedUsers.remove(id);
@@ -24,11 +33,33 @@ class CreateNewPollThreeController extends GetxController {
     }
   }
 
+  /// 🔹 Search update
+  void updateSearch(String value) {
+    searchQuery.value = value;
+  }
+
+  /// 🔹 Filtered users list (reactive)
+  List<Map<String, dynamic>> get filteredUsers {
+    if (searchQuery.value.trim().isEmpty) return users;
+    return users
+        .where((u) =>
+        (u["name"] as String).toLowerCase().contains(searchQuery.value.toLowerCase()))
+        .toList();
+  }
+
+  /// 🔹 Pagination update
   void setPage(int page) {
     currentPage.value = page;
   }
 
+  /// 🔹 Next step navigation
   void goToNextStep() {
-    // Navigate to Publish Settings screen
+    // TODO: Implement API call or navigation
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
   }
 }

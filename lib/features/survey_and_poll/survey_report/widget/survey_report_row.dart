@@ -9,15 +9,29 @@ class SurveyReportRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(flex: 2, child: Text(report.date)),
-          Expanded(flex: 3, child: Text(report.name)),
-          Expanded(flex: 3, child: Text(report.status)),
+          SizedBox(width: 100, child: Text(report.date)),
+          SizedBox(width: 160, child: Text(report.name)),
+          SizedBox(width: 200, child: Text(report.jobSatisfaction)),
+          SizedBox(width: 200, child: Text(report.managerSupport)),
+          SizedBox(width: 200, child: Text(report.workLifeBalance)),
+          SizedBox(
+            width: 150,
+            child: Row(
+              children: List.generate(
+                5,
+                    (i) => Icon(
+                  i < report.leaderRating ? Icons.star : Icons.star_border,
+                  size: 16,
+                  color: Color(0xFF4E53B1),
+                ),
+              ),
+            ),
+          ),
         ],
-      ),
+      )
     );
   }
 }

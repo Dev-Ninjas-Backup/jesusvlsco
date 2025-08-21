@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+
 
 class CustomTimeCounter extends StatelessWidget {
   final String? hintText1;
@@ -24,7 +26,9 @@ class CustomTimeCounter extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Regular', style: TextStyle(fontSize: 16)),
+
               SizedBox(width: 1),
+
               Text('Overtime', style: TextStyle(fontSize: 16)),
               Text('Paid time off', style: TextStyle(fontSize: 16)),
             ],
@@ -44,6 +48,7 @@ class CustomTimeCounter extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                   ),
+
                   hintText: hintText1,
                   hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
                   alignLabelWithHint: true,
@@ -59,7 +64,9 @@ class CustomTimeCounter extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                   ),
+
                   hintText: hintText2,
+
                   hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
                   alignLabelWithHint: true,
                 ),
@@ -74,7 +81,9 @@ class CustomTimeCounter extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                   ),
+
                   hintText: hintText3,
+
                   hintStyle: TextStyle(color: Colors.grey[600], fontSize: 16),
                   alignLabelWithHint: true,
                 ),
@@ -90,7 +99,9 @@ class CustomTimeCounter extends StatelessWidget {
             color: Colors.indigo.shade50,
             borderRadius: BorderRadius.circular(8),
           ),
+
           child: Center(child: Text(text!, style: TextStyle(fontSize: 16))),
+
         ),
       ],
     );
