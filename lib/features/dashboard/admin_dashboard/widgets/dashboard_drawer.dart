@@ -13,6 +13,7 @@ import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
 import '../../../poll/create_new_poll/screen/create_new_poll_screen.dart';
 
@@ -51,6 +52,7 @@ class CustomDrawer extends StatelessWidget {
               text: 'Survey & Poll',
               onTap: () {
                 Get.to(SurveyAndPollScreen());
+                // Get.to(UserSurveyScreen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),
