@@ -11,7 +11,7 @@ class AdminBottomNavigationScaffoldController extends GetxController {
     AdminDashboardScreen(),
     const CommunicationDashboard(), // for communications
     EmployeeListScreen(),
-    const TimeSheetScreen(),
+    TimeSheetScreen(),
     const TaskmanagementDashboard(),
   ];
 }
