@@ -8,6 +8,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
 
 PreferredSizeWidget Custom_appbar({required String title}) {
+
   return AppBar(
     shadowColor: Colors.white,
     backgroundColor: Colors.white,

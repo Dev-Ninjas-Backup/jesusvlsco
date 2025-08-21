@@ -12,6 +12,7 @@ class NewTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: Custom_appbar(title: "New Team",),
       body: Column(
         children: [
@@ -108,9 +109,9 @@ class NewTeam extends StatelessWidget {
                   ),
                   child: customButton(
                     bgcolor: AppColors.primary,
-                    brcolor: AppColors.primary,
+                    brcolor: Colors.transparent,
                     text: "Create New Team",
-                    textcolor: AppColors.textWhite,
+                    textcolor: Colors.white,
                     onPressed: () {},
                     width: double.infinity,
                   ),

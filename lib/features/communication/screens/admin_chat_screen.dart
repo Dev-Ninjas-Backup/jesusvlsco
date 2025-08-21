@@ -3,10 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/features/user/screen/add_member_screen.dart';
+
+import 'chat_info.dart';
 
 class Admin_chatscreen extends StatefulWidget {
   const Admin_chatscreen({super.key});
@@ -58,6 +64,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     ),
   ];
+
 
   void _sendMessage(String message) {
     if (message.trim().isNotEmpty) {
@@ -340,13 +347,111 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
             const SizedBox(width: 8),
             SvgPicture.asset('assets/icons/Camera.svg', width: 24, height: 24),
             const SizedBox(width: 8),
-            SvgPicture.asset(
-              'assets/icons/more_vert.svg',
-              width: 24,
-              height: 24,
-            ),
+            MoreVertMenu()
+
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MoreVertMenu extends StatefulWidget {
+  const MoreVertMenu({super.key});
+
+  @override
+  State<MoreVertMenu> createState() => _MoreVertMenuState();
+}
+
+class _MoreVertMenuState extends State<MoreVertMenu> {
+  void _showPopupMenu(GlobalKey buttonKey) async {
+    final RenderBox button = buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
+
+    // Get position of the button (icon)
+    final Offset buttonTopLeft = button.localToGlobal(Offset.zero, ancestor: overlay);
+    final Size buttonSize = button.size;
+
+    // Define where the menu should appear: near the top-right
+    const double menuWidth = 120;
+    const double margin = 8; // margin from right edge
+
+    // Calculate top and bottom of the menu
+    final double menuTop = buttonTopLeft.dy + buttonSize.height;
+    final double menuBottom = menuTop + 200; // Estimate height or use actual
+    final double rightEdge = overlay.size.width - margin;
+
+    // Top-left and bottom-right of the menu
+    final Offset topLeft = Offset(rightEdge - menuWidth, buttonTopLeft.dy);
+    final Offset bottomRight = Offset(rightEdge, menuBottom);
+
+    // Create a valid rectangle
+    final Rect rect = Rect.fromPoints(topLeft, bottomRight);
+
+    final RelativeRect position = RelativeRect.fromRect(
+      rect,
+      Offset.zero & overlay.size,
+    );
+
+    final selected = await showMenu(
+      context: context,
+      position: position,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0), // 🟩 Rounded corners
+      ),
+      color: Colors.white,
+      elevation: 6,
+      items: [
+        PopupMenuItem(value: 'Chat information', child: GestureDetector(
+          onTap: () => Get.to(ChatInfoScreen()),
+          child: Row(
+            children: [
+              Icon(Icons.error_outline, color: AppColors.textBlackShade,),
+              SizedBox(width: 15,),
+              Text('Chat information', style: TextStyle(color: AppColors.textBlackShade,),),
+            ],
+          ),
+        )),
+        PopupMenuItem(value: 'Add member', child: GestureDetector(
+          onTap: () => Get.to(AddMemberScreen()),
+          child: Row(
+            children: [
+              Icon(Icons.add, color: AppColors.textBlackShade,),
+              SizedBox(width: 15,),
+              Text('Add member',  style: TextStyle(color: AppColors.textBlackShade,),),
+            ],
+          ),
+        )),
+        PopupMenuItem(value: 'Delete chat', child: Row(
+          children: [
+            Icon(Icons.delete_forever, color: AppColors.textBlackShade,),
+            SizedBox(width: 15,),
+            Text('Delete chat',  style: TextStyle(color: AppColors.textBlackShade,),),
+          ],
+        )),
+      ],
+    );
+
+    if (selected != null) {
+      debugPrint('Selected: $selected');
+    }
+  }
+
+  final GlobalKey _buttonKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: _buttonKey,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: GestureDetector(
+        child: SvgPicture.asset(
+          'assets/icons/more_vert.svg',
+          width: 24,
+          height: 24,
+          color: Colors.black,
+        ),
+        onTap: () => _showPopupMenu(_buttonKey),
       ),
     );
   }

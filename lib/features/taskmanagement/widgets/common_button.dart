@@ -14,7 +14,7 @@ Widget customButton({
 }) {
   return SizedBox(
     width: width,
-    height: Sizer.hp(40),
+
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: bgcolor,
