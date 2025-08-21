@@ -36,7 +36,7 @@ class AccessScheduleScreen extends StatelessWidget {
                       SizedBox(height: Sizer.hp(24)),
 
                       // Project overview and controls
-                      _buildProjectOverview(controller),
+                      _buildProjectOverview(controller, context),
 
                       SizedBox(height: Sizer.hp(24)),
 
@@ -75,70 +75,11 @@ class AccessScheduleScreen extends StatelessWidget {
     );
   }
 
-  /// Build the header with back button, title and menu
-  Widget _buildHeader(AccessScheduleController controller) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Sizer.wp(16),
-        vertical: Sizer.hp(12),
-      ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(169, 183, 221, 0.08),
-            offset: Offset(0, 4),
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Back button
-          GestureDetector(
-            onTap: controller.navigateBack,
-            child: Container(
-              width: Sizer.wp(24),
-              height: Sizer.wp(24),
-              decoration: const BoxDecoration(color: Colors.transparent),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: Sizer.wp(16),
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-
-          // Title
-          Expanded(
-            child: Text(
-              'Access Schedule',
-              textAlign: TextAlign.center,
-              style: AppTextStyle.f20W700().copyWith(color: AppColors.primary),
-            ),
-          ),
-
-          // Menu button
-          GestureDetector(
-            onTap: controller.onMenuPressed,
-            child: Container(
-              width: Sizer.wp(24),
-              height: Sizer.wp(24),
-              decoration: const BoxDecoration(color: Colors.transparent),
-              child: Icon(
-                Icons.menu,
-                size: Sizer.wp(20),
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// Build project overview section with controls
-  Widget _buildProjectOverview(AccessScheduleController controller) {
+  Widget _buildProjectOverview(
+    AccessScheduleController controller,
+    BuildContext context,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
       child: Column(
@@ -157,7 +98,7 @@ class AccessScheduleScreen extends StatelessWidget {
             children: [
               // Assign button
               GestureDetector(
-                onTap: controller.onAssignPressed,
+                onTap: () => controller.onAssignPressed(context),
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Sizer.wp(18),
