@@ -20,15 +20,6 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
-      // GetX specific configurations
-      // defaultTransition: Transition.cupertino,
-      // transitionDuration: const Duration(milliseconds: 300),
-      // enableLog: true,
-      // Use GoRouter with GetX
-      // home: Router.withConfig(config: AppRouter.router),
-      
-
-
 
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
@@ -38,20 +29,6 @@ class Jesusvlsco extends StatelessWidget {
       ],
 
       home: Router.withConfig(config: AppRouter.router),
-
-
-      // Alternative: You can also use this approach
-      // builder: (context, child) {
-      //   return Router.withConfig(config: AppRouter.router);
-      // },
-      // logWriterCallback: (String text, {bool isError = false}) {
-      //   // Custom logging for GetX (optional)
-      //   if (isError) {
-      //     print('GetX Error: $text');
-      //   } else {
-      //     print('GetX Log: $text');
-      //   }
-      // },
     );
   }
 }
