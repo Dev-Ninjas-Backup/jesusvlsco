@@ -6,6 +6,7 @@ import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/screens/announcement_dashboard.dart';
+import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_screen.dart';
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
@@ -13,6 +14,9 @@ import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/show_alert_box.dart';
 import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/user/screen/view_user_screen.dart';
+import 'package:jesusvlsco/features/user_profile/views/user_profile_screen.dart';
+import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 
 import '../../../poll/create_new_poll/screen/create_new_poll_screen.dart';
 
@@ -97,6 +101,17 @@ class CustomDrawer extends StatelessWidget {
               text: 'Settings',
               onTap: () {
                 Get.to(Settings_screen());
+                // Get.to(UserSettingsScreen());
+              },
+            ),
+            SizedBox(height: Sizer.hp(24)),
+            const CommonDivider(height: 5),
+            SizedBox(height: Sizer.hp(24)),
+            _buildDrawerItem(
+              imagePath: 'assets/icons/user.png',
+              text: 'Profile',
+              onTap: () {
+                Get.to(AssignEmployeeScreen());
               },
             ),
           ],
