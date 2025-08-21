@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/screen/survey_response_screen.dart';
 
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/controller/survey_and_poll_screen_controller.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/action_popup_menu.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/filter_dialog.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/proposal_card.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/widget/servey_linear.dart';
@@ -58,9 +59,19 @@ class SurveyAndPollScreen extends StatelessWidget {
                 },
                 onDatePressed: () {
                   // Handle date action
+                  controller.pickDate(context);
                 },
                 onMorePressed: () {
                   // Handle more action
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => ActionDialog(
+                      onView: () => debugPrint('View tapped'),
+                      onEdit: () => debugPrint('Edit tapped'),
+                      onDelete: () => debugPrint('Delete tapped'),
+                    ),
+                  );
                 },
               ),
               Row(
@@ -199,7 +210,6 @@ class SurveyAndPollScreen extends StatelessWidget {
                   Get.to(SurveyResponseScreen());
 
                   Get.to(ViewEyeScreen());
-
                 },
               ),
               SizedBox(height: 16),

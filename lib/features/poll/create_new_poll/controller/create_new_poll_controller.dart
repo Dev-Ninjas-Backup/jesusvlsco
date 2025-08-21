@@ -31,7 +31,7 @@ class CreateNewPollController extends GetxController {
     if (type != null) {
       if (type == "Survey") {
         // 🔹 Direct navigate to Survey Screen
-        Get.off(() => const CreateNewSurveyScreen());
+        Get.off(() =>  CreateNewSurveyScreen());
       } else {
         pollType.value = type;
       }
