@@ -7,9 +7,14 @@ import 'package:jesusvlsco/app.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
 
+import 'core/services/location_controller.dart';
+import 'core/services/request_handaler.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await requestPermissions();
+  final locationController = Get.put(LocationController());
+  await locationController.initializeService();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   NotificationController notificationController = Get.put(
     NotificationController(),

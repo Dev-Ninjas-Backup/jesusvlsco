@@ -74,7 +74,8 @@ dependencies:
   flutter_chat_core: ^2.7.1
   chat_bubbles: ^1.7.0
   dropdown_button2: ^2.3.9
-  
+  geolocator: ^14.0.2
+  flutter_background_service: ^5.1.0 
 
   
 

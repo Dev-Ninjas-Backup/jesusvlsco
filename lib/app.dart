@@ -23,6 +23,7 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
+
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),
@@ -30,12 +31,16 @@ class Jesusvlsco extends StatelessWidget {
       // Use GoRouter with GetX
       home: SubmittedTask(),
 
+
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+
+
+      home: Router.withConfig(config: AppRouter.router),
 
       // home: Router.withConfig(config: AppRouter.router),
 
@@ -51,6 +56,7 @@ class Jesusvlsco extends StatelessWidget {
       //     print('GetX Log: $text');
       //   }
       // },
+
     );
   }
 }
