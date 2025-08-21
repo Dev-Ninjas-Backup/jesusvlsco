@@ -7,7 +7,7 @@ import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart
 import 'package:flutter/cupertino.dart';
 
 class EmployeeManagement extends StatefulWidget {
-  EmployeeManagement({super.key});
+  const EmployeeManagement({super.key});
 
   @override
   State<EmployeeManagement> createState() => _EmployeeManagementState();

@@ -4,6 +4,9 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/all_task_details.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/submitted_taskdetails.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/task_details.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
 import 'core/utils/theme/theme.dart';
 
@@ -25,10 +28,7 @@ class Jesusvlsco extends StatelessWidget {
       // transitionDuration: const Duration(milliseconds: 300),
       // enableLog: true,
       // Use GoRouter with GetX
-      // home: Router.withConfig(config: AppRouter.router),
-      
-
-
+      home: SubmittedTask(),
 
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
@@ -37,8 +37,7 @@ class Jesusvlsco extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
 
-      home: Router.withConfig(config: AppRouter.router),
-
+      // home: Router.withConfig(config: AppRouter.router),
 
       // Alternative: You can also use this approach
       // builder: (context, child) {

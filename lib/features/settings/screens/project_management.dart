@@ -17,7 +17,7 @@ class ProjectManagement extends StatelessWidget {
   final ValueNotifier<String?> selectedProjectValue = ValueNotifier(null);
   final ValueNotifier<String?> selectedManagerValue = ValueNotifier(null);
 
-  ProjectManagement({Key? key}) : super(key: key);
+  ProjectManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
