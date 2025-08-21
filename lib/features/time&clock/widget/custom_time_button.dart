@@ -32,7 +32,7 @@ class CustomTimeButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: brColor ?? Colors.transparent, width: 2),
+        border: Border.all(color: brColor ?? Colors.transparent, width: 1),
       ),
       child: GestureDetector(
         onTap: onTap,

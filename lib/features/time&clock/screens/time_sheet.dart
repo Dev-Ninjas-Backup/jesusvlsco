@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
-import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/communication/widgets/common_button.dart';
 import 'package:jesusvlsco/features/time&clock/controller/date_pick_controller.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
+import 'package:jesusvlsco/features/time&clock/widget/date_picker_container.dart';
+import 'package:jesusvlsco/features/time&clock/widget/time_counter.dart';
 
 class TimeSheetScreen extends StatelessWidget {
   const TimeSheetScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TimeSheetController());
-
     return Scaffold(
       appBar: Custom_appbar(title: "Time Sheet"),
       body: Padding(
@@ -49,36 +45,44 @@ class TimeSheetScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Row(children: [Text('Time Period')]),
-            SizedBox(height: 10),
-
-            /// 👇 DATE PICKER ROW
-            Obx(
-              () => GestureDetector(
-                onTap: () => controller.pickDate(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 12,
-                  ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Time Period:'),
+                SizedBox(width: 10),
+                DatePickerContainer(),
+                SizedBox(width: 10),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  height: 40,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          controller.selectedDate.value,
-                          style: TextStyle(fontSize: 16),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.orange,
+                          child: Text(
+                            '1',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                      Icon(Icons.arrow_drop_down),
-                    ],
+                        Text(
+                          'Pending Req.',
+                          style: TextStyle(color: Colors.orange),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
+            SizedBox(height: 20),
+            CustomTimeCounter(),
           ],
         ),
       ),
