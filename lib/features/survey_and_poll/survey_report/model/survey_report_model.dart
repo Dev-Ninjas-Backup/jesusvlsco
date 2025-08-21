@@ -1,11 +1,17 @@
 class SurveyReportModel {
   final String date;
   final String name;
-  final String status;
+  final String jobSatisfaction;
+  final String managerSupport;
+  final String workLifeBalance;
+  final int leaderRating; // ⭐ rating
 
   SurveyReportModel({
     required this.date,
     required this.name,
-    required this.status,
+    required this.jobSatisfaction,
+    required this.managerSupport,
+    required this.workLifeBalance,
+    required this.leaderRating,
   });
 }

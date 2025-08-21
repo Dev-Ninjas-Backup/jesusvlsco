@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/common/widgets/custom_button.dart'; // ✅ make sure path is correct
 
 class CustomDateTimePickerRow extends StatelessWidget {
   final Rx<DateTime> selectedDate;
@@ -19,8 +20,9 @@ class CustomDateTimePickerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        /// 🔹 Date Picker Button
         Expanded(
-          child: OutlinedButton(
+          child: CustomButton(
             onPressed: () async {
               final picked = await showDatePicker(
                 context: context,
@@ -32,15 +34,21 @@ class CustomDateTimePickerRow extends StatelessWidget {
                 onDatePicked(picked);
               }
             },
-            child: Obx(() => Text(
-              "${selectedDate.value.toLocal()}".split(' ')[0],
-              style: const TextStyle(color: Color(0xFF4E53B1)),
-            )),
+            text: "${selectedDate.value.toLocal()}".split(' ')[0],
+            textColor: const Color(0xFF4E53B1),
+            borderColor: const Color(0xFF4E53B1),
+            decorationColor: Colors.white,
+            fontWeight: FontWeight.w500,
+            borderRadius: 8,
+            isExpanded: true,
           ),
         ),
+
         const SizedBox(width: 12),
+
+        /// 🔹 Time Picker Button
         Expanded(
-          child: OutlinedButton(
+          child: CustomButton(
             onPressed: () async {
               final picked = await showTimePicker(
                 context: context,
@@ -50,10 +58,13 @@ class CustomDateTimePickerRow extends StatelessWidget {
                 onTimePicked(picked);
               }
             },
-            child: Obx(() => Text(
-              selectedTime.value.format(context),
-              style: const TextStyle(color: Color(0xFF4E53B1)),
-            )),
+            text: selectedTime.value.format(context),
+            textColor: const Color(0xFF4E53B1),
+            borderColor: const Color(0xFF4E53B1),
+            decorationColor: Colors.white,
+            fontWeight: FontWeight.w500,
+            borderRadius: 8,
+            isExpanded: true,
           ),
         ),
       ],

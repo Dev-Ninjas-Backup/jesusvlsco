@@ -6,8 +6,10 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final String? imagePath;
-  final Widget? leadingIcon; // ✅ new
-  final Widget? trailingIcon; // ✅ new
+
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
+
   final Color? decorationColor;
   final Color? borderColor;
   final double? fontSize;
@@ -41,7 +43,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = (fontFamily ?? const TextStyle()).copyWith(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 16,
       color: textColor ?? Colors.black,
       fontWeight: fontWeight ?? FontWeight.w400,
     );
@@ -55,7 +57,7 @@ class CustomButton extends StatelessWidget {
             : null,
         child: Container(
           width: isExpanded ? double.infinity : null,
-          height: 40,
+          height: 48,
           padding: EdgeInsets.symmetric(
             horizontal: horizontalPadding ?? 12,
             vertical: verticalPadding ?? 8,
