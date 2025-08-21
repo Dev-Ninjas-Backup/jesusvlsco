@@ -36,6 +36,10 @@ class RoutePaths {
   static const String settings = '/settings';
   static const String profile = '/profile';
 
+  // Schedule section paths
+  static const String timeSheet = '/schedule/timesheet';
+  static const String addProject = '/schedule/add-project';
+
   // Home section paths
   static const String homeDetails = '/home/details';
   static const String homeNotifications = '/home/notifications';
@@ -131,6 +135,10 @@ class RouteNames {
   static const String settings = 'settings';
   static const String profile = 'profile';
 
+  // Schedule section route names
+  static const String timeSheet = 'timesheet';
+  static const String addProject = 'add-project';
+
   // Home section route names
   static const String homeDetails = 'home-details';
   static const String homeNotifications = 'home-notifications';
@@ -187,11 +195,6 @@ class RouteNames {
   static const String adminChatDetails = 'admin-chat-details';
   static const String adminChatSettings = 'admin-chat-settings';
   static const String adminChatModeration = 'admin-chat-moderation';
-
-
-
-
-  
 
   // Admin Settings section route names
   static const String adminSettingsAccount = 'admin-settings-account';
