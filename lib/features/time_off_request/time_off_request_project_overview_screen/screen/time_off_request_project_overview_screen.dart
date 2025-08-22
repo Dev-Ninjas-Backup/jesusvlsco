@@ -106,6 +106,7 @@ class TimeOffRequestProjectOverviewScreen extends StatelessWidget {
               ),
               Divider(),
               EmployeeNameRow(),
+              SizedBox(height: 16,),
             ],
           ),
         ),
