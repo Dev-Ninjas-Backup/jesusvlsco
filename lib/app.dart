@@ -28,9 +28,7 @@ class Jesusvlsco extends StatelessWidget {
       // Use GoRouter with GetX
 
       // home: SubmittedTask(),
-      //home: AdminTimeClockAddTimeOffScreen(),
-
-
+      //home: CreateNewSurveyPublishScreen(),
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
@@ -39,6 +37,8 @@ class Jesusvlsco extends StatelessWidget {
       ],
 
       home: Router.withConfig(config: AppRouter.router),
+
+      //  home: AuthRoutes.routes,
 
       // home: Router.withConfig(config: AppRouter.router),
 

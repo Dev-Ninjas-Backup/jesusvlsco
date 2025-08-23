@@ -4,7 +4,7 @@ import 'package:jesusvlsco/routes/routes/projects_routes.dart';
 import 'package:jesusvlsco/routes/routes/schedule_routes.dart';
 import 'package:jesusvlsco/routes/routes/users_screen.dart';
 
-import '../../features/bottom_navigation/screen/bottom_navigation_scaffold.dart';
+import '../../features/bottom_navigation/screen/user_bottom_navigation_scaffold.dart';
 import 'home_routes.dart';
 
 /// Main shell routes configuration
@@ -17,7 +17,7 @@ class MainShellRoutes {
   /// Main application shell with bottom navigation
   static final StatefulShellRoute shell = StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
-      return BottomNavigationScaffold(navigationShell: navigationShell);
+      return UserBottomNavigationScaffold();
     },
     branches: [
       // Home section branch

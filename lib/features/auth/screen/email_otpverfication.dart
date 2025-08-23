@@ -1,145 +1,145 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
+import 'package:jesusvlsco/features/auth/controller/otp_verification_controller.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
-class EmailOtpverfication extends StatefulWidget {
+class EmailOtpverfication extends StatelessWidget {
   const EmailOtpverfication({super.key});
 
   @override
-  State<EmailOtpverfication> createState() => _EmailOtpverficationState();
-}
-
-class _EmailOtpverficationState extends State<EmailOtpverfication> {
-  final List<TextEditingController> _controllers = List.generate(
-    4,
-    (index) => TextEditingController(),
-  );
-  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNodes[0].requestFocus();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Initialize OTP controller
+    final controller = Get.put(OtpController());
+
     return Scaffold(
       body: ScreenUtilInit(
-      
         child: Container(
-          // width: double.infinity,
           height: double.infinity,
           decoration: const BoxDecoration(gradient: AppColors.loginGradient),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: IntrinsicHeight(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Sizer.wp(16),
-                      vertical: Sizer.hp(16),
-                    ),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Container(
-                        width: Sizer.wp(360),
-                        height: Sizer.wp(316),
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Sizer.wp(16),
-                            vertical: Sizer.hp(24),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: Sizer.hp(8)),
-                                
-                              /// Title
-                              Text(
-                                AppText.check,
-                                style: AppTextStyle.semibold().copyWith(
-                                  color: AppColors.color3,
-                                ),
-                              ),
-                              SizedBox(height: Sizer.hp(12)),
-                                
-                              /// Subtitle
-                              Text(
-                                AppText.toconfirm,
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.semiregular().copyWith(
-                                  color: AppColors.color3,
-                                ),
-                              ),
-                              SizedBox(height: Sizer.hp(24)),
-                                
-                              /// OTP Fields
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  4,
-                                  (index) => _buildOTPField(index),
-                                ),
-                              ),
-                              SizedBox(height: Sizer.hp(24)),
-                                
-                              /// Verify Button
-                              SizedBox(
-                                width: Sizer.wp(312),
-                                height: Sizer.wp(48),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    context.pushNamed(RouteNames.verifycomplete);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.color1,
-                                    foregroundColor: AppColors.backgroundLight,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    AppText.verify,
-                                    style: AppTextStyle.semibold().copyWith(
-                                      color: AppColors.textWhite,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: Sizer.hp(8)),
-                            ],
-                          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizer.wp(16),
+                  vertical: Sizer.hp(16),
+                ),
+                child: Container(
+                  width: Sizer.wp(360),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizer.wp(16),
+                    vertical: Sizer.hp(24),
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundLight,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: Sizer.hp(8)),
+                      
+                      /// Title
+                      Text(
+                        AppText.check,
+                        style: AppTextStyle.semibold().copyWith(
+                          color: AppColors.color3,
                         ),
                       ),
-                    ),
+                      SizedBox(height: Sizer.hp(12)),
+                      
+                      /// Subtitle
+                      Text(
+                        AppText.toconfirm,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.semiregular().copyWith(
+                          color: AppColors.color3,
+                        ),
+                      ),
+                      SizedBox(height: Sizer.hp(24)),
+                      
+                      /// OTP Fields
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          
+                          6,
+                          (index) => _buildOTPField(controller, index),
+                        ),
+                      ),
+                      SizedBox(height: Sizer.hp(24)),
+                      
+                      /// Verify Button
+                      Obx(() => SizedBox(
+                        width: Sizer.wp(312),
+                        height: Sizer.wp(48),
+                        child: ElevatedButton(
+                          onPressed: controller.isLoading.value 
+                            ? null 
+                            : controller.verifyOtp,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.color1,
+                            foregroundColor: AppColors.backgroundLight,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: controller.isLoading.value 
+                            ? Center(
+                                    child: SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: LoadingIndicator(
+                                        indicatorType: Indicator.ballPulseSync,
+
+                                        colors: [AppColors.primary],
+                                        strokeWidth: 2,
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                    ),
+                                  )
+                            : Text(
+                                AppText.verify,
+                                style: AppTextStyle.semibold().copyWith(
+                                  color: AppColors.textWhite,
+                                ),
+                              ),
+                        ),
+                      )),
+                      SizedBox(height: Sizer.hp(8)),
+                      
+                      // /// Resend OTP Button
+                      // Obx(() => TextButton(
+                      //   onPressed: controller.isLoading.value 
+                      //     ? null 
+                      //     : controller.resendOtp,
+                      //   child: Text(
+                      //     '📧 Resend OTP',
+                      //     style: AppTextStyle.semiregular().copyWith(
+                      //       color: controller.isLoading.value 
+                      //         ? AppColors.color3.withOpacity(0.5)
+                      //         : AppColors.color1,
+                      //     ),
+                      //   ),
+                      // )),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -149,10 +149,10 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
   }
 
   /// OTP Field Builder
-  Widget _buildOTPField(int index) {
+  Widget _buildOTPField(OtpController controller, int index) {
     return Container(
-      width: Sizer.wp(48),
-      height: Sizer.hp(48),
+      width: Sizer.wp(40),
+      height: Sizer.hp(40),
       margin: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.color2, width: 1),
@@ -160,8 +160,8 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
         color: Colors.white,
       ),
       child: TextFormField(
-        controller: _controllers[index],
-        focusNode: _focusNodes[index],
+        controller: controller.otpControllers[index],
+        focusNode: controller.emailfocusNodes[index],
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,
@@ -175,27 +175,15 @@ class _EmailOtpverficationState extends State<EmailOtpverfication> {
           contentPadding: EdgeInsets.zero,
         ),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (value) => _handleOTPInput(index, value),
+        onChanged: (value) => controller.onOtpChanged(index, value),
         onTap: () {
-          _controllers[index].selection = TextSelection.fromPosition(
-            TextPosition(offset: _controllers[index].text.length),
+          // Ensure cursor is at the end of the text
+          final controller_ = controller.otpControllers[index];
+          controller_.selection = TextSelection.fromPosition(
+            TextPosition(offset: controller_.text.length),
           );
         },
       ),
     );
-  }
-
-  void _handleOTPInput(int index, String value) {
-    if (value.isNotEmpty) {
-      if (index < 3) {
-        _focusNodes[index + 1].requestFocus();
-      } else {
-        _focusNodes[index].unfocus();
-      }
-    } else {
-      if (index > 0) {
-        _focusNodes[index - 1].requestFocus();
-      }
-    }
   }
 }
