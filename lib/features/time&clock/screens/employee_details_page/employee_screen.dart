@@ -1,10 +1,14 @@
 // Employee Details Page
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_shift/screen/admin_time_clock_add_shift_screen.dart';
+import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_time_off_screen/screen/admin_time_clock_add_time_off_screen.dart';
+import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_chat_screen/screen/time_clock_admin_chat_screen.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/custom_wide_slider/project_assign_wide_slider_widget.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
-import 'package:jesusvlsco/features/time&clock/widget/custom_wide_slider/custom_wide_slider_widget.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_wide_slider/wide_slider_model.dart';
-import 'package:jesusvlsco/features/time&clock/widget/date_picker_container.dart';
 import 'package:jesusvlsco/features/time&clock/widget/time_counter.dart';
 
 class EmployeeDetailsPage extends StatelessWidget {
@@ -27,6 +31,7 @@ class EmployeeDetailsPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CustomTimeButton(
+                      onTap: () => _showAddOptions(context),
                       height: 40,
                       textcolor: Colors.white,
                       iconColor: Colors.white,
@@ -52,7 +57,7 @@ class EmployeeDetailsPage extends StatelessWidget {
                 children: [
                   Text('Time Period:', style: TextStyle(fontSize: 16)),
                   SizedBox(width: 10),
-                  DatePickerContainer(),
+                  DatePicker(),
                   SizedBox(width: 10),
                   Expanded(
                     child: CustomTimeButton(
@@ -99,7 +104,9 @@ class EmployeeDetailsPage extends StatelessWidget {
                         Icon(Icons.message_outlined, color: AppColors.primary),
                         SizedBox(width: 10),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(TimeClockAdminChatScreen());
+                          },
                           child: Text(
                             'Chat with user',
                             style: TextStyle(
@@ -136,11 +143,45 @@ class EmployeeDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomWideSliderWidget(),
+              ProjectAssignWideSliderWidget(),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+void _showAddOptions(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add Sheet'),
+                onTap: () {
+                  Get.to(AdminTimeClockAddShiftScreen());
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add Time Off'),
+                onTap: () {
+                  Get.to(AdminTimeClockAddTimeOffScreen());
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
