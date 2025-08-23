@@ -3,6 +3,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
 /// AccessScheduleController manages the business logic for access schedule operations
 /// This includes handling employee schedules, time-off requests, and approved requests
@@ -13,6 +15,7 @@ class AccessScheduleController extends GetxController {
   var isLoading = false.obs;
   var showApprovedSection = false.obs;
   var selectedProject = Rx<String?>(null);
+  var selectedDate = DateTime.now().obs;
 
   @override
   void onInit() {
@@ -68,9 +71,30 @@ class AccessScheduleController extends GetxController {
   }
 
   /// Handle date picker button press
-  void onDatePressed() {
-    _logger.i('Date picker button pressed');
-    EasyLoading.showInfo('Date picker functionality not implemented yet');
+  Future<void> onDatePressed() async {
+    try {
+      _logger.i('Date picker button pressed');
+
+      final DateTime? pickedDate = await CustomDatePicker.show(
+        context: Get.context!,
+        initialDate: selectedDate.value,
+      );
+
+      if (pickedDate != null) {
+        selectedDate.value = pickedDate;
+        _logger.i(
+          'Date selected: ${DateFormat('yyyy-MM-dd').format(pickedDate)}',
+        );
+        EasyLoading.showSuccess(
+          'Date selected: ${DateFormat('MMM dd, yyyy').format(pickedDate)}',
+        );
+        // Reload schedule data for selected date
+        await loadScheduleData();
+      }
+    } catch (error) {
+      _logger.e('Error showing date picker: $error');
+      EasyLoading.showError('Failed to show date picker');
+    }
   }
 
   /// Handle refresh button press

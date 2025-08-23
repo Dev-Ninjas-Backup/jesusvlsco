@@ -10,10 +10,7 @@ import '../../controllers/shift_details_controller.dart';
 class ShiftDetailsDateTimeWidget extends StatelessWidget {
   final ShiftDetailsController controller;
 
-  const ShiftDetailsDateTimeWidget({
-    super.key,
-    required this.controller,
-  });
+  const ShiftDetailsDateTimeWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,7 @@ class ShiftDetailsDateTimeWidget extends StatelessWidget {
                       children: [
                         Obx(
                           () => Text(
-                            controller.selectedDate.value,
+                            controller.selectedDateFormatted.value,
                             style: AppTextStyle.f14W400().copyWith(
                               color: const Color(0xFF949494),
                               height: 1.45,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
@@ -136,8 +137,8 @@ class AccessScheduleScreen extends StatelessWidget {
                   onTap: controller.onDatePressed,
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: Sizer.wp(16),
-                      vertical: Sizer.hp(8),
+                      horizontal: Sizer.wp(10),
+                      vertical: Sizer.hp(10),
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.primary),
@@ -151,11 +152,15 @@ class AccessScheduleScreen extends StatelessWidget {
                           size: Sizer.wp(16),
                           color: AppColors.primary,
                         ),
-                        SizedBox(width: Sizer.wp(8)),
-                        Text(
-                          'Date',
-                          style: AppTextStyle.f14W400().copyWith(
-                            color: AppColors.primary,
+                        SizedBox(width: Sizer.wp(4)),
+                        Obx(
+                          () => Text(
+                            DateFormat(
+                              'MMM dd',
+                            ).format(controller.selectedDate.value),
+                            style: AppTextStyle.f14W400().copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                         SizedBox(width: Sizer.wp(8)),

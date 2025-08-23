@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
+import 'package:intl/intl.dart';
 import '../../../core/utils/constants/sizer.dart';
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/common/styles/global_text_style.dart';
@@ -9,6 +10,7 @@ import '../models/task_model.dart';
 import '../models/activity_model.dart';
 import '../widget/shift_emplate_widgets/add_user_dialog.dart';
 import '../screens/shift_template_screen.dart';
+import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
 /// Controller for Shift Details Screen
 /// Manages form data, tasks, activities, and business logic for shift management
@@ -23,7 +25,8 @@ class ShiftDetailsController extends GetxController {
   final noteController = TextEditingController();
 
   // Observable variables for date and time
-  var selectedDate = '06/03/2025'.obs;
+  var selectedDate = DateTime.now().obs;
+  var selectedDateFormatted = ''.obs;
   var isAllDay = true.obs;
   var startTime = '9:00 am'.obs;
   var endTime = '5:00 pm'.obs;
@@ -38,6 +41,11 @@ class ShiftDetailsController extends GetxController {
     super.onInit();
     _loadMockData();
     _logger.i('ShiftDetailsController initialized');
+
+    // Initialize formatted date
+    selectedDateFormatted.value = DateFormat(
+      'dd/MM/yyyy',
+    ).format(selectedDate.value);
   }
 
   /// Load mock data for tasks and activities
@@ -108,15 +116,26 @@ class ShiftDetailsController extends GetxController {
   }
 
   /// Select date using date picker
-  void selectDate() async {
-    _logger.i('Opening date picker');
+  Future<void> selectDate() async {
+    try {
+      _logger.i('Opening date picker');
 
-    final DateTime? picked = await Get.dialog<DateTime>(_buildDatePicker());
+      final DateTime? picked = await CustomDatePicker.show(
+        context: Get.context!,
+        initialDate: selectedDate.value,
+      );
 
-    if (picked != null) {
-      selectedDate.value =
-          "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
-      _logger.i('Date selected: ${selectedDate.value}');
+      if (picked != null) {
+        selectedDate.value = picked;
+        selectedDateFormatted.value = DateFormat('dd/MM/yyyy').format(picked);
+        _logger.i('Date selected: ${selectedDateFormatted.value}');
+        EasyLoading.showSuccess(
+          'Date selected: ${DateFormat('MMM dd, yyyy').format(picked)}',
+        );
+      }
+    } catch (error) {
+      _logger.e('Error showing date picker: $error');
+      EasyLoading.showError('Failed to show date picker');
     }
   }
 
@@ -270,31 +289,6 @@ class ShiftDetailsController extends GetxController {
     // In real implementation, calculate actual duration
     duration.value = '08:00 Hours';
     _logger.i('Duration calculated: ${duration.value}');
-  }
-
-  /// Build custom date picker dialog
-  Widget _buildDatePicker() {
-    return Dialog(
-      child: Container(
-        padding: EdgeInsets.all(Sizer.wp(20)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Select Date',
-              style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
-            ),
-            SizedBox(height: Sizer.hp(20)),
-            CalendarDatePicker(
-              initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 365)),
-              onDateChanged: (date) => Get.back(result: date),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   /// Build custom time picker dialog

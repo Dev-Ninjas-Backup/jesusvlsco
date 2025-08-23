@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import '../widget/filter_dialog.dart';
+import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
 /// This includes handling employee data, search, filtering, and scheduling operations
@@ -15,6 +17,7 @@ class AssignEmployeeController extends GetxController {
   var searchText = ''.obs;
   var employees = <EmployeeModel>[].obs;
   var activeEmployeesCount = 5.obs;
+  var selectedDate = DateTime.now().obs;
 
   @override
   void onInit() {
@@ -169,9 +172,44 @@ class AssignEmployeeController extends GetxController {
   }
 
   /// Handle date button press
-  void onDatePressed() {
-    _logger.i('Date button pressed');
-    // Show date picker
+  Future<void> onDatePressed() async {
+    try {
+      _logger.i('Date button pressed');
+
+      final DateTime? pickedDate = await CustomDatePicker.show(
+        context: Get.context!,
+        initialDate: selectedDate.value,
+      );
+
+      if (pickedDate != null) {
+        selectedDate.value = pickedDate;
+        _logger.i(
+          'Date selected: ${DateFormat('yyyy-MM-dd').format(pickedDate)}',
+        );
+        EasyLoading.showSuccess(
+          'Date selected: ${DateFormat('MMM dd, yyyy').format(pickedDate)}',
+        );
+        // Here you can add logic to filter data by selected date
+        await _filterByDate(pickedDate);
+      }
+    } catch (error) {
+      _logger.e('Error showing date picker: $error');
+      EasyLoading.showError('Failed to show date picker');
+    }
+  }
+
+  /// Filter employees by selected date
+  Future<void> _filterByDate(DateTime date) async {
+    try {
+      _logger.i(
+        'Filtering employees by date: ${DateFormat('yyyy-MM-dd').format(date)}',
+      );
+      // Add your date filtering logic here
+      // For now, just reload the data
+      await loadEmployees();
+    } catch (error) {
+      _logger.e('Error filtering by date: $error');
+    }
   }
 
   /// Handle export button press
