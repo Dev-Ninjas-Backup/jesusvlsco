@@ -1,33 +1,121 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
-class Numbercontroller extends GetxController {
-  // Controller to handle the phone number text input
-  final TextEditingController _phoneController = TextEditingController();
+class PhoneController extends GetxController {
+  // UI State
+  var isLoading = false.obs;
+  var isLoggedIn = false.obs;
+  var isValidPhone = true.obs;
 
-  // Getter to access the phone controller outside of this class
-  TextEditingController get phoneController => _phoneController;
+  // Phone number controller
+  final phoneController = TextEditingController();
 
-  // Optional: Reactive state for validation or other uses (for example, valid phone number)
-  var isValidPhone = true.obs; // Reactive state to track phone number validity
+  // Country code management
+  var selectedCountryCode = CountryCode.fromCountryCode('US').obs;
+
+  // API endpoint
+  static const _phoneLoginUrl = '$baseurl/auth/login/phone';
 
   @override
-  void dispose() {
-    _phoneController
-        .dispose(); // Properly dispose the controller when not in use
-    super.dispose();
+  void onInit() {
+    super.onInit();
+    // Add a listener to validate the phone number in real-time
+    phoneController.addListener(validatePhoneNumber);
   }
 
-  // Optional: A method to validate the phone number (just an example)
-  void validatePhoneNumber() {
-    // Simple phone number validation (this can be expanded as needed)
-    if (_phoneController.text.length == 10) {
-      isValidPhone.value = true;
-      // Get.toNamed(AppRoute.getphoneotpverifymethod());
-      // Get.snackbar("Success", "Phone number is valid");
-    } else {
-      isValidPhone.value = false;
-      //  Get.snackbar("Failed", "Phone number isnot valid");
+  @override
+  void onClose() {
+    phoneController.removeListener(validatePhoneNumber);
+    phoneController.dispose();
+    super.onClose();
+  }
+
+  // Show snackbar message
+  void _showSnackbar(String title, String message, {bool isError = true}) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: isError ? Colors.red : Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  // Validate phone number
+  bool _isValidPhone(String phone) {
+    String cleanPhone = phone.replaceAll(RegExp(r'[^\d]'), '');
+    return cleanPhone.length >= 7 && cleanPhone.length <= 15;
+  }
+
+  // Update country code
+  void updateCountryCode(CountryCode countryCode) {
+    selectedCountryCode.value = countryCode;
+  }
+
+  // Get full phone number with country code
+  String get fullPhoneNumber {
+    String countryCode = selectedCountryCode.value.dialCode ?? '+1';
+    String phone = phoneController.text.trim().replaceFirst(RegExp(r'^0+'), '');
+    return '$countryCode$phone';
+  }
+
+  // Phone login function
+  Future<void> loginWithPhone() async {
+    final phone = phoneController.text.trim();
+
+    if (phone.isEmpty) {
+      _showSnackbar('❌ Error', 'Please enter your phone number.');
+      return;
     }
+
+    if (!_isValidPhone(phone)) {
+      _showSnackbar('❌ Error', 'Please enter a valid phone number.');
+      return;
+    }
+
+    isLoading.value = true;
+
+    try {
+      final response = await http.post(
+        Uri.parse(_phoneLoginUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({"phoneNumber": fullPhoneNumber}),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoggedIn.value = true;
+        _showSnackbar(
+          '✅ Success',
+          'OTP sent to your phone! 📱',
+          isError: false,
+        );
+
+        // Get.toNamed('/phone-otp-verification', arguments: fullPhoneNumber);
+      } else {
+        final responseBody = json.decode(response.body);
+        final errorMessage =
+            responseBody['message'] ?? 'Login failed. Please try again.';
+        _showSnackbar('❌ Error', errorMessage);
+      }
+    } catch (e) {
+      _showSnackbar('❌ Error', 'Network error. Please check your connection.');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Validate phone number in real-time
+  void validatePhoneNumber() {
+    final phone = phoneController.text.trim();
+    isValidPhone.value = _isValidPhone(phone);
+  }
+
+  // Clear phone number
+  void clearPhone() {
+    phoneController.clear();
   }
 }
