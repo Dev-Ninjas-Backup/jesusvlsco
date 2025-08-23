@@ -28,7 +28,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 16),
 
-            /// 🔹 Progress Indicator
+            /// Progress Indicator
             Center(
               child: PublishSurveyProgressIndicator(
                 currentStep: 3,
@@ -38,7 +38,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            /// 🔹 Publish Option
+            /// Publish Option
             Obx(() => PublishCreateSurveyOptionSelector(
               groupValue: controller.publishOption.value,
               options: ["Publish now", "Select date & time"],
@@ -47,7 +47,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            /// 🔹 Notify Employees
+            /// Notify Employees
             Obx(() => PublishCreateSurveyCheckbox(
               title: "Notify employees via push up notification",
               value: controller.notifyEmployees.value,
@@ -64,7 +64,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
               ),
             )),
 
-            /// 🔹 Reminder
+            /// Reminder
             Obx(() => PublishCreateSurveyCheckbox(
               title: "Send on reminder if user didn’t view by",
               value: controller.reminderEnabled.value,
@@ -77,7 +77,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
               ),
             )),
 
-            /// 🔹 Show on feed
+            /// Show on feed
             Obx(() => PublishCreateSurveyCheckbox(
               title: "Show on feed by XYZ agency",
               value: controller.showOnFeed.value,
@@ -86,7 +86,7 @@ class PublishCreateNewSurveyThreeScreen extends StatelessWidget {
 
             const Spacer(),
 
-            /// 🔹 Bottom Buttons
+            /// Bottom Buttons
             Row(
               children: [
                 Expanded(

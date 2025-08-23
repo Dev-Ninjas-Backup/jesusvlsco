@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
- // ✅ make sure path is correct
+ // make sure path is correct
 
 class PublishCreateSurveyDatePickerRow extends StatelessWidget {
   final Rx<DateTime> selectedDate;
@@ -21,7 +21,7 @@ class PublishCreateSurveyDatePickerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        /// 🔹 Date Picker Button
+        /// Date Picker Button
         Expanded(
           child: CustomButton(
             onPressed: () async {
@@ -47,7 +47,7 @@ class PublishCreateSurveyDatePickerRow extends StatelessWidget {
 
         const SizedBox(width: 12),
 
-        /// 🔹 Time Picker Button
+        /// Time Picker Button
         Expanded(
           child: CustomButton(
             onPressed: () async {
