@@ -69,12 +69,29 @@ class EmployeeCardWidget extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        employee.name,
-                        style: AppTextStyle.f18W600().copyWith(
-                          color: const Color(0xFF5B5B5B),
-                          height: 1.5,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            employee.name,
+                            style: AppTextStyle.f18W600().copyWith(
+                              color: const Color(0xFF5B5B5B),
+                              height: 1.5,
+                            ),
+                          ),
+                          // Active indicator
+                          if (employee.isActive)
+                            Padding(
+                              padding: EdgeInsets.all(Sizer.wp(8)),
+                              child: Container(
+                                width: Sizer.wp(10),
+                                height: Sizer.hp(10),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF1EBD66),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       Text(
                         employee.position,
@@ -132,20 +149,6 @@ class EmployeeCardWidget extends StatelessWidget {
               ),
             ),
           ),
-
-          // Active indicator
-          if (employee.isActive)
-            Padding(
-              padding: EdgeInsets.all(Sizer.wp(8)),
-              child: Container(
-                width: Sizer.wp(12),
-                height: Sizer.hp(12),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1EBD66),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
         ],
       ),
     );

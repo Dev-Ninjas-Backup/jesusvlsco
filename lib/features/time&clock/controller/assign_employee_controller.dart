@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
+import 'package:go_router/go_router.dart';
 import '../widget/filter_dialog.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
@@ -186,26 +187,17 @@ class AssignEmployeeController extends GetxController {
   }
 
   /// Handle schedule slot press
-  void onSchedulePressed(EmployeeModel employee, int slotIndex) {
+  void onSchedulePressed(
+    EmployeeModel employee,
+    int slotIndex,
+    BuildContext context,
+  ) {
     _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
 
-    // Toggle the schedule slot
-    final updatedEmployee = employee.copyWith(
-      scheduleSlots: List.from(employee.scheduleSlots)
-        ..[slotIndex] = !employee.scheduleSlots[slotIndex],
-    );
-
-    // Update the employee in the list
-    final index = employees.indexWhere((e) => e.id == employee.id);
-    if (index != -1) {
-      employees[index] = updatedEmployee;
-      employees.refresh();
-    }
-
-    EasyLoading.showToast(
-      employee.scheduleSlots[slotIndex]
-          ? 'Employee assigned to schedule'
-          : 'Employee removed from schedule',
+    // Navigate to shift details screen
+    context.go(
+      '/admin/schedule/shift-details',
+      extra: {'employee': employee, 'slotIndex': slotIndex},
     );
   }
 

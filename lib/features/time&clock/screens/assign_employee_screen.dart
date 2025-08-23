@@ -360,7 +360,7 @@ class AssignEmployeeScreen extends StatelessWidget {
           return EmployeeCardWidget(
             employee: employee,
             onSchedulePressed: (scheduleIndex) =>
-                controller.onSchedulePressed(employee, scheduleIndex),
+                controller.onSchedulePressed(employee, scheduleIndex, context),
           );
         },
       );

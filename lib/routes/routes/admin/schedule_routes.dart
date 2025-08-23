@@ -4,6 +4,7 @@ import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
 import 'package:jesusvlsco/features/time&clock/screens/add_project_screen.dart';
 import 'package:jesusvlsco/features/time&clock/screens/access_schedule_screen.dart';
 import 'package:jesusvlsco/features/time&clock/screens/assign_employee_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/shift_details_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -42,6 +43,17 @@ class AdminScheduleRoutes {
             path: 'assign-employee',
             name: RouteNames.adminAssignEmployee,
             builder: (context, state) => const AssignEmployeeScreen(),
+          ),
+
+          // Shift Details route
+          GoRoute(
+            path: 'shift-details',
+            name: RouteNames.adminShiftDetails,
+            builder: (context, state) {
+              return ShiftDetailsScreen(
+                extra: state.extra as Map<String, dynamic>?,
+              );
+            },
           ),
 
           // Admin Schedule details page
