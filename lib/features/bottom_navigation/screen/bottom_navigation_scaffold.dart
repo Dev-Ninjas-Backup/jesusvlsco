@@ -11,9 +11,9 @@ import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigati
 class BottomNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  BottomNavigationScaffold({super.key, required this.navigationShell});
+  const BottomNavigationScaffold({super.key, required this.navigationShell});
 
-  final List<BottomNavItem> bottomNavItems = [
+  final List<BottomNavItem> bottomNavItems = const [
     BottomNavItem(
       activeIcon: IconPath.homeActive,
       inactiveIcon: IconPath.homeInactive,

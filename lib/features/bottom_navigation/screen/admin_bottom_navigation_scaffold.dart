@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Admin Bottom Navigation Scaffold
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
@@ -15,9 +13,12 @@ import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_na
 class AdminBottomNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  AdminBottomNavigationScaffold({super.key, required this.navigationShell});
+  const AdminBottomNavigationScaffold({
+    super.key,
+    required this.navigationShell,
+  });
 
-  final List<AdminBottomNavItem> bottomNavItems = [
+  final List<AdminBottomNavItem> bottomNavItems = const [
     AdminBottomNavItem(
       activeIcon: IconPath.homeActive,
       inactiveIcon: IconPath.homeInactive,
@@ -142,6 +143,8 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
+  
+
     // Don't navigate if already on the same tab
     if (index == navigationShell.currentIndex) {
       return; // Just return, don't do anything

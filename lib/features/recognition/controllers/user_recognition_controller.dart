@@ -71,7 +71,7 @@ class UserRecognitionController extends GetxController {
     'Creative',
     'Well done',
     'Leader',
-    'Ball',
+    'Creative',
   ].obs;
 
   // Filters for the recognition feed dropdown. Default matches the design options.

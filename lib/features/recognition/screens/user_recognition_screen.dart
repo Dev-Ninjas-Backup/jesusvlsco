@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/icon_path.dart';
@@ -9,21 +9,6 @@ import '../controllers/user_recognition_controller.dart';
 
 class UserRecognitionScreen extends StatelessWidget {
   const UserRecognitionScreen({super.key});
-
-  String _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'creative':
-        return IconPath.creativeIcon;
-      case 'well done':
-        return IconPath.wellDoneIcon;
-      case 'leader':
-        return IconPath.leaderIcon;
-      case 'ball':
-        return IconPath.ballIcon;
-      default:
-        return IconPath.creativeIcon;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +75,9 @@ class UserRecognitionScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(36),
                                 ),
                                 child: Center(
-                                  child: SvgPicture.asset(
-                                    _getCategoryIcon(cat),
-                                    width: 32,
-                                    height: 32,
+                                  child: Icon(
+                                    Icons.emoji_events,
+                                    color: Colors.orange.shade700,
                                   ),
                                 ),
                               ),
