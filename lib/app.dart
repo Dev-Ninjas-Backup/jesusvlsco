@@ -29,8 +29,6 @@ class Jesusvlsco extends StatelessWidget {
 
       // home: SubmittedTask(),
       //home: AdminTimeClockAddTimeOffScreen(),
-
-
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
@@ -39,6 +37,8 @@ class Jesusvlsco extends StatelessWidget {
       ],
 
       home: Router.withConfig(config: AppRouter.router),
+
+      //  home: AuthRoutes.routes,
 
       // home: Router.withConfig(config: AppRouter.router),
 

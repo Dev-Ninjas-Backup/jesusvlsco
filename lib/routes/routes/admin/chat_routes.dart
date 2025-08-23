@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
-import 'package:jesusvlsco/features/user/screen/user_communication_screen.dart';
-
 import '../../config/route_constants.dart';
 
 /// Admin Chat section routes with all sub-routes
@@ -21,28 +19,7 @@ class AdminChatRoutes {
         name: RouteNames.adminChat,
         builder: (context, state) => const CommunicationDashboard(),
         // builder: (context, state) => UserCommunicationScreen(),
-        routes: [
-          // Admin Chat details page
-          // GoRoute(
-          //   path: 'details',
-          //   name: RouteNames.adminChatDetails,
-          //   builder: (context, state) => const AdminChatDetailsPage(),
-          // ),
-
-          // // Admin Chat settings page
-          // GoRoute(
-          //   path: 'settings',
-          //   name: RouteNames.adminChatSettings,
-          //   builder: (context, state) => const AdminChatSettingsPage(),
-          // ),
-
-          // // Admin Chat moderation page
-          // GoRoute(
-          //   path: 'moderation',
-          //   name: RouteNames.adminChatModeration,
-          //   builder: (context, state) => const AdminChatModerationPage(),
-          // ),
-        ],
+        routes: [],
       ),
     ],
   );
