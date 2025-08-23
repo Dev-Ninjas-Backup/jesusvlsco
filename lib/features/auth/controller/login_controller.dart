@@ -1,26 +1,22 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/auth/screen/email_otpverfication.dart';
+import 'package:jesusvlsco/model/user_loginresponse.dart';
 
 class LoginController extends GetxController {
   // 📱 Reactive variables
   var isLoading = false.obs;
-  var isemail_loading = false.obs;
+  var isEmailLoading = false.obs;
   var isLoggedIn = false.obs;
-  
 
   // 📝 Form controller
   final emailController = TextEditingController();
 
   // 🌐 API endpoint
-  static const _apiUrl =
-      '$baseurl/auth/login/email';
-
-  static const loginendpoint = '/auth/login';
+  static const _apiUrl = '$baseurl/auth/login/email';
 
   @override
   void onClose() {
@@ -34,62 +30,77 @@ class LoginController extends GetxController {
 
   // 🚨 Show error message
   void _showError(String message) => Get.snackbar(
-    '❌ Error',
-    message,
-    backgroundColor: Colors.red,
-    colorText: Colors.white,
-    snackPosition: SnackPosition.BOTTOM,
-  );
+        '❌ Error',
+        message,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
 
   // ✨ Show success message
   void _showSuccess(String message) => Get.snackbar(
-    '✅ Success',
-    message,
-    backgroundColor: Colors.green,
-    colorText: Colors.white,
-    snackPosition: SnackPosition.BOTTOM,
-  );
+        '✅ Success',
+        message,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
 
   // 🔑 Main login function
-  Future<void> login_email() async {
-    final email = emailController.text.trim();
+Future<void> loginEmail() async {
+  final email = emailController.text.trim();
 
-    // 📋 Validate input
-    if (email.isEmpty) return _showError('Please enter your email');
-    if (!_isValidEmail(email)) return _showError('Invalid email format');
+  if (email.isEmpty) return _showError('Please enter your email');
+  if (!_isValidEmail(email)) return _showError('Invalid email format');
 
-    isemail_loading.value = true;
+  isEmailLoading.value = true;
 
-    try {
-      // 🌐 Make API call
-      final request = http.Request('POST', Uri.parse(_apiUrl));
-      request.headers['Content-Type'] = 'application/json';
-      request.body = json.encode({"email": email});
+  try {
+    final request = http.Request('POST', Uri.parse(_apiUrl));
+    request.headers['Content-Type'] = 'application/json';
+    request.body = json.encode({"email": email});
 
-      final response = await request.send();
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        // 🎉 Success
-        final responseBody = await response.stream.bytesToString();
-        isLoggedIn.value = true;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final decoded = json.decode(responseBody);
 
-        _showSuccess('Login successful');
-        print('📱 Response: $responseBody');
+      if (decoded != null && decoded is Map<String, dynamic>) {
+        // Check if `data` exists
+        if (decoded['data'] != null && decoded['data'] is Map<String, dynamic>) {
+          final loginResponse = LoginResponse.fromJson(decoded);
 
-        // 🏠 Navigate to home (uncomment when ready)
-        Get.to(EmailOtpverfication());
+          if (loginResponse.success && loginResponse.data.user.isVerified) {
+            isLoggedIn.value = true;
+            print('👤 User Email: ${loginResponse.data.user.email}');
+            print('🔑 Token: ${loginResponse.data.token}');
+            print('📝 Role: ${loginResponse.data.user.role}');
+
+            _showSuccess('Login successful');
+          } else {
+            _showSuccess('OTP sent to your email');
+          }
+        } else {
+          // data is null → probably just OTP sent
+          _showSuccess('OTP sent to your email');
+        }
+
+        // Navigate to OTP verification in both cases
+        Get.to(() => EmailOtpverfication());
       } else {
-        // 💥 API error
-        _showError('Login failed: ${response.reasonPhrase ?? 'Unknown error'}');
+        _showError('Invalid response format from server');
       }
-    } catch (e) {
-      // 🌐 Network error
-      _showError('Network error. Please try again.');
-      print('🚨 Error: $e');
-    } finally {
-      isemail_loading.value = false;
+    } else {
+      _showError('Login failed: ${response.reasonPhrase ?? 'Unknown error'}');
     }
+  } catch (e) {
+    _showError('Network error. Please try again.');
+    print('🚨 Error: $e');
+  } finally {
+    isEmailLoading.value = false;
   }
+}
 
 
 
@@ -99,12 +110,12 @@ class LoginController extends GetxController {
     emailController.clear();
     _showSuccess('Logged out successfully! 👋');
 
-    // 🔄 Navigate to login (uncomment when ready)
+    // 🔄 Navigate to login screen if needed
     // Get.offAllNamed('/login');
   }
 
   void login() {
-    isLoading = true.obs;
+    isLoading.value = true;
     update();
   }
 }

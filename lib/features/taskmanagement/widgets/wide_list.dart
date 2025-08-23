@@ -137,7 +137,7 @@ class _WideListState extends State<WideList> {
                   // List items dynamically from the map
                   ...shoppingCenters.map((center) {
                     return Container(
-                      height: 80,
+                      height: MediaQuery.of(context).size.height * 0.08,
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
                         border: Border(

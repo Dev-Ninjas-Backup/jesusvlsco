@@ -36,7 +36,7 @@ class AddTaskPage extends StatelessWidget {
                   children: [
                     Container(
                       width: Sizer.wp(360),
-                      height: Sizer.hp(324),
+                      // height: Sizer.hp(324),
                       decoration: BoxDecoration(
                         color: AppColors.textWhite,
                         borderRadius: BorderRadius.circular(16),

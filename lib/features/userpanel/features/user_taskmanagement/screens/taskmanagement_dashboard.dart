@@ -72,14 +72,14 @@ class _UserTaskmanagementDashboardState extends State<UserTaskmanagementDashboar
           children: [
             _buildSearchTextField(),
             Padding(
-              padding: EdgeInsets.only(left: Sizer.wp(16.0)),
+              padding: EdgeInsets.only(left: Sizer.wp(8.0), right: Sizer.wp(8.0)),
               child: Row(
                 children: [
                   Flexible(
                     child: _customButton(
                       // width: Sizer.wp(155),
                       color: AppColors.button1,
-                      text: "Overe tass",
+                      text: "Due",
                       onPressed: () {
                         Get.to(OverdueTask());
                       },
@@ -99,7 +99,7 @@ class _UserTaskmanagementDashboardState extends State<UserTaskmanagementDashboar
                   SizedBox(width: Sizer.wp(8)),
                   Flexible(
                     child: CustomButton1(
-                      width: Sizer.wp(100),
+                      width: Sizer.wp(120),
                       color: AppColors.primary,
                       text: "Activity",
                       onPressed: () {
@@ -203,6 +203,7 @@ Widget _buildSearchTextField() {
           hintStyle: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(14),
             color: AppColors.textSecondary.withOpacity(0.6),
+         
           ),
           suffixIcon: Container(
             padding: const EdgeInsets.all(8),
