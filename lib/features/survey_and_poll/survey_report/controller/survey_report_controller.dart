@@ -1,13 +1,47 @@
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import '../model/survey_report_model.dart';
+import 'package:intl/intl.dart';
 
 class SurveyReportController extends GetxController {
   var reports = <SurveyReportModel>[].obs;
+
+  /// sort state (true = ascending, false = descending)
+  var isAscending = true.obs;
+
+  // Scroll controller and reactive variables for slider
+  final ScrollController scrollController = ScrollController();
+  var scrollPosition = 0.0.obs;
+  var maxScrollExtent = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
     loadReports();
+    _setupScrollListener();
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
+
+  void _setupScrollListener() {
+    scrollController.addListener(() {
+      if (scrollController.hasClients) {
+        maxScrollExtent.value = scrollController.position.maxScrollExtent;
+        scrollPosition.value = scrollController.offset;
+      }
+    });
+  }
+
+  void onSliderDrag(double value) {
+    scrollController.animateTo(
+      value,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+    );
   }
 
   void loadReports() {
@@ -61,5 +95,26 @@ class SurveyReportController extends GetxController {
         leaderRating: 5,
       ),
     ];
+  }
+
+  /// Convert String -> DateTime
+  DateTime _parseDate(String dateStr) {
+    try {
+      return DateFormat("M/d/yy").parse(dateStr);
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
+  /// Toggle sort order and sort list
+  void toggleDateSort() {
+    isAscending.value = !isAscending.value;
+    reports.sort((a, b) {
+      final dateA = _parseDate(a.date);
+      final dateB = _parseDate(b.date);
+      return isAscending.value
+          ? dateA.compareTo(dateB)
+          : dateB.compareTo(dateA);
+    });
   }
 }

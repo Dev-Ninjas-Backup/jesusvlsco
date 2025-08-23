@@ -4,7 +4,7 @@ class SurveyReportModel {
   final String jobSatisfaction;
   final String managerSupport;
   final String workLifeBalance;
-  final int leaderRating; // ⭐ rating
+  final int leaderRating;
 
   SurveyReportModel({
     required this.date,
