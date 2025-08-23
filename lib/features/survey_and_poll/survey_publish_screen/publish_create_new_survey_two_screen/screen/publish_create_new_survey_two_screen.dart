@@ -24,7 +24,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🔹 Progress Indicator
+            /// Progress Indicator
             Center(
               child: PublishSurveyProgressIndicator(
                 currentStep: 2, // fixed: Recipients step
@@ -33,7 +33,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            /// 🔹 Title
+            /// Title
             const Text(
               "Select user from the list",
               style: TextStyle(
@@ -44,7 +44,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            /// 🔹 Search & Filter Row
+            /// Search & Filter Row
             Row(
               children: [
                 Expanded(
@@ -72,7 +72,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            /// 🔹 User List Header
+            /// User List Header
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
@@ -97,7 +97,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
             ),
 
 
-            /// 🔹 User List
+            /// User List
             Expanded(
               child: Obx(() {
                 final users = controller.filteredUsers;
@@ -138,7 +138,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
             ),
 
 
-            /// 🔹 Pagination
+            /// Pagination
             Obx(() {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -185,7 +185,7 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
               );
             }),
 
-            /// 🔹 Bottom Buttons
+            /// Bottom Buttons
             Row(
               children: [
                 Expanded(
@@ -204,7 +204,6 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
                   child: CustomButton(
                     onPressed: () {
                       controller.goToNextStep();
-                      //Get.to(() => const CreateNewPollFourScreen());
                       Get.to(PublishCreateNewSurveyThreeScreen());
                     },
                     text: "Next step",

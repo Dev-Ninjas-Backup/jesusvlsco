@@ -23,7 +23,7 @@ class CreateNewSurveyPublishScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 16,),
-            /// 🔹 Custom Progress Indicator
+            /// Custom Progress Indicator
             Center(
               child: PublishSurveyProgressIndicator(
                 currentStep: 1,
@@ -32,7 +32,7 @@ class CreateNewSurveyPublishScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
 
-            /// 🔹 Centered Option Buttons
+            /// Centered Option Buttons
             Expanded(
               child: Center(
                 child: Obx(
@@ -96,7 +96,7 @@ class CreateNewSurveyPublishScreen extends StatelessWidget {
               ),
             ),
 
-            /// 🔹 Bottom Buttons
+            /// Bottom Buttons
             Row(
               children: [
                 Expanded(
@@ -119,7 +119,6 @@ class CreateNewSurveyPublishScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       controller.nextStep();
-                      //Get.to(() => const CreateNewPollThreeScreen());
                       Get.to(PublishCreateNewSurveyTwoScreen());
                     },
                     style: ElevatedButton.styleFrom(
