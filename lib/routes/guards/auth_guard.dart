@@ -12,7 +12,7 @@ class AuthGuard {
   static bool get _isAuthenticated {
     // TODO: Replace with actual authentication check
     // Example: return AuthService.instance.isLoggedIn;
-    bool isAuthenticated = Get.find<LoginController>().isLoading;
+    bool isAuthenticated = Get.find<LoginController>().isLoading.value; // Example check
     // For demo purposes
     return isAuthenticated;
   }

@@ -1,0 +1,1 @@
+const baseurl ="https://api.lgcglobalcontractingltd.com/js";
