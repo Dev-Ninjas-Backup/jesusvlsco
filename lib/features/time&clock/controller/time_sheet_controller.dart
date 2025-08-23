@@ -234,7 +234,7 @@ class TimeSheetController extends GetxController {
   void addNewProject(BuildContext context) {
     _logger.i('Navigating to Add Project screen');
     // Use GoRouter for navigation - required for StatefulShellRoute
-    context.go(RoutePaths.addProject);
+    context.go(RoutePaths.adminAddProject);
   }
 }
 

@@ -84,6 +84,7 @@ class RoutePaths {
   static const String adminScheduleManage = '/admin/schedule/manage';
   static const String adminAccessSchedule = '/admin/schedule/access-schedule';
   static const String adminAssignEmployee = '/admin/schedule/assign-employee';
+  static const String adminAddProject = '/admin/schedule/add-project';
 
   // Admin Projects management paths
   static const String adminProjectsDetails = '/admin/projects/details';
@@ -191,6 +192,7 @@ class RouteNames {
   static const String adminScheduleManage = 'admin-schedule-manage';
   static const String adminAccessSchedule = 'admin-schedule-access-schedule';
   static const String adminAssignEmployee = 'admin-schedule-assign-employee';
+  static const String adminAddProject = 'admin-schedule-add-project';
 
   // Admin Projects management route names
   static const String adminProjectsDetails = 'admin-projects-details';

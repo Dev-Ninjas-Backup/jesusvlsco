@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/constants/sizer.dart';
-import '../../../../core/utils/constants/colors.dart';
-import '../../../../core/common/styles/global_text_style.dart';
+import '../../../core/utils/constants/sizer.dart';
+import '../../../core/utils/constants/colors.dart';
+import '../../../core/common/styles/global_text_style.dart';
 
 /// Comprehensive filter dialog for employee assignment
 /// Allows filtering by assigned status, completion status, publish state and more
@@ -34,7 +34,7 @@ class _FilterDialogState extends State<FilterDialog> {
     setState(() {
       // Check if the current dropdown is already open
       bool isCurrentlyOpen = false;
-      
+
       switch (dropdownType) {
         case 'assigned':
           isCurrentlyOpen = showAssignedDropdown;
@@ -200,12 +200,12 @@ class _FilterDialogState extends State<FilterDialog> {
           border: Border.all(color: AppColors.border),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           children: options.map((option) {
@@ -306,7 +306,7 @@ class _FilterDialogState extends State<FilterDialog> {
     });
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,

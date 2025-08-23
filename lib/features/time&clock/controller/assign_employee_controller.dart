@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
-import '../views/widgets/filter_dialog.dart';
+import '../widget/filter_dialog.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
 /// This includes handling employee data, search, filtering, and scheduling operations

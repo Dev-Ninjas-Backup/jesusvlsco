@@ -26,7 +26,7 @@ class AdminScheduleRoutes {
           // Add Project route
           GoRoute(
             path: 'add-project',
-            name: 'admin-schedule-add-project',
+            name: RouteNames.adminAddProject,
             builder: (context, state) => const AddProjectScreen(),
           ),
 
