@@ -10,6 +10,7 @@ import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/wid
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/widget/open_ended_field_dialog.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/widget/rating_field_dialog.dart';
 import 'package:jesusvlsco/features/survey_and_poll/save_template/screen/save_template_screen.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_publish_screen/create_new_survey_screen/screen/publish_create_new_survey_screen.dart';
 
 class CreateNewSurveyScreen extends StatelessWidget {
   final CreateNewSurveyScreenController controller = Get.put(
@@ -206,7 +207,8 @@ class CreateNewSurveyScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       onPressedAction: () {
                         // Add your publish action here
-                        Get.to(CreateNewPollTwoScreen());
+                        //Get.to(CreateNewPollTwoScreen());
+                        Get.to(CreateNewSurveyPublishScreen());
                       },
                     ),
                   ),
