@@ -7,21 +7,9 @@ import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigati
 class ControllerBinder extends Bindings {
   @override
   void dependencies() {
-    // Put the main app controller
     Get.put<AppController>(AppController(), permanent: true);
-
-    // Lazy put other controllers (they will be created when first accessed)
-    // Get.lazyPut<LogInController>(
-    //   () => LogInController(),
-    //   fenix: true,
-    // );
-
-    // You can add more controllers here as needed
-    // Get.lazyPut<HomeController>(() => HomeController());
-    // Get.lazyPut<SettingsController>(() => SettingsController());
-
     Get.put(LoginController());
-    Get.put(BottomNavigationScaffoldController());
-    Get.put(AdminBottomNavigationScaffoldController());
+    Get.put(AdminBottomNavigationController());
+    Get.put(BottomNavigationController());
   }
 }

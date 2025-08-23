@@ -115,7 +115,7 @@ class AddTimeOffScreen extends StatelessWidget {
           () => Switch(
             value: controller.isAllDay.value,
             onChanged: controller.toggleAllDay,
-            activeThumbColor: AppColors.primary,
+            // activeThumbColor: AppColors.primary,
           ),
         ),
       ],

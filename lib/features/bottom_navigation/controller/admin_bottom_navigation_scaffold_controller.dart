@@ -1,53 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
-import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
-import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
 
-class AdminBottomNavigationScaffoldController extends GetxController {
-  final List<Widget> screens = [
-    AdminDashboardScreen(),
-    const CommunicationDashboard(), // for communications
-    EmployeeListScreen(),
-    TimeSheetScreen(),
-    const TaskmanagementDashboard(),
-  ];
-}
+class AdminBottomNavigationController extends GetxController {
+  final RxInt currentIndex = 0.obs;
 
-// class AdminChatScreen extends StatelessWidget {
-//   const AdminChatScreen({super.key});
+  void changeIndex(int index) {
+    if (currentIndex.value == index) return;
+    currentIndex.value = index;
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(child: Text('Admin Chat Screen'));
-//   }
-// }
-
-// class AdminUsersScreen extends StatelessWidget {
-//   const AdminUsersScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(child: Text('Admin Users Management Screen'));
-//   }
-// }
-
-class AdminScheduleScreen extends StatelessWidget {
-  const AdminScheduleScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Admin Schedule Management Screen'));
+  void resetToHome() {
+    currentIndex.value = 0;
   }
 }
-
-// class AdminProjectsScreen extends StatelessWidget {
-//   const AdminProjectsScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(child: Text('Admin Projects Management Screen'));
-//   }
-// }

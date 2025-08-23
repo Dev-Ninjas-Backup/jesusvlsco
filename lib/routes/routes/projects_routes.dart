@@ -19,7 +19,7 @@ class ProjectsRoutes {
       GoRoute(
         path: RoutePaths.projects,
         name: RouteNames.projects,
-        builder: (context, state) => const ProjectsScreen(),
+        // builder: (context, state) => const ProjectsScreen(),
         routes: [
           // Projects details page
           // GoRoute(
