@@ -38,9 +38,8 @@ class SplashController extends GetxController {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String? token = prefs.getString('auth_token');
     // return token != null && token.isNotEmpty;
-
     // For testing - return true to skip auth
-    return true;
+    return false;
   }
 
   Future<String> _getUserRole() async {

@@ -24,9 +24,6 @@ class TaskmanagementDashboard extends StatefulWidget {
 class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
   @override
   Widget build(BuildContext context) {
-    final double maxScroll = 500.0;
-    final ScrollController horizontalController = ScrollController();
-    double scrollValue = 0.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -75,9 +72,9 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                 children: [
                   Flexible(
                     child: _customButton(
-                      // width: Sizer.wp(155),
+                     
                       color: AppColors.button1,
-                      text: "Overdue tasks",
+                      text: "Due",
                       onPressed: () {
                         Get.to(OverdueTask());
                       },
@@ -95,15 +92,13 @@ class _TaskmanagementDashboardState extends State<TaskmanagementDashboard> {
                     ),
                   ),
                   SizedBox(width: Sizer.wp(8)),
-                  Flexible(
-                    child: _customButton1(
-                      width: Sizer.wp(100),
-                      color: AppColors.primary,
-                      text: "Activity",
-                      onPressed: () {
-                        Get.to(ActivityFeedScreen());
-                      },
-                    ),
+                  _customButton1(
+                    width: Sizer.wp(120),
+                    color: AppColors.primary,
+                    text: "Activity",
+                    onPressed: () {
+                      Get.to(ActivityFeedScreen());
+                    },
                   ),
                 ],
               ),
@@ -229,6 +224,7 @@ Widget _customButton({
 }) {
   return SizedBox(
     height: Sizer.hp(40),
+    width: Sizer.wp(170),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.button1,
@@ -241,7 +237,7 @@ Widget _customButton({
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            radius: Sizer.wp(5),
+            radius: Sizer.wp(8),
             backgroundColor: AppColors.error,
             child: Text(
               '1',
@@ -257,7 +253,7 @@ Widget _customButton({
             child: Text(
               text,
               style: AppTextStyle.regular().copyWith(
-                fontSize: Sizer.wp(16),
+                fontSize: Sizer.wp(15),
                 color: AppColors.error,
                 fontWeight: FontWeight.w500,
               ),

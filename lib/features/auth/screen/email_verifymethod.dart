@@ -119,14 +119,14 @@ class _EmailotpverifyMethodState extends State<EmailotpverifyMethod> {
                               ),
                               keyboardType: TextInputType.emailAddress,
                               onFieldSubmitted: (value) {
-                                controller.login_email();
+                                controller.loginEmail();
                               },
                             ),
                           ),
                           SizedBox(height: Sizer.hp(24)),
 
                           Obx(
-                            () => controller.isemail_loading.value
+                            () => controller.isEmailLoading.value
                                 ? Center(
                                     child: SizedBox(
                                       width: 40,
@@ -158,7 +158,7 @@ class _EmailotpverifyMethodState extends State<EmailotpverifyMethod> {
                                             ),
                                       ),
                                       onPressed: () {
-                                        controller.login_email();
+                                        controller.loginEmail();
                                       },
                                       child: Text(
                                         AppText.verify,
