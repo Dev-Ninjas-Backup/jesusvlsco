@@ -18,7 +18,7 @@ class ScheduleRoutes {
       GoRoute(
         path: RoutePaths.schedule,
         name: RouteNames.schedule,
-        builder: (context, state) => const TimeSheetScreen(),
+        builder: (context, state) => TimeSheetScreen(),
         routes: [
           // Add Project page
           GoRoute(

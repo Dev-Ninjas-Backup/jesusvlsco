@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;

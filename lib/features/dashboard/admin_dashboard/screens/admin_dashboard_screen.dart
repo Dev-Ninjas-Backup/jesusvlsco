@@ -117,9 +117,11 @@ class AdminDashboardScreen extends StatelessWidget {
                     'assets/icons/map_yellow_marker.png',
                     'Location 2',
                   ),
-                  _buildLegendItem('assets/icons/expand.png', 'Expand Map', () {
-                    print('Item clicked!');
-                  }),
+                  _buildLegendItem(
+                    'assets/icons/map_red_marker.png',
+                    'Expand Map',
+                    () {},
+                  ),
                 ],
               ),
             ],
@@ -571,7 +573,6 @@ class AdminDashboardScreen extends StatelessWidget {
           onTap: () {
             // Navigate to Time-Off Requests List
             Get.to(TimeOffRequestProjectOverviewScreen());
-            
           },
           child: Text(
             'View all',

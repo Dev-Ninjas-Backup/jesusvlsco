@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/custom_wide_slider/project_assign_wide_slider_controller.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/side_popup.dart';
 import 'package:jesusvlsco/features/time&clock/screens/employee_details_page/employee_screen.dart';
-import 'package:jesusvlsco/features/time&clock/widget/custom_wide_slider/wide_slider_controller.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_wide_slider/wide_slider_model.dart';
 
-class CustomWideSliderWidget extends StatelessWidget {
-  final controller = Get.put(ProjectOverviewController());
+class ProjectAssignWideSliderWidget extends StatelessWidget {
+  final controller = Get.put(EmployeeTimeSchemeController());
 
   final List<EmployeeOverview> employees = const [
     EmployeeOverview(
@@ -60,7 +61,7 @@ class CustomWideSliderWidget extends StatelessWidget {
     ),
   ];
 
-  CustomWideSliderWidget({super.key});
+  ProjectAssignWideSliderWidget({super.key});
 
   void _navigateToEmployeeDetails(EmployeeOverview employee) {
     Get.to(() => EmployeeDetailsPage(employee: employee));
@@ -118,7 +119,7 @@ class CustomWideSliderWidget extends StatelessWidget {
         children: const [
           SizedBox(
             width: 210,
-            child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text('Date', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
             width: 200,
@@ -129,22 +130,30 @@ class CustomWideSliderWidget extends StatelessWidget {
           ),
           SizedBox(
             width: 120,
-            child: Text(
-              'Clock-In',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Start', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
             width: 120,
-            child: Text(
-              'Clock-Out',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('End', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
             width: 120,
             child: Text(
               'Total Hours',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            width: 120,
+            child: Text(
+              'Daily Total',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            width: 120,
+            child: Text(
+              'Weekly Total',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -158,23 +167,13 @@ class CustomWideSliderWidget extends StatelessWidget {
           SizedBox(
             width: 120,
             child: Text(
-              'Total Overtime',
+              'OvertimeX1.5',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
             width: 120,
-            child: Text(
-              'Paid Time-off',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            width: 120,
-            child: Text(
-              'Regular Payment',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Notes', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -212,10 +211,7 @@ class CustomWideSliderWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: 200,
-                child: _buildStat('${e.timeOff} ', 'Chicago'),
-              ),
+              SizedBox(width: 200, child: _buildStat()),
               SizedBox(width: 120, child: _buildStatTime('${e.sickLeave} AM')),
               SizedBox(
                 width: 120,
@@ -241,6 +237,7 @@ class CustomWideSliderWidget extends StatelessWidget {
                 width: 120,
                 child: _buildStatTime('${e.unpaidLeave} USD'),
               ),
+              SizedBox(width: 120, child: _buildStatTime('View Notes')),
             ],
           ),
         ),
@@ -248,21 +245,10 @@ class CustomWideSliderWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(String top, String bottom) {
+  Widget _buildStat() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          top,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF4E53B1),
-          ),
-        ),
-        Row(
-          children: [Icon(Icons.location_on_outlined, size: 20), Text(bottom)],
-        ),
-      ],
+      children: const [SidePopup()],
     );
   }
 
@@ -272,24 +258,6 @@ class CustomWideSliderWidget extends StatelessWidget {
       style: const TextStyle(
         fontWeight: FontWeight.bold,
         color: Color(0xFF4E53B1),
-      ),
-    );
-  }
-
-  Widget _buildStatusChip(String status) {
-    final isApproved = status == 'Approved';
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isApproved ? Colors.green.shade100 : Colors.red.shade100,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        status,
-        style: TextStyle(
-          color: isApproved ? Colors.green : Colors.red,
-          fontWeight: FontWeight.bold,
-        ),
       ),
     );
   }
