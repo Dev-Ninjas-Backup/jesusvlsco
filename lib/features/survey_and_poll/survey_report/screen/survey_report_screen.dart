@@ -220,6 +220,7 @@ class SurveyReportScreen extends StatelessWidget {
             maxScrollExtent: controller.maxScrollExtent,
             onSliderDrag: controller.onSliderDrag,
           ),
+          SizedBox(height: 16),
         ],
       ),
     );
