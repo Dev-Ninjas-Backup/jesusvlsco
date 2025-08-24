@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
-import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_shift/screen/admin_time_clock_add_shift_screen.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/custom_wide_slider/project_assign_wide_slider_widget.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pending.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/activity_widget.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/second_date_picker/second_datepicker.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/approved_requests_list.dart';
 import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_time_button.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_wide_slider/custom_wide_slider_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/date_picker_container.dart';
 import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/search_bar.dart';
 import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_counter.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_sheet_wide_list.dart';
+import '../../../../core/common/styles/global_text_style.dart';
+import '../../../../core/utils/constants/sizer.dart';
+import '../../../../core/utils/helpers/spacing_helper.dart';
+import '../widgets/custom_wide_slider/custom_wide_slider_widget.dart';
 
-class TimeAndClockScreen extends StatefulWidget {
-  TimeAndClockScreen({super.key});
+class TimeSheetScreen extends StatefulWidget {
+  TimeSheetScreen({super.key});
 
   @override
-  State<TimeAndClockScreen> createState() => _TimeAndClockScreenState();
+  State<TimeSheetScreen> createState() => _TimeSheetScreenState();
 }
 
-class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
+class _TimeSheetScreenState extends State<TimeSheetScreen> {
   DashboardController dashboardController = Get.put(DashboardController());
   int _selectedTab = 0; // 0 for Timesheet, 1 for Payroll
 
@@ -100,45 +95,35 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
 
   Widget _buildTimesheetContent() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Time Period:', style: TextStyle(fontSize: 16)),
             SizedBox(width: 10),
-            DatePicker(),
+            DatePickerContainer(),
             SizedBox(width: 10),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(8),
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey),
-                ),
+            Container(
+              padding: EdgeInsets.all(8),
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey),
+              ),
 
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(PendingRequest());
-                  },
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.orange,
-                        child: Text('1', style: TextStyle(color: Colors.white)),
-                      ),
-                      SizedBox(width: 2),
-                      Expanded(
-                        child: Text(
-                          'Pending Request',
-                          style: TextStyle(color: Colors.orange, fontSize: 16),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                    ],
-                  ),
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.orange,
+                      child: Text('1', style: TextStyle(color: Colors.white)),
+                    ),
+                    Text(
+                      'Pending Req.',
+                      style: TextStyle(color: Colors.orange, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -154,37 +139,10 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
         SizedBox(height: 20),
         CustomSearchBar(),
         SizedBox(height: 20),
-        CustomWideSliderWidget(),
-        SizedBox(height: 20),
+        Container(height: Get.height * 0.5, child: TimeSheetWideList()),
+        SizedBox(height: 30),
         _buildMapLocationView(),
-        SizedBox(height: 20),
-        Text(
-          'Activity',
-          style: TextStyle(
-            color: AppColors.primary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 10),
-        SecondDatepicker(),
-        SizedBox(height: 10),
-        ActivityWidget(
-          text: 'Jone Cooper Completed a Task',
-          imagePath: 'assets/images/user01.svg',
-        ),
-        ActivityWidget(
-          text: 'Jone Cooper Completed a Task',
-          imagePath: 'assets/images/user01.svg',
-        ),
-        ActivityWidget(
-          text: 'Jone Cooper Completed a Task',
-          imagePath: 'assets/images/user01.svg',
-        ),
-        ActivityWidget(
-          text: 'Jone Cooper Completed a Task',
-          imagePath: 'assets/images/user01.svg',
-        ),
+        CustomWideSliderWidget(),
       ],
     );
   }
@@ -192,6 +150,8 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
   Widget _buildPayrollContent() {
     return Column(
       children: [
+        SizedBox(height: 20),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -219,7 +179,7 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
           children: [
             Text('Time Period:', style: TextStyle(fontSize: 16)),
             SizedBox(width: 10),
-            DatePicker(),
+            DatePickerContainer(),
             SizedBox(width: 10),
             Container(
               padding: EdgeInsets.all(8),
@@ -236,11 +196,48 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
                       backgroundColor: Colors.orange,
                       child: Text('1', style: TextStyle(color: Colors.white)),
                     ),
-                    Text(
-                      'Pending Req..',
-                      style: TextStyle(color: Colors.orange, fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Time Period:', style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 10),
+                        DatePickerContainer(),
+                        SizedBox(width: 10),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.orange,
+                                  child: Text(
+                                    '1',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                Text(
+                                  'Pending Req.',
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Text(
+                          'Pending Req.',
+                          style: TextStyle(color: Colors.orange, fontSize: 16),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -248,6 +245,10 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
             ),
           ],
         ),
+        SizedBox(height: 20),
+        CustomTimeCounter(),
+        SizedBox(height: 20),
+        CustomSearchBar(),
         SizedBox(height: 20),
         CustomTimeCounter(
           text: 'Total Paid Hours- 202.75',

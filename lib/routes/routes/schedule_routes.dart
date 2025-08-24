@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
-import 'package:jesusvlsco/features/time&clock/screens/add_project_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/views/time_sheet.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/views/add_project_screen.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 /// Schedule section routes with all sub-routes
