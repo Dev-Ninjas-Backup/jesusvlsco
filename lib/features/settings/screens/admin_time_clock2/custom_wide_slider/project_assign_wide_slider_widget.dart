@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/custom_wide_slider/project_assign_wide_slider_controller.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/side_popup.dart';
-import 'package:jesusvlsco/features/time&clock/screens/employee_details_page/employee_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/employee_screen.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_wide_slider/wide_slider_model.dart';
 
 class ProjectAssignWideSliderWidget extends StatelessWidget {
