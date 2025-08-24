@@ -40,9 +40,7 @@ class _DatePickerContainerState extends State<DatePickerContainer> {
             SizedBox(width: Sizer.wp(8)),
             Text(
               _getDisplayText(),
-              style: AppTextStyle.f14W400().copyWith(
-                color: AppColors.text,
-              ),
+              style: AppTextStyle.f14W400().copyWith(color: AppColors.text),
             ),
           ],
         ),
@@ -55,10 +53,10 @@ class _DatePickerContainerState extends State<DatePickerContainer> {
     if (selectedDateRange == null) {
       return 'Select Date';
     }
-    
+
     final start = selectedDateRange!.start;
     final end = selectedDateRange!.end;
-    
+
     return '${start.day}/${start.month}/${start.year} - ${end.day}/${end.month}/${end.year}';
   }
 
@@ -68,7 +66,8 @@ class _DatePickerContainerState extends State<DatePickerContainer> {
       context: context,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
-      initialDateRange: selectedDateRange ??
+      initialDateRange:
+          selectedDateRange ??
           DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(const Duration(days: 7)),

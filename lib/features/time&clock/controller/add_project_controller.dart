@@ -122,12 +122,13 @@ class AddProjectController extends GetxController {
       '3',
       '5',
       '6',
-    ]; // Jane, Esther, Marley, Jane (duplicate)
+    ]; // Jane, Esther, Marley, Brandon
 
     selectedMembers.value = availableMembers
         .where((member) => preselectedIds.contains(member.id))
-        .map((member) => member.copyWith(isSelected: true))
         .toList();
+
+    _logger.i('Pre-selected ${selectedMembers.length} members');
   }
 
   /// Handle team selection
@@ -160,15 +161,15 @@ class AddProjectController extends GetxController {
     if (index != -1) {
       // Member is already selected, remove them
       selectedMembers.removeAt(index);
+      _logger.i('Member ${member.name} deselected');
     } else {
       // Member is not selected, add them
-      selectedMembers.add(member.copyWith(isSelected: true));
+      selectedMembers.add(member);
+      _logger.i('Member ${member.name} selected');
     }
 
+    // Force update the observable list
     selectedMembers.refresh();
-    _logger.i(
-      'Member ${member.name} ${index != -1 ? 'deselected' : 'selected'}',
-    );
   }
 
   /// Check if member is selected
