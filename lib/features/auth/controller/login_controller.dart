@@ -71,11 +71,11 @@ Future<void> loginEmail() async {
         if (decoded['data'] != null && decoded['data'] is Map<String, dynamic>) {
           final loginResponse = LoginResponse.fromJson(decoded);
 
-          if (loginResponse.success && loginResponse.data.user.isVerified) {
+          if (loginResponse.success && loginResponse.data!.user.isVerified) {
             isLoggedIn.value = true;
-            print('👤 User Email: ${loginResponse.data.user.email}');
-            print('🔑 Token: ${loginResponse.data.token}');
-            print('📝 Role: ${loginResponse.data.user.role}');
+            print('👤 User Email: ${loginResponse.data!.user.email}');
+            print('🔑 Token: ${loginResponse.data!.token}');
+            print('📝 Role: ${loginResponse.data!.user.role}');
 
             _showSuccess('Login successful');
           } else {

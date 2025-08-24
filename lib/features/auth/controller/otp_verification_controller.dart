@@ -10,7 +10,7 @@ import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 import 'package:jesusvlsco/features/bottom_navigation/screen/admin_bottom_navigation_scaffold.dart';
 import 'package:jesusvlsco/features/bottom_navigation/screen/user_bottom_navigation_scaffold.dart';
 import 'package:jesusvlsco/model/user_loginresponse.dart';
-import 'package:logger/web.dart';
+
 
 class OtpController extends GetxController {
   // UI State
@@ -110,31 +110,31 @@ class OtpController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       
       // Save authentication token
-      await prefs.setString('auth_token', loginResponse.data.token);
+      await prefs.setString('auth_token', loginResponse.data!.token);
       
       // Save user role
-      await prefs.setString('user_role', loginResponse.data.user.role);
+      await prefs.setString('user_role', loginResponse.data!.user.role);
       
       // Save user ID
-      await prefs.setString('user_id', loginResponse.data.user.id);
+      await prefs.setString('user_id', loginResponse.data!.user.id);
       
       // Save user email
-      await prefs.setString('user_email', loginResponse.data.user.email);
+      await prefs.setString('user_email', loginResponse.data!.user.email);
       
       // Save employee ID
-      await prefs.setInt('employee_id', loginResponse.data.user.employeeID);
+      await prefs.setInt('employee_id', loginResponse.data!.user.employeeID);
       
       // Save verification status
-      await prefs.setBool('is_verified', loginResponse.data.user.isVerified);
+      await prefs.setBool('is_verified', loginResponse.data!.user.isVerified);
       
       // Save login status
       await prefs.setBool('is_logged_in', true);
       
       // Optionally save user profile data as JSON string
-      await prefs.setString('user_profile', json.encode(loginResponse.data.user.profile.toJson()));
+      await prefs.setString('user_profile', json.encode(loginResponse.data!.user.profile?.toJson()));
       
       // Save full user data as JSON for future use
-      await prefs.setString('user_data', json.encode(loginResponse.data.user.toJson()));
+      await prefs.setString('user_data', json.encode(loginResponse.data!.user.toJson()));
       
       print('✅ User data saved to SharedPreferences successfully');
       
@@ -170,7 +170,7 @@ class OtpController extends GetxController {
   void _navigateBasedOnRole(String userRole) {
     // Small delay to ensure UI updates properly
     Future.delayed(const Duration(milliseconds: 500), () {
-      if (userRole.toLowerCase() == 'admin') {
+      if (userRole.toLowerCase() == 'ADMIN') {
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
         Get.offAll(() => const UserBottomNavigationScaffold());
@@ -207,11 +207,12 @@ class OtpController extends GetxController {
           final loginResponse = LoginResponse.fromJson(decoded);
   
 
-          if (loginResponse.success && loginResponse.data.user.isVerified) {
+          if (loginResponse.success && loginResponse.data!.user.isVerified) {
             isVerified.value = true;
 
             // 🔥 Save user data to SharedPreferences
             await _saveUserData(loginResponse);
+            print('userrole: ${loginResponse.data!.user.role}');
 
             _showSnackbar(
               '✅ Success',
@@ -219,10 +220,10 @@ class OtpController extends GetxController {
               isError: false,
             );
 
-            Logger().i('📱 Verification Response: ${response.body}');
+            // Logger().i('📱 Verification Response: ${response.body}');
 
             // Navigate based on user role instead of verification complete
-            _navigateBasedOnRole(loginResponse.data.user.role);
+            _navigateBasedOnRole(loginResponse.data!.user.role);
             
           } else {
             _showSnackbar('❌ Error', 'Verification failed. Please try again.');
