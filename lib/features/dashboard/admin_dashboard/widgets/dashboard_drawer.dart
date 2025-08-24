@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -10,7 +9,6 @@ import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_s
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/time_clock.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
-import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
