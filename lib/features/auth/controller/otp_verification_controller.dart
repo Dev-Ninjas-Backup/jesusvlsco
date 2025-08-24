@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jesusvlsco/features/auth/screen/verification_complete.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
@@ -167,10 +168,11 @@ class OtpController extends GetxController {
   }
 
   // Navigate based on user role
-  void _navigateBasedOnRole(String userRole) {
+  void navigateBasedOnRole(String userRole) {
     // Small delay to ensure UI updates properly
     Future.delayed(const Duration(milliseconds: 500), () {
-      if (userRole.toLowerCase() == 'ADMIN') {
+      if (userRole == 'ADMIN') {
+    
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
         Get.offAll(() => const UserBottomNavigationScaffold());
@@ -223,7 +225,7 @@ class OtpController extends GetxController {
             // Logger().i('📱 Verification Response: ${response.body}');
 
             // Navigate based on user role instead of verification complete
-            _navigateBasedOnRole(loginResponse.data!.user.role);
+            navigateBasedOnRole(loginResponse.data!.user.role);
             
           } else {
             _showSnackbar('❌ Error', 'Verification failed. Please try again.');
