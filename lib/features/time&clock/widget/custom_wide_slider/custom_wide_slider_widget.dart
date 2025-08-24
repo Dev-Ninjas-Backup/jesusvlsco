@@ -12,7 +12,7 @@ class CustomWideSliderWidget extends StatelessWidget {
       name: 'Jane Cooper',
       role: 'Project Manager',
       imageUrl: 'https://i.pravatar.cc/150?img=1',
-      timeOff: 22,
+      timeOff: 'Riverside Apartments',
       sickLeave: 7,
       casualLeave: 10,
       unpaidLeave: 6,
@@ -22,7 +22,7 @@ class CustomWideSliderWidget extends StatelessWidget {
       name: 'Robert Fox',
       role: 'Construction Site Manager',
       imageUrl: 'https://i.pravatar.cc/150?img=2',
-      timeOff: 22,
+      timeOff: 'JesusVLSCO',
       sickLeave: 6,
       casualLeave: 10,
       unpaidLeave: 8,
@@ -32,7 +32,7 @@ class CustomWideSliderWidget extends StatelessWidget {
       name: 'Esther Howard',
       role: 'Assistant Project Manager',
       imageUrl: 'https://i.pravatar.cc/150?img=3',
-      timeOff: 22,
+      timeOff: 'Riverside Apartments',
       sickLeave: 5,
       casualLeave: 12,
       unpaidLeave: 6,
@@ -42,7 +42,7 @@ class CustomWideSliderWidget extends StatelessWidget {
       name: 'Desirae Botosh',
       role: 'Superintendent',
       imageUrl: 'https://i.pravatar.cc/150?img=4',
-      timeOff: 22,
+      timeOff: 'Riverside Apartments',
       sickLeave: 7,
       casualLeave: 9,
       unpaidLeave: 5,
@@ -52,7 +52,7 @@ class CustomWideSliderWidget extends StatelessWidget {
       name: 'Marley Stanton',
       role: 'Coordinator',
       imageUrl: 'https://i.pravatar.cc/150?img=5',
-      timeOff: 22,
+      timeOff: 'Riverside Apartments',
       sickLeave: 7,
       casualLeave: 10,
       unpaidLeave: 6,
@@ -118,43 +118,61 @@ class CustomWideSliderWidget extends StatelessWidget {
         children: const [
           SizedBox(
             width: 210,
+            child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          SizedBox(
+            width: 200,
             child: Text(
-              'Employee Name',
+              'Project',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 120,
             child: Text(
-              'Time-off',
+              'Clock-In',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 120,
             child: Text(
-              'Sick leave',
+              'Clock-Out',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 120,
             child: Text(
-              'Casual leave',
+              'Total Hours',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 120,
             child: Text(
-              'Unpaid leave',
+              'Regular',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 120,
             child: Text(
-              'Last Status',
+              'Total Overtime',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            width: 120,
+            child: Text(
+              'Paid Time-off',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            width: 120,
+            child: Text(
+              'Regular Payment',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -186,42 +204,43 @@ class CustomWideSliderWidget extends StatelessWidget {
                       radius: 20,
                     ),
                     const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          e.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          e.role,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
+
+                    Text(
+                      e.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
               SizedBox(
-                width: 100,
-                child: _buildStat('${e.timeOff} Days', 'Remaining'),
+                width: 200,
+                child: _buildStat('${e.timeOff} ', 'Chicago'),
+              ),
+              SizedBox(width: 120, child: _buildStatTime('${e.sickLeave} AM')),
+              SizedBox(
+                width: 120,
+                child: _buildStatTime('${e.casualLeave} PM'),
               ),
               SizedBox(
-                width: 100,
-                child: _buildStat('${e.sickLeave} Days', 'Remaining'),
+                width: 120,
+                child: _buildStatTime('${e.unpaidLeave} Hours'),
               ),
               SizedBox(
-                width: 100,
-                child: _buildStat('${e.casualLeave} Days', 'Remaining'),
+                width: 120,
+                child: _buildStatTime('${e.unpaidLeave} Hours'),
               ),
               SizedBox(
-                width: 100,
-                child: _buildStat('${e.unpaidLeave} Days', 'Remaining'),
+                width: 120,
+                child: _buildStatTime('${e.unpaidLeave} Hours'),
               ),
-              SizedBox(width: 100, child: _buildStatusChip(e.status)),
+              SizedBox(
+                width: 120,
+                child: _buildStatTime('${e.unpaidLeave} Hours'),
+              ),
+              SizedBox(
+                width: 120,
+                child: _buildStatTime('${e.unpaidLeave} USD'),
+              ),
             ],
           ),
         ),
@@ -240,8 +259,20 @@ class CustomWideSliderWidget extends StatelessWidget {
             color: Color(0xFF4E53B1),
           ),
         ),
-        Text(bottom, style: const TextStyle(fontSize: 12, color: Colors.green)),
+        Row(
+          children: [Icon(Icons.location_on_outlined, size: 20), Text(bottom)],
+        ),
       ],
+    );
+  }
+
+  Widget _buildStatTime(String top) {
+    return Text(
+      top,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF4E53B1),
+      ),
     );
   }
 

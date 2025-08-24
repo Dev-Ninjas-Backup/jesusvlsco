@@ -1,22 +1,20 @@
-// Admin Bottom Navigation Scaffold
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
+import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
+import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
 
 class AdminBottomNavigationScaffold extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
+  AdminBottomNavigationScaffold({super.key});
 
-  const AdminBottomNavigationScaffold({
-    super.key,
-    required this.navigationShell,
-  });
+  final controller = Get.put(AdminBottomNavigationController());
 
   final List<AdminBottomNavItem> bottomNavItems = const [
     AdminBottomNavItem(
@@ -46,14 +44,29 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
     ),
   ];
 
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return AdminDashboardScreen();
+      case 1:
+        return const CommunicationDashboard();
+      case 2:
+        return EmployeeListScreen();
+      case 3:
+        return TimeSheetScreen();
+      case 4:
+        return const TaskmanagementDashboard();
+      default:
+        return AdminDashboardScreen();
+    }
+  }
+
   Duration get animationDuration => const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
-    Get.find<AdminBottomNavigationScaffoldController>();
-
     return Scaffold(
-      body: navigationShell,
+      body: Obx(() => _getPage(controller.currentIndex.value)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.primaryBackground,
@@ -79,10 +92,12 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 bottomNavItems.length,
-                (index) => _buildNavItem(
-                  context,
-                  index,
-                  navigationShell.currentIndex == index,
+                (index) => Obx(
+                  () => _buildNavItem(
+                    context,
+                    index,
+                    controller.currentIndex.value == index,
+                  ),
                 ),
               ),
             ),
@@ -96,7 +111,7 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
     final item = bottomNavItems[index];
 
     return GestureDetector(
-      onTap: () => _onTap(context, index),
+      onTap: () => controller.changeIndex(index),
       child: AnimatedContainer(
         duration: animationDuration,
         curve: Curves.easeInOut,
@@ -140,17 +155,6 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
         height: Sizer.hp(24),
       ),
     );
-  }
-
-  void _onTap(BuildContext context, int index) {
-  
-
-    // Don't navigate if already on the same tab
-    if (index == navigationShell.currentIndex) {
-      return; // Just return, don't do anything
-    }
-
-    navigationShell.goBranch(index, initialLocation: false);
   }
 }
 

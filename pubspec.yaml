@@ -76,6 +76,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   geolocator: ^14.0.2
   flutter_background_service: ^5.1.0 
+  loading_indicator: ^3.1.1
 
   
 

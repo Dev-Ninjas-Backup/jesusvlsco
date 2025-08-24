@@ -4,6 +4,7 @@ import '../../../../core/common/widgets/custom_appbar.dart';
 import '../../../../core/common/widgets/custom_button.dart';
 import '../controller/survey_report_controller.dart';
 import '../widget/survey_report_row.dart';
+import '../widget/horizontal_scroll_slider.dart';
 
 class SurveyReportScreen extends StatelessWidget {
   const SurveyReportScreen({super.key});
@@ -40,17 +41,24 @@ class SurveyReportScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.toggleDateSort(); // 👉 sort by date
+                    },
                     text: "Date",
                     leadingIcon: const Icon(
                       Icons.calendar_today,
                       size: 18,
                       color: Color(0xFF4E53B1),
                     ),
-                    trailingIcon: const Icon(
-                      Icons.arrow_drop_down,
-                      size: 20,
-                      color: Color(0xFF4E53B1),
+                    trailingIcon: Obx(
+                      () => Icon(
+                        controller.isAscending.value
+                            ? Icons
+                                  .arrow_upward // ascending
+                            : Icons.arrow_downward, // descending
+                        size: 18,
+                        color: const Color(0xFF4E53B1),
+                      ),
                     ),
                     decorationColor: Colors.white,
                     borderColor: const Color(0xFF4E53B1),
@@ -67,6 +75,7 @@ class SurveyReportScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               return SingleChildScrollView(
+                controller: controller.scrollController,
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width: 1054, // total table width
@@ -75,7 +84,10 @@ class SurveyReportScreen extends StatelessWidget {
                       /// Header Row
                       Container(
                         color: Colors.grey.shade100,
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -176,7 +188,6 @@ class SurveyReportScreen extends StatelessWidget {
                         ),
                       ),
 
-
                       /// Data Rows
                       Expanded(
                         child: SizedBox(
@@ -201,6 +212,15 @@ class SurveyReportScreen extends StatelessWidget {
               );
             }),
           ),
+
+          /// 🔹 Horizontal Slider
+          HorizontalScrollSlider(
+            scrollController: controller.scrollController,
+            scrollPosition: controller.scrollPosition,
+            maxScrollExtent: controller.maxScrollExtent,
+            onSliderDrag: controller.onSliderDrag,
+          ),
+          SizedBox(height: 16),
         ],
       ),
     );

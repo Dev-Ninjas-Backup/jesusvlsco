@@ -9,6 +9,9 @@ import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/device/device_utility.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
+import 'package:jesusvlsco/features/auth/screen/Phone_verifymethod.dart';
+import 'package:jesusvlsco/features/auth/screen/email_otpverfication.dart';
+import 'package:jesusvlsco/features/auth/screen/email_verifymethod.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -59,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                     ), // 5% of screen height for spacing
                     ElevatedButton(
                       onPressed: () {
-                        context.pushNamed(RouteNames.loginwithphone);
+                     Get.to(Phoneverifymethod());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary, // ✅ Updated color
@@ -94,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: Sizer.hp(16)), // ✅ Updated spacing
                     ElevatedButton(
                       onPressed: () {
-                        context.pushNamed(RouteNames.loginwithemail);
+                      Get.to(EmailotpverifyMethod());
                        
                       },
                       style: ElevatedButton.styleFrom(

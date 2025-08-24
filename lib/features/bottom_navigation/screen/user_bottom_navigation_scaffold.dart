@@ -1,54 +1,71 @@
 // Bottom Navigation Scaffold
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
+import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/user/screen/user_user_info_screen.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
+import '../../user/screen/user_communication_screen.dart';
 
-class BottomNavigationScaffold extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
-
-  const BottomNavigationScaffold({super.key, required this.navigationShell});
-
-  final List<BottomNavItem> bottomNavItems = const [
-    BottomNavItem(
-      activeIcon: IconPath.homeActive,
-      inactiveIcon: IconPath.homeInactive,
-      label: 'Home',
-    ),
-    BottomNavItem(
-      activeIcon: IconPath.chatActive,
-      inactiveIcon: IconPath.chatInactive,
-      label: 'Chat',
-    ),
-    BottomNavItem(
-      activeIcon: IconPath.usersActive,
-      inactiveIcon: IconPath.usersInactive,
-      label: 'Users',
-    ),
-    BottomNavItem(
-      activeIcon: IconPath.scheduleActive,
-      inactiveIcon: IconPath.scheduleInactive,
-      label: 'Schedule',
-    ),
-    BottomNavItem(
-      activeIcon: IconPath.projectsActive,
-      inactiveIcon: IconPath.projectsInactive,
-      label: 'Projects',
-    ),
-  ];
-
-  Duration get animationDuration => const Duration(milliseconds: 200);
+class UserBottomNavigationScaffold extends StatelessWidget {
+  const UserBottomNavigationScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<BottomNavigationScaffoldController>();
+    final controller = Get.put(BottomNavigationController());
+
+    Widget getPage(int index) {
+      switch (index) {
+        case 0:
+          return UserDashboardScreen();
+        case 1:
+          return UserCommunicationScreen();
+        case 2:
+          return UserUserInfoScreen();
+        case 3:
+          return TimeSheetScreen();
+        case 4:
+          return UserTaskmanagementDashboard();
+        default:
+          return Container(color: Colors.purpleAccent);
+      }
+    }
+
+    final List<BottomNavItem> bottomNavItems = const [
+      BottomNavItem(
+        activeIcon: IconPath.homeActive,
+        inactiveIcon: IconPath.homeInactive,
+        label: 'Home',
+      ),
+      BottomNavItem(
+        activeIcon: IconPath.chatActive,
+        inactiveIcon: IconPath.chatInactive,
+        label: 'Chat',
+      ),
+      BottomNavItem(
+        activeIcon: IconPath.usersActive,
+        inactiveIcon: IconPath.usersInactive,
+        label: 'Users',
+      ),
+      BottomNavItem(
+        activeIcon: IconPath.scheduleActive,
+        inactiveIcon: IconPath.scheduleInactive,
+        label: 'Schedule',
+      ),
+      BottomNavItem(
+        activeIcon: IconPath.projectsActive,
+        inactiveIcon: IconPath.projectsInactive,
+        label: 'Projects',
+      ),
+    ];
 
     return Scaffold(
-      body: navigationShell,
+      body: Obx(() => getPage(controller.currentIndex.value)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.primaryBackground,
@@ -74,10 +91,13 @@ class BottomNavigationScaffold extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 bottomNavItems.length,
-                (index) => _buildNavItem(
-                  context,
-                  index,
-                  navigationShell.currentIndex == index,
+                (index) => Obx(
+                  () => _buildNavItem(
+                    controller,
+                    index,
+                    bottomNavItems[index],
+                    controller.currentIndex.value == index,
+                  ),
                 ),
               ),
             ),
@@ -87,17 +107,21 @@ class BottomNavigationScaffold extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, int index, bool isActive) {
-    final item = bottomNavItems[index];
+  Widget _buildNavItem(
+    BottomNavigationController controller,
+    int index,
+    BottomNavItem item,
+    bool isActive,
+  ) {
+    const Duration animationDuration = Duration(milliseconds: 200);
 
     return GestureDetector(
-      onTap: () => _onTap(context, index),
+      onTap: () => controller.changeIndex(index),
       child: AnimatedContainer(
         duration: animationDuration,
         curve: Curves.easeInOut,
         width: Sizer.wp(73),
         height: Sizer.hp(65),
-
         decoration: BoxDecoration(
           color: isActive
               ? AppColors.primary.withOpacity(0.1)
@@ -108,7 +132,15 @@ class BottomNavigationScaffold extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildIocnsView(isActive, item),
+            AnimatedContainer(
+              duration: animationDuration,
+              curve: Curves.easeInOut,
+              child: Image.asset(
+                isActive ? item.activeIcon : item.inactiveIcon,
+                width: Sizer.wp(24),
+                height: Sizer.hp(24),
+              ),
+            ),
             SizedBox(height: Sizer.hp(4)),
             AnimatedDefaultTextStyle(
               duration: animationDuration,
@@ -124,27 +156,6 @@ class BottomNavigationScaffold extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  AnimatedContainer _buildIocnsView(bool isActive, BottomNavItem item) {
-    return AnimatedContainer(
-      duration: animationDuration,
-      curve: Curves.easeInOut,
-      child: Image.asset(
-        isActive ? item.activeIcon : item.inactiveIcon,
-        width: Sizer.wp(24),
-        height: Sizer.hp(24),
-      ),
-    );
-  }
-
-  void _onTap(BuildContext context, int index) {
-    // Don't navigate if already on the same tab
-    if (index == navigationShell.currentIndex) {
-      return; // Just return, don't do anything
-    }
-
-    navigationShell.goBranch(index, initialLocation: false);
   }
 }
 

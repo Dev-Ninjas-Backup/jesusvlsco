@@ -20,7 +20,7 @@ class UsersRoutes {
       GoRoute(
         path: RoutePaths.users,
         name: RouteNames.users,
-        builder: (context, state) => const UsersScreen(),
+        // builder: (context, state) => const UsersScreen(),
         routes: [
           // User info/details page (opened as /users/info)
           GoRoute(

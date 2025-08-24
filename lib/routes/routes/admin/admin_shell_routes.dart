@@ -13,7 +13,7 @@ class AdminShellRoutes {
   /// Admin application shell with bottom navigation
   static final StatefulShellRoute shell = StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
-      return AdminBottomNavigationScaffold(navigationShell: navigationShell);
+      return AdminBottomNavigationScaffold();
     },
     branches: [
       // Admin Home section branch
