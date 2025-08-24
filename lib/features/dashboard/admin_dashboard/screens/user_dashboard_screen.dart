@@ -7,6 +7,7 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
@@ -697,7 +698,7 @@ class UserDashboardScreen extends StatelessWidget {
       actions: [
         IconButton(
           icon: Icon(Icons.menu, color: AppColors.textBlackShade),
-          onPressed: () => context.pushNamed(RouteNames.drawer),
+          onPressed: () => Get.to(CustomDrawer()),
         ),
       ],
     );

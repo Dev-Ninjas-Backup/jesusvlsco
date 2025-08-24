@@ -11,6 +11,7 @@ import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.da
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/time_clock.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
+import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -20,7 +21,7 @@ class CustomDrawer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_forward, color: AppColors.primary),
         ),
       ),
@@ -93,8 +94,8 @@ class CustomDrawer extends StatelessWidget {
               imagePath: 'assets/icons/drawer_settings.png',
               text: 'Settings',
               onTap: () {
-                Get.to(Settings_screen());
-                // Get.to(UserSettingsScreen());
+                // Get.to(Settings_screen());
+                Get.to(UserSettingsScreen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),
