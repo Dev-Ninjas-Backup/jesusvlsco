@@ -7,7 +7,9 @@ import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_shift/
 import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_time_off_screen/widget/show_time_of_type_pop_up.dart';
 import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_chat_screen/screen/time_clock_admin_chat_screen.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pending_widget.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/2nd_pending_widget.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
+import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/pending_widget_container.dart';
 import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
 import 'package:jesusvlsco/features/time&clock/widget/search_bar.dart';
 
@@ -38,7 +40,9 @@ class PendingRequest extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              
+              PendingWidget(),
+              SizedBox(height: 20),
+              ApprovedPendingWidget(),
             ],
           ),
         ),
