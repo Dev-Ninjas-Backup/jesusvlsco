@@ -10,8 +10,8 @@ import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pe
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/2nd_pending_widget.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/pending_widget_container.dart';
-import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
-import 'package:jesusvlsco/features/time&clock/widget/search_bar.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_time_button.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/search_bar.dart';
 
 class PendingRequest extends StatelessWidget {
   const PendingRequest({super.key});

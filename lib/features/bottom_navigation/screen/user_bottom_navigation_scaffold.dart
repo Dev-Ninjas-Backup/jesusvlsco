@@ -7,7 +7,7 @@ import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
-import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
+import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/views/time_sheet.dart';
 import 'package:jesusvlsco/features/user/screen/user_user_info_screen.dart';
 import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
 import '../../user/screen/user_communication_screen.dart';

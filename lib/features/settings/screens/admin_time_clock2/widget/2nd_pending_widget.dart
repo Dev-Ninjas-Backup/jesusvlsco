@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_chat_screen/screen/time_clock_admin_chat_screen.dart';
-import 'package:jesusvlsco/features/time&clock/widget/custom_time_button.dart';
+
+import '../../../../scheduling_and_time _tracking/screens/widgets/custom_time_button.dart';
 
 class ApprovedPendingWidget extends StatelessWidget {
   const ApprovedPendingWidget({super.key});

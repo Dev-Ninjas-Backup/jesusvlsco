@@ -22,13 +22,12 @@ android {
     }
 
     defaultConfig {
-    applicationId = "com.example.jesusvlsco"
-    minSdk = flutter.minSdkVersion        // ✅ Use "minSdk" instead of minSdkVersion()
-    targetSdk = flutter.targetSdkVersion
-    versionCode = 1
-    versionName = "1.0"
-}
-
+        applicationId = "com.example.jesusvlsco"
+        minSdk = 23
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
 
     buildTypes {
         release {
