@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/routes/scheduling_routes.dart';
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -20,6 +21,9 @@ class Jesusvlsco extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
+
+      // GetX Pages - include scheduling routes for hybrid navigation
+      getPages: SchedulingRoutes.pages,
 
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,

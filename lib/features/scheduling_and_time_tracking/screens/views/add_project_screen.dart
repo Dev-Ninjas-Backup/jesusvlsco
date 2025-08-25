@@ -4,9 +4,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/add_project_controller.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_sheet_appbar.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/member_selection_dialog.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/add_project_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/member_selection_dialog.dart';
 
 /// Add Project Screen
 /// Allows users to create new projects with team and member selection

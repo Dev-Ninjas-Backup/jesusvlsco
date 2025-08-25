@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../screens/widgets/filter_dialog.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
+import '../routes/scheduling_routes.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
 /// This includes handling employee data, search, filtering, and scheduling operations
@@ -232,16 +232,16 @@ class AssignEmployeeController extends GetxController {
   ) {
     _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
 
-    // Navigate to shift details screen
-    context.go(
-      '/admin/schedule/shift-details',
-      extra: {'employee': employee, 'slotIndex': slotIndex},
-    );
+    // Navigate to shift details screen using GetX routes
+    SchedulingRoutes.toShiftDetails(arguments: {
+      'employee': employee,
+      'slotIndex': slotIndex,
+    });
   }
 
   /// Navigate back
   void navigateBack() {
-    Get.back();
+    SchedulingRoutes.back();
   }
 }
 

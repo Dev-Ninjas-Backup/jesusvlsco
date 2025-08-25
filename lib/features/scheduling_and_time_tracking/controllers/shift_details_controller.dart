@@ -9,7 +9,7 @@ import '../../../core/common/styles/global_text_style.dart';
 import '../models/task_model.dart';
 import '../models/activity_model.dart';
 import '../screens/widgets/shift_emplate_widgets/add_user_dialog.dart';
-import '../screens/views/shift_template_screen.dart';
+import '../routes/scheduling_routes.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
 /// Controller for Shift Details Screen
@@ -242,7 +242,7 @@ class ShiftDetailsController extends GetxController {
   /// Save shift as template
   void saveAsTemplate() {
     _logger.i('Navigating to save as template screen');
-    Get.to(() => const ShiftTemplateScreen());
+    SchedulingRoutes.toShiftTemplate();
   }
 
   /// Save shift as draft
@@ -272,7 +272,7 @@ class ShiftDetailsController extends GetxController {
   /// Navigate back to previous screen
   void goBack() {
     _logger.i('Navigating back');
-    Get.back();
+    SchedulingRoutes.back();
   }
 
   /// Format TimeOfDay to string
@@ -338,7 +338,7 @@ class ShiftDetailsController extends GetxController {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () => Get.back(),
+                    onPressed: () => SchedulingRoutes.back(),
                     child: const Text('Cancel'),
                   ),
                 ),
@@ -353,7 +353,7 @@ class ShiftDetailsController extends GetxController {
                         );
                         tasks.add(newTask);
                         _logger.i('New task added: ${newTask.title}');
-                        Get.back();
+                        SchedulingRoutes.back();
                       }
                     },
                     style: ElevatedButton.styleFrom(

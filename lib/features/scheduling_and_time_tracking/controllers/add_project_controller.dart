@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/models/team_model.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/team_model.dart';
 
 /// AddProjectController manages the business logic for adding new projects
 /// Handles team selection, member selection, and project creation

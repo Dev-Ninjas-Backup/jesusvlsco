@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/assign_employee_controller.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_sheet_appbar.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/employee_card_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/employee_card_widget.dart';
 
 class AssignEmployeeScreen extends StatelessWidget {
   const AssignEmployeeScreen({super.key});

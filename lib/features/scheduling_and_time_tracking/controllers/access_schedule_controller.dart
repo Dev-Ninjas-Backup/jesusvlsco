@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
+import '../routes/scheduling_routes.dart';
 
 /// AccessScheduleController manages the business logic for access schedule operations
 /// This includes handling employee schedules, time-off requests, and approved requests
@@ -66,8 +66,8 @@ class AccessScheduleController extends GetxController {
   /// Handle assign button press
   void onAssignPressed(BuildContext context) {
     _logger.i('Assign button pressed');
-    // Navigate to assign employee screen using GoRouter
-    context.go('/admin/schedule/assign-employee');
+    // Navigate to assign employee screen using GetX routes
+    SchedulingRoutes.toAssignEmployee();
   }
 
   /// Handle date picker button press
@@ -107,7 +107,7 @@ class AccessScheduleController extends GetxController {
   /// Navigate back to previous screen
   void navigateBack() {
     _logger.i('Navigating back from access schedule');
-    Get.back();
+    SchedulingRoutes.back();
   }
 
   /// Handle menu button press

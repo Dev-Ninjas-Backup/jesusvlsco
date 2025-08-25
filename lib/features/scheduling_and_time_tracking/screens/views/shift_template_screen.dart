@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/shift_template_controller.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/shift_emplate_widgets/shift_template_app_bar_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/shift_emplate_widgets/shift_template_search_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/shift_emplate_widgets/shift_template_list_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/shift_emplate_widgets/shift_template_add_button_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_sheet_appbar.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_template_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_emplate_widgets/shift_template_app_bar_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_emplate_widgets/shift_template_search_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_emplate_widgets/shift_template_list_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_emplate_widgets/shift_template_add_button_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 
 /// Shift Template Screen
 /// Displays available shift templates with search functionality

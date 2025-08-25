@@ -35,7 +35,7 @@ class OtpController extends GetxController {
   String get otp => otpControllers.map((c) => c.text).join('');
 
   // API endpoint
-  static const _verifyUrl = '$baseurl/auth/verify/email';
+  static const _verifyUrl = '${ApiConstants.baseurl}/auth/verify/email';
 
   @override
   void onInit() {
