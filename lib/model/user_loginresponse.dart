@@ -1,24 +1,24 @@
 class LoginResponse {
   bool success;
   String message;
-  LoginData data;
+  LoginData? data; // Made nullable since it might be null on error
 
   LoginResponse({
     required this.success,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-        success: json['success'],
-        message: json['message'],
-        data: LoginData.fromJson(json['data']),
+        success: json['success'] ?? false,
+        message: json['message'] ?? '',
+        data: json['data'] != null ? LoginData.fromJson(json['data']) : null,
       );
 
   Map<String, dynamic> toJson() => {
         'success': success,
         'message': message,
-        'data': data.toJson(),
+        'data': data?.toJson(),
       };
 }
 
@@ -33,7 +33,7 @@ class LoginData {
 
   factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
         user: User.fromJson(json['user']),
-        token: json['token'],
+        token: json['token'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,44 +45,48 @@ class LoginData {
 class User {
   String id;
   String email;
-  String phone;
+  String? phone; // Made nullable
   int employeeID;
   String role;
   bool isLogin;
   bool isVerified;
-  DateTime lastLoginAt;
+  DateTime? lastLoginAt; // Made nullable
   DateTime createdAt;
   DateTime updatedAt;
-  Profile profile;
+  Profile? profile; // Made nullable
   List<dynamic> shift;
 
   User({
     required this.id,
     required this.email,
-    required this.phone,
+    this.phone,
     required this.employeeID,
     required this.role,
     required this.isLogin,
     required this.isVerified,
-    required this.lastLoginAt,
+    this.lastLoginAt,
     required this.createdAt,
     required this.updatedAt,
-    required this.profile,
+    this.profile,
     required this.shift,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json['id'],
-        email: json['email'],
+        id: json['id'] ?? '',
+        email: json['email'] ?? '',
         phone: json['phone'],
-        employeeID: json['employeeID'],
-        role: json['role'],
-        isLogin: json['isLogin'],
-        isVerified: json['isVerified'],
-        lastLoginAt: DateTime.parse(json['lastLoginAt']),
-        createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
-        profile: Profile.fromJson(json['profile']),
+        employeeID: json['employeeID'] ?? 0,
+        role: json['role'] ?? '',
+        isLogin: json['isLogin'] ?? false,
+        isVerified: json['isVerified'] ?? false,
+        lastLoginAt: json['lastLoginAt'] != null 
+            ? DateTime.tryParse(json['lastLoginAt']) 
+            : null,
+        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+        updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
+        profile: json['profile'] != null 
+            ? Profile.fromJson(json['profile']) 
+            : null,
         shift: List<dynamic>.from(json['shift'] ?? []),
       );
 
@@ -94,53 +98,53 @@ class User {
         'role': role,
         'isLogin': isLogin,
         'isVerified': isVerified,
-        'lastLoginAt': lastLoginAt.toIso8601String(),
+        'lastLoginAt': lastLoginAt?.toIso8601String(),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
-        'profile': profile.toJson(),
+        'profile': profile?.toJson(),
         'shift': shift,
       };
 }
 
 class Profile {
   String id;
-  String firstName;
-  String lastName;
-  String profileUrl;
-  String gender;
-  String jobTitle;
-  String department;
-  String address;
-  String city;
-  String state;
-  DateTime dob;
-  String country;
-  String nationality;
+  String? firstName; // Made nullable
+  String? lastName; // Made nullable
+  String? profileUrl; // Made nullable
+  String? gender; // Made nullable
+  String? jobTitle; // Made nullable
+  String? department; // Made nullable
+  String? address; // Made nullable
+  String? city; // Made nullable
+  String? state; // Made nullable
+  DateTime? dob; // Made nullable
+  String? country; // Made nullable
+  String? nationality; // Made nullable
   DateTime createdAt;
   DateTime updatedAt;
   String userId;
 
   Profile({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.profileUrl,
-    required this.gender,
-    required this.jobTitle,
-    required this.department,
-    required this.address,
-    required this.city,
-    required this.state,
-    required this.dob,
-    required this.country,
-    required this.nationality,
+    this.firstName,
+    this.lastName,
+    this.profileUrl,
+    this.gender,
+    this.jobTitle,
+    this.department,
+    this.address,
+    this.city,
+    this.state,
+    this.dob,
+    this.country,
+    this.nationality,
     required this.createdAt,
     required this.updatedAt,
     required this.userId,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json['id'],
+        id: json['id'] ?? '',
         firstName: json['firstName'],
         lastName: json['lastName'],
         profileUrl: json['profileUrl'],
@@ -150,12 +154,12 @@ class Profile {
         address: json['address'],
         city: json['city'],
         state: json['state'],
-        dob: DateTime.parse(json['dob']),
+        dob: json['dob'] != null ? DateTime.tryParse(json['dob']) : null,
         country: json['country'],
         nationality: json['nationality'],
-        createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
-        userId: json['userId'],
+        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+        updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
+        userId: json['userId'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -169,7 +173,7 @@ class Profile {
         'address': address,
         'city': city,
         'state': state,
-        'dob': dob.toIso8601String(),
+        'dob': dob?.toIso8601String(),
         'country': country,
         'nationality': nationality,
         'createdAt': createdAt.toIso8601String(),

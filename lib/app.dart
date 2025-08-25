@@ -4,7 +4,6 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pending.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
 import 'core/utils/theme/theme.dart';
 
@@ -38,7 +37,6 @@ class Jesusvlsco extends StatelessWidget {
       ],
 
       // home: PendingRequest(),
-
       home: Router.withConfig(config: AppRouter.router),
 
       //  home: AuthRoutes.routes,

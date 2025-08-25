@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jesusvlsco/features/auth/screen/login_screen.dart';
@@ -26,9 +27,11 @@ class SplashController extends GetxController {
       // Check user role and navigate accordingly
       String userRole = await _getUserRole();
 
-      if (userRole.toLowerCase() == 'admin') {
+      if (userRole.toLowerCase() == 'ADMIN') {
+        debugPrint(' Role : $userRole');
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
+         debugPrint(' Role : $userRole');
         Get.offAll(() => const UserBottomNavigationScaffold());
       }
     } else {
@@ -58,6 +61,7 @@ class SplashController extends GetxController {
       print('   - Is Verified: $isVerified');
       print('   - Has Token: ${token != null && token.isNotEmpty}');
       print('   - Final Result: $isAuthenticated');
+  
       
       return isAuthenticated;
       
@@ -70,7 +74,7 @@ class SplashController extends GetxController {
   Future<String> _getUserRole() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      String userRole = prefs.getString('user_role') ?? 'user';
+      String userRole = prefs.getString('user_role') ?? 'ADMIN';
       
       print('👤 User Role: $userRole');
       return userRole;
