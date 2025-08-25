@@ -8,87 +8,117 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddUserController());
+    final controller = Get.find<AddUserController>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildFieldLabel('Position/ Designation'),
-        const SizedBox(height: 8),
-        _buildTextField(
-          controller: controller.positionController,
-          hintText: 'Enter designation',
-        ),
+    return Obx(() {
+      final exps = controller.experiences;
 
-        const SizedBox(height: 20),
+      if (exps.isEmpty) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'No experiences added. Use "Add Experience" to add one.',
+            ),
+            const SizedBox(height: 12),
+          ],
+        );
+      }
 
-        _buildFieldLabel('Company name'),
-        const SizedBox(height: 8),
-        _buildTextField(
-          controller: controller.companyNameController,
-          hintText: 'Enter company name',
-        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: exps.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final item = entry.value;
 
-        const SizedBox(height: 20),
-
-        _buildFieldLabel('Job type'),
-        const SizedBox(height: 8),
-        _buildSelectableField(
-          controller: controller.jobTypeController,
-          hintText: 'Select job type here',
-          onTap: () => controller.selectJobType(),
-        ),
-
-        const SizedBox(height: 20),
-
-        _buildFieldLabel('Start date'),
-        const SizedBox(height: 8),
-        _buildDateField(
-          controller: controller.startDateController,
-          hintText: 'Select date here',
-          onTap: () => controller.selectStartDate(),
-        ),
-
-        const SizedBox(height: 20),
-
-        _buildFieldLabel('End date'),
-        const SizedBox(height: 8),
-        _buildDateField(
-          controller: controller.endDateController,
-          hintText: 'Select date here',
-          onTap: () => controller.selectEndDate(),
-        ),
-
-        const SizedBox(height: 16),
-
-        Obx(
-          () => Row(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Checkbox(
-                value: controller.isCurrentlyWorking.value,
-                onChanged: (bool? value) {
-                  controller.setCurrentlyWorking(value ?? false);
-                },
-                activeColor: const Color(0xFF6366F1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Experience ${idx + 1}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  IconButton(
+                    onPressed: () => controller.removeExperienceAt(idx),
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
+                ],
               ),
-              const Text(
-                'I am currently working there',
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+              const SizedBox(height: 8),
+              _buildFieldLabel('Position/ Designation'),
+              const SizedBox(height: 8),
+              _buildTextField(
+                initialText: item['position'] ?? '',
+                hintText: 'Enter designation',
+                onChanged: (v) =>
+                    controller.updateExperienceField(idx, 'position', v),
               ),
+              const SizedBox(height: 20),
+              _buildFieldLabel('Company name'),
+              const SizedBox(height: 8),
+              _buildTextField(
+                initialText: item['company'] ?? '',
+                hintText: 'Enter company name',
+                onChanged: (v) =>
+                    controller.updateExperienceField(idx, 'company', v),
+              ),
+              const SizedBox(height: 20),
+              _buildFieldLabel('Job type'),
+              const SizedBox(height: 8),
+              _buildSelectableField(
+                text: item['jobType'] ?? 'Select job type here',
+                hintText: 'Select job type here',
+                onTap: () => controller.selectJobTypeFor(idx),
+              ),
+              const SizedBox(height: 20),
+              _buildFieldLabel('Start date'),
+              const SizedBox(height: 8),
+              _buildDateField(
+                text: item['startDate'] ?? '',
+                hintText: 'Select date here',
+                onTap: () => controller.selectStartDateFor(idx),
+              ),
+              const SizedBox(height: 20),
+              _buildFieldLabel('End date'),
+              const SizedBox(height: 8),
+              _buildDateField(
+                text: item['endDate'] ?? '',
+                hintText: 'Select date here',
+                onTap: () => controller.selectEndDateFor(idx),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: item['isCurrentlyWorking'] == true,
+                    onChanged: (bool? value) => controller
+                        .toggleCurrentlyWorkingFor(idx, value ?? false),
+                    activeColor: const Color(0xFF6366F1),
+                  ),
+                  const Text(
+                    'I am currently working there',
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _buildFieldLabel('Description'),
+              const SizedBox(height: 8),
+              _buildTextArea(
+                initialText: item['description'] ?? '',
+                hintText: 'Description',
+                onChanged: (v) =>
+                    controller.updateExperienceField(idx, 'description', v),
+              ),
+              const SizedBox(height: 20),
             ],
-          ),
-        ),
-
-        const SizedBox(height: 20),
-
-        _buildFieldLabel('Description'),
-        const SizedBox(height: 8),
-        _buildTextArea(
-          controller: controller.descriptionController,
-          hintText: 'Description',
-        ),
-      ],
-    );
+          );
+        }).toList(),
+      );
+    });
   }
 
   Widget _buildFieldLabel(String label) {
@@ -103,8 +133,9 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
   }
 
   Widget _buildTextField({
-    required TextEditingController controller,
+    String initialText = '',
     required String hintText,
+    ValueChanged<String>? onChanged,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -113,7 +144,8 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: TextFormField(
-        controller: controller,
+        initialValue: initialText,
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey[500], fontSize: 16),
@@ -129,10 +161,11 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
   }
 
   Widget _buildSelectableField({
-    required TextEditingController controller,
+    required String text,
     required String hintText,
     required VoidCallback onTap,
   }) {
+    final isEmpty = text.trim().isEmpty;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -146,12 +179,10 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                controller.text.isEmpty ? hintText : controller.text,
+                isEmpty ? hintText : text,
                 style: TextStyle(
                   fontSize: 16,
-                  color: controller.text.isEmpty
-                      ? Colors.grey[500]
-                      : Colors.black87,
+                  color: isEmpty ? Colors.grey[500] : Colors.black87,
                 ),
               ),
             ),
@@ -163,10 +194,11 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
   }
 
   Widget _buildDateField({
-    required TextEditingController controller,
+    required String text,
     required String hintText,
     required VoidCallback onTap,
   }) {
+    final isEmpty = text.trim().isEmpty;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -180,12 +212,10 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                controller.text.isEmpty ? hintText : controller.text,
+                isEmpty ? hintText : text,
                 style: TextStyle(
                   fontSize: 16,
-                  color: controller.text.isEmpty
-                      ? Colors.grey[500]
-                      : Colors.black87,
+                  color: isEmpty ? Colors.grey[500] : Colors.black87,
                 ),
               ),
             ),
@@ -197,8 +227,9 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
   }
 
   Widget _buildTextArea({
-    required TextEditingController controller,
+    String initialText = '',
     required String hintText,
+    ValueChanged<String>? onChanged,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -207,7 +238,8 @@ class ExperienceFormFieldsWidget extends StatelessWidget {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: TextFormField(
-        controller: controller,
+        initialValue: initialText,
+        onChanged: onChanged,
         maxLines: 6,
         decoration: InputDecoration(
           hintText: hintText,

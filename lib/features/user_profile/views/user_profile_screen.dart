@@ -41,11 +41,12 @@ class UserProfileScreen extends StatelessWidget {
                     SizedBox(height: Sizer.hp(32)),
                     Container(
                       height: Sizer.hp(50),
-                      margin: EdgeInsets.all(15),
+                      margin: const EdgeInsets.all(15),
                       child: CustomButton(
+                        // isLoading: controller.isLoading.value,
                         textColor: Colors.white,
                         isExpanded: true,
-                        onPressed: () {},
+                        onPressed: controller.updateProfile,
                         text: 'Save Settings',
                         decorationColor: AppColors.primary,
                       ),
@@ -61,6 +62,7 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
+  // Replace the _buildHeaderView method in your UserProfileScreen with this:
   Widget _buildHeaderView(UserProfileController controller) {
     return Obx(
       () => Container(
@@ -88,9 +90,11 @@ class UserProfileScreen extends StatelessWidget {
                 border: Border.all(color: const Color(0xFFE5E7EB), width: 2),
               ),
               child: ClipOval(
-                child: controller.firstNameController.text.isNotEmpty
+                child:
+                    controller.profileImageUrl.value != null &&
+                        controller.profileImageUrl.value!.isNotEmpty
                     ? Image.network(
-                        controller.profileImageUrl.value ?? '',
+                        controller.profileImageUrl.value!,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
@@ -123,8 +127,7 @@ class UserProfileScreen extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        '${controller.firstNameController.text} ${controller.lastNameController.text}',
-
+                        controller.displayName,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -137,10 +140,12 @@ class UserProfileScreen extends StatelessWidget {
                     const SizedBox(height: 4),
                     Flexible(
                       child: Text(
-                        controller.selectedJobTitle.value ?? 'None',
-                        style: const TextStyle(
+                        controller.displayJobTitle,
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: controller.displayJobTitle == 'No Job Title'
+                              ? Colors.grey.shade500
+                              : Colors.grey,
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -155,8 +160,7 @@ class UserProfileScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (controller.isEditing.value) {
-                    // Save API call here
-                    controller.isEditing.value = false;
+                    controller.updateProfile();
                   } else {
                     controller.isEditing.value = true;
                   }
@@ -171,10 +175,19 @@ class UserProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  minimumSize: const Size(60, 40), // Constrain button size
+                  minimumSize: const Size(60, 40),
                 ),
                 child: Obx(
-                  () => Text(controller.isEditing.value ? 'Save' : 'Edit'),
+                  () => controller.isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(controller.isEditing.value ? 'Save' : 'Edit'),
                 ),
               ),
             ),
