@@ -39,11 +39,13 @@ class ProjectModel {
       managerId: json['managerId'] ?? '',
       team: TeamModel.fromJson(json['team'] ?? {}),
       manager: ManagerModel.fromJson(json['manager'] ?? {}),
-      projectUsers: (json['projectUsers'] as List<dynamic>?)
+      projectUsers:
+          (json['projectUsers'] as List<dynamic>?)
               ?.map((user) => ProjectUserModel.fromJson(user))
               .toList() ??
           [],
-      tasks: (json['tasks'] as List<dynamic>?)
+      tasks:
+          (json['tasks'] as List<dynamic>?)
               ?.map((task) => TaskModel.fromJson(task))
               .toList() ??
           [],
@@ -250,11 +252,7 @@ class ProjectUserModel {
 
   /// Convert ProjectUserModel to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'projectId': projectId,
-      'userId': userId,
-    };
+    return {'id': id, 'projectId': projectId, 'userId': userId};
   }
 }
 
@@ -262,22 +260,16 @@ class ProjectUserModel {
 class TaskModel {
   final String projectId;
 
-  TaskModel({
-    required this.projectId,
-  });
+  TaskModel({required this.projectId});
 
   /// Create TaskModel from JSON
   factory TaskModel.fromJson(Map<String, dynamic> json) {
-    return TaskModel(
-      projectId: json['projectId'] ?? '',
-    );
+    return TaskModel(projectId: json['projectId'] ?? '');
   }
 
   /// Convert TaskModel to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'projectId': projectId,
-    };
+    return {'projectId': projectId};
   }
 }
 
@@ -304,11 +296,7 @@ class ProjectApiResponse {
 
   /// Convert ProjectApiResponse to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'data': data.toJson(),
-    };
+    return {'success': success, 'message': message, 'data': data.toJson()};
   }
 }
 
@@ -317,15 +305,13 @@ class ProjectDataModel {
   final List<ProjectModel> projects;
   final MetaModel meta;
 
-  ProjectDataModel({
-    required this.projects,
-    required this.meta,
-  });
+  ProjectDataModel({required this.projects, required this.meta});
 
   /// Create ProjectDataModel from JSON
   factory ProjectDataModel.fromJson(Map<String, dynamic> json) {
     return ProjectDataModel(
-      projects: (json['projects'] as List<dynamic>?)
+      projects:
+          (json['projects'] as List<dynamic>?)
               ?.map((project) => ProjectModel.fromJson(project))
               .toList() ??
           [],
@@ -368,11 +354,6 @@ class MetaModel {
 
   /// Convert MetaModel to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'total': total,
-      'page': page,
-      'limit': limit,
-      'pages': pages,
-    };
+    return {'total': total, 'page': page, 'limit': limit, 'pages': pages};
   }
 }

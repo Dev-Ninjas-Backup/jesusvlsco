@@ -100,7 +100,7 @@ class AdminListController extends GetxController {
     print('token $token');
 
     final url =
-        '$baseurl/admin/manage-admin/get-admins?page=$page&limit=$limit';
+        '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit';
 
     final response = await _networkCaller.getRequest(url, token: '$token');
 

@@ -39,9 +39,55 @@ class NetworkCaller {
     try {
       final Response response = await post(
         Uri.parse(url),
-        headers: {'Content-type': 'application/json'},
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
         body: jsonEncode(body),
       ).timeout(Duration(seconds: timeoutDuration));
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
+  // PATCH method
+  Future<ResponseData> patchRequest(
+    String url, {
+    Map<String, String>? body,
+    String? token,
+  }) async {
+    log('PATCH Request: $url');
+    log('Request Body: ${jsonEncode(body)}');
+
+    try {
+      final Response response = await patch(
+        Uri.parse(url),
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
+        body: jsonEncode(body),
+      ).timeout(Duration(seconds: timeoutDuration));
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
+  // DELETE method
+  Future<ResponseData> deleteRequest(String url, {String? token}) async {
+    log('DELETE Request: $url');
+    log('DELETE Token: $token');
+    try {
+      final Response response = await delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
+      ).timeout(Duration(seconds: timeoutDuration));
+
       return _handleResponse(response);
     } catch (e) {
       return _handleError(e);

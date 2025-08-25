@@ -9,6 +9,8 @@ class ApiConstants {
   static const String deleteProjectById = '/admin/project/{id}'; // delete project by id
   static const String updateProjectTitle = '/admin/project/{projectId}/update-title'; // update project title
   static const String updateProjectById = '/admin/project/{id}'; // update project by id
+  static const String searchProject = '/admin/project?search={keyword}'; // search project
+
 
 
   //--------------------------- User---------------------------

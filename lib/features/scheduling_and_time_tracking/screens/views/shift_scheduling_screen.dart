@@ -10,7 +10,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 
-
 class TimeSheetScreen extends StatelessWidget {
   const TimeSheetScreen({super.key});
 
@@ -131,7 +130,7 @@ class TimeSheetScreen extends StatelessWidget {
                 height: 1.45,
               ),
               decoration: InputDecoration(
-                hintText: 'Search articles',
+                hintText: 'Search projects',
                 hintStyle: AppTextStyle.f14W400().copyWith(
                   color: AppColors.textfield,
                   height: 1.45,
@@ -206,15 +205,22 @@ class TimeSheetScreen extends StatelessWidget {
         color: AppColors.primary,
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
-            // Load more when reaching 80% of scroll
-            if (scrollInfo.metrics.pixels / scrollInfo.metrics.maxScrollExtent > 0.8) {
+            // Load more when reaching near the end (85% of scroll)
+            if (scrollInfo is ScrollEndNotification &&
+                scrollInfo.metrics.pixels / scrollInfo.metrics.maxScrollExtent >
+                    0.85) {
               controller.loadMoreProjects();
             }
             return false;
           },
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: projects.length + (controller.hasMoreData.value ? 1 : 0),
+            itemCount:
+                projects.length +
+                (controller.hasMoreData.value ||
+                        controller.searchHasMoreData.value
+                    ? 1
+                    : 0),
             itemBuilder: (context, index) {
               // Show loading indicator at the end if there's more data
               if (index == projects.length) {
@@ -238,7 +244,8 @@ class TimeSheetScreen extends StatelessWidget {
               return ProjectCardWidget(
                 project: project,
                 onMorePressed: () => controller.showProjectOptions(project),
-                onAccessSchedule: () => controller.accessSchedule(project, context),
+                onAccessSchedule: () =>
+                    controller.accessSchedule(project, context),
               );
             },
           ),
