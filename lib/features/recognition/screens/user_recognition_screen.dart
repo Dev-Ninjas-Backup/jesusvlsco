@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/icon_path.dart';
 import '../../../core/utils/constants/sizer.dart';
@@ -599,7 +600,9 @@ PreferredSizeWidget _buildAppBar() {
           color: AppColors.backgroundDark,
           size: Sizer.wp(24),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Get.to(UserDrawer());
+        },
       ),
     ],
   );

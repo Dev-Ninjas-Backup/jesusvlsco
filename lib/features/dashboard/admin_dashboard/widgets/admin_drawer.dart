@@ -8,11 +8,12 @@ import 'package:jesusvlsco/features/announcements/admin_announcement/screens/ann
 import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_screen.dart';
 import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/time_clock.dart';
+import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+class AdminDrawer extends StatelessWidget {
+  const AdminDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +93,7 @@ class CustomDrawer extends StatelessWidget {
               imagePath: 'assets/icons/drawer_settings.png',
               text: 'Settings',
               onTap: () {
-                // Get.to(Settings_screen());
-                Get.to(UserSettingsScreen());
+                Get.to(Settings_screen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),
