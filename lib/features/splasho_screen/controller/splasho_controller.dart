@@ -27,7 +27,7 @@ class SplashController extends GetxController {
       // Check user role and navigate accordingly
       String userRole = await _getUserRole();
 
-      if (userRole.toLowerCase() == 'ADMIN') {
+      if (userRole == 'ADMIN') {
         debugPrint(' Role : $userRole');
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
