@@ -15,7 +15,7 @@ class EditProjectDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TimeSheetController>();
     final textController = TextEditingController(
-      text: controller.editingProject.value?.projectName ?? '',
+      text: controller.editingProject.value?.title ?? '',
     );
 
     return Dialog(

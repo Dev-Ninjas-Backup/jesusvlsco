@@ -33,4 +33,61 @@ class UserProfileRepository {
       return null;
     }
   }
+
+  Future<UserProfileModel?> updateProfile({
+    required String userId,
+    String? firstName,
+    String? lastName,
+    String? gender,
+    String? jobTitle,
+    String? department,
+    String? address,
+    String? city,
+    String? state,
+    String? country,
+    String? nationality,
+    String? profileUrl,
+  }) async {
+    try {
+      final url = Uri.parse(
+        'https://lgcglobalcontractingltd.com/js/admin/user/$userId',
+      );
+
+      var request = http.MultipartRequest('PATCH', url)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..headers['accept'] = '*/*';
+
+      if (firstName != null) request.fields['firstName'] = firstName;
+      if (lastName != null) request.fields['lastName'] = lastName;
+      if (gender != null) request.fields['gender'] = gender;
+      if (jobTitle != null) request.fields['jobTitle'] = jobTitle;
+      if (department != null) request.fields['department'] = department;
+      if (address != null) request.fields['address'] = address;
+      if (city != null) request.fields['city'] = city;
+      if (state != null) request.fields['state'] = state;
+      if (country != null) request.fields['country'] = country;
+      if (nationality != null) request.fields['nationality'] = nationality;
+      if (profileUrl != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('profileUrl', profileUrl),
+        );
+      }
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return UserProfileModel.fromJson(data);
+      } else {
+        debugPrint(
+          '🚨 Failed to update profile. Status: ${response.statusCode}',
+        );
+        return null;
+      }
+    } catch (e) {
+      debugPrint('🚨 Error updating profile: $e');
+      return null;
+    }
+  }
 }
