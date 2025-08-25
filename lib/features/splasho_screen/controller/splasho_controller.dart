@@ -27,7 +27,7 @@ class SplashController extends GetxController {
       // Check user role and navigate accordingly
       String userRole = await _getUserRole();
 
-      if (userRole.toLowerCase() == 'ADMIN') {
+      if (userRole == 'ADMIN') {
         debugPrint(' Role : $userRole');
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
@@ -52,7 +52,9 @@ class SplashController extends GetxController {
 
       // Check if auth token exists
       String? token = prefs.getString('auth_token');
+
       String? userId = prefs.getString('user_id');
+
 
       // User is authenticated if they are logged in, verified, and have a token
       bool isAuthenticated =
@@ -64,7 +66,9 @@ class SplashController extends GetxController {
       print('   - Has Token: ${token != null && token.isNotEmpty}');
       print('   - Final Result: $isAuthenticated');
 
+
       debugPrint('📌 User ID: $userId');
+
 
       return isAuthenticated;
     } catch (e) {
