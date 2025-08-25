@@ -233,10 +233,9 @@ class AssignEmployeeController extends GetxController {
     _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
 
     // Navigate to shift details screen using GetX routes
-    SchedulingRoutes.toShiftDetails(arguments: {
-      'employee': employee,
-      'slotIndex': slotIndex,
-    });
+    SchedulingRoutes.toShiftDetails(
+      arguments: {'employee': employee, 'slotIndex': slotIndex},
+    );
   }
 
   /// Navigate back
