@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:http/http.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import '../models/response_data.dart';
 
@@ -13,13 +14,15 @@ class NetworkCaller {
     log('GET Request: $url');
     log('GET Token: $token');
     try {
-      final Response response = await get(
+      final http.Response response = await http
+          .get(
         Uri.parse(url),
         headers: {
-          'Authorization': token.toString(),
+          if (token != null) 'Authorization': token,
           'Content-type': 'application/json',
         },
-      ).timeout(
+      )
+          .timeout(
         Duration(seconds: timeoutDuration),
       );
 
@@ -36,9 +39,15 @@ class NetworkCaller {
     log('Request Body: ${jsonEncode(body)}');
 
     try {
-      final Response response = await post(Uri.parse(url),
-          headers: {'Content-type': 'application/json'},
-          body: jsonEncode(body))
+      final http.Response response = await http
+          .post(
+        Uri.parse(url),
+        headers: {
+          if (token != null) 'Authorization': token,
+          'Content-type': 'application/json'
+        },
+        body: jsonEncode(body),
+      )
           .timeout(Duration(seconds: timeoutDuration));
       return _handleResponse(response);
     } catch (e) {
@@ -46,8 +55,61 @@ class NetworkCaller {
     }
   }
 
+  // Multipart POST (for file uploads + form fields)
+  Future<ResponseData> postMultipart(
+    String url, {
+    Map<String, String>? fields,
+    String? token,
+    String? filePath,
+    String fileField = 'profileUrl',
+  }) async {
+    log('POST Multipart Request: $url');
+    log('Fields: ${jsonEncode(fields)}');
+    try {
+      final uri = Uri.parse(url);
+      final request = http.MultipartRequest('POST', uri);
+
+      // Attach token header if provided
+      if (token != null) {
+        request.headers['Authorization'] = token;
+      }
+
+      // Add fields
+      if (fields != null) {
+        request.fields.addAll(fields);
+      }
+
+      // Attach file if exists
+      if (filePath != null && filePath.isNotEmpty) {
+        final file = File(filePath);
+        if (await file.exists()) {
+          final stream = http.ByteStream(file.openRead());
+          final length = await file.length();
+          final multipartFile = http.MultipartFile(fileField, stream, length,
+              filename: file.uri.pathSegments.last);
+          request.files.add(multipartFile);
+        }
+      }
+
+      final streamedResponse = await request.send().timeout(
+            Duration(seconds: timeoutDuration),
+          );
+
+      final responseBody = await streamedResponse.stream.bytesToString();
+      final http.Response response = http.Response(
+        responseBody,
+        streamedResponse.statusCode,
+        headers: streamedResponse.headers,
+      );
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
   // Handle response
-  ResponseData _handleResponse(Response response) {
+  ResponseData _handleResponse(http.Response response) {
     log('Response Status: ${response.statusCode}');
     log('Response Body: ${response.body}');
 
@@ -108,7 +170,7 @@ class NetworkCaller {
   ResponseData _handleError(dynamic error) {
     log('Request Error: $error');
 
-    if (error is ClientException) {
+  if (error is http.ClientException) {
       return ResponseData(
         isSuccess: false,
         statusCode: 500,
