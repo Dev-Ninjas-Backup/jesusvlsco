@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/core/services/network_caller.dart';
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_education_screen.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_experience_screen.dart';
 
@@ -103,6 +106,9 @@ class AddUserController extends GetxController {
   // Break time options
   final List<String> breakTimeOptions = ['30 min', '1 hour', '3 hour'];
 
+  // Profile image path (local file path). UI may set this when image is picked.
+  // profile image upload removed — currently not needed
+
   @override
   void onInit() {
     super.onInit();
@@ -191,7 +197,57 @@ class AddUserController extends GetxController {
   }
 
   void saveUser() {
-    Get.to(AddUserEducationScreen());
+    // Validate form first
+    if (!_validateForm()) return;
+
+    // Build fields map
+    final Map<String, String> fields = {
+      'phone': phoneController.text.trim(),
+      'employeeID': employeeIdController.text.trim(),
+      'email': emailController.text.trim(),
+      'role': selectedRole.value ?? '',
+      'firstName': firstNameController.text.trim(),
+      'lastName': lastNameController.text.trim(),
+      'gender': selectedGender.value ?? '',
+      'jobTitle': selectedJobTitle.value ?? '',
+      'department': '',
+      'address': addressController.text.trim(),
+      'city': selectedCity.value ?? '',
+      'state': selectedState.value ?? '',
+      'dob': selectedDateOfBirth.value != null
+          ? selectedDateOfBirth.value!.toIso8601String()
+          : '',
+      'country': '',
+      'nationality': '',
+      'password': '',
+      'pinCode': '',
+    };
+
+  _createUser(fields);
+  }
+
+  Future<void> _createUser(Map<String, String> fields) async {
+    final NetworkCaller caller = NetworkCaller();
+    final token = StorageService.token;
+
+  final url = '${ApiConstants.baseurl}/admin/user';
+
+  final response = await caller.postRequest(url, body: fields, token: token);
+
+    if (response.isSuccess) {
+      Get.snackbar('Success', response.responseData['message'] ?? 'User created',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white);
+      // Navigate to next step
+      Get.to(AddUserEducationScreen());
+    } else {
+      final errMsg = response.errorMessage.isNotEmpty ? response.errorMessage : 'Failed to create user';
+      Get.snackbar('Error', errMsg,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
   }
 
   void saveEducation() {
