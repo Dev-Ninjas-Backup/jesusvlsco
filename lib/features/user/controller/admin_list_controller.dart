@@ -65,14 +65,14 @@ class AdminListController extends GetxController {
 
     final token = await StorageService.getAuthToken();
 
-    final url = Uri.parse(
-      '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit',
-    );
+    final url =
+        '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit';
+
 
 
     try {
       final response = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

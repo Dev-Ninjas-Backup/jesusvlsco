@@ -95,6 +95,30 @@ class NetworkCaller {
     }
   }
 
+  // DELETE method
+  Future<ResponseData> deleteRequest(String url, {String? token}) async {
+    log('DELETE Request: $url');
+    log('DELETE Token: $token');
+    try {
+      final http.Response response = await http
+          .delete(
+            Uri.parse(url),
+            headers: {
+              if (token != null)
+                'Authorization': token.startsWith('Bearer ')
+                    ? token
+                    : 'Bearer $token',
+              'Content-type': 'application/json',
+            },
+          )
+          .timeout(Duration(seconds: timeoutDuration));
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
   // Multipart POST (for file uploads + form fields)
   Future<ResponseData> postMultipart(
     String url, {

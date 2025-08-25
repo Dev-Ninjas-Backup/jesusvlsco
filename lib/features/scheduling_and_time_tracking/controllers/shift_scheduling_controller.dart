@@ -26,6 +26,12 @@ class TimeSheetController extends GetxController {
   var totalPages = 1.obs;
   var isLoadingMore = false.obs;
   var hasMoreData = true.obs;
+  
+  // Search variables
+  var isSearching = false.obs;
+  var searchCurrentPage = 1.obs;
+  var searchTotalPages = 1.obs;
+  var searchHasMoreData = true.obs;
 
   @override
   void onInit() {
@@ -48,7 +54,6 @@ class TimeSheetController extends GetxController {
       final response = await _projectApiService.getAllAdminProjects(
         page: currentPage.value,
         limit: 10,
-        token: 'Bearer your_token_here', // TODO: Get token from storage
       );
 
       if (response.isSuccess) {
@@ -80,6 +85,12 @@ class TimeSheetController extends GetxController {
 
   /// Load more projects for pagination
   Future<void> loadMoreProjects() async {
+    // If searching, load more search results
+    if (isSearching.value) {
+      return loadMoreSearchResults();
+    }
+    
+    // Otherwise load more normal projects
     if (isLoadingMore.value || !hasMoreData.value) return;
     
     try {
@@ -91,7 +102,6 @@ class TimeSheetController extends GetxController {
       final response = await _projectApiService.getAllAdminProjects(
         page: currentPage.value,
         limit: 10,
-        token: 'Bearer your_token_here', // TODO: Get token from storage
       );
 
       if (response.isSuccess) {
@@ -117,16 +127,122 @@ class TimeSheetController extends GetxController {
 
   /// Refresh projects list
   Future<void> refreshProjects() async {
-    await loadProjects(isRefresh: true);
+    if (isSearching.value && searchText.value.trim().isNotEmpty) {
+      // Refresh search results
+      await _performSearch(searchText.value.trim(), isRefresh: true);
+    } else {
+      // Refresh normal projects
+      isSearching.value = false;
+      await loadProjects(isRefresh: true);
+    }
   }
 
   /// Handle search functionality
   void updateSearchText(String text) {
     searchText.value = text;
+    
+    if (text.trim().isEmpty) {
+      // If search is cleared, load normal projects
+      isSearching.value = false;
+      loadProjects(isRefresh: true);
+    } else {
+      // Start searching with API
+      isSearching.value = true;
+      searchCurrentPage.value = 1;
+      searchHasMoreData.value = true;
+      _performSearch(text.trim(), isRefresh: true);
+    }
+  }
+
+  /// Perform search using API
+  Future<void> _performSearch(String keyword, {bool isRefresh = false}) async {
+    try {
+      if (isRefresh) {
+        searchCurrentPage.value = 1;
+        searchHasMoreData.value = true;
+      }
+      
+      isLoading.value = true;
+      _logger.i('Searching projects: "$keyword" - Page: ${searchCurrentPage.value}');
+
+      final response = await _projectApiService.searchProjects(
+        keyword: keyword,
+        page: searchCurrentPage.value,
+        limit: 10,
+      );
+
+      if (response.isSuccess) {
+        final projectResponse = ProjectApiResponse.fromJson(response.responseData);
+        
+        if (isRefresh) {
+          projects.value = projectResponse.data.projects;
+        } else {
+          projects.addAll(projectResponse.data.projects);
+        }
+        
+        // Update search pagination info
+        searchTotalPages.value = projectResponse.data.meta.pages;
+        searchHasMoreData.value = searchCurrentPage.value < searchTotalPages.value;
+        
+        _logger.i('Successfully found ${projectResponse.data.projects.length} projects for "$keyword"');
+      } else {
+        _logger.e('Failed to search projects: ${response.errorMessage}');
+        EasyLoading.showError(response.errorMessage);
+      }
+
+      isLoading.value = false;
+    } catch (error) {
+      isLoading.value = false;
+      _logger.e('Error searching projects: $error');
+      EasyLoading.showError('Failed to search projects. Please try again.');
+    }
+  }
+
+  /// Load more search results for pagination
+  Future<void> loadMoreSearchResults() async {
+    if (isLoadingMore.value || !searchHasMoreData.value || searchText.value.trim().isEmpty) return;
+    
+    try {
+      isLoadingMore.value = true;
+      searchCurrentPage.value++;
+      
+      _logger.i('Loading more search results - Page: ${searchCurrentPage.value}');
+
+      final response = await _projectApiService.searchProjects(
+        keyword: searchText.value.trim(),
+        page: searchCurrentPage.value,
+        limit: 10,
+      );
+
+      if (response.isSuccess) {
+        final projectResponse = ProjectApiResponse.fromJson(response.responseData);
+        projects.addAll(projectResponse.data.projects);
+        
+        searchHasMoreData.value = searchCurrentPage.value < projectResponse.data.meta.pages;
+        _logger.i('Successfully loaded ${projectResponse.data.projects.length} more search results');
+      } else {
+        searchCurrentPage.value--; // Revert page increment on failure
+        _logger.e('Failed to load more search results: ${response.errorMessage}');
+        EasyLoading.showError(response.errorMessage);
+      }
+
+      isLoadingMore.value = false;
+    } catch (error) {
+      isLoadingMore.value = false;
+      searchCurrentPage.value--; // Revert page increment on failure
+      _logger.e('Error loading more search results: $error');
+      EasyLoading.showError('Failed to load more search results. Please try again.');
+    }
   }
 
   /// Get filtered projects based on search text
   List<ProjectModel> get filteredProjects {
+    // If we're using API search, return all projects as they're already filtered
+    if (isSearching.value) {
+      return projects;
+    }
+    
+    // Local filtering for normal project list
     if (searchText.value.isEmpty) {
       return projects;
     }
@@ -172,7 +288,6 @@ class TimeSheetController extends GetxController {
       final response = await _projectApiService.updateProjectTitle(
         projectId: editingProject.value!.id,
         newTitle: newTitle,
-        token: 'Bearer your_token_here', // TODO: Get token from storage
       );
 
       if (response.isSuccess) {
@@ -206,7 +321,6 @@ class TimeSheetController extends GetxController {
 
       final response = await _projectApiService.deleteProjectById(
         projectId: editingProject.value!.id,
-        token: 'Bearer your_token_here', // TODO: Get token from storage
       );
 
       if (response.isSuccess) {
