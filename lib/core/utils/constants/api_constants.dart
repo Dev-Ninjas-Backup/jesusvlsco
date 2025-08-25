@@ -4,12 +4,14 @@ class ApiConstants {
   // ----------------------- Admin------------------------
 
   //!-------------------- Shift Scheduling ------------------
-
   static const String allAdminProjects = '/admin/project';
+  static const String createProject = '/admin/project'; // create new project
   static const String deleteProjectById = '/admin/project/{id}'; // delete project by id
   static const String updateProjectTitle = '/admin/project/{projectId}/update-title'; // update project title
   static const String updateProjectById = '/admin/project/{id}'; // update project by id
   static const String searchProject = '/admin/project?search={keyword}'; // search project
+  static const String getAllTeams = '/admin/team/get-all-teams'; // get all teams
+  static const String getAllManager = '/admin/user'; // get all users
 
 
 

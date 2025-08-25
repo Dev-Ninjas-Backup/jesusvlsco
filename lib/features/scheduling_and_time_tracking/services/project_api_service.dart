@@ -223,4 +223,140 @@ class ProjectApiService {
       );
     }
   }
+
+  /// Create a new project
+  /// [teamId] - ID of the selected team
+  /// [managerId] - ID of the selected manager
+  /// [title] - Project title/name
+  /// [projectLocation] - Project location
+  /// Returns ResponseData containing created project data or error
+  Future<ResponseData> createProject({
+    required String teamId,
+    required String managerId,
+    required String title,
+    required String projectLocation,
+  }) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Construct URL
+      final String url = '${ApiConstants.baseurl}${ApiConstants.createProject}';
+
+      // Prepare request body
+      final Map<String, String> requestBody = {
+        'teamId': teamId,
+        'managerId': managerId,
+        'title': title,
+        'projectLocation': projectLocation,
+      };
+
+      _logger.i('Creating project: $title at $projectLocation');
+
+      // Make POST request to create project
+      final ResponseData response = await _networkCaller.postRequest(
+        url,
+        body: requestBody,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i('Successfully created project: $title');
+      } else {
+        _logger.e('Failed to create project: ${response.errorMessage}');
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in createProject: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to create project. Please try again.',
+      );
+    }
+  }
+
+  /// Get all teams with pagination
+  /// [page] - Page number (default: 1)
+  /// [limit] - Number of teams per page (default: 10)
+  /// Returns ResponseData containing teams list or error
+  Future<ResponseData> getAllTeams({int page = 1, int limit = 10}) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Construct URL with query parameters
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.getAllTeams}?page=$page&limit=$limit';
+
+      _logger.i('Fetching teams: Page $page, Limit $limit');
+
+      // Make GET request to fetch teams
+      final ResponseData response = await _networkCaller.getRequest(
+        url,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i(
+          'Successfully fetched ${response.responseData['data']['teams'].length} teams',
+        );
+      } else {
+        _logger.e('Failed to fetch teams: ${response.errorMessage}');
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in getAllTeams: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to fetch teams. Please try again.',
+      );
+    }
+  }
+
+  /// Get all managers with pagination
+  /// [page] - Page number (default: 1)
+  /// [limit] - Number of managers per page (default: 10)
+  /// Returns ResponseData containing managers list or error
+  Future<ResponseData> getAllManagers({int page = 1, int limit = 10}) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Construct URL with query parameters
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.getAllManager}?page=$page&limit=$limit';
+
+      _logger.i('Fetching managers: Page $page, Limit $limit');
+
+      // Make GET request to fetch managers
+      final ResponseData response = await _networkCaller.getRequest(
+        url,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i(
+          'Successfully fetched ${response.responseData['data'].length} managers',
+        );
+      } else {
+        _logger.e('Failed to fetch managers: ${response.errorMessage}');
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in getAllManagers: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to fetch managers. Please try again.',
+      );
+    }
+  }
 }
