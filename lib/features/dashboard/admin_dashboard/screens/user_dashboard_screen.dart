@@ -10,6 +10,7 @@ import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_d
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
