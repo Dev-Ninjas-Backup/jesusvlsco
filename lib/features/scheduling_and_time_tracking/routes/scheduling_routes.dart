@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import '../screens/views/time_sheet.dart';
+import '../screens/views/shift_scheduling_screen.dart';
 import '../screens/views/add_project_screen.dart';
 import '../screens/views/access_schedule_screen.dart';
 import '../screens/views/assign_employee_screen.dart';
 import '../screens/views/shift_details_screen.dart';
 import '../screens/views/shift_template_screen.dart';
-import '../controllers/time_sheet_controller.dart';
+import '../controllers/shift_scheduling_controller.dart';
 import '../controllers/add_project_controller.dart';
 import '../controllers/access_schedule_controller.dart';
 import '../controllers/assign_employee_controller.dart';
@@ -13,7 +13,7 @@ import '../controllers/shift_details_controller.dart';
 import '../controllers/shift_template_controller.dart';
 
 /// GetX Routes for Scheduling and Time Tracking module
-/// 
+///
 /// This class defines all routes and their bindings for the scheduling feature.
 /// All navigation within this module will use GetX instead of GoRouter.
 class SchedulingRoutes {
@@ -97,7 +97,7 @@ class SchedulingRoutes {
   ];
 
   /// Helper methods for navigation within the scheduling module
-  
+
   /// Navigate to Time Sheet screen
   static void toTimeSheet() {
     Get.toNamed(timeSheet);

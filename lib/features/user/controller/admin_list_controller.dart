@@ -64,9 +64,11 @@ class AdminListController extends GetxController {
     print('call admin');
 
     final token = await StorageService.getAuthToken();
+
     final url = Uri.parse(
       '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit',
     );
+
 
     try {
       final response = await http.get(

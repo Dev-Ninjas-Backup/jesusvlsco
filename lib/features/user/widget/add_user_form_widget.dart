@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import '../controller/add_user_controller.dart';
 import 'add_user_dropdown_widget.dart';
 
@@ -49,13 +51,15 @@ Widget buildFormFields(AddUserController controller) {
       ], controller),
       const SizedBox(height: 20),
       buildDropdownField('Department', 'Select Department', [
-        'Engineering',
-        'Product',
-        'Design',
-        'Marketing',
+        'IT',
+        'DEVELOPMENT',
+        'HR',
+        'FINANCE',
+        'MARKETING',
+        'SEALS',
       ], controller),
       const SizedBox(height: 20),
-      buildAddressField('Address', 'Enter Address', controller),
+      _buildTextField('Address', 'Enter Address', controller.addressController),
       const SizedBox(height: 20),
       buildDropdownField('City', 'Select city', [
         'New York',
@@ -180,21 +184,32 @@ Widget _buildDateField(
       const SizedBox(height: 8),
       GestureDetector(
         onTap: () => controller.selectDate(),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(hint, style: const TextStyle(color: Colors.grey)),
-              const Icon(Icons.calendar_today, color: Colors.grey, size: 20),
-            ],
-          ),
-        ),
+        child: Obx(() {
+          final dob = controller.selectedDateOfBirth.value;
+          final display = dob != null
+              ? '${dob.day}/${dob.month}/${dob.year}'
+              : hint;
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: const Color(0xFFE5E7EB)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  display,
+                  style: TextStyle(
+                    color: dob != null ? Colors.black : Colors.grey,
+                  ),
+                ),
+                const Icon(Icons.calendar_today, color: Colors.grey, size: 20),
+              ],
+            ),
+          );
+        }),
       ),
     ],
   );

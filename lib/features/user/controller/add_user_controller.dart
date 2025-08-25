@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/core/services/network_caller.dart';
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_education_screen.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_experience_screen.dart';
 
@@ -26,6 +29,11 @@ class AddUserController extends GetxController {
   final programController = TextEditingController();
   final institutionController = TextEditingController();
   final yearController = TextEditingController();
+  // Multi-education entries
+  final RxList<Map<String, dynamic>> educations = <Map<String, dynamic>>[].obs;
+  String? createdUserId;
+  // Multi-experience entries
+  final RxList<Map<String, dynamic>> experiences = <Map<String, dynamic>>[].obs;
 
   // Experience Text controllers
   final positionController = TextEditingController();
@@ -46,6 +54,7 @@ class AddUserController extends GetxController {
   // Observable form values
   var selectedGender = Rx<String?>(null);
   var selectedJobTitle = Rx<String?>(null);
+  var selectedDepartment = Rx<String?>(null);
   var selectedCity = Rx<String?>(null);
   var selectedState = Rx<String?>(null);
   var selectedDateOfBirth = Rx<DateTime?>(null);
@@ -102,6 +111,9 @@ class AddUserController extends GetxController {
 
   // Break time options
   final List<String> breakTimeOptions = ['30 min', '1 hour', '3 hour'];
+
+  // Profile image path (local file path). UI may set this when image is picked.
+  // profile image upload removed — currently not needed
 
   @override
   void onInit() {
@@ -169,33 +181,467 @@ class AddUserController extends GetxController {
       },
     );
 
-    if (picked != null) {}
+    if (picked != null) {
+      // Save the selected date so the UI can react to it
+      selectedDateOfBirth.value = picked;
+    }
   }
 
   // Education Methods
-  void addEducation() {}
+  void addEducation() {
+    // Add an empty education entry
+    educations.add({'program': '', 'institution': '', 'year': null});
+  }
 
-  void selectProgram() {}
+  void removeEducation(int index) {
+    if (index >= 0 && index < educations.length) {
+      educations.removeAt(index);
+    }
+  }
 
-  void selectInstitution() {}
+  // ...implemented below
+
+  // Education selectors implementations
+  void selectProgram() {
+    final programs = [
+      'Bachelor of Science',
+      'Bachelor of Arts',
+      'Master of Science',
+      'Master of Arts',
+      'PhD',
+      'Associate Degree',
+      'Diploma',
+      'Certificate',
+    ];
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select Program',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            ...programs.map(
+              (p) => ListTile(
+                title: Text(p),
+                onTap: () {
+                  programController.text = p;
+                  Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectInstitution() {
+    final institutions = [
+      'Harvard University',
+      'MIT',
+      'Stanform University',
+      'UC Berkeley',
+      'Yale University',
+      'Princeton University',
+      'Columbia University',
+      'Other',
+    ];
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select Institution',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            ...institutions.map(
+              (i) => ListTile(
+                title: Text(i),
+                onTap: () {
+                  institutionController.text = i;
+                  Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   void selectYear() {
-    Get.snackbar(
-      'Year',
-      'Opening year selector...',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: const Color(0xFF6366F1),
-      colorText: Colors.white,
-      duration: const Duration(seconds: 2),
+    final years = List.generate(
+      2025 - 1976 + 1,
+      (i) => (1976 + i).toString(),
+    ).reversed.toList();
+
+    Get.bottomSheet(
+      Container(
+        height: 400,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          children: [
+            const Text(
+              'Select Year',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                children: years
+                    .map(
+                      (y) => ListTile(
+                        title: Text(y),
+                        onTap: () {
+                          yearController.text = y;
+                          Get.back();
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Per-entry selectors (for multi-education)
+  void selectProgramFor(int index) {
+    final programs = [
+      'Bachelor of Science',
+      'Bachelor of Arts',
+      'Master of Science',
+      'Master of Arts',
+      'PhD',
+      'Associate Degree',
+      'Diploma',
+      'Certificate',
+    ];
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select Program',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            ...programs.map(
+              (p) => ListTile(
+                title: Text(p),
+                onTap: () {
+                  if (index >= 0 && index < educations.length) {
+                    final current = Map<String, dynamic>.from(
+                      educations[index],
+                    );
+                    current['program'] = p;
+                    educations[index] = current;
+                  }
+                  Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectInstitutionFor(int index) {
+    final institutions = [
+      'Harvard University',
+      'MIT',
+      'Stanford University',
+      'UC Berkeley',
+      'Yale University',
+      'Princeton University',
+      'Columbia University',
+      'Other',
+    ];
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select Institution',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            ...institutions.map(
+              (i) => ListTile(
+                title: Text(i),
+                onTap: () {
+                  if (index >= 0 && index < educations.length) {
+                    final current = Map<String, dynamic>.from(
+                      educations[index],
+                    );
+                    current['institution'] = i;
+                    educations[index] = current;
+                  }
+                  Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectYearFor(int index) {
+    final years = List.generate(
+      2025 - 1976 + 1,
+      (i) => (1976 + i).toString(),
+    ).reversed.toList();
+
+    Get.bottomSheet(
+      Container(
+        height: 400,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          children: [
+            const Text(
+              'Select Year',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                children: years
+                    .map(
+                      (y) => ListTile(
+                        title: Text(y),
+                        onTap: () {
+                          if (index >= 0 && index < educations.length) {
+                            final current = Map<String, dynamic>.from(
+                              educations[index],
+                            );
+                            current['year'] = int.tryParse(y);
+                            educations[index] = current;
+                          }
+                          Get.back();
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   void saveUser() {
-    Get.to(AddUserEducationScreen());
+    // Validate form first and show specific error message if any
+    final validationError = _validateForm();
+    if (validationError != null && validationError.isNotEmpty) {
+      Get.snackbar(
+        'Validation Error',
+        validationError,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // Build fields map
+    // Map UI values to backend expected enums
+    final mappedRole = _mapRole(selectedRole.value);
+    final mappedGender = _mapGender(selectedGender.value);
+    final mappedJobTitle = _mapJobTitle(selectedJobTitle.value);
+    final mappedDepartment = _mapDepartment(selectedDepartment.value ?? '');
+
+    final Map<String, String> fields = {
+      'phone': phoneController.text.trim(),
+      'employeeID': employeeIdController.text.trim(),
+      'email': emailController.text.trim(),
+      'role': mappedRole ?? '',
+      'firstName': firstNameController.text.trim(),
+      'lastName': lastNameController.text.trim(),
+      'gender': mappedGender ?? '',
+      'jobTitle': mappedJobTitle ?? '',
+      'department': mappedDepartment ?? '',
+      'address': addressController.text.trim(),
+      'city': selectedCity.value ?? '',
+      'state': selectedState.value ?? '',
+      'dob': selectedDateOfBirth.value != null
+          ? selectedDateOfBirth.value!.toIso8601String()
+          : '',
+      'country': '',
+      'nationality': '',
+      'password': '',
+      'pinCode': '',
+    };
+
+    _createUser(fields);
   }
 
-  void saveEducation() {
-    Get.to(AddUserExperienceScreen());
+  Future<void> _createUser(Map<String, String> fields) async {
+    final NetworkCaller caller = NetworkCaller();
+    final token = StorageService.token;
+
+    final url = '${ApiConstants.baseurl}${ApiConstants.createUser}';
+
+    final response = await caller.postRequest(url, body: fields, token: token);
+
+    if (response.isSuccess) {
+      Get.snackbar(
+        'Success',
+        response.responseData['message'] ?? 'User created',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      // Extract created user id (try common keys) and navigate to education screen
+      try {
+        final data = response.responseData['data'];
+        String? userId;
+        if (data != null) {
+          if (data is String) {
+            userId = data;
+          } else if (data is Map) {
+            if (data.containsKey('id')) userId = data['id']?.toString();
+            if (userId == null && data.containsKey('_id'))
+              userId = data['_id']?.toString();
+            if (userId == null && data.containsKey('userId'))
+              userId = data['userId']?.toString();
+          }
+        }
+        createdUserId = userId;
+        Get.to(AddUserEducationScreen(), arguments: {'userId': userId});
+      } catch (e) {
+        // fallback: navigate without userId
+        Get.to(AddUserEducationScreen());
+      }
+    } else {
+      final errMsg = response.errorMessage.isNotEmpty
+          ? response.errorMessage
+          : 'Failed to create user';
+      Get.snackbar(
+        'Error',
+        errMsg,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  // Save education entries for the created user
+  Future<void> saveEducation() async {
+    final token = StorageService.token;
+    final userIdFromArg = Get.arguments != null && Get.arguments is Map
+        ? (Get.arguments as Map)['userId']?.toString()
+        : null;
+    final userId = createdUserId ?? userIdFromArg;
+
+    if (userId == null || userId.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'User id not found. Cannot save education.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (educations.isEmpty) {
+      Get.snackbar(
+        'Validation',
+        'Please add at least one education entry.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    final body = {
+      'educations': educations
+          .map(
+            (e) => {
+              'program': e['program'] ?? '',
+              'institution': e['institution'] ?? '',
+              'year': e['year'] ?? null,
+            },
+          )
+          .toList(),
+    };
+
+    final url =
+        '${ApiConstants.baseurl}${ApiConstants.createUserEducation}/$userId';
+    final caller = NetworkCaller();
+    final response = await caller.postRequest(url, body: body, token: token);
+
+    if (response.isSuccess) {
+      Get.snackbar(
+        'Success',
+        response.responseData['message'] ?? 'Educations saved',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      // Navigate to experience screen
+      Get.to(AddUserExperienceScreen(), arguments: {'userId': userId});
+    } else {
+      Get.snackbar(
+        'Error',
+        response.errorMessage.isNotEmpty
+            ? response.errorMessage
+            : 'Failed to save educations',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
   void cancelEducation() {
@@ -249,12 +695,281 @@ class AddUserController extends GetxController {
   }
 
   void saveExperience() {
-    currentStep.value = 4; // Move to Payroll step
-    Get.to(AddUserPayrollScreen());
+    // Post experiences to backend and navigate to payroll on success
+    _postExperiences();
+  }
+
+  Future<void> _postExperiences() async {
+    final token = StorageService.token;
+    final userIdFromArg = Get.arguments != null && Get.arguments is Map
+        ? (Get.arguments as Map)['userId']?.toString()
+        : null;
+    final userId = createdUserId ?? userIdFromArg;
+
+    if (userId == null || userId.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'User id not found. Cannot save experiences.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (experiences.isEmpty) {
+      Get.snackbar(
+        'Validation',
+        'Please add at least one experience entry.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // Build body
+    final List<Map<String, dynamic>> bodyExps = [];
+    for (final e in experiences) {
+      final designation = (e['position'] ?? '').toString();
+      final companyName = (e['company'] ?? '').toString();
+      final uiJobType = (e['jobType'] ?? '').toString();
+      final jobType = _mapJobType(uiJobType);
+      final startIso = _toIso(e['startDate']?.toString());
+      final endIso = _toIso(e['endDate']?.toString());
+      final description = (e['description'] ?? '').toString();
+      final isCurrentlyWorking = e['isCurrentlyWorking'] == true;
+
+      bodyExps.add({
+        'designation': designation,
+        'companyName': companyName,
+        'jobType': jobType,
+        'startDate': startIso,
+        'endDate': isCurrentlyWorking ? null : endIso,
+        'description': description,
+        'isCurrentlyWorking': isCurrentlyWorking,
+      });
+    }
+
+    final body = {'experiences': bodyExps};
+
+    final url =
+        '${ApiConstants.baseurl}${ApiConstants.createUserExperience}/$userId';
+    final caller = NetworkCaller();
+    final response = await caller.postRequest(url, body: body, token: token);
+
+    if (response.isSuccess) {
+      Get.snackbar(
+        'Success',
+        response.responseData['message'] ?? 'Experiences saved',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      // proceed to payroll
+      currentStep.value = 4;
+      Get.to(AddUserPayrollScreen(), arguments: {'userId': userId});
+    } else {
+      Get.snackbar(
+        'Error',
+        response.errorMessage.isNotEmpty
+            ? response.errorMessage
+            : 'Failed to save experiences',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  String? _mapJobType(String? ui) {
+    if (ui == null) return null;
+    final v = ui.toLowerCase();
+    if (v.contains('full')) return 'FULL_TIME';
+    if (v.contains('part')) return 'PART_TIME';
+    if (v.contains('contract')) return 'CONTRACT';
+    if (v.contains('intern')) return 'INTERNSHIP';
+    if (v.contains('freel')) return 'FREELANCE';
+    return ui.toUpperCase().replaceAll(' ', '_');
+  }
+
+  String? _toIso(String? dateStr) {
+    if (dateStr == null) return null;
+    final s = dateStr.trim();
+    if (s.isEmpty) return null;
+    // expected format stored like 'd/m/yyyy' or already ISO
+    if (s.contains('T') && s.contains('-')) return s; // already ISO
+    final parts = s.split('/');
+    if (parts.length == 3) {
+      final d = int.tryParse(parts[0]);
+      final m = int.tryParse(parts[1]);
+      final y = int.tryParse(parts[2]);
+      if (d != null && m != null && y != null) {
+        try {
+          return DateTime.utc(y, m, d).toIso8601String();
+        } catch (_) {
+          return null;
+        }
+      }
+    }
+    // fallback null
+    return null;
   }
 
   void savePayroll() {
+    _postPayrollSettings();
+  }
+
+  Future<void> _postPayrollSettings() async {
+    final token = StorageService.token;
+    final userIdFromArg = Get.arguments != null && Get.arguments is Map
+        ? (Get.arguments as Map)['userId']?.toString()
+        : null;
+    final userId = createdUserId ?? userIdFromArg;
+
+    if (userId == null || userId.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'User id not found. Cannot save payroll settings.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // Build pay rate body
+    final regularPayRate =
+        int.tryParse(regularPayRateController.text.trim()) ?? 0;
+    final overtimePayRate =
+        int.tryParse(overtimePayRateController.text.trim()) ?? 0;
+    int casualLeave = 0;
+    final casualFromField = int.tryParse(casualLeaveController.text.trim());
+    if (casualFromField != null)
+      casualLeave = casualFromField;
+    else if (selectedCasualLeave.value != null &&
+        selectedCasualLeave.value!.isNotEmpty) {
+      casualLeave =
+          int.tryParse(selectedCasualLeave.value!.split(' ').first) ?? 0;
+    }
+
+    int sickLeave = 0;
+    final sickFromField = int.tryParse(sickLeaveController.text.trim());
+    if (sickFromField != null)
+      sickLeave = sickFromField;
+    else if (selectedSickLeave.value != null &&
+        selectedSickLeave.value!.isNotEmpty) {
+      sickLeave = int.tryParse(selectedSickLeave.value!.split(' ').first) ?? 0;
+    }
+
+    final payRateBody = {
+      'regularPayRate': regularPayRate,
+      'regularPayRateType': _mapPayRateType(selectedPayRateType.value),
+      'overTimePayRate': overtimePayRate,
+      'overTimePayRateType': _mapPayRateType(selectedOvertimeRateType.value),
+      'casualLeave': casualLeave,
+      'sickLeave': sickLeave,
+    };
+
+    final payUrl =
+        '${ApiConstants.baseurl}${ApiConstants.payrollPayrate}/$userId';
+    final caller = NetworkCaller();
+    final payResp = await caller.patchRequest(
+      payUrl,
+      body: payRateBody,
+      token: token,
+    );
+
+    if (!payResp.isSuccess) {
+      Get.snackbar(
+        'Error',
+        payResp.errorMessage.isNotEmpty
+            ? payResp.errorMessage
+            : 'Failed to save pay rate',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // Build offday & break body
+    int numberOffDay = int.tryParse(offDayController.text.trim()) ?? -1;
+    final offDay = <String>[];
+    if (selectedOffDay.value != null) {
+      // If user selected multiple off days format not supported by single selection UI,
+      // try to map single value
+      offDay.add(_mapOffDay(selectedOffDay.value));
+    }
+
+    // Ensure numberOffDay meets backend minimum requirement (>=1).
+    // Prefer explicit user input; otherwise derive from selected off days count; default to 1.
+    if (numberOffDay < 1) {
+      numberOffDay = offDay.isNotEmpty ? offDay.length : 1;
+    }
+
+    final breakBody = {
+      'numberOffDay': numberOffDay,
+      'offDay': offDay,
+      'breakTimePerDay': _mapBreakTime(selectedBreakTime.value),
+    };
+
+    final breakUrl =
+        '${ApiConstants.baseurl}${ApiConstants.payrollOffday}/$userId';
+    final breakResp = await caller.patchRequest(
+      breakUrl,
+      body: breakBody,
+      token: token,
+    );
+
+    if (!breakResp.isSuccess) {
+      Get.snackbar(
+        'Error',
+        breakResp.errorMessage.isNotEmpty
+            ? breakResp.errorMessage
+            : 'Failed to save offday/break settings',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    Get.snackbar(
+      'Success',
+      payResp.responseData['message'] ?? 'Payroll settings saved',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+
+    // Finished — navigate to view user screen
     Get.to(ViewUserScreen());
+  }
+
+  String _mapPayRateType(String? ui) {
+    if (ui == null) return 'HOUR';
+    final v = ui.toLowerCase();
+    if (v.contains('hour')) return 'HOUR';
+    if (v.contains('day')) return 'DAY';
+    if (v.contains('week')) return 'WEEK';
+    if (v.contains('month')) return 'MONTH';
+    return ui.toUpperCase();
+  }
+
+  String _mapOffDay(String? ui) {
+    if (ui == null) return 'SUNDAY';
+    // Map single selection to backend enum (uppercase)
+    return ui.toUpperCase();
+  }
+
+  String _mapBreakTime(String? ui) {
+    if (ui == null) return 'NONE';
+    final v = ui.toLowerCase();
+    if (v.contains('30')) return 'THIRTY_MIN';
+    if (v.contains('1 hour') || v.contains('1')) return 'ONE_HOUR';
+    if (v.contains('3')) return 'THREE_HOUR';
+    return ui.toUpperCase();
   }
 
   void setCurrentlyWorking(bool value) {
@@ -264,79 +979,39 @@ class AddUserController extends GetxController {
     }
   }
 
-  bool _validateForm() {
-    if (selectedRole.value == null) {
-      Get.snackbar(
-        'Validation Error',
-        'Please select a role',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+  /// Validates the form and returns an error message string when invalid,
+  /// or null when the form is valid.
+  String? _validateForm() {
+    if (selectedRole.value == null || selectedRole.value!.isEmpty) {
+      return 'Please select a role';
     }
 
     if (firstNameController.text.trim().isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'First name is required',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+      return 'First name is required';
     }
 
     if (lastNameController.text.trim().isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Last name is required',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+      return 'Last name is required';
     }
 
-    if (emailController.text.trim().isEmpty ||
-        !emailController.text.contains('@')) {
-      Get.snackbar(
-        'Validation Error',
-        'Valid email is required',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+    final email = emailController.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      return 'Valid email is required';
     }
 
     if (phoneController.text.trim().isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Phone number is required',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+      return 'Phone number is required';
     }
 
     if (employeeIdController.text.trim().isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Employee ID is required',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return false;
+      return 'Employee ID is required';
     }
 
-    return true;
+    return null;
   }
 
   void _clearForm() {
-    selectedRole.value = '';
+    selectedRole.value = null;
     firstNameController.clear();
     lastNameController.clear();
     phoneController.clear();
@@ -373,10 +1048,212 @@ class AddUserController extends GetxController {
     selectedBreakTime.value = null;
   }
 
+  // --- Mapping helpers to convert UI labels to backend enum values ---
+  String? _mapRole(String? uiRole) {
+    if (uiRole == null) return null;
+    switch (uiRole.toLowerCase()) {
+      case 'admin':
+        return 'ADMIN';
+      case 'employee':
+        return 'EMPLOYEE';
+      case 'super admin':
+      case 'super_admin':
+      case 'superadmin':
+        return 'SUPER_ADMIN';
+      case 'user':
+        return 'USER';
+      case 'manager':
+        return 'MANAGER';
+      default:
+        return uiRole.toUpperCase();
+    }
+  }
+
+  String? _mapGender(String? uiGender) {
+    if (uiGender == null) return null;
+    switch (uiGender.toLowerCase()) {
+      case 'male':
+        return 'MALE';
+      case 'female':
+        return 'FEMALE';
+      case 'other':
+        return 'OTHER';
+      case 'prefer not to say':
+      case 'prefer_not_to_say':
+        return 'PREFER_NOT_TO_SAY';
+      default:
+        return uiGender.toUpperCase();
+    }
+  }
+
+  String? _mapJobTitle(String? uiJob) {
+    if (uiJob == null) return null;
+    // Explicit mappings for UI labels used in the form
+    switch (uiJob.toLowerCase()) {
+      case 'software engineer':
+        return 'FULL_STACK_DEVELOPER';
+      case 'product manager':
+        return 'MARKETING_MANAGER';
+      case 'designer':
+        return 'UI_DEVELOPER';
+      case 'qa engineer':
+      case 'qa':
+      case 'quality assurance':
+        return 'SEALS_ENGINEER';
+    }
+
+    final v = uiJob.toLowerCase();
+    if (v.contains('back') || v.contains('back end'))
+      return 'BACK_END_DEVELOPER';
+    if (v.contains('front') || v.contains('front end'))
+      return 'FRONT_END_DEVELOPER';
+    if (v.contains('full')) return 'FULL_STACK_DEVELOPER';
+    if (v.contains('mobile')) return 'MOBILE_DEVELOPER';
+    if (v.contains('ui')) return 'UI_DEVELOPER';
+    if (v.contains('ux')) return 'UX_DEVELOPER';
+    if (v.contains('seals') || v.contains('sales')) return 'SEALS_ENGINEER';
+    if (v.contains('data scientist')) return 'DATA_SCIENTIST';
+    if (v.contains('data analyst')) return 'DATA_ANALYST';
+    if (v.contains('data engineer')) return 'DATA_ENGINEER';
+    if (v.contains('hr')) return 'HR_MANAGER';
+    if (v.contains('finance')) return 'FINANCE_MANAGER';
+    if (v.contains('marketing')) return 'MARKETING_MANAGER';
+
+    // Fallback: convert to uppercase and replace spaces with underscores
+    return uiJob.toUpperCase().replaceAll(' ', '_');
+  }
+
+  String? _mapDepartment(String? uiDept) {
+    if (uiDept == null) return null;
+    switch (uiDept.toLowerCase()) {
+      case 'it':
+      case 'information technology':
+        return 'IT';
+      case 'development':
+      case 'dev':
+      case 'engineering':
+        return 'DEVELOPMENT';
+      case 'hr':
+      case 'human resources':
+        return 'HR';
+      case 'finance':
+        return 'FINANCE';
+      case 'marketing':
+        return 'MARKETING';
+      case 'seals':
+      case 'sales':
+        return 'SEALS';
+      default:
+        return uiDept.toUpperCase().replaceAll(' ', '_');
+    }
+  }
+
   // Experience Methods
   void editExperience() {}
 
-  void addExperience() {}
+  void addExperience() {
+    experiences.add({
+      'position': '',
+      'company': '',
+      'jobType': '',
+      'startDate': '',
+      'endDate': '',
+      'description': '',
+      'isCurrentlyWorking': false,
+    });
+  }
+
+  void removeExperienceAt(int index) {
+    if (index >= 0 && index < experiences.length) experiences.removeAt(index);
+  }
+
+  void updateExperienceField(int index, String key, dynamic value) {
+    if (index < 0 || index >= experiences.length) return;
+    final current = Map<String, dynamic>.from(experiences[index]);
+    current[key] = value;
+    experiences[index] = current;
+  }
+
+  void selectJobTypeFor(int index) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select Job Type',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 16),
+            ...jobTypes.map(
+              (type) => ListTile(
+                title: Text(type),
+                onTap: () {
+                  updateExperienceField(index, 'jobType', type);
+                  Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectStartDateFor(int index) async {
+    final DateTime? picked = await showDatePicker(
+      context: Get.context!,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(primary: Color(0xFF6366F1)),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      final formatted = '${picked.day}/${picked.month}/${picked.year}';
+      updateExperienceField(index, 'startDate', formatted);
+    }
+  }
+
+  void selectEndDateFor(int index) async {
+    final DateTime? picked = await showDatePicker(
+      context: Get.context!,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(primary: Color(0xFF6366F1)),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      final formatted = '${picked.day}/${picked.month}/${picked.year}';
+      updateExperienceField(index, 'endDate', formatted);
+    }
+  }
+
+  void toggleCurrentlyWorkingFor(int index, bool value) {
+    updateExperienceField(index, 'isCurrentlyWorking', value);
+    if (value) updateExperienceField(index, 'endDate', '');
+  }
 
   void selectJobType() {
     Get.bottomSheet(

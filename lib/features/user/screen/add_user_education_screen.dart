@@ -12,7 +12,18 @@ class AddUserEducationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddUserController());
+    // Reuse the existing AddUserController if available so createdUserId is preserved
+    final controller = Get.isRegistered<AddUserController>()
+        ? Get.find<AddUserController>()
+        : Get.put(AddUserController());
+
+    // If a userId was passed via arguments, store it on the controller
+    if (Get.arguments != null && Get.arguments is Map) {
+      final argMap = Get.arguments as Map;
+      if (argMap.containsKey('userId')) {
+        controller.createdUserId = argMap['userId']?.toString();
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),

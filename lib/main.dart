@@ -9,9 +9,11 @@ import 'package:jesusvlsco/firebase_options.dart';
 
 import 'core/services/location_controller.dart';
 import 'core/services/request_handaler.dart';
+import 'core/services/storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await StorageService.init();
   await requestPermissions();
   final locationController = Get.put(LocationController());
   await locationController.initializeService();

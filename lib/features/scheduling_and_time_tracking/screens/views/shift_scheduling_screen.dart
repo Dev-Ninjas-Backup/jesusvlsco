@@ -4,8 +4,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/time_sheet_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_scheduling_controller.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/project_card_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/project_card_shimmer.dart';
 
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 
@@ -154,18 +155,19 @@ class TimeSheetScreen extends StatelessWidget {
     );
   }
 
-  /// Build projects list
+  /// Build projects list with pull to refresh and pagination
   Widget _buildProjectsList(TimeSheetController controller) {
     return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
+      if (controller.isLoading.value && controller.projects.isEmpty) {
+        return ListView.builder(
+          itemCount: 5, // Show 5 shimmer cards
+          itemBuilder: (context, index) => const ProjectCardShimmer(),
         );
       }
 
       final projects = controller.filteredProjects;
 
-      if (projects.isEmpty) {
+      if (projects.isEmpty && !controller.isLoading.value) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -183,21 +185,64 @@ class TimeSheetScreen extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
+              SizedBox(height: Sizer.hp(8)),
+              TextButton(
+                onPressed: () => controller.refreshProjects(),
+                child: Text(
+                  'Tap to refresh',
+                  style: AppTextStyle.f14W500().copyWith(
+                    color: AppColors.primary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
             ],
           ),
         );
       }
 
-      return ListView.builder(
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          final project = projects[index];
-          return ProjectCardWidget(
-            project: project,
-            onMorePressed: () => controller.showProjectOptions(project),
-            onAccessSchedule: () => controller.accessSchedule(project, context),
-          );
-        },
+      return RefreshIndicator(
+        onRefresh: controller.refreshProjects,
+        color: AppColors.primary,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            // Load more when reaching 80% of scroll
+            if (scrollInfo.metrics.pixels / scrollInfo.metrics.maxScrollExtent > 0.8) {
+              controller.loadMoreProjects();
+            }
+            return false;
+          },
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: projects.length + (controller.hasMoreData.value ? 1 : 0),
+            itemBuilder: (context, index) {
+              // Show loading indicator at the end if there's more data
+              if (index == projects.length) {
+                return Obx(() {
+                  if (controller.isLoadingMore.value) {
+                    return Container(
+                      padding: EdgeInsets.all(Sizer.wp(16)),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                });
+              }
+
+              final project = projects[index];
+              return ProjectCardWidget(
+                project: project,
+                onMorePressed: () => controller.showProjectOptions(project),
+                onAccessSchedule: () => controller.accessSchedule(project, context),
+              );
+            },
+          ),
+        ),
       );
     });
   }

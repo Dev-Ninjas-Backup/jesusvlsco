@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/time_sheet_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_scheduling_controller.dart';
 
 /// EditProjectDialog allows users to edit project title
 /// Shows a text field with current project name and confirm button
@@ -15,7 +15,7 @@ class EditProjectDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TimeSheetController>();
     final textController = TextEditingController(
-      text: controller.editingProject.value?.projectName ?? '',
+      text: controller.editingProject.value?.title ?? '',
     );
 
     return Dialog(

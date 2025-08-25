@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/user/widget/appbar_widget.dart';
 import '../controller/add_user_controller.dart';
-import '../widget/edit_button_widget.dart';
 import '../widget/payroll_form_fields_widget.dart';
 import '../widget/progress_indigator_widget.dart';
 import '../widget/section_header_widget.dart';
@@ -29,18 +28,10 @@ class AddUserPayrollScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [
-                        SectionHeaderWidget(
-                          title: 'Payroll, Time-off & Break Time',
-                          subtitle:
-                              'Fill in the details below to add a new employee to the system.',
-                        ),
-                        const SizedBox(height: 16),
-                        EditButtonWidget(
-                          onPressed: () => controller.editPayroll(),
-                        ),
-                      ],
+                    SectionHeaderWidget(
+                      title: 'Payroll, Time-off & Break Time',
+                      subtitle:
+                          'Fill in the details below to add a new employee to the system.',
                     ),
 
                     const SizedBox(height: 16),
