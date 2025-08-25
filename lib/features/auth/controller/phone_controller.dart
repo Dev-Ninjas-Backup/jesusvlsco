@@ -18,7 +18,7 @@ class PhoneController extends GetxController {
   var selectedCountryCode = CountryCode.fromCountryCode('US').obs;
 
   // API endpoint
-  static const _phoneLoginUrl = '$baseurl/auth/login/phone';
+  static const _phoneLoginUrl = '${ApiConstants.baseurl}/auth/login/phone';
 
   @override
   void onInit() {

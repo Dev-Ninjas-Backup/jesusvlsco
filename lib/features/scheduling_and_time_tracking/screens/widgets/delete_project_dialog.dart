@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/time_sheet_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/time_sheet_controller.dart';
 
 /// DeleteProjectDialog shows confirmation for project deletion
 /// Displays warning message with Delete and Cancel buttons

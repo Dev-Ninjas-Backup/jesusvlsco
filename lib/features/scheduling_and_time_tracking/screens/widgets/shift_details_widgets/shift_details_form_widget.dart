@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/shift_details_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_details_controller.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';

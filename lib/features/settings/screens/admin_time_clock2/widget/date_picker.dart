@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/date_pick_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/date_pick_controller.dart';
 
 class DatePicker extends StatelessWidget {
   const DatePicker({super.key});

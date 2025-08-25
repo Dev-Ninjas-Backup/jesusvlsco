@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/assign_employee_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
 
 class EmployeeCardWidget extends StatelessWidget {
   final EmployeeModel employee;

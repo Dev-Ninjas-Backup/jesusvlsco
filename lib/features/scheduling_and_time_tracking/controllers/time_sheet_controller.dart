@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
-import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/project_options_dialog.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/edit_project_dialog.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/delete_project_dialog.dart';
-import '../../../routes/config/route_constants.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/project_options_dialog.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/edit_project_dialog.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/delete_project_dialog.dart';
+import '../routes/scheduling_routes.dart';
 
 /// TimeSheetController manages the business logic for time sheet operations
 /// This includes handling project management and dialog states
@@ -190,8 +189,8 @@ class TimeSheetController extends GetxController {
       }
 
       EasyLoading.showSuccess('Project updated successfully');
-      Get.back(); // Close edit dialog
-      Get.back(); // Close options dialog
+      SchedulingRoutes.back(); // Close edit dialog
+      SchedulingRoutes.back(); // Close options dialog
     } catch (error) {
       _logger.e('Error updating project: $error');
       EasyLoading.showError('Failed to update project');
@@ -212,8 +211,8 @@ class TimeSheetController extends GetxController {
       }
 
       EasyLoading.showSuccess('Project deleted successfully');
-      Get.back(); // Close delete dialog
-      Get.back(); // Close options dialog
+      SchedulingRoutes.back(); // Close delete dialog
+      SchedulingRoutes.back(); // Close options dialog
     } catch (error) {
       _logger.e('Error deleting project: $error');
       EasyLoading.showError('Failed to delete project');
@@ -223,18 +222,18 @@ class TimeSheetController extends GetxController {
   /// Navigate to project schedule
   void accessSchedule(ProjectModel project, BuildContext context) {
     _logger.i('Accessing schedule for project: ${project.projectName}');
-    // Navigate to access schedule screen using GoRouter
-    context.go(
-      RoutePaths.adminAccessSchedule,
-      extra: {'projectId': project.id, 'projectName': project.projectName},
-    );
+    // Navigate to access schedule screen using GetX routes
+    SchedulingRoutes.toAccessSchedule(arguments: {
+      'projectId': project.id,
+      'projectName': project.projectName,
+    });
   }
 
   /// Add new project - Navigate to Add Project Screen
   void addNewProject(BuildContext context) {
     _logger.i('Navigating to Add Project screen');
-    // Use GoRouter for navigation - required for StatefulShellRoute
-    context.go(RoutePaths.adminAddProject);
+    // Use GetX routes for navigation
+    SchedulingRoutes.toAddProject();
   }
 }
 

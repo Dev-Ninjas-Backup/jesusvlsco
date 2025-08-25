@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/views/employee_screen.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_wide_slider/wide_slider_controller.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_wide_slider/wide_slider_model.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/employee_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_wide_slider/wide_slider_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_wide_slider/wide_slider_model.dart';
 
 class CustomWideSliderWidget extends StatelessWidget {
   final controller = Get.put(ProjectOverviewController());

@@ -8,7 +8,7 @@ import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_na
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/admin_dashboard_screen.dart';
 import 'package:jesusvlsco/features/communication/screens/communication_dashboard.dart';
 import 'package:jesusvlsco/features/user/screen/employee_list_screen.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/views/time_sheet.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/time_sheet.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/taskmanagement_dashboard.dart';
 
 class AdminBottomNavigationScaffold extends StatelessWidget {

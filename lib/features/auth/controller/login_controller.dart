@@ -16,7 +16,7 @@ class LoginController extends GetxController {
   final emailController = TextEditingController();
 
   // 🌐 API endpoint
-  static const _apiUrl = '$baseurl/auth/login/email';
+  static const _apiUrl = '${ApiConstants.baseurl}/auth/login/email';
 
   @override
   void onClose() {

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/controllers/add_project_controller.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/models/team_model.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/add_project_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/team_model.dart';
 
 /// Member selection dialog widget
 /// Shows a scrollable list of team members with checkbox selection
