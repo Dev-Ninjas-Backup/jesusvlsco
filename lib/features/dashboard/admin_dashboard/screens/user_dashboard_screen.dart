@@ -9,6 +9,8 @@ import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
+import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class UserDashboardScreen extends StatelessWidget {
@@ -452,7 +454,9 @@ class UserDashboardScreen extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(UserSurveyScreen());
+          },
           child: Row(
             children: [
               Text(
