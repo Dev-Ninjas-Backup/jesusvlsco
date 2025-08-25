@@ -13,11 +13,11 @@ import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pe
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/activity_widget.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/second_date_picker/second_datepicker.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/approved_requests_list.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_time_button.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/custom_wide_slider/custom_wide_slider_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/search_bar.dart';
-import 'package:jesusvlsco/features/scheduling_and_time%20_tracking/screens/widgets/time_counter.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/approved_requests_list.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_time_button.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_wide_slider/custom_wide_slider_widget.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/search_bar.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_counter.dart';
 
 class TimeAndClockScreen extends StatefulWidget {
   TimeAndClockScreen({super.key});

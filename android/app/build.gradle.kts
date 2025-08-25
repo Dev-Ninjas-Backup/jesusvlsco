@@ -22,6 +22,7 @@ android {
     }
 
     defaultConfig {
+        
         applicationId = "com.example.jesusvlsco"
         minSdk = flutter.minSdkVersion        // ✅ Use "minSdk" instead of minSdkVersion()
         targetSdk = flutter.targetSdkVersion

@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_drawer.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
 
 PreferredSizeWidget Custom_appbar({required String title}) {
-
   return AppBar(
     shadowColor: Colors.white,
     backgroundColor: Colors.white,
@@ -40,7 +39,7 @@ PreferredSizeWidget Custom_appbar({required String title}) {
           size: Sizer.wp(24),
         ),
         onPressed: () {
-          Get.to(CustomDrawer());
+          Get.to(AdminDrawer());
         },
       ),
     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/core/utils/constants/image_path.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 
 class AdminTile extends StatelessWidget {
@@ -10,6 +11,7 @@ class AdminTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Obx(
@@ -26,12 +28,12 @@ class AdminTile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(admin.imageUrl),
+                  backgroundImage: NetworkImage(ImagePath.user1),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    admin.name,
+                    admin.email,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -42,7 +44,7 @@ class AdminTile extends StatelessWidget {
               ],
             ),
             trailing: Text(
-              admin.code,
+              admin.id,
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
