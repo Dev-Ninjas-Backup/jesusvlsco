@@ -1,38 +1,6 @@
-// import 'package:get/get.dart';
-
-// class Admin {
-//   final String name;
-//   final String imageUrl;
-//   final String code;
-//   RxBool isSelected;
-
-//   Admin({
-//     required this.name,
-//     required this.imageUrl,
-//     required this.code,
-//     bool selected = false,
-//   }) : isSelected = selected.obs;
-// }
-
-// class AdminListController extends GetxController {
-//   var admin = <Admin>[
-//   Admin(name: "Olivia Martinez", imageUrl: "https://i.pravatar.cc/150?img=10", code: "78421"),
-//   Admin(name: "Liam Anderson", imageUrl: "https://i.pravatar.cc/150?img=11", code: "45938"),
-//   Admin(name: "Sophia Lee", imageUrl: "https://i.pravatar.cc/150?img=12", code: "93215"),
-//   Admin(name: "Noah Brown", imageUrl: "https://i.pravatar.cc/150?img=13", code: "67209"),
-//   Admin(name: "Isabella Clark", imageUrl: "https://i.pravatar.cc/150?img=14", code: "84576"),
-//   Admin(name: "Mason Walker", imageUrl: "https://i.pravatar.cc/150?img=15", code: "21847"),
-//   Admin(name: "Ava Harris", imageUrl: "https://i.pravatar.cc/150?img=16", code: "50673"),
-//   Admin(name: "Ethan Young", imageUrl: "https://i.pravatar.cc/150?img=17", code: "39482"),
-//   Admin(name: "Mia King", imageUrl: "https://i.pravatar.cc/150?img=18", code: "76134"),
-// ].obs;
-
-//   void toggleSelection(int index) {
-//     admin[index].isSelected.value = !admin[index].isSelected.value;
-//   }
-// }
+import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/core/services/network_caller.dart';
+import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
@@ -85,39 +53,48 @@ class AdminListController extends GetxController {
   final RxInt currentPage = 1.obs;
   final int limit = 8;
 
-  final NetworkCaller _networkCaller = NetworkCaller();
-
   @override
   void onInit() {
     super.onInit();
-    fetchAdmins(); // Initial load
+    // Initial load
   }
 
   Future<void> fetchAdmins({int page = 1}) async {
     isLoading.value = true;
+    print('call admin');
 
     final token = await StorageService.getAuthToken();
-    print('token $token');
+    final url = Uri.parse(
+      '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit',
+    );
 
-    final url =
-        '$baseurl/admin/manage-admin/get-admins?page=$page&limit=$limit';
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+        },
+      );
+      print('Bearer $token');
+      
 
-    final response = await _networkCaller.getRequest(url, token: '$token');
-
-    if (response.isSuccess) {
-      try {
-        final List<dynamic> data = response.responseData['data'];
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final List<dynamic> data = jsonData['data'];
         admin.value = data.map((e) => Admin.fromJson(e)).toList();
         currentPage.value = page;
-        print("successfully access the api");
-      } catch (e) {
-        print('Parsing error: $e');
+        print("Successfully accessed the API");
+      } else {
+        print("Failed to load admins: ${response.statusCode}");
+        print("Response body: ${response.body}");
       }
-    } else {
-      print('Admin fetch failed: ${response.errorMessage}');
+    } catch (e) {
+      print("Error fetching admins: $e");
+    } finally {
+      isLoading.value = false;
     }
-
-    isLoading.value = false;
   }
 
   void nextPage() => fetchAdmins(page: currentPage.value + 1);
