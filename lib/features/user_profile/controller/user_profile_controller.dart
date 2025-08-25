@@ -96,21 +96,17 @@ class UserProfileController extends GetxController {
       lastName: lastNameController.text.isNotEmpty
           ? lastNameController.text
           : null,
-      gender: selectedGender.value,
-      jobTitle: selectedJobTitle.value,
-      department: departmentController.text.isNotEmpty
-          ? departmentController.text
-          : null,
-      address: addressController.text.isNotEmpty
-          ? addressController.text
-          : null,
+      gender: selectedGender.value, // ✅ this is a string
+      jobTitle: selectedJobTitle.value, // ✅ this is a string
       city: selectedCity.value,
       state: selectedState.value,
       country: selectedCountry.value,
+      address: addressController.text.isNotEmpty
+          ? addressController.text
+          : null,
       nationality: nationalityController.text.isNotEmpty
           ? nationalityController.text
           : null,
-      // not allowing phone, email, dob to be changed
       profileUrl: profileImageUrl.value,
     );
 

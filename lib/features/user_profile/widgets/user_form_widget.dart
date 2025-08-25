@@ -44,20 +44,45 @@ class UserFormWidget extends StatelessWidget {
           _buildDropdownField(
             'Gender',
             controller.selectedGender.value ?? 'Not specified',
-            () {},
-            // () => _showGenderBottomSheet(controller),
+            () {
+              if (!controller.isEditing.value)
+                return; // only editable in edit mode
+              List<Map<String, String>> genders = [
+                {'label': 'Male', 'value': 'MALE'},
+                {'label': 'Female', 'value': 'FEMALE'},
+                {'label': 'Other', 'value': 'OTHER'},
+                {'label': 'Prefer not to say', 'value': 'PREFER_NOT_TO_SAY'},
+              ];
+
+              Get.bottomSheet(
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: genders.map((gender) {
+                      return ListTile(
+                        title: Text(gender['label']!),
+                        onTap: () {
+                          controller.selectedGender.value =
+                              gender['value']; // send backend-friendly value
+                          Get.back();
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
           ),
+
           const SizedBox(height: 20),
           _buildFormField(
             'Employee ID',
             controller.employeeIdController,
             isEditable: false,
           ),
-          const SizedBox(height: 20),
-          _buildReadOnlyField(
-            'Job Title',
-            controller.selectedJobTitle.value ?? 'Not specified',
-          ),
+
           const SizedBox(height: 20),
           _buildDropdownField(
             'Job Title',
