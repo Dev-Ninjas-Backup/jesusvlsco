@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
@@ -46,6 +47,61 @@ class UserDashboardScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add, // Main FAB icon
+        activeIcon: Icons.close, // Icon when FAB is open
+        backgroundColor: AppColors.color1,
+        foregroundColor: Colors.white,
+        activeBackgroundColor: Colors.red,
+        activeForegroundColor: Colors.white,
+        buttonSize: const Size(56, 56),
+        childrenButtonSize: const Size(48, 48),
+        overlayColor: Colors.black,
+        overlayOpacity: 0.4,
+        spacing: 8,
+        spaceBetweenChildren: 8,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.login, size: 20),
+            backgroundColor: AppColors.color2,
+            foregroundColor: Colors.white,
+            label: 'Check In',
+            labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+            labelBackgroundColor: Colors.white,
+            onTap: () {
+              // Placeholder action for Check In
+              Get.snackbar(
+                'Check In',
+                'Check In button pressed!',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: AppColors.color1,
+                colorText: Colors.white,
+              );
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.logout, size: 20),
+            backgroundColor: AppColors.color2,
+            foregroundColor: Colors.white,
+            label: 'Check Out',
+            labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+            labelBackgroundColor: Colors.white,
+            onTap: () {
+              // Placeholder action for Check Out
+              Get.snackbar(
+                'Check Out',
+                'Check Out button pressed!',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: AppColors.color1,
+                colorText: Colors.white,
+              );
+              // Example: Send a predefined message to the chat
+              // controller.messageController.text = 'Check Out';
+              // controller.sendMessage();
+            },
+          ),
+        ],
       ),
     );
   }

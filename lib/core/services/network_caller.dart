@@ -18,7 +18,10 @@ class NetworkCaller {
           .get(
             Uri.parse(url),
             headers: {
-              if (token != null) 'Authorization': token,
+              if (token != null)
+                'Authorization': token.startsWith('Bearer ')
+                    ? token
+                    : 'Bearer $token',
               'Content-type': 'application/json',
             },
           )
@@ -33,21 +36,80 @@ class NetworkCaller {
   // POST method
   Future<ResponseData> postRequest(
     String url, {
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
     String? token,
   }) async {
     log('POST Request: $url');
-    log('Request Body: ${jsonEncode(body)}');
-
     try {
+      final encoded = body != null ? jsonEncode(body) : null;
+      log('Request Body: $encoded');
+
       final http.Response response = await http
           .post(
             Uri.parse(url),
             headers: {
-              if (token != null) 'Authorization': token,
+              if (token != null)
+                'Authorization': token.startsWith('Bearer ')
+                    ? token
+                    : 'Bearer $token',
               'Content-type': 'application/json',
             },
-            body: jsonEncode(body),
+            body: encoded,
+          )
+          .timeout(Duration(seconds: timeoutDuration));
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
+  // PATCH method
+  Future<ResponseData> patchRequest(
+    String url, {
+    Map<String, dynamic>? body,
+    String? token,
+  }) async {
+    log('PATCH Request: $url');
+    try {
+      final encoded = body != null ? jsonEncode(body) : null;
+      log('Request Body: $encoded');
+
+      final http.Response response = await http
+          .patch(
+            Uri.parse(url),
+            headers: {
+              if (token != null)
+                'Authorization': token.startsWith('Bearer ')
+                    ? token
+                    : 'Bearer $token',
+              'Content-type': 'application/json',
+            },
+            body: encoded,
+          )
+          .timeout(Duration(seconds: timeoutDuration));
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
+  // DELETE method
+  Future<ResponseData> deleteRequest(String url, {String? token}) async {
+    log('DELETE Request: $url');
+    log('DELETE Token: $token');
+    try {
+      final http.Response response = await http
+          .delete(
+            Uri.parse(url),
+            headers: {
+              if (token != null)
+                'Authorization': token.startsWith('Bearer ')
+                    ? token
+                    : 'Bearer $token',
+              'Content-type': 'application/json',
+            },
           )
           .timeout(Duration(seconds: timeoutDuration));
 
@@ -73,7 +135,9 @@ class NetworkCaller {
 
       // Attach token header if provided
       if (token != null) {
-        request.headers['Authorization'] = token;
+        request.headers['Authorization'] = token.startsWith('Bearer ')
+            ? token
+            : 'Bearer $token';
       }
 
       // Add fields
@@ -121,15 +185,9 @@ class NetworkCaller {
 
     final decodedResponse = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      if (decodedResponse['success'] == true) {
-        return ResponseData(
-          isSuccess: true,
-          statusCode: response.statusCode,
-          responseData: decodedResponse,
-          errorMessage: '',
-        );
-      } else {
+    // Treat any 2xx status as success unless the server explicitly returns success: false
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (decodedResponse is Map && decodedResponse['success'] == false) {
         return ResponseData(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -137,6 +195,13 @@ class NetworkCaller {
           errorMessage: decodedResponse['message'] ?? 'Unknown error occurred',
         );
       }
+
+      return ResponseData(
+        isSuccess: true,
+        statusCode: response.statusCode,
+        responseData: decodedResponse,
+        errorMessage: '',
+      );
     } else if (response.statusCode == 400) {
       return ResponseData(
         isSuccess: false,

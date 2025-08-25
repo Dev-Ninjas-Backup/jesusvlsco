@@ -3,28 +3,39 @@ import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/team_model.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/services/project_api_service.dart';
 
 /// AddProjectController manages the business logic for adding new projects
-/// Handles team selection, member selection, and project creation
+/// Handles team selection, manager selection, and project creation
 class AddProjectController extends GetxController {
   final Logger _logger = Logger();
+  final ProjectApiService _projectApiService = ProjectApiService();
 
-  // Text controller for project name input
+  // Text controllers for input fields
   final projectNameController = TextEditingController();
+  final locationController = TextEditingController();
 
-  // Observable variable for project name
+  // Observable variables for form inputs
   var projectName = ''.obs;
+  var location = ''.obs;
 
   // Observable variables for state management
   var isLoading = false.obs;
+  var isLoadingMoreTeams = false.obs;
+  var isLoadingMoreManagers = false.obs;
   var selectedTeam = Rx<TeamModel?>(null);
-  var selectedMembers = <MemberModel>[].obs;
-  var availableMembers = <MemberModel>[].obs;
+  var selectedManager = Rx<MemberModel?>(null);
+  var availableManagers = <MemberModel>[].obs;
   var teams = <TeamModel>[].obs;
+
+  // Pagination variables
+  var currentTeamPage = 1;
+  var currentManagerPage = 1;
+  var hasMoreTeams = true.obs;
+  var hasMoreManagers = true.obs;
 
   // Dropdown states
   var isTeamDropdownOpen = false.obs;
-  var isMemberDropdownOpen = false.obs;
 
   @override
   void onInit() {
@@ -35,100 +46,163 @@ class AddProjectController extends GetxController {
     projectNameController.addListener(() {
       projectName.value = projectNameController.text;
     });
+
+    locationController.addListener(() {
+      location.value = locationController.text;
+    });
   }
 
   @override
   void onClose() {
     projectNameController.dispose();
+    locationController.dispose();
     super.onClose();
   }
 
-  /// Load all available teams and members from API
+  /// Load all available teams and managers from API
   Future<void> loadTeamsAndMembers() async {
     try {
       isLoading.value = true;
+      currentTeamPage = 1;
+      currentManagerPage = 1;
 
-      // Mock data for demonstration - replace with actual API call
-      await Future.delayed(const Duration(milliseconds: 500));
+      // Load teams and managers in parallel
+      final teamsFuture = _projectApiService.getAllTeams(page: 1, limit: 10);
+      final managersFuture = _projectApiService.getAllManagers(
+        page: 1,
+        limit: 10,
+      );
 
-      // Load teams
-      teams.value = [
-        const TeamModel(id: '1', name: 'Team 1', members: []),
-        const TeamModel(id: '2', name: 'Team 2', members: []),
-        const TeamModel(id: '3', name: 'Team 3', members: []),
-      ];
+      final results = await Future.wait([teamsFuture, managersFuture]);
+      final teamsResponse = results[0];
+      final managersResponse = results[1];
 
-      // Load all available members
-      availableMembers.value = [
-        const MemberModel(
-          id: '1',
-          name: 'Jane Cooper',
-          position: 'Project Manager',
-          avatar: 'https://i.pravatar.cc/150?img=1',
-        ),
-        const MemberModel(
-          id: '2',
-          name: 'Robert Fox',
-          position: 'Construction Site Manager',
-          avatar: 'https://i.pravatar.cc/150?img=2',
-        ),
-        const MemberModel(
-          id: '3',
-          name: 'Esther Howard',
-          position: 'Assistant Project Manager',
-          avatar: 'https://i.pravatar.cc/150?img=3',
-        ),
-        const MemberModel(
-          id: '4',
-          name: 'Desirae Botosh',
-          position: 'Superintendent',
-          avatar: 'https://i.pravatar.cc/150?img=4',
-        ),
-        const MemberModel(
-          id: '5',
-          name: 'Marley Stanton',
-          position: 'Coordinator',
-          avatar: 'https://i.pravatar.cc/150?img=5',
-        ),
-        const MemberModel(
-          id: '6',
-          name: 'Brandon Vaccaro',
-          position: 'Operations Manager',
-          avatar: 'https://i.pravatar.cc/150?img=6',
-        ),
-        const MemberModel(
-          id: '7',
-          name: 'Erin Press',
-          position: 'Estimating Manager',
-          avatar: 'https://i.pravatar.cc/150?img=7',
-        ),
-      ];
+      // Process teams response
+      if (teamsResponse.isSuccess) {
+        final teamsData = teamsResponse.responseData['data']['teams'] as List;
+        final meta = teamsResponse.responseData['data']['meta'];
 
-      // Pre-select some members to match the Figma design
-      _preselectMembers();
+        teams.value = teamsData
+            .map((team) => TeamModel.fromJson(team))
+            .toList();
+        hasMoreTeams.value = currentTeamPage < (meta['pages'] ?? 1);
+        _logger.i(
+          'Loaded ${teams.length} teams, hasMore: ${hasMoreTeams.value}',
+        );
+      } else {
+        _logger.e('Failed to load teams: ${teamsResponse.errorMessage}');
+        EasyLoading.showError('Failed to load teams');
+      }
+
+      // Process managers response
+      if (managersResponse.isSuccess) {
+        final managersData = managersResponse.responseData['data'] as List;
+        final metadata = managersResponse.responseData['metadata'];
+
+        availableManagers.value = managersData
+            .map((manager) => MemberModel.fromManagerJson(manager))
+            .toList();
+        hasMoreManagers.value =
+            currentManagerPage < (metadata['totalPage'] ?? 1);
+        _logger.i(
+          'Loaded ${availableManagers.length} managers, hasMore: ${hasMoreManagers.value}',
+        );
+      } else {
+        _logger.e('Failed to load managers: ${managersResponse.errorMessage}');
+        EasyLoading.showError('Failed to load managers');
+      }
 
       isLoading.value = false;
     } catch (error) {
       isLoading.value = false;
-      _logger.e('Error loading teams and members: $error');
-      EasyLoading.showError('Failed to load teams and members');
+      _logger.e('Error loading teams and managers: $error');
+      EasyLoading.showError('Failed to load data. Please try again.');
     }
   }
 
-  /// Pre-select members to match the Figma design
-  void _preselectMembers() {
-    final preselectedIds = [
-      '1',
-      '3',
-      '5',
-      '6',
-    ]; // Jane, Esther, Marley, Brandon
+  /// Load more teams for pagination
+  Future<void> loadMoreTeams() async {
+    if (!hasMoreTeams.value || isLoadingMoreTeams.value) return;
 
-    selectedMembers.value = availableMembers
-        .where((member) => preselectedIds.contains(member.id))
-        .toList();
+    try {
+      isLoadingMoreTeams.value = true;
+      currentTeamPage++;
 
-    _logger.i('Pre-selected ${selectedMembers.length} members');
+      final response = await _projectApiService.getAllTeams(
+        page: currentTeamPage,
+        limit: 10,
+      );
+
+      if (response.isSuccess) {
+        final teamsData = response.responseData['data']['teams'] as List;
+        final meta = response.responseData['data']['meta'];
+
+        final newTeams = teamsData
+            .map((team) => TeamModel.fromJson(team))
+            .toList();
+        teams.addAll(newTeams);
+        hasMoreTeams.value = currentTeamPage < (meta['pages'] ?? 1);
+
+        _logger.i(
+          'Loaded ${newTeams.length} more teams, total: ${teams.length}',
+        );
+      } else {
+        currentTeamPage--; // Revert page increment on error
+        _logger.e('Failed to load more teams: ${response.errorMessage}');
+      }
+
+      isLoadingMoreTeams.value = false;
+    } catch (error) {
+      currentTeamPage--; // Revert page increment on error
+      isLoadingMoreTeams.value = false;
+      _logger.e('Error loading more teams: $error');
+    }
+  }
+
+  /// Load more managers for pagination
+  Future<void> loadMoreManagers() async {
+    if (!hasMoreManagers.value || isLoadingMoreManagers.value) return;
+
+    try {
+      isLoadingMoreManagers.value = true;
+      currentManagerPage++;
+
+      final response = await _projectApiService.getAllManagers(
+        page: currentManagerPage,
+        limit: 10,
+      );
+
+      if (response.isSuccess) {
+        final managersData = response.responseData['data'] as List;
+        final metadata = response.responseData['metadata'];
+
+        final newManagers = managersData
+            .map((manager) => MemberModel.fromManagerJson(manager))
+            .toList();
+        availableManagers.addAll(newManagers);
+        hasMoreManagers.value =
+            currentManagerPage < (metadata['totalPage'] ?? 1);
+
+        _logger.i(
+          'Loaded ${newManagers.length} more managers, total: ${availableManagers.length}',
+        );
+      } else {
+        currentManagerPage--; // Revert page increment on error
+        _logger.e('Failed to load more managers: ${response.errorMessage}');
+      }
+
+      isLoadingMoreManagers.value = false;
+    } catch (error) {
+      currentManagerPage--; // Revert page increment on error
+      isLoadingMoreManagers.value = false;
+      _logger.e('Error loading more managers: $error');
+    }
+  }
+
+  /// Handle manager selection
+  void selectManager(MemberModel manager) {
+    selectedManager.value = manager;
+    _logger.i('Selected manager: ${manager.name}');
   }
 
   /// Handle team selection
@@ -141,50 +215,14 @@ class AddProjectController extends GetxController {
   /// Toggle team dropdown visibility
   void toggleTeamDropdown() {
     isTeamDropdownOpen.value = !isTeamDropdownOpen.value;
-    if (isTeamDropdownOpen.value) {
-      isMemberDropdownOpen.value = false;
-    }
   }
-
-  /// Toggle member dropdown visibility
-  void toggleMemberDropdown() {
-    isMemberDropdownOpen.value = !isMemberDropdownOpen.value;
-    if (isMemberDropdownOpen.value) {
-      isTeamDropdownOpen.value = false;
-    }
-  }
-
-  /// Toggle member selection
-  void toggleMemberSelection(MemberModel member) {
-    final index = selectedMembers.indexWhere((m) => m.id == member.id);
-
-    if (index != -1) {
-      // Member is already selected, remove them
-      selectedMembers.removeAt(index);
-      _logger.i('Member ${member.name} deselected');
-    } else {
-      // Member is not selected, add them
-      selectedMembers.add(member);
-      _logger.i('Member ${member.name} selected');
-    }
-
-    // Force update the observable list
-    selectedMembers.refresh();
-  }
-
-  /// Check if member is selected
-  bool isMemberSelected(MemberModel member) {
-    return selectedMembers.any((m) => m.id == member.id);
-  }
-
-  /// Get selected members count
-  int get selectedMembersCount => selectedMembers.length;
 
   /// Validate form inputs
   bool get isFormValid {
     return projectName.value.trim().isNotEmpty &&
+        location.value.trim().isNotEmpty &&
         selectedTeam.value != null &&
-        selectedMembers.isNotEmpty;
+        selectedManager.value != null;
   }
 
   /// Create new project
@@ -197,35 +235,44 @@ class AddProjectController extends GetxController {
     try {
       EasyLoading.show(status: 'Creating project...');
 
-      // Simulate API call
-      await Future.delayed(const Duration(milliseconds: 1500));
-
-      _logger.i(
-        'Creating project: ${projectNameController.text.trim()}, '
-        'Team: ${selectedTeam.value!.name}, '
-        'Members: ${selectedMembers.map((m) => m.name).join(', ')}',
+      // Call API to create project
+      final response = await _projectApiService.createProject(
+        teamId: selectedTeam.value!.id,
+        managerId: selectedManager.value!.id,
+        title: projectNameController.text.trim(),
+        projectLocation: locationController.text.trim(),
       );
 
-      EasyLoading.showSuccess('Project created successfully!');
+      if (response.isSuccess) {
+        _logger.i('Project created successfully');
+        EasyLoading.showSuccess('Project created successfully!');
 
-      // Clear form
-      _clearForm();
+        // Clear form
+        _clearForm();
 
-      // Navigate back to TimeSheet screen
-      Get.back();
+        // Navigate back to previous screen
+        Get.back();
+      } else {
+        _logger.e('Failed to create project: ${response.errorMessage}');
+        EasyLoading.showError(
+          response.errorMessage.isEmpty
+              ? 'Failed to create project'
+              : response.errorMessage,
+        );
+      }
     } catch (error) {
       _logger.e('Error creating project: $error');
-      EasyLoading.showError('Failed to create project');
+      EasyLoading.showError('Failed to create project. Please try again.');
     }
   }
 
   /// Clear form data
   void _clearForm() {
     projectNameController.clear();
+    locationController.clear();
     selectedTeam.value = null;
-    selectedMembers.clear();
+    selectedManager.value = null;
     isTeamDropdownOpen.value = false;
-    isMemberDropdownOpen.value = false;
   }
 
   /// Navigate back to previous screen

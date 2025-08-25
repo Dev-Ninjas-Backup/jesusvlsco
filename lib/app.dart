@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
@@ -40,7 +41,10 @@ class Jesusvlsco extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
 
-      // home: PendingRequest(),
+      // EasyLoading builder - separate from routing
+      builder: EasyLoading.init(),
+
+      // Main app routing
       home: Router.withConfig(config: AppRouter.router),
 
       //  home: AuthRoutes.routes,
