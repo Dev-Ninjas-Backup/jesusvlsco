@@ -16,15 +16,13 @@ class NetworkCaller {
     try {
       final http.Response response = await http
           .get(
-        Uri.parse(url),
-        headers: {
-          if (token != null) 'Authorization': token,
-          'Content-type': 'application/json',
-        },
-      )
-          .timeout(
-        Duration(seconds: timeoutDuration),
-      );
+            Uri.parse(url),
+            headers: {
+              if (token != null) 'Authorization': token,
+              'Content-type': 'application/json',
+            },
+          )
+          .timeout(Duration(seconds: timeoutDuration));
 
       return _handleResponse(response);
     } catch (e) {
@@ -42,23 +40,16 @@ class NetworkCaller {
     log('Request Body: ${jsonEncode(body)}');
 
     try {
-
       final http.Response response = await http
           .post(
-        Uri.parse(url),
-        headers: {
-          if (token != null) 'Authorization': token,
-          'Content-type': 'application/json'
-        },
-        body: jsonEncode(body),
-      )
+            Uri.parse(url),
+            headers: {
+              if (token != null) 'Authorization': token,
+              'Content-type': 'application/json',
+            },
+            body: jsonEncode(body),
+          )
           .timeout(Duration(seconds: timeoutDuration));
-
-      final Response response = await post(
-        Uri.parse(url),
-        headers: {'Content-type': 'application/json'},
-        body: jsonEncode(body),
-      ).timeout(Duration(seconds: timeoutDuration));
 
       return _handleResponse(response);
     } catch (e) {
@@ -96,15 +87,19 @@ class NetworkCaller {
         if (await file.exists()) {
           final stream = http.ByteStream(file.openRead());
           final length = await file.length();
-          final multipartFile = http.MultipartFile(fileField, stream, length,
-              filename: file.uri.pathSegments.last);
+          final multipartFile = http.MultipartFile(
+            fileField,
+            stream,
+            length,
+            filename: file.uri.pathSegments.last,
+          );
           request.files.add(multipartFile);
         }
       }
 
       final streamedResponse = await request.send().timeout(
-            Duration(seconds: timeoutDuration),
-          );
+        Duration(seconds: timeoutDuration),
+      );
 
       final responseBody = await streamedResponse.stream.bytesToString();
       final http.Response response = http.Response(
@@ -181,7 +176,7 @@ class NetworkCaller {
   ResponseData _handleError(dynamic error) {
     log('Request Error: $error');
 
-  if (error is http.ClientException) {
+    if (error is http.ClientException) {
       return ResponseData(
         isSuccess: false,
         statusCode: 500,
