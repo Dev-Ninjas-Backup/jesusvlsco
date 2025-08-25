@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
-import '../screens/views/shift_scheduling_screen.dart';
-import '../screens/views/add_project_screen.dart';
-import '../screens/views/access_schedule_screen.dart';
-import '../screens/views/assign_employee_screen.dart';
-import '../screens/views/shift_details_screen.dart';
-import '../screens/views/shift_template_screen.dart';
-import '../controllers/shift_scheduling_controller.dart';
-import '../controllers/add_project_controller.dart';
-import '../controllers/access_schedule_controller.dart';
-import '../controllers/assign_employee_controller.dart';
-import '../controllers/shift_details_controller.dart';
-import '../controllers/shift_template_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/access_schedule_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/add_project_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/date_pick_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_details_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_template_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/access_schedule_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/add_project_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_details_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_scheduling_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_template_screen.dart';
 
 /// GetX Routes for Scheduling and Time Tracking module
 ///
@@ -65,7 +65,7 @@ class SchedulingRoutes {
     // Assign Employee Screen
     GetPage(
       name: assignEmployee,
-      page: () => const AssignEmployeeScreen(),
+      page: () => AssignEmployeeScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AssignEmployeeController>(() => AssignEmployeeController());
       }),

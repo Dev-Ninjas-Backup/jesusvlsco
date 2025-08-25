@@ -72,6 +72,16 @@ class NetworkCaller {
   }) async {
     log('PATCH Request: $url');
     try {
+
+      final Response response = await post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
+        body: jsonEncode(body),
+      ).timeout(Duration(seconds: timeoutDuration));
+
       final encoded = body != null ? jsonEncode(body) : null;
       log('Request Body: $encoded');
 
@@ -89,11 +99,32 @@ class NetworkCaller {
           )
           .timeout(Duration(seconds: timeoutDuration));
 
+
       return _handleResponse(response);
     } catch (e) {
       return _handleError(e);
     }
   }
+
+
+  // PATCH method
+  Future<ResponseData> patchRequest(
+    String url, {
+    Map<String, String>? body,
+    String? token,
+  }) async {
+    log('PATCH Request: $url');
+    log('Request Body: ${jsonEncode(body)}');
+
+    try {
+      final Response response = await patch(
+        Uri.parse(url),
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
+        body: jsonEncode(body),
+      ).timeout(Duration(seconds: timeoutDuration));
 
   // Multipart POST (for file uploads + form fields)
   Future<ResponseData> postMultipart(
@@ -148,6 +179,26 @@ class NetworkCaller {
         headers: streamedResponse.headers,
       );
 
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
+  // DELETE method
+  Future<ResponseData> deleteRequest(String url, {String? token}) async {
+    log('DELETE Request: $url');
+    log('DELETE Token: $token');
+    try {
+      final Response response = await delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': token.toString(),
+          'Content-type': 'application/json',
+        },
+      ).timeout(Duration(seconds: timeoutDuration));
+
       return _handleResponse(response);
     } catch (e) {
       return _handleError(e);
@@ -160,6 +211,17 @@ class NetworkCaller {
     log('Response Body: ${response.body}');
 
     final decodedResponse = jsonDecode(response.body);
+
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      if (decodedResponse['success'] == true) {
+        return ResponseData(
+          isSuccess: true,
+          statusCode: response.statusCode,
+          responseData: decodedResponse,
+          errorMessage: '',
+        );
+      } else {
 
     // Treat any 2xx status as success unless the server explicitly returns success: false
     if (response.statusCode >= 200 && response.statusCode < 300) {

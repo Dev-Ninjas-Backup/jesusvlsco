@@ -96,135 +96,136 @@ class ProjectCardWidget extends StatelessWidget {
     );
   }
 
-  /// Build project information section with team and manager
+  /// Build project information section with assigned users and admin
   Widget _buildProjectInfo() {
     return Column(
       children: [
-        _buildTeamSection(),
+        _buildAssignedSection(),
         SizedBox(height: Sizer.hp(12)),
-        _buildManagerSection(),
+        _buildAdminSection(),
       ],
     );
   }
 
-  /// Build team section
-  Widget _buildTeamSection() {
+  /// Build assigned users section (max 4 members + total count)
+  Widget _buildAssignedSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Team',
+          'Assigned',
           style: AppTextStyle.f16W500().copyWith(
             color: AppColors.textSecondary,
             height: 1.5,
           ),
         ),
-        Row(
-          children: [
-            // Team image or icon
-            _buildUserAvatar(project.team.image, isTeam: true),
-            SizedBox(width: Sizer.wp(8)),
-            // Team name and department
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  project.team.title,
-                  style: AppTextStyle.f14W500().copyWith(
-                    color: AppColors.text,
-                    height: 1.4,
-                  ),
-                ),
-                Text(
-                  project.team.department,
-                  style: AppTextStyle.f12W400().copyWith(
-                    color: AppColors.textSecondary,
-                    height: 1.3,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+        _buildUserAvatars(),
       ],
     );
   }
 
-  /// Build manager section
-  Widget _buildManagerSection() {
+  /// Build admin section (only admin photo)
+  Widget _buildAdminSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Manager',
+          'Admin',
           style: AppTextStyle.f16W500().copyWith(
             color: AppColors.textSecondary,
             height: 1.5,
           ),
         ),
-        Row(
-          children: [
-            // Manager avatar (no image in API, so use icon)
-            _buildUserAvatar(null),
-            SizedBox(width: Sizer.wp(8)),
-            // Manager email and role
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  project.manager.email.split('@')[0], // Display first part of email
-                  style: AppTextStyle.f14W500().copyWith(
-                    color: AppColors.text,
-                    height: 1.4,
-                  ),
-                ),
-                Text(
-                  project.manager.role,
-                  style: AppTextStyle.f12W400().copyWith(
-                    color: AppColors.textSecondary,
-                    height: 1.3,
-                  ),
-                ),
-              ],
-            ),
-          ],
+        Container(
+          margin: EdgeInsets.only(right: Sizer.wp(12)),
+          child: _buildUserAvatar(
+            null,
+            isAdmin: true,
+          ), // Admin doesn't have image in API
         ),
       ],
     );
   }
 
-  /// Build user avatar with fallback to user icon
-  Widget _buildUserAvatar(String? imageUrl, {bool isTeam = false}) {
+  /// Build user avatars with up to 4 members + total count
+  Widget _buildUserAvatars() {
+    final int totalUsers = project.projectUsers.length;
+    final int displayCount = totalUsers > 4
+        ? 3
+        : totalUsers; // Show 3 if more than 4, else show all
+
     return Container(
-      width: Sizer.wp(40),
-      height: Sizer.wp(40),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.background,
-        border: Border.all(color: AppColors.border, width: 1),
-      ),
-      child: imageUrl != null && imageUrl.isNotEmpty
-          ? ClipOval(
-              child: Image.network(
-                imageUrl,
-                width: Sizer.wp(40),
-                height: Sizer.wp(40),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildDefaultAvatar(isTeam);
-                },
-              ),
-            )
-          : _buildDefaultAvatar(isTeam),
-    );
-  }
+      padding: EdgeInsets.only(right: Sizer.wp(14)),
+      child: Row(
+        children: [
+          // Display assigned user avatars using Stack for overlap
+          SizedBox(
+            width: totalUsers > 4
+                ? Sizer.wp(120) // Width for 3 avatars + total count
+                : Sizer.wp(
+                    80 + (displayCount > 2 ? 26 : 0),
+                  ), // Dynamic width based on count
+            height: Sizer.wp(40),
+            child: Stack(
+              children: [
+                // Display up to 3 user avatars
+                for (int i = 0; i < displayCount; i++)
+                  Positioned(
+                    left: i * Sizer.wp(26), // Overlap position
+                    child: _buildUserAvatar(
+                      null,
+                    ), // No user images in API, use default icon
+                  ),
 
-  /// Build default avatar icon
-  Widget _buildDefaultAvatar(bool isTeam) {
-    return Icon(
-      isTeam ? Iconsax.people : Iconsax.user,
-      size: Sizer.wp(20),
-      color: AppColors.textSecondary,
+                // Show total count if more than 4 users
+                if (totalUsers > 4)
+                  Positioned(
+                    left: 3 * Sizer.wp(26), // Position after 3 avatars
+                    child: Container(
+                      width: Sizer.wp(40),
+                      height: Sizer.wp(40),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '+${totalUsers - 3}',
+                          style: AppTextStyle.f14W500().copyWith(
+                            color: Colors.white,
+                            height: 1,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // Add user button if 4 or fewer users
+                if (totalUsers <= 4)
+                  Positioned(
+                    left: displayCount * Sizer.wp(26), // Position after avatars
+                    child: Container(
+                      width: Sizer.wp(40),
+                      height: Sizer.wp(40),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(color: AppColors.text, width: 1),
+                      ),
+                      child: Icon(
+                        Icons.add,
+                        size: Sizer.wp(20),
+                        color: AppColors.text,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -282,6 +283,41 @@ class ProjectCardWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  /// Build user avatar with fallback to user icon
+  Widget _buildUserAvatar(String? imageUrl, {bool isAdmin = false}) {
+    return Container(
+      width: Sizer.wp(40),
+      height: Sizer.wp(40),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.background,
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
+      child: imageUrl != null && imageUrl.isNotEmpty
+          ? ClipOval(
+              child: Image.network(
+                imageUrl,
+                width: Sizer.wp(40),
+                height: Sizer.wp(40),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildDefaultAvatar(isAdmin);
+                },
+              ),
+            )
+          : _buildDefaultAvatar(isAdmin),
+    );
+  }
+
+  /// Build default avatar icon
+  Widget _buildDefaultAvatar(bool isAdmin) {
+    return Icon(
+      isAdmin ? Iconsax.user_octagon : Iconsax.user,
+      size: Sizer.wp(20),
+      color: AppColors.textSecondary,
     );
   }
 }

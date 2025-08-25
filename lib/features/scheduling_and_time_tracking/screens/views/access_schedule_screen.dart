@@ -82,7 +82,7 @@ class AccessScheduleScreen extends StatelessWidget {
     BuildContext context,
   ) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
+      padding: EdgeInsets.symmetric(horizontal: Sizer.wp(14)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
