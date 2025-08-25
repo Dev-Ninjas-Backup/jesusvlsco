@@ -43,7 +43,7 @@ class UserFormWidget extends StatelessWidget {
           const SizedBox(height: 20),
           _buildDropdownField(
             'Gender',
-            controller.selectedGender.value ?? 'Female',
+            controller.selectedGender.value ?? 'Not specified',
             () {},
             // () => _showGenderBottomSheet(controller),
           ),
@@ -61,8 +61,7 @@ class UserFormWidget extends StatelessWidget {
           const SizedBox(height: 20),
           _buildDropdownField(
             'Job Title',
-            controller.selectedJobTitle.value ??
-                '1901 Thornridge Cir, Shiloh, Hawaii, 811063',
+            controller.selectedJobTitle.value ?? 'Not specified',
             () {},
             // () => _showJobTitleBottomSheet(controller),
           ),
@@ -75,16 +74,28 @@ class UserFormWidget extends StatelessWidget {
           const SizedBox(height: 20),
           _buildDropdownField(
             'City',
-            controller.selectedCity.value ?? 'America',
-            // () => _showCityBottomSheet(controller),
+            controller.selectedCity.value ?? 'Not specified',
             () {},
+            // () => _showCityBottomSheet(controller),
           ),
           const SizedBox(height: 20),
           _buildDropdownField(
             'State',
-            controller.selectedState.value ?? 'Los angeles',
-            // () => _showStateBottomSheet(controller),
+            controller.selectedState.value ?? 'Not specified',
             () {},
+            // () => _showStateBottomSheet(controller),
+          ),
+          const SizedBox(height: 20),
+          _buildDropdownField(
+            'Country',
+            controller.selectedCountry.value ?? 'Not specified',
+            () {},
+          ),
+          const SizedBox(height: 20),
+          _buildFormField(
+            'Nationality',
+            controller.nationalityController,
+            isEditable: controller.isEditing.value,
           ),
         ],
       ),
@@ -118,6 +129,8 @@ class UserFormWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
+            hintText: controller.text.isEmpty ? 'Not specified' : null,
+            hintStyle: TextStyle(color: Colors.grey.shade500),
           ),
         ),
       ],
@@ -150,7 +163,12 @@ class UserFormWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   value,
-                  style: const TextStyle(fontSize: 16, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: value == 'Not specified'
+                        ? Colors.grey.shade500
+                        : Colors.black87,
+                  ),
                 ),
               ),
               const Icon(Icons.calendar_today, size: 20, color: Colors.grey),
@@ -189,7 +207,12 @@ class UserFormWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     value,
-                    style: const TextStyle(fontSize: 16, color: Colors.black87),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: value == 'Not specified'
+                          ? Colors.grey.shade500
+                          : Colors.black87,
+                    ),
                   ),
                 ),
                 const Icon(
@@ -206,7 +229,7 @@ class UserFormWidget extends StatelessWidget {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return '25, July 1998';
+    if (date == null) return 'Not specified';
     return '${date.day}, ${_getMonthName(date.month)} ${date.year}';
   }
 
@@ -251,159 +274,15 @@ class UserFormWidget extends StatelessWidget {
           ),
           child: Text(
             value,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 16,
+              color: value == 'Not specified'
+                  ? Colors.grey.shade500
+                  : Colors.black87,
+            ),
           ),
         ),
       ],
     );
   }
 }
-
-//   void _showGenderBottomSheet(UserProfileController controller) {
-//     Get.bottomSheet(
-//       Container(
-//         padding: const EdgeInsets.all(20),
-//         decoration: const BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             const Text(
-//               'Select Gender',
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-//             ),
-//             const SizedBox(height: 16),
-//             ...controller.genderOptions
-//                 .map(
-//                   (gender) => ListTile(
-//                     title: Text(gender),
-//                     trailing: controller.selectedGender.value == gender
-//                         ? const Icon(Icons.check, color: Color(0xFF6366F1))
-//                         : null,
-//                     onTap: () {
-//                       controller.selectedGender.value = gender;
-//                       Get.back();
-//                     },
-//                   ),
-//                 )
-//                 .toList(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _showJobTitleBottomSheet(UserProfileController controller) {
-//     Get.bottomSheet(
-//       Container(
-//         padding: const EdgeInsets.all(20),
-//         decoration: const BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             const Text(
-//               'Select Job Title',
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-//             ),
-//             const SizedBox(height: 16),
-//             ...controller.jobTitleOptions
-//                 .map(
-//                   (title) => ListTile(
-//                     title: Text(title),
-//                     trailing: controller.selectedJobTitle.value == title
-//                         ? const Icon(Icons.check, color: Color(0xFF6366F1))
-//                         : null,
-//                     onTap: () {
-//                       controller.selectedJobTitle.value = title;
-//                       Get.back();
-//                     },
-//                   ),
-//                 )
-//                 .toList(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _showCityBottomSheet(UserProfileController controller) {
-//     Get.bottomSheet(
-//       Container(
-//         padding: const EdgeInsets.all(20),
-//         decoration: const BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             const Text(
-//               'Select City',
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-//             ),
-//             const SizedBox(height: 16),
-//             ...controller.cityOptions
-//                 .map(
-//                   (city) => ListTile(
-//                     title: Text(city),
-//                     trailing: controller.selectedCity.value == city
-//                         ? const Icon(Icons.check, color: Color(0xFF6366F1))
-//                         : null,
-//                     onTap: () {
-//                       controller.selectedCity.value = city;
-//                       Get.back();
-//                     },
-//                   ),
-//                 )
-//                 .toList(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _showStateBottomSheet(UserProfileController controller) {
-//     Get.bottomSheet(
-//       Container(
-//         padding: const EdgeInsets.all(20),
-//         decoration: const BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             const Text(
-//               'Select State',
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-//             ),
-//             const SizedBox(height: 16),
-//             ...controller.stateOptions
-//                 .map(
-//                   (state) => ListTile(
-//                     title: Text(state),
-//                     trailing: controller.selectedState.value == state
-//                         ? const Icon(Icons.check, color: Color(0xFF6366F1))
-//                         : null,
-//                     onTap: () {
-//                       controller.selectedState.value = state;
-//                       Get.back();
-//                     },
-//                   ),
-//                 )
-//                 .toList(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

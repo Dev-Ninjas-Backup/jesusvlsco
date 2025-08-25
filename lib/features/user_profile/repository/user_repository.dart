@@ -35,7 +35,6 @@ class UserProfileRepository {
   }
 
   Future<UserProfileModel?> updateProfile({
-    required String userId,
     String? firstName,
     String? lastName,
     String? gender,
@@ -46,11 +45,12 @@ class UserProfileRepository {
     String? state,
     String? country,
     String? nationality,
+    String? pinCode,
     String? profileUrl,
   }) async {
     try {
       final url = Uri.parse(
-        'https://lgcglobalcontractingltd.com/js/admin/user/$userId',
+        'https://lgcglobalcontractingltd.com/js/employee/user/profile',
       );
 
       var request = http.MultipartRequest('PATCH', url)
@@ -67,7 +67,8 @@ class UserProfileRepository {
       if (state != null) request.fields['state'] = state;
       if (country != null) request.fields['country'] = country;
       if (nationality != null) request.fields['nationality'] = nationality;
-      if (profileUrl != null) {
+      if (pinCode != null) request.fields['pinCode'] = pinCode;
+      if (profileUrl != null && profileUrl.isNotEmpty) {
         request.files.add(
           await http.MultipartFile.fromPath('profileUrl', profileUrl),
         );
@@ -83,6 +84,7 @@ class UserProfileRepository {
         debugPrint(
           '🚨 Failed to update profile. Status: ${response.statusCode}',
         );
+        debugPrint('Response body: ${response.body}');
         return null;
       }
     } catch (e) {
