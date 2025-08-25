@@ -105,6 +105,15 @@ class EmployeeListScreen extends StatelessWidget {
                       ? userListController.users
                       : adminListController.admin;
 
+                  if (items.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No ${isUserRole ? 'users' : 'admins'} found",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
+                  }
+
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
