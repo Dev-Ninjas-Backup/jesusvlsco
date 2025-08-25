@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
+import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 import 'package:jesusvlsco/features/user/controller/employee_list_screen_controller.dart';
+import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
 
 class BuildRoleSelectionButton extends StatelessWidget {
   const BuildRoleSelectionButton({
     super.key,
     required this.width,
-    required EmployeeListScreenController controller,
+    required EmployeeListScreenController controller, required this.adminListController, required this.userListController,
   }) : _controller = controller;
 
   final double width;
   final EmployeeListScreenController _controller;
+  final AdminListController adminListController;
+  final UserListController userListController;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +25,7 @@ class BuildRoleSelectionButton extends StatelessWidget {
       child: Obx(
         () => Row(
           children: List.generate(_controller.roleButtonList.length, (index) {
+            index == 1 ? adminListController.fetchAdmins() : userListController.fetchEmployeeProfiles();
             return Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 12.0),

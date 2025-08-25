@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/core/utils/constants/image_path.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 
 class AdminTile extends StatelessWidget {
@@ -28,7 +27,10 @@ class AdminTile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(ImagePath.user1),
+                  //backgroundImage: NetworkImage(ImagePath.user1),
+                  child: FittedBox(
+                    child: Icon(Icons.person),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -44,7 +46,7 @@ class AdminTile extends StatelessWidget {
               ],
             ),
             trailing: Text(
-              admin.id,
+              admin.employeeID.toString(),
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
