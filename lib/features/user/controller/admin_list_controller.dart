@@ -72,7 +72,7 @@ class AdminListController extends GetxController {
 
     try {
       final response = await http.get(
-        url,
+        Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
