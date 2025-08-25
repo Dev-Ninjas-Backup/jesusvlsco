@@ -3,7 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/time_sheet_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/project_model.dart';
 
 /// ProjectCardWidget displays individual project information
 /// Shows project details, assigned users, and action buttons
@@ -50,13 +50,13 @@ class ProjectCardWidget extends StatelessWidget {
     );
   }
 
-  /// Build project header with title and project name
+  /// Build project header with title and project location
   Widget _buildProjectHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          project.title,
+          'Job Scheduling',
           style: AppTextStyle.f18W600().copyWith(
             color: AppColors.text,
             height: 1.5,
@@ -64,124 +64,167 @@ class ProjectCardWidget extends StatelessWidget {
         ),
         SizedBox(height: Sizer.hp(8)),
         Text(
-          project.projectName,
+          project.title,
           style: AppTextStyle.f16W600().copyWith(
             color: AppColors.primary,
             height: 1.5,
           ),
         ),
+        if (project.projectLocation.isNotEmpty) ...[
+          SizedBox(height: Sizer.hp(4)),
+          Row(
+            children: [
+              Icon(
+                Iconsax.location,
+                size: Sizer.wp(16),
+                color: AppColors.textSecondary,
+              ),
+              SizedBox(width: Sizer.wp(4)),
+              Expanded(
+                child: Text(
+                  project.projectLocation,
+                  style: AppTextStyle.f14W400().copyWith(
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }
 
-  /// Build project information section with assigned users and admin
+  /// Build project information section with team and manager
   Widget _buildProjectInfo() {
     return Column(
       children: [
-        _buildAssignedSection(),
+        _buildTeamSection(),
         SizedBox(height: Sizer.hp(12)),
-        _buildAdminSection(),
+        _buildManagerSection(),
       ],
     );
   }
 
-  /// Build assigned users section
-  Widget _buildAssignedSection() {
+  /// Build team section
+  Widget _buildTeamSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Assigned',
+          'Team',
           style: AppTextStyle.f16W500().copyWith(
             color: AppColors.textSecondary,
             height: 1.5,
           ),
         ),
-        _buildUserAvatars(),
-      ],
-    );
-  }
-
-  /// Build admin user section
-  Widget _buildAdminSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Admin',
-          style: AppTextStyle.f16W500().copyWith(
-            color: AppColors.textSecondary,
-            height: 1.5,
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(right: Sizer.wp(12)),
-          child: CircleAvatar(
-            radius: Sizer.wp(20),
-            backgroundImage: NetworkImage(project.adminUser.avatar),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Build user avatars with add button
-  Widget _buildUserAvatars() {
-    return Container(
-      padding: EdgeInsets.only(right: Sizer.wp(14)),
-      child: Row(
-        children: [
-          // Display assigned user avatars using Stack for overlap
-          SizedBox(
-            width: Sizer.wp(80), // Width for 2 overlapping avatars
-            height: Sizer.wp(40),
-            child: Stack(
+        Row(
+          children: [
+            // Team image or icon
+            _buildUserAvatar(project.team.image, isTeam: true),
+            SizedBox(width: Sizer.wp(8)),
+            // Team name and department
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // First user avatar
-                if (project.assignedUsers.isNotEmpty)
-                  Positioned(
-                    left: 0,
-                    child: CircleAvatar(
-                      radius: Sizer.wp(20),
-                      backgroundImage: NetworkImage(
-                        project.assignedUsers[0].avatar,
-                      ),
-                    ),
+                Text(
+                  project.team.title,
+                  style: AppTextStyle.f14W500().copyWith(
+                    color: AppColors.text,
+                    height: 1.4,
                   ),
-                // Second user avatar (overlapping)
-                if (project.assignedUsers.length > 1)
-                  Positioned(
-                    left: Sizer.wp(26), // Overlap position
-                    child: CircleAvatar(
-                      radius: Sizer.wp(20),
-                      backgroundImage: NetworkImage(
-                        project.assignedUsers[1].avatar,
-                      ),
-                    ),
-                  ),
-                // Add user button (overlapping)
-                Positioned(
-                  left: Sizer.wp(52), // Position after avatars
-                  child: Container(
-                    width: Sizer.wp(40),
-                    height: Sizer.wp(40),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(color: AppColors.text, width: 1),
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      size: Sizer.wp(24),
-                      color: AppColors.text,
-                    ),
+                ),
+                Text(
+                  project.team.department,
+                  style: AppTextStyle.f12W400().copyWith(
+                    color: AppColors.textSecondary,
+                    height: 1.3,
                   ),
                 ),
               ],
             ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Build manager section
+  Widget _buildManagerSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Manager',
+          style: AppTextStyle.f16W500().copyWith(
+            color: AppColors.textSecondary,
+            height: 1.5,
           ),
-        ],
+        ),
+        Row(
+          children: [
+            // Manager avatar (no image in API, so use icon)
+            _buildUserAvatar(null),
+            SizedBox(width: Sizer.wp(8)),
+            // Manager email and role
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  project.manager.email.split('@')[0], // Display first part of email
+                  style: AppTextStyle.f14W500().copyWith(
+                    color: AppColors.text,
+                    height: 1.4,
+                  ),
+                ),
+                Text(
+                  project.manager.role,
+                  style: AppTextStyle.f12W400().copyWith(
+                    color: AppColors.textSecondary,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Build user avatar with fallback to user icon
+  Widget _buildUserAvatar(String? imageUrl, {bool isTeam = false}) {
+    return Container(
+      width: Sizer.wp(40),
+      height: Sizer.wp(40),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.background,
+        border: Border.all(color: AppColors.border, width: 1),
       ),
+      child: imageUrl != null && imageUrl.isNotEmpty
+          ? ClipOval(
+              child: Image.network(
+                imageUrl,
+                width: Sizer.wp(40),
+                height: Sizer.wp(40),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildDefaultAvatar(isTeam);
+                },
+              ),
+            )
+          : _buildDefaultAvatar(isTeam),
+    );
+  }
+
+  /// Build default avatar icon
+  Widget _buildDefaultAvatar(bool isTeam) {
+    return Icon(
+      isTeam ? Iconsax.people : Iconsax.user,
+      size: Sizer.wp(20),
+      color: AppColors.textSecondary,
     );
   }
 

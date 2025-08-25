@@ -223,10 +223,9 @@ class TimeSheetController extends GetxController {
   void accessSchedule(ProjectModel project, BuildContext context) {
     _logger.i('Accessing schedule for project: ${project.projectName}');
     // Navigate to access schedule screen using GetX routes
-    SchedulingRoutes.toAccessSchedule(arguments: {
-      'projectId': project.id,
-      'projectName': project.projectName,
-    });
+    SchedulingRoutes.toAccessSchedule(
+      arguments: {'projectId': project.id, 'projectName': project.projectName},
+    );
   }
 
   /// Add new project - Navigate to Add Project Screen
