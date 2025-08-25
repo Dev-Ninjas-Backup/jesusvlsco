@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EducationFormFieldsWidget extends StatelessWidget {
   final dynamic controller;
@@ -7,23 +8,68 @@ class EducationFormFieldsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildSelectableField(
-          'Program',
-          'Enter name here',
-          controller.selectProgram,
-        ),
-        const SizedBox(height: 20),
-        _buildSelectableField(
-          'Institution',
-          'Enter name here',
-          controller.selectInstitution,
-        ),
-        const SizedBox(height: 20),
-        _buildSelectableField('Year', 'Enter Year here', controller.selectYear),
-      ],
-    );
+    return Obx(() {
+      final educations = controller.educations as List<dynamic>;
+
+      if (educations.isEmpty) {
+        return Column(
+          children: [
+            const Text('No education entries. Use "Add Education" to add one.'),
+            const SizedBox(height: 12),
+          ],
+        );
+      }
+
+      return Column(
+        children: educations.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value as Map<String, dynamic>;
+          String programText = (item['program'] ?? '').toString();
+          String institutionText = (item['institution'] ?? '').toString();
+          String yearText = item['year'] != null ? item['year'].toString() : '';
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Education ${index + 1}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  IconButton(
+                    onPressed: () => controller.removeEducation(index),
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _buildSelectableField(
+                'Program',
+                programText.isNotEmpty ? programText : 'Select program',
+                () => controller.selectProgramFor(index),
+              ),
+              const SizedBox(height: 12),
+              _buildSelectableField(
+                'Institution',
+                institutionText.isNotEmpty
+                    ? institutionText
+                    : 'Select institution',
+                () => controller.selectInstitutionFor(index),
+              ),
+              const SizedBox(height: 12),
+              _buildSelectableField(
+                'Year',
+                yearText.isNotEmpty ? yearText : 'Select year',
+                () => controller.selectYearFor(index),
+              ),
+              const SizedBox(height: 20),
+            ],
+          );
+        }).toList(),
+      );
+    });
   }
 
   Widget _buildSelectableField(String label, String hint, VoidCallback onTap) {
@@ -51,7 +97,9 @@ class EducationFormFieldsWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(hint, style: const TextStyle(color: Colors.grey)),
+                Flexible(
+                  child: Text(hint, style: const TextStyle(color: Colors.grey)),
+                ),
                 const Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.grey,
