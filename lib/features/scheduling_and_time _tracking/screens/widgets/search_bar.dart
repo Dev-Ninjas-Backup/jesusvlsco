@@ -9,7 +9,7 @@ class CustomSearchBar extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: Colors.grey),
         hintText: 'Search...',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), ),
         contentPadding: EdgeInsets.symmetric(vertical: 12),
       ),
     );
