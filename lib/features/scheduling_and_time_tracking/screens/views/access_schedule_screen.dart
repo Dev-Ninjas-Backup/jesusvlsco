@@ -7,7 +7,6 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/access_schedule_controller.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/assigned_employee_list.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_off_requests_section.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/approved_requests_list.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 
 class AccessScheduleScreen extends StatelessWidget {
@@ -51,7 +50,10 @@ class AccessScheduleScreen extends StatelessWidget {
                         onApprovePressed: controller.onApprovePressed,
                       ),
 
-                      // Conditional Approved Requests Section
+                      // Conditional Approved Requests Section (hidden by default)
+                      // Note: This section will be implemented in future when user clicks approve
+                      // For now, the section is hidden as requested
+                      /*
                       Obx(() {
                         if (controller.showApprovedSection.value) {
                           return Column(
@@ -63,7 +65,7 @@ class AccessScheduleScreen extends StatelessWidget {
                         }
                         return const SizedBox.shrink();
                       }),
-
+                      */
                       SizedBox(height: Sizer.hp(100)), // Bottom padding
                     ],
                   ),

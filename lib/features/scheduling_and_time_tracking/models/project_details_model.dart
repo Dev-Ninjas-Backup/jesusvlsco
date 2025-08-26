@@ -39,7 +39,8 @@ class ProjectDetailsModel {
       managerId: json['managerId'] ?? '',
       team: TeamModel.fromJson(json['team'] ?? {}),
       manager: ManagerModel.fromJson(json['manager'] ?? {}),
-      projectUsers: (json['projectUsers'] as List<dynamic>?)
+      projectUsers:
+          (json['projectUsers'] as List<dynamic>?)
               ?.map((user) => ProjectUserModel.fromJson(user))
               .toList() ??
           [],
@@ -311,11 +312,13 @@ class UserModel {
       payroll: json['payroll'] != null
           ? PayrollModel.fromJson(json['payroll'])
           : null,
-      shift: (json['shift'] as List<dynamic>?)
+      shift:
+          (json['shift'] as List<dynamic>?)
               ?.map((shift) => ShiftModel.fromJson(shift))
               .toList() ??
           [],
-      taskUsers: (json['taskUsers'] as List<dynamic>?)
+      taskUsers:
+          (json['taskUsers'] as List<dynamic>?)
               ?.map((taskUser) => TaskUserModel.fromJson(taskUser))
               .toList() ??
           [],
@@ -606,10 +609,6 @@ class ProjectDetailsResponse {
 
   /// Convert ProjectDetailsResponse to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'data': data.toJson(),
-    };
+    return {'success': success, 'message': message, 'data': data.toJson()};
   }
 }
