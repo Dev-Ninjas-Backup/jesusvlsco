@@ -107,9 +107,10 @@ class EmployeeListScreen extends StatelessWidget {
                 child: Obx(() {
                   final isUserRole = controller.roleSelectedButton.value == 0;
                   final items = isUserRole
-                      ? userListController.employeeProfiles  //users
+                      ? userListController
+                            .employeeProfiles //users
                       : adminListController.admin;
-
+                      
                   if (items.isEmpty) {
                     return Center(
                       child: Text(
@@ -119,14 +120,17 @@ class EmployeeListScreen extends StatelessWidget {
                       ),
                     );
                   }
+
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       if (isUserRole) {
                         final user = items[index] as EmployeeProfile;
-                        return UserTile(
-                          employee: user,
-                        );
+                        if (userListController.isLoading == true) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return UserTile(employee: user);
+                        }
                       } else {
                         final admin = items[index] as Admin;
                         return AdminTile(
