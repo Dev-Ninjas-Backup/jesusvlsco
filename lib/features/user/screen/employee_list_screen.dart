@@ -5,8 +5,6 @@ import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 import 'package:jesusvlsco/features/user/controller/employee_list_screen_controller.dart';
 import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
-import 'package:jesusvlsco/features/user/model/admin_model.dart' hide Admin;
-import 'package:jesusvlsco/features/user/model/user_model.dart';
 import 'package:jesusvlsco/features/user/widget/action_button_row.dart';
 import 'package:jesusvlsco/features/user/widget/admin_tile.dart';
 import 'package:jesusvlsco/features/user/widget/build_role_selection_button.dart';
@@ -115,22 +113,19 @@ class EmployeeListScreen extends StatelessWidget {
                   if (items.isEmpty) {
                     return Center(
                       child: Text(
-                        "No ${isUserRole ? 'users' : 'admins'} found",
+                        "Wait for ${isUserRole ? 'users' : 'admins'} load data",
+                        //"No ${isUserRole ? 'users' : 'admins'} found",
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     );
                   }
-
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       if (isUserRole) {
                         final user = items[index] as EmployeeProfile;
                         return UserTile(
-                          //user: user,
                           employee: user,
-                          //onChanged: () =>{}
-                              //userListController.toggleSelection(index), 
                         );
                       } else {
                         final admin = items[index] as Admin;

@@ -135,49 +135,6 @@ class ProjectApiService {
     }
   }
 
-  /// Update project by ID (full update)
-  /// [projectId] - ID of the project to update
-  /// [projectData] - Map containing updated project data
-  /// Returns ResponseData indicating success or failure
-  Future<ResponseData> updateProjectById({
-    required String projectId,
-    required Map<String, dynamic> projectData,
-  }) async {
-    try {
-      // Get auth token from storage
-      final String? token = await StorageService.getAuthToken();
-
-      // Replace {id} placeholder with actual project ID
-      final String url =
-          '${ApiConstants.baseurl}${ApiConstants.updateProjectById.replaceAll('{id}', projectId)}';
-
-      _logger.i('Updating project: $projectId');
-
-      // Make POST request with project data
-      final ResponseData response = await _networkCaller.postRequest(
-        url,
-        body: projectData.map((key, value) => MapEntry(key, value.toString())),
-        token: token != null ? 'Bearer $token' : null,
-      );
-
-      if (response.isSuccess) {
-        _logger.i('Successfully updated project: $projectId');
-      } else {
-        _logger.e('Failed to update project: ${response.errorMessage}');
-      }
-
-      return response;
-    } catch (error) {
-      _logger.e('Error in updateProjectById: $error');
-      return ResponseData(
-        isSuccess: false,
-        statusCode: 500,
-        responseData: null,
-        errorMessage: 'Failed to update project. Please try again.',
-      );
-    }
-  }
-
   /// Search projects with pagination
   /// [keyword] - Search keyword
   /// [page] - Page number (default: 1)
@@ -356,6 +313,143 @@ class ProjectApiService {
         statusCode: 500,
         responseData: null,
         errorMessage: 'Failed to fetch managers. Please try again.',
+      );
+    }
+  }
+
+  /// Get project by ID with full details including assigned employees
+  /// [projectId] - ID of the project to fetch
+  /// Returns ResponseData containing project details or error
+  Future<ResponseData> getProjectById({required String projectId}) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Replace {id} placeholder with actual project ID
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.getProjectById.replaceAll('{id}', projectId)}';
+
+      _logger.i('Fetching project details for ID: $projectId');
+
+      // Make GET request to fetch project details
+      final ResponseData response = await _networkCaller.getRequest(
+        url,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i('Successfully fetched project details for: $projectId');
+      } else {
+        _logger.e('Failed to fetch project details: ${response.errorMessage}');
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in getProjectById: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to fetch project details. Please try again.',
+      );
+    }
+  }
+
+  /// Get all time-off requests with pagination
+  /// [page] - Page number (default: 1)
+  /// [limit] - Number of requests per page (default: 15)
+  /// Returns ResponseData containing time-off requests list or error
+  Future<ResponseData> getAllTimeOffRequests({
+    int page = 1,
+    int limit = 15,
+  }) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Construct URL with query parameters
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.allTimeOffRequests}?page=$page&limit=$limit';
+
+      _logger.i('Fetching time-off requests: Page $page, Limit $limit');
+
+      // Make GET request to fetch time-off requests
+      final ResponseData response = await _networkCaller.getRequest(
+        url,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i(
+          'Successfully fetched ${response.responseData['data']?.length ?? 0} time-off requests',
+        );
+      } else {
+        _logger.e(
+          'Failed to fetch time-off requests: ${response.errorMessage}',
+        );
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in getAllTimeOffRequests: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to fetch time-off requests. Please try again.',
+      );
+    }
+  }
+
+  /// Update time-off request status (approve or reject)
+  /// [requestId] - ID of the time-off request to update
+  /// [status] - New status (APPROVED or REJECTED)
+  /// [adminNote] - Optional admin note explaining the decision
+  /// Returns ResponseData indicating success or failure
+  Future<ResponseData> updateTimeOffRequestStatus({
+    required String requestId,
+    required String status,
+    String? adminNote,
+  }) async {
+    try {
+      // Get auth token from storage
+      final String? token = await StorageService.getAuthToken();
+
+      // Replace {id} placeholder with actual request ID
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.updateRequestApprovedOrRejected.replaceAll('{id}', requestId)}';
+
+      // Prepare request body
+      final Map<String, dynamic> requestBody = {
+        'status': status,
+        'adminNote': adminNote ?? '',
+      };
+
+      _logger.i('Updating time-off request status: $requestId -> $status');
+
+      // Make PATCH request to update request status
+      final ResponseData response = await _networkCaller.patchRequest(
+        url,
+        body: requestBody,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      if (response.isSuccess) {
+        _logger.i('Successfully updated time-off request status: $requestId');
+      } else {
+        _logger.e(
+          'Failed to update time-off request status: ${response.errorMessage}',
+        );
+      }
+
+      return response;
+    } catch (error) {
+      _logger.e('Error in updateTimeOffRequestStatus: $error');
+      return ResponseData(
+        isSuccess: false,
+        statusCode: 500,
+        responseData: null,
+        errorMessage: 'Failed to update request status. Please try again.',
       );
     }
   }

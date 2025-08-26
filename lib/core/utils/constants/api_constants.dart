@@ -1,19 +1,29 @@
 class ApiConstants {
   static const baseurl = "http://148.230.86.72:5005/js";
 
-  // ----------------------- Admin------------------------
+  // ----------------------- Admin ------------------------
 
   //!-------------------- Shift Scheduling ------------------
   static const String allAdminProjects = '/admin/project';
 
   static const String createProject = '/admin/project'; // create new project
-  static const String deleteProjectById = '/admin/project/{id}'; // delete project by id
-  static const String updateProjectTitle = '/admin/project/{projectId}/update-title'; // update project title
-  static const String updateProjectById = '/admin/project/{id}'; // update project by id
-  static const String searchProject = '/admin/project?search={keyword}'; // search project
-  static const String getAllTeams = '/admin/team/get-all-teams'; // get all teams
-  static const String getAllManager = '/admin/user'; // get all users
 
+  static const String deleteProjectById =
+      '/admin/project/{id}'; // delete project by id
+  static const String updateProjectTitle =
+      '/admin/project/{projectId}/update-title'; // update project title
+  static const String searchProject =
+      '/admin/project?search={keyword}'; // search project
+  static const String getAllTeams =
+      '/admin/team/get-all-teams'; // get all teams
+  static const String getAllManager = '/admin/user'; // get all users
+  //access Schedule Screen
+  static const String getProjectById =
+      '/admin/project/{id}'; // get project by id
+  static const String allTimeOffRequests =
+      '/admin/time-off-request/all-requests';
+  static const String updateRequestApprovedOrRejected =
+      '/admin/time-off-request/update-request/{id}'; // Patch
 
   //!-------------------- Payroll ------------------
 
@@ -30,5 +40,14 @@ class ApiConstants {
   static const String createUserExperience =
       '/admin/user/experience/create/user'; // POST /admin/user/experience/create/user/{userId}
 
-  //--------------------------- User---------------------------
+  //--------------------------- Employee ---------------------------
+
+  //!-------------------- Time Clock ------------------
+  static const String processClock =
+      '/employee/time-clock/process-clock'; // POST /employee/time-clock/process-clock
+  static const String currentClock =
+      '/employee/time-clock/shift/current-clock'; // GET /employee/time-clock/shift/current-clock
+  // Employee dashboard
+  static const String employeeDashboard =
+      '/employee/dashboard'; // GET /employee/dashboard
 }

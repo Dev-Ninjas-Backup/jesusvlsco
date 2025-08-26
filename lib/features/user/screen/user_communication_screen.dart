@@ -10,7 +10,6 @@ import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/sizer.dart';
 import '../../../routes/config/route_constants.dart';
 import '../../communication/screens/admin_chat_screen.dart';
-import '../../communication/screens/chat_info.dart';
 import '../../communication/screens/create_new.dart';
 import '../../communication/widgets/chat_dashboard.dart';
 

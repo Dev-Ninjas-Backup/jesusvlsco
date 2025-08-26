@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -49,65 +50,91 @@ class Admin {
 
 class AdminListController extends GetxController {
   final RxList<Admin> admin = <Admin>[].obs;
-  final RxBool isLoading = false.obs;
   final RxInt currentPage = 1.obs;
-  final int limit = 8;
+  final int limit = 12;
+  final RxBool isLoading = false.obs;
+  final RxBool hasMore = true.obs;
+  final RxInt totalAdminCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Initial load
+    fetchAdmins(); // Initial load
   }
 
-  Future<void> fetchAdmins({int page = 1}) async {
-    isLoading.value = true;
-    print('call admin');
+  Future<void> fetchAdmins() async {
+  if (isLoading.value || !hasMore.value) return;
 
-    final token = await StorageService.getAuthToken();
+  isLoading.value = true;
+  final token = await StorageService.getAuthToken();
 
-    final url =
-        '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit';
+  try {
+    while (hasMore.value) {
+      final url = Uri.parse(
+        '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=${currentPage.value}&limit=$limit',
+      );
 
 
-
-    try {
       final response = await http.get(
-        Uri.parse(url),
+        url,
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
           'Accept': '*/*',
         },
       );
+
       print('Bearer $token');
-      
+
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         final List<dynamic> data = jsonData['data'];
-        admin.value = data.map((e) => Admin.fromJson(e)).toList();
-        currentPage.value = page;
-        print("Successfully accessed the API");
+
+        if (data.isEmpty) {
+          hasMore.value = false;
+        } else {
+          final newAdmins = data.map((adminJson) => Admin.fromJson(adminJson)).toList();
+          admin.addAll(newAdmins);
+          currentPage.value++;
+        }
+
+        // Optional: break early if fewer than limit returned
+        if (data.length < limit) {
+          hasMore.value = false;
+        }
       } else {
         print("Failed to load admins: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        hasMore.value = false;
       }
-    } catch (e) {
-      print("Error fetching admins: $e");
-    } finally {
-      isLoading.value = false;
     }
+  } catch (e) {
+    print("Error fetching admins: $e");
+  } finally {
+    isLoading.value = false;
   }
+}
 
-  void nextPage() => fetchAdmins(page: currentPage.value + 1);
 
-  void previousPage() {
-    if (currentPage.value > 1) {
-      fetchAdmins(page: currentPage.value - 1);
-    }
-  }
-
+  /// Selection logic
   void toggleSelection(int index) {
     admin[index].isSelected.value = !admin[index].isSelected.value;
   }
+
+  /// Batch actions
+  List<Admin> get selectedAdmins =>
+      admin.where((a) => a.isSelected.value).toList();
+
+  void deleteSelectedAdmins() {
+    admin.removeWhere((a) => a.isSelected.value);
+  }
+
+  void clearSelections() {
+    for (var a in admin) {
+      a.isSelected.value = false;
+    }
+  }
 }
+
+
+
