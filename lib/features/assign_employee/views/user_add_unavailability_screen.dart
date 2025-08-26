@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
+import 'package:jesusvlsco/features/assign_employee/controller/user_time_off_request_controller.dart';
 
 class AddUnavailabilityScreen extends StatelessWidget {
-  final ScheduleController controller = Get.find();
+  final TimeOffController controller = Get.put(TimeOffController());
 
   AddUnavailabilityScreen({super.key});
 
@@ -14,47 +15,45 @@ class AddUnavailabilityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(Icons.close, color: AppColors.primary),
-        ),
-        title: Text(
-          "Add Unavailability",
-          style: AppTextStyle.regular().copyWith(
-            fontSize: Sizer.wp(20),
-            color: AppColors.primary,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: AppColors.primary),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildToggleAllDay(),
-            const SizedBox(height: 16),
-            _buildDatePicker(context),
-            const SizedBox(height: 16),
-            _buildTimePickers(context),
-            const SizedBox(height: 16),
-            _buildNotesField(),
-            const SizedBox(height: 16),
-            _buildRequestButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildToggleAllDay(),
+              const SizedBox(height: 16),
+              _buildDateRangePickers(context),
+              const SizedBox(height: 16),
+              _buildTypeDropdown(),
+              const SizedBox(height: 16),
+              _buildNotesField(),
+              const SizedBox(height: 16),
+              _buildDaysCounter(),
+              const SizedBox(height: 24),
+              _buildRequestButton(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: Icon(Icons.close, color: AppColors.primary),
+      ),
+      title: Text(
+        "Add Unavailability",
+        style: AppTextStyle.regular().copyWith(
+          fontSize: Sizer.wp(20),
+          color: AppColors.primary,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -74,24 +73,24 @@ class AddUnavailabilityScreen extends StatelessWidget {
         ),
         Obx(
           () => Switch(
-            value: controller.unavailableAllDay.value,
-            onChanged: (val) => controller.unavailableAllDay.value = val,
-            activeColor: AppColors.primary, // Thumb color (ON)
-            activeTrackColor: AppColors.primary.withOpacity(0.5), // Track (ON)
-            inactiveThumbColor: Colors.grey.shade400, // Thumb (OFF)
-            inactiveTrackColor: Colors.grey.shade300, // Track (OFF)
+            value: controller.isFullDayOff.value,
+            onChanged: (val) => controller.isFullDayOff.value = val,
+            activeColor: AppColors.primary,
+            activeTrackColor: AppColors.primary.withOpacity(0.5),
+            inactiveThumbColor: Colors.grey.shade400,
+            inactiveTrackColor: Colors.grey.shade300,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildDatePicker(BuildContext context) {
+  Widget _buildDateRangePickers(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Date",
+          "Select Date Range",
           style: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(16),
             fontWeight: FontWeight.w500,
@@ -99,108 +98,112 @@ class AddUnavailabilityScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        InkWell(
-          onTap: () async {
-            DateTime? picked = await showDatePicker(
-              context: context,
-              initialDate: controller.selectedDate.value,
-              firstDate: DateTime(2020),
-              lastDate: DateTime(2030),
-            );
-            if (picked != null) controller.selectedDate.value = picked;
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: const Color(0xFF484848)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Obx(
-                  () => Text(
-                    "${controller.selectedDate.value.toLocal()}".split(" ")[0],
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(12),
-                      color: Colors.black87,
-                    ),
-                  ),
+        Obx(
+          () => Row(
+            children: [
+              Expanded(
+                child: _dateBox(
+                  label: "Start Date",
+                  date: controller.selectedStartDate.value,
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: controller.selectedStartDate.value,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2030),
+                    );
+                    if (picked != null) controller.setStartDate(picked);
+                  },
                 ),
-                const Icon(Icons.keyboard_arrow_down),
-              ],
-            ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _dateBox(
+                  label: "End Date",
+                  date: controller.selectedEndDate.value,
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: controller.selectedEndDate.value,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2030),
+                    );
+                    if (picked != null) controller.setEndDate(picked);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildTimePickers(BuildContext context) {
-    return Obx(
-      () => Row(
-        children: [
-          Expanded(
-            child: _timeBox("From", controller.startTime.value, () async {
-              TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: controller.startTime.value,
-              );
-              if (picked != null) controller.startTime.value = picked;
-            }),
+  Widget _dateBox({
+    required String label,
+    required DateTime date,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 1, color: const Color(0xFF484848)),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _timeBox("To", controller.endTime.value, () async {
-              TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: controller.endTime.value,
-              );
-              if (picked != null) controller.endTime.value = picked;
-            }),
-          ),
-        ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              DateFormat("yyyy-MM-dd").format(date),
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(12),
+                color: Colors.black87,
+              ),
+            ),
+            const Icon(Icons.calendar_today, size: 18),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _timeBox(String label, TimeOfDay time, VoidCallback onTap) {
+  Widget _buildTypeDropdown() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          "Request Type",
           style: AppTextStyle.regular().copyWith(
-            fontSize: Sizer.wp(14),
+            fontSize: Sizer.wp(16),
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF949494),
+            color: const Color(0xFF484848),
           ),
         ),
         const SizedBox(height: 8),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: const Color(0xFF949494)),
+        Obx(
+          () => DropdownButtonFormField<TimeOffRequestType>(
+            value: controller.selectedType.value,
+            items: TimeOffRequestType.values.map((type) {
+              return DropdownMenuItem(
+                value: type,
+                child: Text(type.name.replaceAll("_", " ")),
+              );
+            }).toList(),
+            onChanged: (val) {
+              if (val != null) controller.selectedType.value = val;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  time.format(Get.context!),
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: Sizer.wp(12),
-                    color: Colors.black87,
-                  ),
-                ),
-                const Icon(Icons.keyboard_arrow_down),
-              ],
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
             ),
           ),
         ),
@@ -213,7 +216,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Notes",
+          "Reason",
           style: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(16),
             fontWeight: FontWeight.w600,
@@ -222,10 +225,10 @@ class AddUnavailabilityScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: controller.notesController,
+          controller: controller.reasonController,
           maxLines: 3,
           decoration: InputDecoration(
-            hintText: "Type here...",
+            hintText: "Enter your reason...",
             hintStyle: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(11),
               color: Colors.grey,
@@ -245,23 +248,42 @@ class AddUnavailabilityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRequestButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
-        backgroundColor: const Color(0xFFFFE6E7),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      onPressed: () {
-        Get.back();
-      },
-      child: Text(
-        "Request Time Off",
+  Widget _buildDaysCounter() {
+    return Obx(
+      () => Text(
+        "Total Days Off: ${controller.totalDaysOff.value}",
         style: AppTextStyle.regular().copyWith(
-          fontSize: Sizer.wp(16),
+          fontSize: Sizer.wp(14),
           fontWeight: FontWeight.w500,
-          color: const Color(0xFFAB070F),
+          color: AppColors.primary,
         ),
+      ),
+    );
+  }
+
+  Widget _buildRequestButton() {
+    return Obx(
+      () => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 50),
+          backgroundColor: const Color(0xFFFFE6E7),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        onPressed: controller.isSubmitting.value
+            ? null
+            : () {
+                controller.submitTimeOffRequest();
+              },
+        child: controller.isSubmitting.value
+            ? const CircularProgressIndicator(color: Colors.red)
+            : Text(
+                "Request Time Off",
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFFAB070F),
+                ),
+              ),
       ),
     );
   }
