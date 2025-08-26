@@ -5,42 +5,90 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 import '../routes/scheduling_routes.dart';
+import '../models/project_details_model.dart';
+import '../services/project_api_service.dart';
 
 /// AccessScheduleController manages the business logic for access schedule operations
-/// This includes handling employee schedules, time-off requests, and approved requests
+/// This includes handling project details, employee schedules, time-off requests, and approved requests
 class AccessScheduleController extends GetxController {
   final Logger _logger = Logger();
+  final ProjectApiService _projectApiService = ProjectApiService();
 
   // Observable variables for state management
   var isLoading = false.obs;
   var showApprovedSection = false.obs;
-  var selectedProject = Rx<String?>(null);
   var selectedDate = DateTime.now().obs;
+  
+  // Project data variables
+  var projectDetails = Rx<ProjectDetailsModel?>(null);
+  var projectId = ''.obs;
+  var projectName = ''.obs;
+  var assignedEmployees = <ProjectUserModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadScheduleData();
+    
+    // Get project data from navigation arguments
+    final arguments = Get.arguments as Map<String, dynamic>?;
+    if (arguments != null) {
+      projectId.value = arguments['projectId'] ?? '';
+      projectName.value = arguments['projectName'] ?? '';
+      
+      if (projectId.value.isNotEmpty) {
+        loadProjectDetails();
+      }
+    }
+  }
+
+  /// Load project details from API including assigned employees
+  Future<void> loadProjectDetails() async {
+    try {
+      isLoading.value = true;
+      _logger.i('Loading project details for ID: ${projectId.value}');
+
+      // Call API to fetch project details
+      final response = await _projectApiService.getProjectById(
+        projectId: projectId.value,
+      );
+
+      if (response.isSuccess) {
+        final projectResponse = ProjectDetailsResponse.fromJson(response.responseData);
+        projectDetails.value = projectResponse.data;
+        assignedEmployees.value = projectResponse.data.projectUsers;
+        
+        // Update project name if available
+        if (projectResponse.data.title.isNotEmpty) {
+          projectName.value = projectResponse.data.title;
+        }
+        
+        _logger.i('Successfully loaded project details for: ${projectResponse.data.title}');
+        _logger.i('Found ${projectResponse.data.projectUsers.length} assigned employees');
+      } else {
+        _logger.e('Failed to load project details: ${response.errorMessage}');
+        EasyLoading.showError(response.errorMessage);
+      }
+
+      isLoading.value = false;
+    } catch (error) {
+      isLoading.value = false;
+      _logger.e('Error loading project details: $error');
+      EasyLoading.showError('Failed to load project details. Please try again.');
+    }
   }
 
   /// Load schedule data from API or local storage
   Future<void> loadScheduleData() async {
     try {
-      isLoading.value = true;
-      _logger.i('Loading access schedule data');
+      _logger.i('Refreshing schedule data');
 
-      // Simulate API call
-      await Future.delayed(const Duration(milliseconds: 800));
-
-      // In real implementation, load data from API
-      // Example: await _apiService.getAccessSchedule();
-
-      isLoading.value = false;
-      _logger.i('Access schedule data loaded successfully');
+      // Reload project details to get latest data
+      await loadProjectDetails();
+      
+      _logger.i('Schedule data refreshed successfully');
     } catch (error) {
-      isLoading.value = false;
       _logger.e('Error loading schedule data: $error');
-      EasyLoading.showError('Failed to load schedule data');
+      EasyLoading.showError('Failed to refresh schedule data');
     }
   }
 
@@ -116,10 +164,28 @@ class AccessScheduleController extends GetxController {
     EasyLoading.showInfo('Menu functionality not implemented yet');
   }
 
-  /// Set selected project for context
-  void setSelectedProject(String projectId) {
-    selectedProject.value = projectId;
-    _logger.i('Selected project set: $projectId');
+  /// Get project display name
+  String get displayProjectName {
+    return projectName.value.isNotEmpty ? projectName.value : 'Project Details';
+  }
+
+  /// Get assigned employees count
+  int get assignedEmployeesCount {
+    return assignedEmployees.length;
+  }
+
+  /// Get team information
+  String get teamName {
+    return projectDetails.value?.team.title ?? '';
+  }
+
+  /// Get manager information
+  String get managerName {
+    final manager = projectDetails.value?.manager;
+    if (manager != null) {
+      return '${manager.email}';
+    }
+    return '';
   }
 
   @override

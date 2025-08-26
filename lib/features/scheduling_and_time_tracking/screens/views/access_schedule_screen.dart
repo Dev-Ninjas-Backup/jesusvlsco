@@ -87,9 +87,11 @@ class AccessScheduleScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Project title
-          Text(
-            'Overview Project 1',
-            style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
+          Obx(
+            () => Text(
+              controller.displayProjectName,
+              style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
+            ),
           ),
 
           SizedBox(height: Sizer.hp(24)),

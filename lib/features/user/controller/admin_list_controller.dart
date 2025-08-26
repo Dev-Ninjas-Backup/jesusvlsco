@@ -68,8 +68,6 @@ class AdminListController extends GetxController {
     final url =
         '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=$page&limit=$limit';
 
-
-
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -80,7 +78,6 @@ class AdminListController extends GetxController {
         },
       );
       print('Bearer $token');
-      
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
