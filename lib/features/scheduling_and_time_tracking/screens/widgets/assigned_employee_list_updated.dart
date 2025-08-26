@@ -152,12 +152,12 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
       children: [
         // Scrollable table content with your original design
         SizedBox(
-          height: Sizer.hp(360),
+          height: Sizer.hp(460),
           child: SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              width: Sizer.wp(690),
+              width: Sizer.wp(824),
               child: Column(
                 children: [
                   // Header row
@@ -253,7 +253,7 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
       child: Row(
         children: [
           _buildHeaderCell('Employee', Sizer.wp(236)),
-          _buildHeaderCell('Project Name', Sizer.wp(160)),
+          _buildHeaderCell('Project Name', Sizer.wp(270)),
           _buildHeaderCell('Shift', Sizer.wp(140)),
           _buildHeaderCell('Date', null), // Flexible width
         ],
@@ -299,13 +299,13 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
       shiftDate = DateFormat('dd/MM/yyyy').format(latestShift.date);
     }
 
-    // if porfile image have then shows othwise shows profile icon
-    final String avatarUrl =
-        (user.profile?.profileUrl != null &&
-            user.profile!.profileUrl!.isNotEmpty)
-        ? user.profile!.profileUrl!
-        // Fallback to a generated avatar image when no profile URL is provided
-        : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user.fullName ?? 'User')}&background=E4E5F3&color=5A67D8';
+    // Get avatar URL or use fallback
+    String avatarUrl =
+        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&w=1000&q=80';
+    if (user.profile?.profileUrl != null &&
+        user.profile!.profileUrl!.isNotEmpty) {
+      avatarUrl = user.profile!.profileUrl!;
+    }
 
     return Container(
       height: Sizer.hp(80),
@@ -317,7 +317,7 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
         children: [
           // Employee info (name and role with avatar)
           Container(
-            width: Sizer.wp(260),
+            width: Sizer.wp(236),
             padding: EdgeInsets.symmetric(horizontal: Sizer.wp(12)),
             child: Row(
               children: [
@@ -363,7 +363,7 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
 
           // Project name
           Container(
-            width: Sizer.wp(140),
+            width: Sizer.wp(270),
             padding: EdgeInsets.symmetric(horizontal: Sizer.wp(12)),
             child: Text(
               projectName,

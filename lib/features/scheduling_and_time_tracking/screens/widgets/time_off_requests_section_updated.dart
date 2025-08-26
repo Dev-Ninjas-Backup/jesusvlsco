@@ -14,23 +14,7 @@ class TimeOffRequestsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Try to find the controller, create if not found
-    late AccessScheduleController controller;
-    try {
-      controller = Get.find<AccessScheduleController>();
-    } catch (e) {
-      print('DEBUG: Controller not found, creating new one: $e');
-      controller = Get.put(AccessScheduleController());
-    }
-
-    // Debug logging
-    print('DEBUG: TimeOffRequestsSection build called');
-    print(
-      'DEBUG: timeOffRequests length: ${controller.timeOffRequests.length}',
-    );
-    print(
-      'DEBUG: isLoadingTimeOffRequests: ${controller.isLoadingTimeOffRequests.value}',
-    );
+    final controller = Get.find<AccessScheduleController>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
