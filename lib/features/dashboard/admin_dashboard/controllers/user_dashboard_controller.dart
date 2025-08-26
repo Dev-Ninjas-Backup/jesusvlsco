@@ -44,6 +44,10 @@ class UserDashboardController extends GetxController {
     },
   ].obs;
 
+  // Upcoming shifts from dashboard
+  final RxList<Map<String, String>> upcomingShifts =
+      <Map<String, String>>[].obs;
+
   void dismissAlert() {
     showAlert.value = false;
   }
@@ -122,6 +126,8 @@ class UserDashboardController extends GetxController {
     super.onInit();
     // Load current clock/shift info for the user
     loadCurrentClock();
+    // Load dashboard sections: upcoming tasks, company updates, recognitions
+    loadDashboard();
   }
 
   /// Loads the current clock/shift info for the user. Updates UI observables.
@@ -213,6 +219,158 @@ class UserDashboardController extends GetxController {
     } else {
       // Not found or other error
       hasActiveShift.value = false;
+    }
+  }
+
+  /// Loads dashboard sections (upcoming tasks, company updates, recognitions)
+  Future<void> loadDashboard() async {
+    final token = StorageService.token;
+    final caller = NetworkCaller();
+    final url = '${ApiConstants.baseurl}${ApiConstants.employeeDashboard}';
+
+    final resp = await caller.getRequest(url, token: token);
+    if (resp.isSuccess) {
+      final data = resp.responseData['data'];
+      if (data != null && data is Map) {
+        // upcomingTasks
+        final uts = data['upcomingTasks'];
+        if (uts != null && uts is List) {
+          upcomingTasks.clear();
+          for (final t in uts) {
+            if (t is Map) {
+              final title = (t['title'] ?? '') as String;
+              final start = t['startTime'];
+              final end = t['endTime'];
+              final isToday = _isToday(start);
+              final dueDate = _formatDueDate(start, end);
+              upcomingTasks.add({
+                'title': title,
+                'dueDate': dueDate,
+                'isToday': isToday,
+              });
+            }
+          }
+        }
+
+        // upcomingShifts
+        final us = data['upcomingShifts'];
+        if (us != null && us is List) {
+          upcomingShifts.clear();
+          for (final sh in us) {
+            if (sh is Map) {
+              final start = sh['startTime'];
+              final end = sh['endTime'];
+              String time = '';
+              try {
+                if (start != null && end != null) {
+                  final sdt = DateTime.parse(start.toString()).toLocal();
+                  final edt = DateTime.parse(end.toString()).toLocal();
+                  time = '${_formatTime(sdt)} - ${_formatTime(edt)}';
+                }
+              } catch (_) {}
+
+              final location = (sh['location'] ?? '') as String;
+
+              // team: if controller.teamMembers was loaded from currentClock, use that; otherwise build from shift.teamMembers if provided
+              String teamStr = '';
+              if (teamMembers.isNotEmpty) {
+                teamStr = teamMembers
+                    .map((e) => e['name'])
+                    .whereType<String>()
+                    .join(', ');
+              } else if (sh['teamMembers'] != null &&
+                  sh['teamMembers'] is List) {
+                final list = <String>[];
+                for (final m in sh['teamMembers']) {
+                  if (m is Map) {
+                    final fn = (m['firstName'] ?? '') as String;
+                    final ln = (m['lastName'] ?? '') as String;
+                    final name = '$fn $ln'.trim();
+                    if (name.isNotEmpty) list.add(name);
+                  }
+                }
+                teamStr = list.join(', ');
+              }
+
+              upcomingShifts.add({
+                'time': time,
+                'location': location,
+                'team': teamStr,
+              });
+            }
+          }
+        }
+
+        // companyUpdates
+        final cus = data['companyUpdates'];
+        if (cus != null && cus is List) {
+          companyUpdates.clear();
+          for (final u in cus) {
+            if (u is Map) {
+              final type = (u['type'] ?? '') as String;
+              final title = (u['title'] ?? '') as String;
+              final message = (u['message'] ?? '') as String;
+              final publishedAt =
+                  (u['meta'] != null && u['meta']['publishedAt'] != null)
+                  ? u['meta']['publishedAt'].toString()
+                  : (u['createdAt'] ?? '').toString();
+              companyUpdates.add({
+                'department': type,
+                'departmentName': title,
+                'message': message,
+                'timeAgo': publishedAt,
+              });
+            }
+          }
+        }
+
+        // recognitions -> recognitionEngagement
+        final recs = data['recognitions'];
+        if (recs != null && recs is List) {
+          recognitionEngagement.clear();
+          for (final r in recs) {
+            if (r is Map) {
+              final title = (r['title'] ?? '') as String;
+              final message = (r['message'] ?? '') as String;
+              // performedBy or meta info could be used for image path later
+              recognitionEngagement.add({
+                'title': title,
+                'description': message,
+                'imagePath': 'assets/icons/crown.png',
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  bool _isToday(dynamic isoString) {
+    try {
+      if (isoString == null) return false;
+      final dt = DateTime.parse(isoString.toString()).toLocal();
+      final now = DateTime.now();
+      return dt.year == now.year && dt.month == now.month && dt.day == now.day;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  String _formatDueDate(dynamic startIso, dynamic endIso) {
+    try {
+      if (startIso == null) return '';
+      final start = DateTime.parse(startIso.toString()).toLocal();
+      final now = DateTime.now();
+      if (start.year == now.year &&
+          start.month == now.month &&
+          start.day == now.day) {
+        return 'Today';
+      }
+      final diff = start.difference(now);
+      if (diff.inDays == 1) return 'Tomorrow';
+      return '${start.month}/${start.day}';
+    } catch (_) {
+      return '';
     }
   }
 
