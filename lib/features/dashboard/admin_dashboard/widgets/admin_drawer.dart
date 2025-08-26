@@ -10,7 +10,8 @@ import 'package:jesusvlsco/features/recognition/screens/recognition_dashboard.da
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/time_clock.dart';
 import 'package:jesusvlsco/features/settings/screens/settings.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
-import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
+
+import '../../../../core/services/storage_service.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
@@ -104,6 +105,16 @@ class AdminDrawer extends StatelessWidget {
               text: 'Profile',
               onTap: () {
                 Get.to(AssignEmployeeScreen());
+              },
+            ),
+            SizedBox(height: Sizer.hp(24)),
+            const CommonDivider(height: 5),
+            SizedBox(height: Sizer.hp(24)),
+            _buildDrawerItem(
+              imagePath: 'assets/icons/logout.png',
+              text: 'Logout',
+              onTap: () {
+                StorageService.logout();
               },
             ),
           ],
