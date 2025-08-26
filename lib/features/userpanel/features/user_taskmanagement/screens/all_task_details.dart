@@ -11,8 +11,8 @@ import 'package:jesusvlsco/features/taskmanagement/controller/celendercontroller
 import 'package:jesusvlsco/features/taskmanagement/screens/weekly_calender.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/wide_list.dart';
 
-class AllTask extends StatelessWidget {
-  const AllTask({super.key});
+class Datewisetasks extends StatelessWidget {
+  const Datewisetasks({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,37 +58,8 @@ class AllTask extends StatelessWidget {
         child: Column(
           children: [
             _buildSearchTextField(),
-            Padding(
-              padding: EdgeInsets.only(
-                left: Sizer.wp(16.0),
-                right: Sizer.wp(16.0),
-              ),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //
-                  SizedBox(width: Sizer.wp(8)),
-                  Expanded(
-                    child: _customButton1(
-                      width: Sizer.wp(120),
-                      color: AppColors.primary,
-                      text: "All Task",
-                      onPressed: () {},
-                    ),
-                  ),
-                  SizedBox(width: Sizer.wp(8)),
-                  Expanded(
-                    child: _customButton1(
-                      width: Sizer.wp(100),
-                      color: AppColors.primary,
-                      text: "Submitted Task",
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: Sizer.hp(16)),
+            
+            SizedBox(height: Sizer.hp(8)),
 
             //List items start
             Row(

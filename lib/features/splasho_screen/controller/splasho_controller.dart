@@ -52,6 +52,7 @@ class SplashController extends GetxController {
       
       // Check if auth token exists
       String? token = prefs.getString('auth_token');
+      String? user_id = prefs.getString('user_id');
       
       // User is authenticated if they are logged in, verified, and have a token
       bool isAuthenticated = isLoggedIn && isVerified && (token != null && token.isNotEmpty);
@@ -61,6 +62,8 @@ class SplashController extends GetxController {
       print('   - Is Verified: $isVerified');
       print('   - Has Token: ${token != null && token.isNotEmpty}');
       print('   - Final Result: $isAuthenticated');
+      print(  '✅ User is authenticated: UserToken : $token');
+      print(  '✅ User is authenticated: User ID : $user_id');
   
       
       return isAuthenticated;

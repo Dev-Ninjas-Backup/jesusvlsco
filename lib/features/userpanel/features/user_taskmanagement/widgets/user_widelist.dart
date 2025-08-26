@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
@@ -7,7 +7,12 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
 class UserWidelist extends StatefulWidget {
-  const UserWidelist({super.key});
+  
+  final List<Map<String, dynamic>>? data;
+  final Function(int, bool)? onCheckboxChanged;
+  final Function(Map<String, dynamic>)? onItemTap;
+
+  const UserWidelist({super.key, this.data, this.onCheckboxChanged, this.onItemTap});
 
   @override
   State<UserWidelist> createState() => _UserWidelistState();
@@ -17,11 +22,24 @@ class _UserWidelistState extends State<UserWidelist> {
   final ScrollController _scrollController = ScrollController();
   double _sliderValue = 0.0;
   double _maxScrollExtent = 0.0;
+  
+  List<Map<String, dynamic>> get items => widget.data ?? _defaultData;
+
+  static final List<Map<String, dynamic>> _defaultData = List.generate(6, (i) => {
+    'id': i,
+    'name': 'Task ${i + 1} - Shopping Center',
+    'isSelected': false,
+    'startTime': '${10 + i}/12/2024 at ${12 + i}:00 PM',
+    'dueDate': '${10 + i}/12/2024 at ${12 + i}:00 PM',
+    'assignTo': ['John Doe', 'Jane Smith', 'Alice Brown', 'Bob Wilson', 'Carol Davis', 'David Johnson'][i],
+    'status': ['Open', 'In Progress', 'Completed', 'Pending', 'Open', 'In Progress'][i],
+    'label': ['High', 'Medium', 'Low', 'High', 'Medium', 'Low'][i],
+    'avatarUrl': "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+  });
 
   @override
   void initState() {
     super.initState();
-    // Listen to scroll changes to update slider
     _scrollController.addListener(() {
       if (_scrollController.hasClients) {
         setState(() {
@@ -39,7 +57,7 @@ class _UserWidelistState extends State<UserWidelist> {
 
   void _updateMaxScrollExtent() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
+      if (_scrollController.hasClients && _maxScrollExtent != _scrollController.position.maxScrollExtent) {
         setState(() {
           _maxScrollExtent = _scrollController.position.maxScrollExtent;
         });
@@ -49,343 +67,201 @@ class _UserWidelistState extends State<UserWidelist> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> shoppingCenters = [
-      {
-        'name': 'Metro Shopping Center',
-        'isSelected': false,
-        'startTime': '10/12/2024 at 12:00 PM',
-        'dueDate': '10/12/2024 at 12:00 PM',
-        'assignTo': 'John Doe',
-        'infoIcon': 'assets/icons/forum.svg',
-      },
-      {
-        'name': 'Downtown Plaza Mall',
-        'isSelected': false,
-        'startTime': '11/12/2024 at 1:00 PM',
-        'dueDate': '11/12/2024 at 1:00 PM',
-        'assignTo': 'Jane Smith',
-        'infoIcon': 'assets/icons/forum.svg',
-      },
-      {
-        'name': 'City Center Shopping Complex',
-        'isSelected': false,
-        'startTime': '12/12/2024 at 2:00 PM',
-        'dueDate': '12/12/2024 at 2:00 PM',
-        'assignTo': 'Alice Brown',
-        'infoIcon': 'assets/icons/forum.svg',
-      },
-      // Add more items as needed
-    ];
-
-    // Update max scroll extent after build
     _updateMaxScrollExtent();
 
     return Column(
       children: [
-        // XSlider for horizontal scrolling control
-
-        // Main scrollable content
         Expanded(
           child: SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: Sizer.wp(1200),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header section (with grey background)
-                  Container(
-                    height: 60,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.border1, // Grey background
-                      border: Border(),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Checkbox
-                        Checkbox(
-                          value: true,
-                          onChanged: (bool? value) {},
-                          activeColor: AppColors.primary,
-                        ),
-
-                        // Shopping center name
-                        _header_item(context, "Title"),
-
-                        // Shopping center name header
-                        _header_item(context, "Status"),
-
-                        // Info header
-                        _header_item(context, "Label"),
-
-                        // First button header
-                        _header_item(context, "Start Time"),
-
-                        // Second button header
-                        _header_item(context, "Due Date"),
-
-                        // First date header
-                        _header_item(context, "Assign To"),
-                      ],
+                  _buildHeader(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) => _buildItem(items[index], index),
                     ),
                   ),
-
-                  // List items dynamically from the map
-                  ...shoppingCenters.map((center) {
-                    return Container(
-                      height: 80,
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey[300]!,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Checkbox
-                          Checkbox(
-                            value: center['isSelected'],
-                            onChanged: (bool? value) {},
-                            activeColor: AppColors.primary,
-                          ),
-                          SizedBox(width: Sizer.wp(12)),
-
-                          // Shopping center name
-                          SizedBox(
-                            width: Sizer.wp(200),
-                            child: Text(
-                              center['name'],
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.text,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(21)),
-
-                          // Info icon
-                          SvgPicture.asset(
-                            center['infoIcon'],
-                            width: Sizer.wp(20),
-                            height: Sizer.wp(20),
-                          ),
-                          SizedBox(width: Sizer.wp(24)),
-
-                          // First button (Open)
-                          Container(
-                            width: Sizer.wp(130),
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColors.list,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Open",
-                                style: AppTextStyle.regular().copyWith(
-                                  fontSize: Sizer.wp(14),
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.success,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(24)),
-
-                          // Second button (Open)
-                          Container(
-                            width: Sizer.wp(130),
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColors.button2,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Open",
-                                style: AppTextStyle.regular().copyWith(
-                                  fontSize: Sizer.wp(14),
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.text,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(24)),
-
-                          // Start time (dummy data)
-                          SizedBox(
-                            width: Sizer.wp(150),
-                            child: Text(
-                              center['startTime'],
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.text,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(24)),
-
-                          // Due date (dummy data)
-                          SizedBox(
-                            width: Sizer.wp(150),
-                            child: Text(
-                              center['dueDate'],
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.text,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(24)),
-
-                          // Avatar (dummy data)
-                          CircleAvatar(
-                            radius: 15,
-                            backgroundImage: NetworkImage(
-                              "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&w=1000&q=80",
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(8)),
-
-                          // Assign to (dummy data)
-                          SizedBox(
-                            width: Sizer.wp(200),
-                            child: Text(
-                              center['assignTo'],
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: AppColors.text,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
                 ],
               ),
             ),
           ),
         ),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                height: 40,
-                width: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: Sizer.hp(30),
-                      width: Sizer.wp(30),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary,
-                      ),
-                      child: Center(
-                        child: Icon(Icons.add, color: Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: Sizer.wp(8)),
-                    Text(
-                      "Add Task",
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(14),
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: FlutterSlider(
-                  handlerHeight: Sizer.hp(24),
-                  handlerWidth: Sizer.wp(40),
-                  touchSize: 20,
-
-                  values: [_sliderValue],
-                  max: _maxScrollExtent > 0 ? _maxScrollExtent : 100,
-                  min: 0,
-                  onDragging: (handlerIndex, lowerValue, upperValue) {
-                    _scrollController.animateTo(
-                      lowerValue,
-                      duration: Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  trackBar: FlutterSliderTrackBar(
-                    activeTrackBarHeight: 12,
-                    inactiveTrackBarHeight: 12,
-
-                    activeTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.color4,
-                    ),
-                    inactiveTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.color4,
-                    ),
-                  ),
-                  handler: FlutterSliderHandler(
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: SizedBox.shrink(), // Invisible widget
-                  ),
-                  tooltip: FlutterSliderTooltip(disabled: true),
-                ),
-              ),
-            ],
-          ),
-        ),
+        _buildSlider(),
       ],
     );
   }
-}
 
-Widget _header_item(BuildContext context, String text) {
-  return SizedBox(
-    width: Sizer.wp(200),
-    child: Text(
-      text,
-      style: AppTextStyle.regular().copyWith(
-        fontSize: Sizer.wp(16),
-        fontWeight: FontWeight.w600,
-        color: AppColors.primary,
+  Widget _buildHeader() {
+    return Container(
+      height: 60,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      color: AppColors.border1,
+      child: Row(
+        children: [
+          SizedBox(width: 60, child: Checkbox(value: true, onChanged: null, activeColor: AppColors.primary)),
+          ...[
+            "Title", "Status", "Label", "Start Time", "Due Date", "Assign To"
+          ].map((text) => SizedBox(
+            width: Sizer.wp(200),
+            child: Text(
+              text,
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+              ),
+            ),
+          )),
+        ],
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _buildItem(Map<String, dynamic> item, int index) {
+    final status = item['status'] ?? 'Open';
+    final statusColor = status == 'Completed' ? AppColors.success : 
+                      status == 'In Progress' ? AppColors.primary : AppColors.success;
+    final statusBg = status == 'Completed' ? AppColors.list : AppColors.button2;
+
+    return InkWell(
+      onTap: () => widget.onItemTap?.call(item),
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        decoration: BoxDecoration(
+          color: index % 2 == 0 ? Colors.white : Colors.grey[50],
+          border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 60,
+              child: Checkbox(
+                value: item['isSelected'] ?? false,
+                onChanged: (value) => widget.onCheckboxChanged?.call(index, value ?? false),
+                activeColor: AppColors.primary,
+              ),
+            ),
+            
+            _buildCell(item['name'], Sizer.wp(200)),
+            const SizedBox(width: 21),
+            
+            _buildStatusButton(status, statusBg, statusColor),
+            const SizedBox(width: 24),
+            
+            _buildStatusButton(item['label'] ?? 'Open', AppColors.button2, AppColors.text),
+            const SizedBox(width: 24),
+            
+            _buildCell(item['startTime'], Sizer.wp(150)),
+            const SizedBox(width: 24),
+            
+            _buildCell(item['dueDate'], Sizer.wp(150)),
+            const SizedBox(width: 24),
+            
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 15,
+                  backgroundImage: item['avatarUrl'] != null ? NetworkImage(item['avatarUrl']) : null,
+                  child: item['avatarUrl'] == null ? const Icon(Icons.person, size: 20) : null,
+                ),
+                const SizedBox(width: 8),
+                _buildCell(item['assignTo'], Sizer.wp(150)),
+              ],
+            ),
+            const SizedBox(width: 16),
+            
+            SvgPicture.asset(
+              'assets/icons/forum.svg',
+              width: Sizer.wp(20),
+              height: Sizer.wp(20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCell(String? text, double width) {
+    return SizedBox(
+      width: width,
+      child: Text(
+        text ?? '',
+        style: AppTextStyle.regular().copyWith(fontSize: Sizer.wp(14), color: AppColors.text),
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _buildStatusButton(String text, Color bgColor, Color textColor) {
+    return Container(
+      width: Sizer.wp(130),
+      height: 40,
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: AppTextStyle.regular().copyWith(
+            fontSize: Sizer.wp(14),
+            fontWeight: FontWeight.w400,
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: FlutterSlider(
+        handlerHeight: Sizer.hp(24),
+        handlerWidth: Sizer.wp(40),
+        touchSize: 20,
+        values: [_sliderValue],
+        max: _maxScrollExtent > 0 ? _maxScrollExtent : 100,
+        min: 0,
+        onDragging: (_, lowerValue, __) {
+          _scrollController.animateTo(
+            lowerValue,
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+          );
+        },
+        trackBar: FlutterSliderTrackBar(
+          activeTrackBarHeight: 12,
+          inactiveTrackBarHeight: 12,
+          activeTrackBar: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.color4,
+          ),
+          inactiveTrackBar: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.color4,
+          ),
+        ),
+        handler: FlutterSliderHandler(
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
+            ],
+          ),
+          child: const SizedBox.shrink(),
+        ),
+        tooltip:  FlutterSliderTooltip(disabled: true),
+      ),
+    );
+  }
 }
