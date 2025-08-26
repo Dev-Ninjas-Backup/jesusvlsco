@@ -65,15 +65,14 @@ class UserDashboardScreen extends StatelessWidget {
             label: 'Check In',
             labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
             labelBackgroundColor: Colors.white,
-            onTap: () {
-              // Placeholder action for Check In
+            onTap: () async {
+              // Attempt to clock in using approximate device location (0,0 fallback)
               Get.snackbar(
-                'Check In',
-                'Check In button pressed!',
+                'Info',
+                'Processing Check In...',
                 snackPosition: SnackPosition.TOP,
-                backgroundColor: AppColors.color1,
-                colorText: Colors.white,
               );
+              await controller.clockIn(lat: 0.0, lng: 0.0);
             },
           ),
           SpeedDialChild(
@@ -83,18 +82,13 @@ class UserDashboardScreen extends StatelessWidget {
             label: 'Check Out',
             labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
             labelBackgroundColor: Colors.white,
-            onTap: () {
-              // Placeholder action for Check Out
+            onTap: () async {
               Get.snackbar(
-                'Check Out',
-                'Check Out button pressed!',
+                'Info',
+                'Processing Check Out...',
                 snackPosition: SnackPosition.TOP,
-                backgroundColor: AppColors.color1,
-                colorText: Colors.white,
               );
-              // Example: Send a predefined message to the chat
-              // controller.messageController.text = 'Check Out';
-              // controller.sendMessage();
+              await controller.clockOut(lat: 0.0, lng: 0.0);
             },
           ),
         ],

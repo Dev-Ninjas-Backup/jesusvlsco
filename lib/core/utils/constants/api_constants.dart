@@ -7,6 +7,7 @@ class ApiConstants {
   static const String allAdminProjects = '/admin/project';
 
   static const String createProject = '/admin/project'; // create new project
+
   static const String deleteProjectById = '/admin/project/{id}'; // delete project by id
   static const String updateProjectTitle = '/admin/project/{projectId}/update-title'; // update project title
   static const String searchProject = '/admin/project?search={keyword}'; // search project
@@ -17,6 +18,7 @@ class ApiConstants {
   static const String allTimeOffRequests = '/admin/time-off-request/all-requests';
   static const String updateRequestApprovedOrRejected = '/admin/time-off-request/update-request/{id}'; // Patch
   
+
 
   //!-------------------- Payroll ------------------
 
@@ -32,6 +34,10 @@ class ApiConstants {
       '/admin/user/education/create/multiple'; // POST /admin/user/education/create/multiple/{userId}
   static const String createUserExperience =
       '/admin/user/experience/create/user'; // POST /admin/user/experience/create/user/{userId}
+
+  //!-------------------- Time Clock ------------------
+  static const String processClock =
+      '/employee/time-clock/process-clock'; // POST /employee/time-clock/process-clock
 
   //--------------------------- User---------------------------
 }

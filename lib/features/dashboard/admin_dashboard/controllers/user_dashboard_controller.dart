@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:jesusvlsco/core/services/network_caller.dart';
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
 class UserDashboardController extends GetxController {
   final RxString alertMessage =
@@ -109,4 +113,49 @@ class UserDashboardController extends GetxController {
           'imagePath': 'assets/icons/crown.png',
         },
       ].obs;
+
+  /// Sends a clock action to the server. action should be 'CLOCK_IN' or 'CLOCK_OUT'.
+  Future<void> processClock(
+    String action, {
+    double lat = 0.0,
+    double lng = 0.0,
+  }) async {
+    final token = StorageService.token;
+    final caller = NetworkCaller();
+    final url = '${ApiConstants.baseurl}${ApiConstants.processClock}';
+
+    final body = {'lat': lat, 'lng': lng, 'action': action};
+
+    final resp = await caller.postRequest(url, body: body, token: token);
+
+    if (resp.isSuccess) {
+      Get.snackbar(
+        'Success',
+        resp.responseData['message'] ?? 'Clock processed',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } else {
+      final err =
+          resp.responseData != null && resp.responseData['message'] != null
+          ? resp.responseData['message']
+          : resp.errorMessage;
+      Get.snackbar(
+        'Error',
+        err is String ? err : err?.toString() ?? 'Failed to process clock',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> clockIn({double lat = 0.0, double lng = 0.0}) async {
+    await processClock('CLOCK_IN', lat: lat, lng: lng);
+  }
+
+  Future<void> clockOut({double lat = 0.0, double lng = 0.0}) async {
+    await processClock('CLOCK_OUT', lat: lat, lng: lng);
+  }
 }
