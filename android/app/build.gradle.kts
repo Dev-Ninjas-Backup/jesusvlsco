@@ -25,7 +25,7 @@ android {
         
         applicationId = "com.example.jesusvlsco"
 
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
 
         targetSdk = 36
         versionCode = flutter.versionCode
