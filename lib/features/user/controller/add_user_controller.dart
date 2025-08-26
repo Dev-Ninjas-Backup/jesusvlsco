@@ -966,7 +966,7 @@ class AddUserController extends GetxController {
   String _mapBreakTime(String? ui) {
     if (ui == null) return 'NONE';
     final v = ui.toLowerCase();
-    if (v.contains('30')) return 'THIRTY_MIN';
+    if (v.contains('30')) return 'HALF_HOUR';
     if (v.contains('1 hour') || v.contains('1')) return 'ONE_HOUR';
     if (v.contains('3')) return 'THREE_HOUR';
     return ui.toUpperCase();
