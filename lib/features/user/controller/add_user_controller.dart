@@ -215,33 +215,40 @@ class AddUserController extends GetxController {
     ];
 
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Program',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            ...programs.map(
-              (p) => ListTile(
-                title: Text(p),
-                onTap: () {
-                  programController.text = p;
-                  Get.back();
-                },
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Program',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ...programs.map(
+                (p) => ListTile(
+                  title: Text(p),
+                  onTap: () {
+                    programController.text = p;
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -258,33 +265,40 @@ class AddUserController extends GetxController {
     ];
 
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Institution',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            ...institutions.map(
-              (i) => ListTile(
-                title: Text(i),
-                onTap: () {
-                  institutionController.text = i;
-                  Get.back();
-                },
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Institution',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ...institutions.map(
+                (i) => ListTile(
+                  title: Text(i),
+                  onTap: () {
+                    institutionController.text = i;
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -295,38 +309,51 @@ class AddUserController extends GetxController {
     ).reversed.toList();
 
     Get.bottomSheet(
-      Container(
-        height: 400,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          children: [
-            const Text(
-              'Select Year',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: ListView(
-                children: years
-                    .map(
-                      (y) => ListTile(
-                        title: Text(y),
-                        onTap: () {
-                          yearController.text = y;
-                          Get.back();
-                        },
-                      ),
-                    )
-                    .toList(),
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(Get.context!).size.height * 0.8,
+          ),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            children: [
+              const Text(
+                'Select Year',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(Get.context!).size.height * 0.6,
+                ),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: years
+                      .map(
+                        (y) => ListTile(
+                          title: Text(y),
+                          onTap: () {
+                            yearController.text = y;
+                            Get.back();
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -344,39 +371,46 @@ class AddUserController extends GetxController {
     ];
 
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Program',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            ...programs.map(
-              (p) => ListTile(
-                title: Text(p),
-                onTap: () {
-                  if (index >= 0 && index < educations.length) {
-                    final current = Map<String, dynamic>.from(
-                      educations[index],
-                    );
-                    current['program'] = p;
-                    educations[index] = current;
-                  }
-                  Get.back();
-                },
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Program',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ...programs.map(
+                (p) => ListTile(
+                  title: Text(p),
+                  onTap: () {
+                    if (index >= 0 && index < educations.length) {
+                      final current = Map<String, dynamic>.from(
+                        educations[index],
+                      );
+                      current['program'] = p;
+                      educations[index] = current;
+                    }
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -393,39 +427,46 @@ class AddUserController extends GetxController {
     ];
 
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Institution',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            ...institutions.map(
-              (i) => ListTile(
-                title: Text(i),
-                onTap: () {
-                  if (index >= 0 && index < educations.length) {
-                    final current = Map<String, dynamic>.from(
-                      educations[index],
-                    );
-                    current['institution'] = i;
-                    educations[index] = current;
-                  }
-                  Get.back();
-                },
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Institution',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ...institutions.map(
+                (i) => ListTile(
+                  title: Text(i),
+                  onTap: () {
+                    if (index >= 0 && index < educations.length) {
+                      final current = Map<String, dynamic>.from(
+                        educations[index],
+                      );
+                      current['institution'] = i;
+                      educations[index] = current;
+                    }
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -436,44 +477,57 @@ class AddUserController extends GetxController {
     ).reversed.toList();
 
     Get.bottomSheet(
-      Container(
-        height: 400,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          children: [
-            const Text(
-              'Select Year',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: ListView(
-                children: years
-                    .map(
-                      (y) => ListTile(
-                        title: Text(y),
-                        onTap: () {
-                          if (index >= 0 && index < educations.length) {
-                            final current = Map<String, dynamic>.from(
-                              educations[index],
-                            );
-                            current['year'] = int.tryParse(y);
-                            educations[index] = current;
-                          }
-                          Get.back();
-                        },
-                      ),
-                    )
-                    .toList(),
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(Get.context!).size.height * 0.8,
+          ),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            children: [
+              const Text(
+                'Select Year',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(Get.context!).size.height * 0.6,
+                ),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: years
+                      .map(
+                        (y) => ListTile(
+                          title: Text(y),
+                          onTap: () {
+                            if (index >= 0 && index < educations.length) {
+                              final current = Map<String, dynamic>.from(
+                                educations[index],
+                              );
+                              current['year'] = int.tryParse(y);
+                              educations[index] = current;
+                            }
+                            Get.back();
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -1176,33 +1230,40 @@ class AddUserController extends GetxController {
 
   void selectJobTypeFor(int index) {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Job Type',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...jobTypes.map(
-              (type) => ListTile(
-                title: Text(type),
-                onTap: () {
-                  updateExperienceField(index, 'jobType', type);
-                  Get.back();
-                },
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Job Type',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              ...jobTypes.map(
+                (type) => ListTile(
+                  title: Text(type),
+                  onTap: () {
+                    updateExperienceField(index, 'jobType', type);
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -1257,35 +1318,42 @@ class AddUserController extends GetxController {
 
   void selectJobType() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Job Type',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...jobTypes
-                .map(
-                  (type) => ListTile(
-                    title: Text(type),
-                    onTap: () {
-                      jobTypeController.text = type;
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Job Type',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...jobTypes
+                  .map(
+                    (type) => ListTile(
+                      title: Text(type),
+                      onTap: () {
+                        jobTypeController.text = type;
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -1345,205 +1413,247 @@ class AddUserController extends GetxController {
 
   void selectPayRateTypeBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Pay rate',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...payRateTypes
-                .map(
-                  (type) => ListTile(
-                    title: Text(type),
-                    onTap: () {
-                      setPayRateType(type);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Pay rate',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...payRateTypes
+                  .map(
+                    (type) => ListTile(
+                      title: Text(type),
+                      onTap: () {
+                        setPayRateType(type);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void selectOvertimeRateTypeBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Overtime rate',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...payRateTypes
-                .map(
-                  (type) => ListTile(
-                    title: Text(type),
-                    onTap: () {
-                      setOvertimeRateType(type);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Overtime rate',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...payRateTypes
+                  .map(
+                    (type) => ListTile(
+                      title: Text(type),
+                      onTap: () {
+                        setOvertimeRateType(type);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void selectCasualLeaveBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Casual Leave',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...leaveOptions
-                .map(
-                  (leave) => ListTile(
-                    title: Text(leave),
-                    onTap: () {
-                      setCasualLeave(leave);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Casual Leave',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...leaveOptions
+                  .map(
+                    (leave) => ListTile(
+                      title: Text(leave),
+                      onTap: () {
+                        setCasualLeave(leave);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void selectSickLeaveBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Sick Leave',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...leaveOptions
-                .map(
-                  (leave) => ListTile(
-                    title: Text(leave),
-                    onTap: () {
-                      setSickLeave(leave);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Sick Leave',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...leaveOptions
+                  .map(
+                    (leave) => ListTile(
+                      title: Text(leave),
+                      onTap: () {
+                        setSickLeave(leave);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void selectOffDayBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select day here',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...offDayOptions
-                .map(
-                  (day) => ListTile(
-                    title: Text(day),
-                    onTap: () {
-                      setOffDay(day);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select day here',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...offDayOptions
+                  .map(
+                    (day) => ListTile(
+                      title: Text(day),
+                      onTap: () {
+                        setOffDay(day);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void selectBreakTimeBottomSheet() {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Time Here',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            ...breakTimeOptions
-                .map(
-                  (time) => ListTile(
-                    title: Text(time),
-                    onTap: () {
-                      setBreakTime(time);
-                      Get.back();
-                    },
-                  ),
-                )
-                .toList(),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select Time Here',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              ...breakTimeOptions
+                  .map(
+                    (time) => ListTile(
+                      title: Text(time),
+                      onTap: () {
+                        setBreakTime(time);
+                        Get.back();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
