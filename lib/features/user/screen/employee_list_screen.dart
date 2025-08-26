@@ -45,7 +45,12 @@ class EmployeeListScreen extends StatelessWidget {
             spacing: 10,
             children: [
               const SizedBox(height: 10),
-              BuildRoleSelectionButton(width: width, controller: controller),
+              BuildRoleSelectionButton(
+                width: width,
+                controller: controller,
+                adminListController: adminListController,
+                userListController: userListController,
+              ),
               Text(
                 "Employee List",
                 style: TextStyle(
@@ -102,19 +107,30 @@ class EmployeeListScreen extends StatelessWidget {
                 child: Obx(() {
                   final isUserRole = controller.roleSelectedButton.value == 0;
                   final items = isUserRole
-                      ? userListController.users
+                      ? userListController
+                            .employeeProfiles //users
                       : adminListController.admin;
+                      
+                  if (items.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "Wait for ${isUserRole ? 'users' : 'admins'} load data",
+                        //"No ${isUserRole ? 'users' : 'admins'} found",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
+                  }
 
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       if (isUserRole) {
-                        final user = items[index] as User;
-                        return UserTile(
-                          user: user,
-                          onChanged: () =>
-                              userListController.toggleSelection(index),
-                        );
+                        final user = items[index] as EmployeeProfile;
+                        if (userListController.isLoading == true) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return UserTile(employee: user);
+                        }
                       } else {
                         final admin = items[index] as Admin;
                         return AdminTile(

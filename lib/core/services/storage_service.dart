@@ -1,8 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../features/auth/screen/login_screen.dart';
 
 class StorageService {
   // Constants for preference keys
-  static const String _tokenKey = 'token';
+  static const String _tokenKey = 'auth_token';
   static const String _idKey = 'userId';
 
   // Singleton instance for SharedPreferences
@@ -38,4 +42,53 @@ class StorageService {
 
   // Getter for token
   static String? get token => _preferences?.getString(_tokenKey);
+
+  static Future<String?> getId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? userId = prefs.getString('user_id');
+
+      debugPrint('📌 User ID: $userId');
+
+      return userId;
+    } catch (e) {
+      print('🚨 Error getting user id: $e');
+      return null;
+    }
+  }
+
+  // Helper method to get auth token
+  static Future<String?> getAuthToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString('auth_token');
+    } catch (e) {
+      print('🚨 Error getting auth token: $e');
+      return null;
+    }
+  }
+
+  static Future<void> logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Clear all user-related data
+      await prefs.remove('auth_token');
+      await prefs.remove('user_role');
+      await prefs.remove('user_id');
+      await prefs.remove('user_email');
+      await prefs.remove('employee_id');
+      await prefs.remove('is_verified');
+      await prefs.remove('is_logged_in');
+      await prefs.remove('user_profile');
+      await prefs.remove('user_data');
+
+      print('✅ User logged out successfully');
+
+      // Navigate to login screen
+      Get.offAll(() => LoginScreen());
+    } catch (e) {
+      print('🚨 Error during logout: $e');
+    }
+  }
 }

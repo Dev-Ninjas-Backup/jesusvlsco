@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/routes/scheduling_routes.dart';
 import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
@@ -21,6 +23,9 @@ class Jesusvlsco extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
 
+      // GetX Pages - include scheduling routes for hybrid navigation
+      getPages: SchedulingRoutes.pages,
+
       // GetX specific configurations
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 300),
@@ -36,6 +41,10 @@ class Jesusvlsco extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
 
+      // EasyLoading builder - separate from routing
+      builder: EasyLoading.init(),
+
+      // Main app routing
       home: Router.withConfig(config: AppRouter.router),
 
       //  home: AuthRoutes.routes,

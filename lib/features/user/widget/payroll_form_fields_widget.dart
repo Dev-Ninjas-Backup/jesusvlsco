@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import '../controller/add_user_controller.dart';
 
 class PayrollFormFieldsWidget extends StatelessWidget {
@@ -80,6 +81,26 @@ class PayrollFormFieldsWidget extends StatelessWidget {
           ),
         ),
 
+        const SizedBox(height: 12),
+        // Regular pay amount input
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: TextFormField(
+            controller: controller.regularPayRateController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: const InputDecoration(
+              hintText: 'Enter regular pay amount',
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+
         const SizedBox(height: 16),
 
         GestureDetector(
@@ -124,6 +145,26 @@ class PayrollFormFieldsWidget extends StatelessWidget {
                 ),
                 const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
               ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+        // Overtime pay amount input
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: TextFormField(
+            controller: controller.overtimePayRateController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: const InputDecoration(
+              hintText: 'Enter overtime pay amount',
+              border: InputBorder.none,
             ),
           ),
         ),

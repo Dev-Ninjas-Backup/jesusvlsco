@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/features/time&clock/screens/time_sheet.dart';
-import 'package:jesusvlsco/features/time&clock/screens/add_project_screen.dart';
-import 'package:jesusvlsco/features/time&clock/screens/access_schedule_screen.dart';
-import 'package:jesusvlsco/features/time&clock/screens/assign_employee_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_scheduling_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/add_project_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/access_schedule_screen.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -26,7 +26,7 @@ class AdminScheduleRoutes {
           // Add Project route
           GoRoute(
             path: 'add-project',
-            name: 'admin-schedule-add-project',
+            name: RouteNames.adminAddProject,
             builder: (context, state) => const AddProjectScreen(),
           ),
 

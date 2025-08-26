@@ -12,7 +12,7 @@ class UserPollScreen extends StatelessWidget {
     final controller = Get.put(UserPollController());
 
     return Scaffold(
-      appBar: Custom_appbar(title: "Survey"),
+      appBar: Custom_appbar(title: "Poll"),
       body: Obx(() {
         final poll = controller.pollQuestion as Map<String, dynamic>;
 
@@ -45,21 +45,27 @@ class UserPollScreen extends StatelessWidget {
                 children: const [
                   Icon(Icons.calendar_today, size: 16, color: Colors.black54),
                   SizedBox(width: 6),
-                  Text("Duration: May 1 - May 15, 2025",
-                      style: TextStyle(fontSize: 14)),
+                  Text(
+                    "Duration: May 1 - May 15, 2025",
+                    style: TextStyle(fontSize: 14),
+                  ),
                 ],
               ),
               const SizedBox(height: 6),
               Row(
                 children: const [
-                  Text("Status: ",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500)),
-                  Text("Active",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green)),
+                  Text(
+                    "Status: ",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "Active",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -77,7 +83,9 @@ class UserPollScreen extends StatelessWidget {
                     child: const Text(
                       "1",
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -104,7 +112,9 @@ class UserPollScreen extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 12),
+                        vertical: 14,
+                        horizontal: 12,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: isSelected
@@ -161,7 +171,7 @@ class UserPollScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 borderRadius: 8,
               ),
-              SizedBox(height: 8,)
+              SizedBox(height: 8),
             ],
           ),
         );

@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/app.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
 
 import 'core/services/location_controller.dart';
 import 'core/services/request_handaler.dart';
+import 'core/services/storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await StorageService.init();
   await requestPermissions();
   final locationController = Get.put(LocationController());
   await locationController.initializeService();
@@ -24,5 +27,26 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
+
+  // Configure EasyLoading
+  _configureEasyLoading();
+
   runApp(const Jesusvlsco());
+}
+
+/// Configure EasyLoading settings
+void _configureEasyLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }

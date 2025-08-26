@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -8,7 +9,10 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
+import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
+
+import '../../../userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
 
 class UserDashboardScreen extends StatelessWidget {
   UserDashboardScreen({super.key});
@@ -43,6 +47,137 @@ class UserDashboardScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add, // Main FAB icon
+        activeIcon: Icons.close, // Icon when FAB is open
+        backgroundColor: AppColors.color1,
+        foregroundColor: Colors.white,
+        activeBackgroundColor: Colors.red,
+        activeForegroundColor: Colors.white,
+        buttonSize: const Size(56, 56),
+        childrenButtonSize: const Size(48, 48),
+        overlayColor: Colors.black,
+        overlayOpacity: 0.4,
+        spacing: 8,
+        spaceBetweenChildren: 8,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.login, size: 20),
+            backgroundColor: AppColors.color2,
+            foregroundColor: Colors.white,
+            label: 'Check In',
+            labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+            labelBackgroundColor: Colors.white,
+            onTap: () async {
+              Get.snackbar(
+                'Info',
+                'Processing Check In...',
+                snackPosition: SnackPosition.TOP,
+              );
+              try {
+                bool serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (!serviceEnabled) {
+                  Get.snackbar(
+                    'Location',
+                    'Please enable location services',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockIn(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                LocationPermission permission =
+                    await Geolocator.checkPermission();
+                if (permission == LocationPermission.denied) {
+                  permission = await Geolocator.requestPermission();
+                }
+                if (permission == LocationPermission.denied ||
+                    permission == LocationPermission.deniedForever) {
+                  Get.snackbar(
+                    'Location',
+                    'Location permission denied',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockIn(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                final pos = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high,
+                );
+                await controller.clockIn(lat: pos.latitude, lng: pos.longitude);
+              } catch (e) {
+                Get.snackbar(
+                  'Error',
+                  'Failed to get location: $e',
+                  snackPosition: SnackPosition.TOP,
+                );
+                await controller.clockIn(lat: 0.0, lng: 0.0);
+              }
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.logout, size: 20),
+            backgroundColor: AppColors.color2,
+            foregroundColor: Colors.white,
+            label: 'Check Out',
+            labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+            labelBackgroundColor: Colors.white,
+            onTap: () async {
+              Get.snackbar(
+                'Info',
+                'Processing Check Out...',
+                snackPosition: SnackPosition.TOP,
+              );
+              try {
+                bool serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (!serviceEnabled) {
+                  Get.snackbar(
+                    'Location',
+                    'Please enable location services',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockOut(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                LocationPermission permission =
+                    await Geolocator.checkPermission();
+                if (permission == LocationPermission.denied) {
+                  permission = await Geolocator.requestPermission();
+                }
+                if (permission == LocationPermission.denied ||
+                    permission == LocationPermission.deniedForever) {
+                  Get.snackbar(
+                    'Location',
+                    'Location permission denied',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockOut(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                final pos = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high,
+                );
+                await controller.clockOut(
+                  lat: pos.latitude,
+                  lng: pos.longitude,
+                );
+              } catch (e) {
+                Get.snackbar(
+                  'Error',
+                  'Failed to get location: $e',
+                  snackPosition: SnackPosition.TOP,
+                );
+                await controller.clockOut(lat: 0.0, lng: 0.0);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -69,24 +204,52 @@ class UserDashboardScreen extends StatelessWidget {
     return Obx(
       () => SizedBox(
         height: Sizer.hp(300),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: controller.recognitionEngagement.length > 3
-              ? 3
-              : controller.recognitionEngagement.length,
-          itemBuilder: (context, index) {
-            final item = controller.recognitionEngagement[index];
-            return Container(
-              margin: EdgeInsets.only(bottom: Sizer.wp(8)),
-              child: _buildRecognitionItemWithIcon(
-                item['title']!,
-                item['description']!,
-                item['imagePath']!,
+        child: controller.recognitionEngagement.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.emoji_events,
+                      size: Sizer.wp(36),
+                      color: AppColors.recognitionColor,
+                    ),
+                    SpacingHelper.h8(),
+                    Text(
+                      'No recognitions yet',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.recognitionColor,
+                      ),
+                    ),
+                    SpacingHelper.h4(),
+                    Text(
+                      'There are no recognitions for you right now.',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.recognitionEngagement.length > 3
+                    ? 3
+                    : controller.recognitionEngagement.length,
+                itemBuilder: (context, index) {
+                  final item = controller.recognitionEngagement[index];
+                  return Container(
+                    margin: EdgeInsets.only(bottom: Sizer.wp(8)),
+                    child: _buildRecognitionItemWithIcon(
+                      item['title']!,
+                      item['description']!,
+                      item['imagePath']!,
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }
@@ -178,17 +341,45 @@ class UserDashboardScreen extends StatelessWidget {
     return Obx(
       () => SizedBox(
         height: Sizer.hp(380),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: controller.companyUpdates.length > 3
-              ? 3
-              : controller.companyUpdates.length,
-          itemBuilder: (context, index) {
-            final update = controller.companyUpdates[index];
-            return _buildUpdateItem(update);
-          },
-        ),
+        child: controller.companyUpdates.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.announcement_outlined,
+                      size: Sizer.wp(36),
+                      color: AppColors.primary,
+                    ),
+                    SpacingHelper.h8(),
+                    Text(
+                      'No company updates',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SpacingHelper.h4(),
+                    Text(
+                      'You have no recent announcements.',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.companyUpdates.length > 3
+                    ? 3
+                    : controller.companyUpdates.length,
+                itemBuilder: (context, index) {
+                  final update = controller.companyUpdates[index];
+                  return _buildUpdateItem(update);
+                },
+              ),
       ),
     );
   }
@@ -305,48 +496,94 @@ class UserDashboardScreen extends StatelessWidget {
           ),
         ),
         SpacingHelper.h8(),
-        Padding(
-          padding: EdgeInsets.only(left: Sizer.wp(8)),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: Sizer.wp(4), right: Sizer.wp(2)),
-                child: Image.asset(
-                  'assets/icons/calendar_today.png',
-                  height: Sizer.hp(20),
-                  width: Sizer.wp(20),
-                ),
-              ),
-              SpacingHelper.w8(),
-              Column(
+        Obx(() {
+          if (controller.upcomingShifts.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.only(left: Sizer.wp(8)),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '9:00 AM - 5:00 PM',
-                    style: AppTextStyle.f16W600().copyWith(
-                      color: AppColors.primary,
-                    ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: Sizer.wp(4),
+                          right: Sizer.wp(2),
+                        ),
+                        child: Image.asset(
+                          'assets/icons/calendar_today.png',
+                          height: Sizer.hp(20),
+                          width: Sizer.wp(20),
+                        ),
+                      ),
+                      SpacingHelper.w8(),
+                      Text(
+                        'No upcoming shifts',
+                        style: AppTextStyle.f16W600().copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
-                  SpacingHelper.h4(),
+                  SpacingHelper.h8(),
                   Text(
-                    'Main Office - Floor 3',
+                    'You have no scheduled shifts coming up.',
                     style: AppTextStyle.f14W400().copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  Text(
-                    'With : Alice, Bob',
-                    style: AppTextStyle.f14W400().copyWith(
-                      color: AppColors.primary,
+                      color: AppColors.textBlackShade,
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
+            );
+          }
+
+          final s = controller.upcomingShifts.first;
+          return Padding(
+            padding: EdgeInsets.only(left: Sizer.wp(8)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: Sizer.wp(4),
+                    right: Sizer.wp(2),
+                  ),
+                  child: Image.asset(
+                    'assets/icons/calendar_today.png',
+                    height: Sizer.hp(20),
+                    width: Sizer.wp(20),
+                  ),
+                ),
+                SpacingHelper.w8(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      s['time'] ?? '',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SpacingHelper.h4(),
+                    Text(
+                      s['location'] ?? '',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    Text(
+                      s['team'] ?? '',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }
@@ -366,17 +603,46 @@ class UserDashboardScreen extends StatelessWidget {
           ],
         ),
         SpacingHelper.h8(),
-        _buildTaskItemWithIcon(
-          'Complete Q2 Performance Review',
-          'Today, 5:00 PM',
-          Icons.assignment_outlined,
-        ),
-        SpacingHelper.h8(),
-        _buildTaskItemWithIcon(
-          'Review Marketing Campaign Draft',
-          'Today, 5:00 PM',
-          Icons.assignment_outlined,
-        ),
+        Obx(() {
+          if (controller.upcomingTasks.isEmpty) {
+            return Column(
+              children: [
+                Icon(
+                  Icons.assignment,
+                  size: Sizer.wp(36),
+                  color: AppColors.primary,
+                ),
+                SpacingHelper.h8(),
+                Text(
+                  'No upcoming tasks',
+                  style: AppTextStyle.f16W600().copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+                SpacingHelper.h4(),
+                Text(
+                  'You have no assigned tasks at the moment.',
+                  style: AppTextStyle.f14W400().copyWith(
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            );
+          }
+
+          final count = controller.upcomingTasks.length > 3
+              ? 3
+              : controller.upcomingTasks.length;
+          return Column(
+            children: List.generate(count, (index) {
+              final task = controller.upcomingTasks[index];
+              return Column(
+                children: [_buildTaskItem(task), SpacingHelper.h8()],
+              );
+            }),
+          );
+        }),
       ],
     );
   }
@@ -400,45 +666,7 @@ class UserDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTaskItemWithIcon(String title, String time, IconData icon) {
-    return Container(
-      padding: EdgeInsets.all(Sizer.wp(12)),
-      decoration: BoxDecoration(
-        color: AppColors.shiftCardColor,
-        borderRadius: BorderRadius.circular(Sizer.wp(12)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: Sizer.wp(8)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: Sizer.wp(18), color: AppColors.primary),
-            SpacingHelper.w8(),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyle.f14W400().copyWith(
-                      color: AppColors.textBlackShade,
-                    ),
-                  ),
-                  SpacingHelper.h4(),
-                  Text(
-                    '($time)',
-                    style: AppTextStyle.f14W400().copyWith(
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // ...existing task item widget is used instead: _buildTaskItem
 
   Widget _buildUpcomingTasksHeader() {
     return Row(
@@ -451,7 +679,9 @@ class UserDashboardScreen extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(UserTaskmanagementDashboard());
+          },
           child: Row(
             children: [
               Text(
@@ -477,17 +707,45 @@ class UserDashboardScreen extends StatelessWidget {
     return Obx(
       () => SizedBox(
         height: Sizer.hp(290),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: controller.upcomingTasks.length > 3
-              ? 3
-              : controller.upcomingTasks.length,
-          itemBuilder: (context, index) {
-            final task = controller.upcomingTasks[index];
-            return _buildTaskItem(task);
-          },
-        ),
+        child: controller.upcomingTasks.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.assignment,
+                      size: Sizer.wp(36),
+                      color: AppColors.primary,
+                    ),
+                    SpacingHelper.h8(),
+                    Text(
+                      'No upcoming tasks',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SpacingHelper.h4(),
+                    Text(
+                      'You have no assigned tasks for now.',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.upcomingTasks.length > 3
+                    ? 3
+                    : controller.upcomingTasks.length,
+                itemBuilder: (context, index) {
+                  final task = controller.upcomingTasks[index];
+                  return _buildTaskItem(task);
+                },
+              ),
       ),
     );
   }
@@ -602,12 +860,6 @@ class UserDashboardScreen extends StatelessWidget {
       children: [
         Icon(Icons.alarm, size: Sizer.wp(24), color: AppColors.textBlackShade),
         const Spacer(),
-        Text(
-          "View Schedule",
-          style: AppTextStyle.f12W400().copyWith(
-            color: AppColors.textBlackShade,
-          ),
-        ),
       ],
     );
   }
@@ -617,13 +869,37 @@ class UserDashboardScreen extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildShiftTime(),
-          SpacingHelper.h8(),
-          _buildShiftDate(),
-          SpacingHelper.h8(),
-          _buildShiftLocation(),
-          SpacingHelper.h8(),
-          _buildTeamSection(),
+          controller.hasActiveShift.value
+              ? Column(
+                  children: [
+                    _buildShiftTime(),
+                    SpacingHelper.h8(),
+                    _buildShiftDate(),
+                    SpacingHelper.h8(),
+                    _buildShiftLocation(),
+                    SpacingHelper.h8(),
+                    _buildTeamSection(),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Text(
+                      'No active shift',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SpacingHelper.h8(),
+                    Text(
+                      'You currently have no active shift. Please check in to start.',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: AppColors.textBlackShade,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SpacingHelper.h8(),
+                  ],
+                ),
         ],
       ),
     );
@@ -697,7 +973,7 @@ class UserDashboardScreen extends StatelessWidget {
       actions: [
         IconButton(
           icon: Icon(Icons.menu, color: AppColors.textBlackShade),
-          onPressed: () => context.pushNamed(RouteNames.drawer),
+          onPressed: () => Get.to(UserDrawer()),
         ),
       ],
     );

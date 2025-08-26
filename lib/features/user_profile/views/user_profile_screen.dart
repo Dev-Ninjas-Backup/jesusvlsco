@@ -5,7 +5,6 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/user_profile/controller/user_profile_controller.dart';
 import 'package:jesusvlsco/features/user_profile/widgets/user_form_widget.dart';
-import 'package:jesusvlsco/features/user/widget/view_info_card_widget.dart';
 import 'package:jesusvlsco/features/user/widget/view_profile_header_widget.dart';
 
 class UserProfileScreen extends StatelessWidget {
@@ -42,11 +41,12 @@ class UserProfileScreen extends StatelessWidget {
                     SizedBox(height: Sizer.hp(32)),
                     Container(
                       height: Sizer.hp(50),
-                      margin: EdgeInsets.all(15),
+                      margin: const EdgeInsets.all(15),
                       child: CustomButton(
+                        // isLoading: controller.isLoading.value,
                         textColor: Colors.white,
                         isExpanded: true,
-                        onPressed: () {},
+                        onPressed: controller.updateProfile,
                         text: 'Save Settings',
                         decorationColor: AppColors.primary,
                       ),
@@ -62,108 +62,137 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
+  // Replace the _buildHeaderView method in your UserProfileScreen with this:
   Widget _buildHeaderView(UserProfileController controller) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFFE5E7EB), width: 2),
+    return Obx(
+      () => Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
-            child: ClipOval(
-              child: Image.network(
-                'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey.shade300,
-                    child: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
-                  );
-                },
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFE5E7EB), width: 2),
               ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: double.infinity),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      'Leslie Alexander',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+              child: ClipOval(
+                child:
+                    controller.profileImageUrl.value != null &&
+                        controller.profileImageUrl.value!.isNotEmpty
+                    ? Image.network(
+                        controller.profileImageUrl.value!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.grey,
+                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Flexible(
-                    child: Text(
-                      controller.selectedJobTitle.value ??
-                          'Senior Software Engineer',
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: ElevatedButton(
-              onPressed: () {
-                // Navigate to an edit profile screen
-                Get.toNamed('/edit-profile'); // Replace with actual route
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6366F1),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+            const SizedBox(width: 16),
+            Expanded(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: double.infinity),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        controller.displayName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Flexible(
+                      child: Text(
+                        controller.displayJobTitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: controller.displayJobTitle == 'No Job Title'
+                              ? Colors.grey.shade500
+                              : Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                minimumSize: const Size(60, 40), // Constrain button size
-              ),
-              child: const Text(
-                'Edit',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Flexible(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (controller.isEditing.value) {
+                    controller.updateProfile();
+                  } else {
+                    controller.isEditing.value = true;
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6366F1),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  minimumSize: const Size(60, 40),
+                ),
+                child: Obx(
+                  () => controller.isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(controller.isEditing.value ? 'Save' : 'Edit'),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

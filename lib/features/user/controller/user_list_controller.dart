@@ -1,33 +1,148 @@
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
-class User {
-  final String name;
-  final String imageUrl;
-  final String code;
-  RxBool isSelected;
+class EmployeeProfile {
+  final int employeeID;
+  final Profile profile;
+  final RxBool isSelected = false.obs;
 
-  User({
-    required this.name,
-    required this.imageUrl,
-    required this.code,
-    bool selected = false,
-  }) : isSelected = selected.obs;
+  EmployeeProfile({required this.employeeID, required this.profile});
+
+  factory EmployeeProfile.fromJson(Map<String, dynamic> json) {
+    return EmployeeProfile(
+      employeeID: json['employeeID'],
+      profile: Profile.fromJson(json['profile']),
+    );
+  }
+}
+
+class Profile {
+  final String firstName;
+  final String lastName;
+  final String jobTitle;
+  final String department;
+  final String address;
+  final String city;
+  final String state;
+  final String country;
+  final String nationality;
+  final String gender;
+  final String dob;
+
+  Profile({
+    required this.firstName,
+    required this.lastName,
+    required this.jobTitle,
+    required this.department,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.country,
+    required this.nationality,
+    required this.gender,
+    required this.dob,
+  });
+
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      jobTitle: json['jobTitle'] ?? '',
+      department: json['department'] ?? '',
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      state: json['state'] ?? '',
+      country: json['country'] ?? '',
+      nationality: json['nationality'] ?? '',
+      gender: json['gender'] ?? '',
+      dob: json['dob'] ?? '',
+    );
+  }
 }
 
 class UserListController extends GetxController {
-  var users = <User>[
-    User(name: "Jenny Wilson", imageUrl: "https://i.pravatar.cc/150?img=1", code: "21389"),
-    User(name: "Theresa Webb", imageUrl: "https://i.pravatar.cc/150?img=2", code: "21389"),
-    User(name: "Courtney Henry", imageUrl: "https://i.pravatar.cc/150?img=3", code: "21389"),
-    User(name: "Eleanor Pena", imageUrl: "https://i.pravatar.cc/150?img=4", code: "21389"),
-    User(name: "Kathryn Murphy", imageUrl: "https://i.pravatar.cc/150?img=5", code: "21389"),
-    User(name: "Kathryn Murphy", imageUrl: "https://i.pravatar.cc/150?img=6", code: "21389"),
-    User(name: "Arlene McCoy", imageUrl: "https://i.pravatar.cc/150?img=7", code: "21389"),
-    User(name: "Cody Fisher", imageUrl: "https://i.pravatar.cc/150?img=8", code: "21389"),
-    User(name: "Jacob Jones", imageUrl: "https://i.pravatar.cc/150?img=9", code: "21389"),
-  ].obs;
+  var employeeProfiles = <EmployeeProfile>[].obs;
+  var currentPage = 1.obs;
+  final int limit = 10;
+  var isLoading = false.obs;
+  var hasMore = true.obs;
+  RxInt totalEmployeeCount = 0.obs;
 
-  void toggleSelection(int index) {
-    users[index].isSelected.value = !users[index].isSelected.value;
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   fetchEmployeeProfiles(); // Initial load
+  // }
+
+  Future<void> fetchEmployeeProfiles({bool loadMore = false}) async {
+    if (isLoading.value || !hasMore.value) return;
+
+    isLoading.value = true;
+    final token = await StorageService.getAuthToken();
+    final url = Uri.parse(
+      '${ApiConstants.baseurl}/admin/user?role=EMPLOYEE&page=${currentPage.value}&limit=$limit',
+    );
+    print(">>>>call user");
+
+    try {
+      //final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+        },
+      );
+      print("Bearer $token");
+      print("Sending GET request to: $url");
+      print("Request headers:");
+      print({
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+      });
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final List<dynamic> data = jsonData['data'];
+
+        if (data.isEmpty) {
+          hasMore.value = false;
+        } else {
+          final newProfiles = data.map((userJson) {
+            return EmployeeProfile.fromJson(userJson);
+          }).toList();
+
+          employeeProfiles.addAll(newProfiles);
+          totalEmployeeCount.value = employeeProfiles.length;
+          currentPage.value++;
+          print("Total employees fetched so far: ${totalEmployeeCount.value}");
+        }
+      } else {
+        print('Failed to fetch data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching employee profiles: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  ///For delete and add employee after selected
+  List<EmployeeProfile> get selectedEmployees =>
+      employeeProfiles.where((e) => e.isSelected.value).toList();
+
+  void deleteSelectedEmployees() {
+    employeeProfiles.removeWhere((e) => e.isSelected.value);
+  }
+
+  void clearSelections() {
+    for (var e in employeeProfiles) {
+      e.isSelected.value = false;
+    }
   }
 }

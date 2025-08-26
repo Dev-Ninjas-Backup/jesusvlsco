@@ -1,34 +1,140 @@
+
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
 class Admin {
-  final String name;
-  final String imageUrl;
-  final String code;
+  final String id;
+  final String email;
+  final String role;
+  final int employeeID;
+  final bool isLogin;
+  final bool isVerified;
+  final String phone;
+  final int pinCode;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   RxBool isSelected;
 
   Admin({
-    required this.name,
-    required this.imageUrl,
-    required this.code,
+    required this.id,
+    required this.email,
+    required this.role,
+    required this.employeeID,
+    required this.isLogin,
+    required this.isVerified,
+    required this.phone,
+    required this.pinCode,
+    required this.createdAt,
+    required this.updatedAt,
     bool selected = false,
   }) : isSelected = selected.obs;
+
+  factory Admin.fromJson(Map<String, dynamic> json) {
+    return Admin(
+      id: json['id'] ?? "",
+      email: json['email'] ?? "",
+      role: json['role'] ?? "",
+      employeeID: json['employeeID'] ?? 0,
+      isLogin: json['isLogin'] ?? false,
+      isVerified: json['isVerified'] ?? false,
+      phone: json['phone'] ?? "",
+      pinCode: json['pinCode'] ?? 0,
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
 }
 
 class AdminListController extends GetxController {
-  var admin = <Admin>[
-  Admin(name: "Olivia Martinez", imageUrl: "https://i.pravatar.cc/150?img=10", code: "78421"),
-  Admin(name: "Liam Anderson", imageUrl: "https://i.pravatar.cc/150?img=11", code: "45938"),
-  Admin(name: "Sophia Lee", imageUrl: "https://i.pravatar.cc/150?img=12", code: "93215"),
-  Admin(name: "Noah Brown", imageUrl: "https://i.pravatar.cc/150?img=13", code: "67209"),
-  Admin(name: "Isabella Clark", imageUrl: "https://i.pravatar.cc/150?img=14", code: "84576"),
-  Admin(name: "Mason Walker", imageUrl: "https://i.pravatar.cc/150?img=15", code: "21847"),
-  Admin(name: "Ava Harris", imageUrl: "https://i.pravatar.cc/150?img=16", code: "50673"),
-  Admin(name: "Ethan Young", imageUrl: "https://i.pravatar.cc/150?img=17", code: "39482"),
-  Admin(name: "Mia King", imageUrl: "https://i.pravatar.cc/150?img=18", code: "76134"),
-].obs;
+  final RxList<Admin> admin = <Admin>[].obs;
+  final RxInt currentPage = 1.obs;
+  final int limit = 12;
+  final RxBool isLoading = false.obs;
+  final RxBool hasMore = true.obs;
+  final RxInt totalAdminCount = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAdmins(); // Initial load
+  }
+
+  Future<void> fetchAdmins() async {
+  if (isLoading.value || !hasMore.value) return;
+
+  isLoading.value = true;
+  final token = await StorageService.getAuthToken();
+
+  try {
+    while (hasMore.value) {
+      final url = Uri.parse(
+        '${ApiConstants.baseurl}/admin/manage-admin/get-admins?page=${currentPage.value}&limit=$limit',
+      );
 
 
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+        },
+      );
+
+      print('Bearer $token');
+
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final List<dynamic> data = jsonData['data'];
+
+        if (data.isEmpty) {
+          hasMore.value = false;
+        } else {
+          final newAdmins = data.map((adminJson) => Admin.fromJson(adminJson)).toList();
+          admin.addAll(newAdmins);
+          currentPage.value++;
+        }
+
+        // Optional: break early if fewer than limit returned
+        if (data.length < limit) {
+          hasMore.value = false;
+        }
+      } else {
+        print("Failed to load admins: ${response.statusCode}");
+        hasMore.value = false;
+      }
+    }
+  } catch (e) {
+    print("Error fetching admins: $e");
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+
+  /// Selection logic
   void toggleSelection(int index) {
     admin[index].isSelected.value = !admin[index].isSelected.value;
   }
+
+  /// Batch actions
+  List<Admin> get selectedAdmins =>
+      admin.where((a) => a.isSelected.value).toList();
+
+  void deleteSelectedAdmins() {
+    admin.removeWhere((a) => a.isSelected.value);
+  }
+
+  void clearSelections() {
+    for (var a in admin) {
+      a.isSelected.value = false;
+    }
+  }
 }
+
+
+

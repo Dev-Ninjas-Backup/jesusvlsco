@@ -4,7 +4,6 @@ import 'package:jesusvlsco/features/user/widget/add_education_button_widget.dart
 import 'package:jesusvlsco/features/user/widget/appbar_widget.dart';
 
 import '../controller/add_user_controller.dart';
-import '../widget/edit_button_widget.dart';
 import '../widget/experience_form_fields_widget.dart';
 import '../widget/progress_indigator_widget.dart';
 import '../widget/section_header_widget.dart';
@@ -29,18 +28,10 @@ class AddUserExperienceScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [
-                        SectionHeaderWidget(
-                          title: 'Experience & skills',
-                          subtitle:
-                              'Fill in the details below to add a new employee to the system.',
-                        ),
-                        const SizedBox(height: 16),
-                        EditButtonWidget(
-                          onPressed: () => controller.editExperience(),
-                        ),
-                      ],
+                    SectionHeaderWidget(
+                      title: 'Experience & skills',
+                      subtitle:
+                          'Fill in the details below to add a new employee to the system.',
                     ),
 
                     const SizedBox(height: 25),
