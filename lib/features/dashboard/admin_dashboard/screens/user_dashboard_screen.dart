@@ -12,6 +12,8 @@ import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avata
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
+import '../../../userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
+
 class UserDashboardScreen extends StatelessWidget {
   UserDashboardScreen({super.key});
 
@@ -678,7 +680,7 @@ class UserDashboardScreen extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Get.to(UserSurveyScreen());
+            Get.to(UserTaskmanagementDashboard());
           },
           child: Row(
             children: [
@@ -858,12 +860,6 @@ class UserDashboardScreen extends StatelessWidget {
       children: [
         Icon(Icons.alarm, size: Sizer.wp(24), color: AppColors.textBlackShade),
         const Spacer(),
-        Text(
-          "View Schedule",
-          style: AppTextStyle.f12W400().copyWith(
-            color: AppColors.textBlackShade,
-          ),
-        ),
       ],
     );
   }
