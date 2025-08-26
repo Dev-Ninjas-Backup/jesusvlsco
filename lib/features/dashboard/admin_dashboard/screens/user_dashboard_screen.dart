@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
-import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class UserDashboardScreen extends StatelessWidget {
   UserDashboardScreen({super.key});

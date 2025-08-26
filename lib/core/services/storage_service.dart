@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../features/auth/screen/login_screen.dart';
 
 class StorageService {
   // Constants for preference keys
@@ -62,6 +65,30 @@ class StorageService {
     } catch (e) {
       print('🚨 Error getting auth token: $e');
       return null;
+    }
+  }
+
+  static Future<void> logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Clear all user-related data
+      await prefs.remove('auth_token');
+      await prefs.remove('user_role');
+      await prefs.remove('user_id');
+      await prefs.remove('user_email');
+      await prefs.remove('employee_id');
+      await prefs.remove('is_verified');
+      await prefs.remove('is_logged_in');
+      await prefs.remove('user_profile');
+      await prefs.remove('user_data');
+
+      print('✅ User logged out successfully');
+
+      // Navigate to login screen
+      Get.offAll(() => LoginScreen());
+    } catch (e) {
+      print('🚨 Error during logout: $e');
     }
   }
 }

@@ -11,6 +11,8 @@ import 'package:jesusvlsco/features/user_profile/views/user_profile_screen.dart'
 import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
+import '../../../../core/services/storage_service.dart';
+
 class UserDrawer extends StatelessWidget {
   const UserDrawer({super.key});
 
@@ -102,6 +104,16 @@ class UserDrawer extends StatelessWidget {
               text: 'Profile',
               onTap: () {
                 Get.to(UserProfileScreen());
+              },
+            ),
+            SizedBox(height: Sizer.hp(24)),
+            const CommonDivider(height: 5),
+            SizedBox(height: Sizer.hp(24)),
+            _buildDrawerItem(
+              imagePath: 'assets/icons/logout.png',
+              text: 'Logout',
+              onTap: () {
+                StorageService.logout();
               },
             ),
           ],
