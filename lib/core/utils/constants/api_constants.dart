@@ -1,7 +1,7 @@
 class ApiConstants {
   static const baseurl = "http://148.230.86.72:5005/js";
 
-  // ----------------------- Admin------------------------
+  // ----------------------- Admin ------------------------
 
   //!-------------------- Shift Scheduling ------------------
   static const String allAdminProjects = '/admin/project';
@@ -34,9 +34,11 @@ class ApiConstants {
   static const String createUserExperience =
       '/admin/user/experience/create/user'; // POST /admin/user/experience/create/user/{userId}
 
+  //--------------------------- Employee ---------------------------
+
   //!-------------------- Time Clock ------------------
   static const String processClock =
       '/employee/time-clock/process-clock'; // POST /employee/time-clock/process-clock
-
-  //--------------------------- User---------------------------
+  static const String currentClock =
+      '/employee/time-clock/shift/current-clock'; // GET /employee/time-clock/shift/current-clock
 }

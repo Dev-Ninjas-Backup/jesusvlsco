@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -66,13 +67,52 @@ class UserDashboardScreen extends StatelessWidget {
             labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
             labelBackgroundColor: Colors.white,
             onTap: () async {
-              // Attempt to clock in using approximate device location (0,0 fallback)
               Get.snackbar(
                 'Info',
                 'Processing Check In...',
                 snackPosition: SnackPosition.TOP,
               );
-              await controller.clockIn(lat: 0.0, lng: 0.0);
+              try {
+                bool serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (!serviceEnabled) {
+                  Get.snackbar(
+                    'Location',
+                    'Please enable location services',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockIn(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                LocationPermission permission =
+                    await Geolocator.checkPermission();
+                if (permission == LocationPermission.denied) {
+                  permission = await Geolocator.requestPermission();
+                }
+                if (permission == LocationPermission.denied ||
+                    permission == LocationPermission.deniedForever) {
+                  Get.snackbar(
+                    'Location',
+                    'Location permission denied',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockIn(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                final pos = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high,
+                );
+                await controller.clockIn(lat: pos.latitude, lng: pos.longitude);
+              } catch (e) {
+                Get.snackbar(
+                  'Error',
+                  'Failed to get location: $e',
+                  snackPosition: SnackPosition.TOP,
+                );
+                await controller.clockIn(lat: 0.0, lng: 0.0);
+              }
             },
           ),
           SpeedDialChild(
@@ -88,7 +128,50 @@ class UserDashboardScreen extends StatelessWidget {
                 'Processing Check Out...',
                 snackPosition: SnackPosition.TOP,
               );
-              await controller.clockOut(lat: 0.0, lng: 0.0);
+              try {
+                bool serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (!serviceEnabled) {
+                  Get.snackbar(
+                    'Location',
+                    'Please enable location services',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockOut(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                LocationPermission permission =
+                    await Geolocator.checkPermission();
+                if (permission == LocationPermission.denied) {
+                  permission = await Geolocator.requestPermission();
+                }
+                if (permission == LocationPermission.denied ||
+                    permission == LocationPermission.deniedForever) {
+                  Get.snackbar(
+                    'Location',
+                    'Location permission denied',
+                    snackPosition: SnackPosition.TOP,
+                  );
+                  await controller.clockOut(lat: 0.0, lng: 0.0);
+                  return;
+                }
+
+                final pos = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high,
+                );
+                await controller.clockOut(
+                  lat: pos.latitude,
+                  lng: pos.longitude,
+                );
+              } catch (e) {
+                Get.snackbar(
+                  'Error',
+                  'Failed to get location: $e',
+                  snackPosition: SnackPosition.TOP,
+                );
+                await controller.clockOut(lat: 0.0, lng: 0.0);
+              }
             },
           ),
         ],
@@ -669,13 +752,37 @@ class UserDashboardScreen extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildShiftTime(),
-          SpacingHelper.h8(),
-          _buildShiftDate(),
-          SpacingHelper.h8(),
-          _buildShiftLocation(),
-          SpacingHelper.h8(),
-          _buildTeamSection(),
+          controller.hasActiveShift.value
+              ? Column(
+                  children: [
+                    _buildShiftTime(),
+                    SpacingHelper.h8(),
+                    _buildShiftDate(),
+                    SpacingHelper.h8(),
+                    _buildShiftLocation(),
+                    SpacingHelper.h8(),
+                    _buildTeamSection(),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Text(
+                      'No active shift',
+                      style: AppTextStyle.f16W600().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SpacingHelper.h8(),
+                    Text(
+                      'You currently have no active shift. Please check in to start.',
+                      style: AppTextStyle.f14W400().copyWith(
+                        color: AppColors.textBlackShade,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SpacingHelper.h8(),
+                  ],
+                ),
         ],
       ),
     );

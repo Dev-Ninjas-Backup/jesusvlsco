@@ -114,6 +114,136 @@ class UserDashboardController extends GetxController {
         },
       ].obs;
 
+  // Active shift flag
+  final RxBool hasActiveShift = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Load current clock/shift info for the user
+    loadCurrentClock();
+  }
+
+  /// Loads the current clock/shift info for the user. Updates UI observables.
+  Future<void> loadCurrentClock() async {
+    final token = StorageService.token;
+    final caller = NetworkCaller();
+    final url = '${ApiConstants.baseurl}${ApiConstants.currentClock}';
+
+    final resp = await caller.getRequest(url, token: token);
+    if (resp.isSuccess) {
+      // Expecting resp.responseData['data'] to contain an object with 'shift' and 'teamMembers'
+      final data = resp.responseData['data'];
+      if (data != null && data is Map) {
+        try {
+          final shift = data['shift'];
+
+          if (shift != null && shift is Map) {
+            // parse start/end times
+            final startStr = shift['startTime'] ?? shift['start'] ?? '';
+            final endStr = shift['endTime'] ?? shift['end'] ?? '';
+            DateTime? startDt;
+            DateTime? endDt;
+            try {
+              if (startStr != null && startStr.toString().isNotEmpty) {
+                startDt = DateTime.parse(startStr.toString()).toLocal();
+              }
+            } catch (_) {}
+            try {
+              if (endStr != null && endStr.toString().isNotEmpty) {
+                endDt = DateTime.parse(endStr.toString()).toLocal();
+              }
+            } catch (_) {}
+
+            if (startDt != null && endDt != null) {
+              shiftTime.value =
+                  '${_formatTime(startDt)} - ${_formatTime(endDt)}';
+            } else if (startDt != null) {
+              shiftTime.value = _formatTime(startDt);
+            }
+
+            if (shift['date'] != null) {
+              try {
+                final dateDt = DateTime.parse(
+                  shift['date'].toString(),
+                ).toLocal();
+                shiftDate.value = _formatDate(dateDt);
+              } catch (_) {
+                shiftDate.value = shift['date'].toString();
+              }
+            }
+
+            final location = shift['location'] ?? shift['locationName'] ?? '';
+            if (location != null && location.toString().isNotEmpty) {
+              shiftLocation.value = location.toString();
+            }
+
+            // teamMembers from response
+            final tm = data['teamMembers'];
+            if (tm != null && tm is List) {
+              teamMembers.clear();
+              for (final m in tm) {
+                if (m is Map) {
+                  final fn = (m['firstName'] ?? '') as String;
+                  final ln = (m['lastName'] ?? '') as String;
+                  String initial = '?';
+                  if (fn.isNotEmpty)
+                    initial = fn[0].toUpperCase();
+                  else if (ln.isNotEmpty)
+                    initial = ln[0].toUpperCase();
+                  teamMembers.add({
+                    'initial': initial,
+                    'name': '$fn $ln'.trim(),
+                  });
+                }
+              }
+            }
+
+            hasActiveShift.value = true;
+          } else {
+            hasActiveShift.value = false;
+          }
+        } catch (e) {
+          // If shape unexpected, keep defaults and mark no active shift
+          hasActiveShift.value = false;
+        }
+      } else {
+        hasActiveShift.value = false;
+      }
+    } else {
+      // Not found or other error
+      hasActiveShift.value = false;
+    }
+  }
+
+  String _formatTime(DateTime dt) {
+    final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+    final minute = dt.minute.toString().padLeft(2, '0');
+    final ampm = dt.hour >= 12 ? 'PM' : 'AM';
+    return '$hour:$minute $ampm';
+  }
+
+  String _formatDate(DateTime dt) {
+    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final wd = weekdays[(dt.weekday - 1) % 7];
+    final mn = months[dt.month - 1];
+    return '$wd, $mn ${dt.day}';
+  }
+
   /// Sends a clock action to the server. action should be 'CLOCK_IN' or 'CLOCK_OUT'.
   Future<void> processClock(
     String action, {
