@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 import '../../assign_employee/models/project_model.dart';
@@ -13,7 +14,7 @@ import '../routes/scheduling_routes.dart';
 /// This includes handling employee data, search, filtering, and scheduling operations
 class AssignEmployeeController extends GetxController {
   final Logger _logger = Logger();
-  final ProjectService _projectService = ProjectService();
+  final ScheduleController scheduleController = Get.put(ScheduleController());
 
   // Observable variables for state management
   var isLoading = false.obs;
@@ -63,7 +64,7 @@ class AssignEmployeeController extends GetxController {
         'Fetching projects - Page: ${currentPage.value}, Limit: $pageLimit',
       ); // Added pageLimit logging
 
-      final response = await _projectService.getAllProjects(
+      final response = await scheduleController.projectService.getAllProjects(
         page: currentPage.value,
         limit: pageLimit, // Make sure this is 5
       );
@@ -310,9 +311,24 @@ class AssignEmployeeController extends GetxController {
   ) {
     _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
 
-    // Navigate to shift details screen using GetX routes
+    // Check if a project is selected
+    if (scheduleController.selectedProject.value == null) {
+      EasyLoading.showError('Please select a project first');
+      return;
+    }
+
+    // Navigate to shift details screen with project and employee data
     SchedulingRoutes.toShiftDetails(
-      arguments: {'employee': employee, 'slotIndex': slotIndex},
+      arguments: {
+        'employee': employee,
+        'slotIndex': slotIndex,
+        'projectId': scheduleController.selectedProject.value!.id,
+        'projectTitle': scheduleController.selectedProject.value!.title,
+      },
+    );
+
+    _logger.i(
+      'Navigating to shift details with project ID: ${scheduleController.selectedProject.value!.id}',
     );
   }
 

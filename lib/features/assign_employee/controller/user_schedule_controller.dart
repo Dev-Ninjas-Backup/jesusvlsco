@@ -11,7 +11,7 @@ import '../models/project_model.dart';
 
 class ScheduleController extends GetxController {
   final Logger _logger = Logger();
-  final ProjectService _projectService = ProjectService();
+  final ProjectService projectService = ProjectService();
 
   // Dropdown values
   var dropdownValue = "Everyone".obs;
@@ -75,7 +75,7 @@ class ScheduleController extends GetxController {
         'Fetching projects - Page: ${currentPage.value}, Limit: $pageLimit',
       ); // Added pageLimit logging
 
-      final response = await _projectService.getAllProjects(
+      final response = await projectService.getAllProjects(
         page: currentPage.value,
         limit: pageLimit, // Make sure this is 5
       );

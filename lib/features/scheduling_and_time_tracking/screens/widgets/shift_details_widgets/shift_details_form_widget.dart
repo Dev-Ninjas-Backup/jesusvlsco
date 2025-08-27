@@ -28,44 +28,43 @@ class ShiftDetailsFormWidget extends StatelessWidget {
         // Job
         _buildFormField(
           label: 'Job',
-          hintText: 'Select',
+          hintText: 'Type Job',
           controller: controller.jobController,
           isDropdown: false,
         ),
 
-        SizedBox(height: Sizer.hp(24)),
+        // SizedBox(height: Sizer.hp(24)),
 
         // Users
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            _buildFormField(
-              label: 'Users',
-              hintText: 'Select Users',
-              controller: controller.usersController,
-              isDropdown: false,
-            ),
-            SizedBox(height: Sizer.hp(8)),
-            GestureDetector(
-              onTap: () => controller.addUser(),
-              child: Text(
-                'Add User',
-                style: AppTextStyle.f12W400().copyWith(
-                  color: AppColors.primary,
-                  height: 1.5,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
-        ),
-
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.end,
+        //   children: [
+        //     _buildFormField(
+        //       label: 'Users',
+        //       hintText: 'Select Users',
+        //       controller: controller.usersController,
+        //       isDropdown: false,
+        //     ),
+        //     SizedBox(height: Sizer.hp(8)),
+        //     GestureDetector(
+        //       onTap: () => controller.addUser(),
+        //       child: Text(
+        //         'Add User',
+        //         style: AppTextStyle.f12W400().copyWith(
+        //           color: AppColors.primary,
+        //           height: 1.5,
+        //           decoration: TextDecoration.underline,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         SizedBox(height: Sizer.hp(24)),
 
         // Location
         _buildFormField(
           label: 'Location',
-          hintText: 'Type location',
+          hintText: 'Type Location',
           controller: controller.locationController,
         ),
 
@@ -76,29 +75,29 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildFormField(
-              label: 'Note',
+              label: 'Description',
               hintText: 'Type Description',
               controller: controller.noteController,
               maxLines: 4,
             ),
-            SizedBox(height: Sizer.hp(12)),
-            Row(
-              children: [
-                Icon(
-                  Icons.attach_file,
-                  size: Sizer.wp(18),
-                  color: const Color(0xFF5B5B5B),
-                ),
-                SizedBox(width: Sizer.wp(6)),
-                Text(
-                  'Attachment',
-                  style: AppTextStyle.f14W400().copyWith(
-                    color: const Color(0xFF5B5B5B),
-                    height: 1.45,
-                  ),
-                ),
-              ],
-            ),
+            // SizedBox(height: Sizer.hp(12)),
+            // Row(
+            //   children: [
+            //     Icon(
+            //       Icons.attach_file,
+            //       size: Sizer.wp(18),
+            //       color: const Color(0xFF5B5B5B),
+            //     ),
+            //     SizedBox(width: Sizer.wp(6)),
+            //     Text(
+            //       'Attachment',
+            //       style: AppTextStyle.f14W400().copyWith(
+            //         color: const Color(0xFF5B5B5B),
+            //         height: 1.45,
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ],

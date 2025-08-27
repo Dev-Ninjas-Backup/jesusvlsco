@@ -21,6 +21,12 @@ class ShiftDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ShiftDetailsController());
+    final args = Get.arguments as Map<String, dynamic>;
+
+    final employee = args['employee'];
+    final slotIndex = args['slotIndex'];
+    final projectId = args['projectId'];
+    final projectTitle = args['projectTitle'];
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -40,22 +46,19 @@ class ShiftDetailsScreen extends StatelessWidget {
                     // Date and Time Section
                     ShiftDetailsDateTimeWidget(controller: controller),
 
-                    SizedBox(height: Sizer.hp(32)),
+                    SizedBox(height: Sizer.hp(20)),
 
                     // Form Fields Section
                     ShiftDetailsFormWidget(controller: controller),
 
-                    SizedBox(height: Sizer.hp(48)),
-
                     // Shift Tasks Section
                     ShiftDetailsTasksWidget(controller: controller),
 
-                    SizedBox(height: Sizer.hp(48)),
+                    SizedBox(height: Sizer.hp(20)),
 
                     // Shift Activity Section
-                    ShiftDetailsActivityWidget(controller: controller),
-
-                    SizedBox(height: Sizer.hp(32)),
+                    // ShiftDetailsActivityWidget(controller: controller),
+                    // SizedBox(height: Sizer.hp(32)),
 
                     // Action Buttons
                     ShiftDetailsActionButtonsWidget(controller: controller),
