@@ -44,13 +44,15 @@ class SurveyProgressCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
-          Text(
-            textAlign: TextAlign.center,
-            displayTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF2196F3),
+          Center(
+            child: Text(
+              textAlign: TextAlign.center,
+              displayTitle,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2196F3),
+              ),
             ),
           ),
           SizedBox(height: 12),
