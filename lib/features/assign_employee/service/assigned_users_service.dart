@@ -2,9 +2,13 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_model.dart';
+
 import 'package:jesusvlsco/features/splasho_screen/controller/splasho_controller.dart';
 import 'package:logger/logger.dart';
+
+import '../models/assign_user_response_model.dart';
 
 class AssignedUsersService {
   final Logger _logger = Logger();
