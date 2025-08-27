@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -7,6 +8,8 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/employee_card_widget.dart';
+
+import '../../../assign_employee/widgets/projects_selection_dialog.dart';
 
 class AssignEmployeeScreen extends StatelessWidget {
   const AssignEmployeeScreen({super.key});
@@ -37,8 +40,8 @@ class AssignEmployeeScreen extends StatelessWidget {
 
             SizedBox(height: Sizer.hp(16)),
 
-            // Search bar
-            _buildSearchBar(controller),
+            // Project list section
+            _buildProjectSelectionSection(controller),
 
             SizedBox(height: Sizer.hp(16)),
 
@@ -48,6 +51,117 @@ class AssignEmployeeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildProjectSelectionSection(AssignEmployeeController controller) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: Sizer.hp(16),
+        left: Sizer.wp(10),
+        right: Sizer.wp(10),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Sizer.wp(12)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Projects *',
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(14),
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Spacer(),
+              Obx(
+                () => controller.isLoading.value
+                    ? SizedBox(
+                        width: Sizer.wp(16),
+                        height: Sizer.wp(16),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () => controller.refreshProjects(),
+                        child: Icon(
+                          Icons.refresh,
+                          size: Sizer.wp(20),
+                          color: AppColors.primary.withOpacity(0.7),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+          SizedBox(height: Sizer.hp(12)),
+          _buildProjectSelector(controller),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProjectSelector(AssignEmployeeController controller) {
+    return Obx(() {
+      return GestureDetector(
+        onTap: () {
+          // Refresh projects when dialog opens if list is empty
+          if (controller.projects.isEmpty && !controller.isLoading.value) {
+            controller.refreshProjects();
+          }
+          Get.dialog(const ProjectSelectionDialog(), barrierDismissible: true);
+        },
+        child: Container(
+          height: Sizer.hp(48),
+          padding: EdgeInsets.symmetric(horizontal: Sizer.wp(12)),
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            borderRadius: BorderRadius.circular(Sizer.wp(8)),
+            border: Border.all(
+              color: controller.selectedProject.value != null
+                  ? AppColors.primary.withOpacity(0.5)
+                  : const Color(0xFFC8CAE7),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  controller.selectedProject.value?.title ??
+                      'Select a project to continue',
+                  style: AppTextStyle.f14W400().copyWith(
+                    color: controller.selectedProject.value != null
+                        ? AppColors.text
+                        : AppColors.text.withOpacity(0.6),
+                    height: 1.5,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Icon(
+                Iconsax.arrow_down_1,
+                size: Sizer.wp(24),
+                color: AppColors.text,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   /// Build project header with title and publish button
@@ -247,25 +361,6 @@ class AssignEmployeeScreen extends StatelessWidget {
             style: AppTextStyle.f16W600().copyWith(
               color: AppColors.primary,
               height: 1.5,
-            ),
-          ),
-          Obx(
-            () => Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: Sizer.wp(12),
-                vertical: Sizer.hp(6),
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9F0E4),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                '${controller.activeEmployeesCount.value} active',
-                style: AppTextStyle.f14W400().copyWith(
-                  color: const Color(0xFF003317),
-                  height: 1.45,
-                ),
-              ),
             ),
           ),
         ],

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
+import '../../assign_employee/models/project_model.dart';
+import '../../assign_employee/service/project_service.dart';
 import '../screens/widgets/filter_dialog.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 import '../routes/scheduling_routes.dart';
@@ -11,6 +13,7 @@ import '../routes/scheduling_routes.dart';
 /// This includes handling employee data, search, filtering, and scheduling operations
 class AssignEmployeeController extends GetxController {
   final Logger _logger = Logger();
+  final ProjectService _projectService = ProjectService();
 
   // Observable variables for state management
   var isLoading = false.obs;
@@ -18,11 +21,86 @@ class AssignEmployeeController extends GetxController {
   var employees = <EmployeeModel>[].obs;
   var activeEmployeesCount = 5.obs;
   var selectedDate = DateTime.now().obs;
+  var projects = <ProjectModel>[].obs;
+  var selectedProject = Rx<ProjectModel?>(null);
+
+  // Pagination variables
+  var currentPage = 1.obs;
+  var hasMoreProjects = true.obs;
+  var isLoadingMoreProjects = false.obs;
+  var totalProjects = 0.obs;
+  var totalPages = 0.obs;
+  final int pageLimit = 5;
 
   @override
   void onInit() {
     super.onInit();
+    fetchProjects();
     loadEmployees();
+  }
+
+  Future<void> refreshProjects() async {
+    await fetchProjects(isRefresh: true);
+  }
+
+  Future<void> fetchProjects({bool isRefresh = false}) async {
+    try {
+      if (isRefresh) {
+        currentPage.value = 1;
+        projects.clear();
+        hasMoreProjects.value = true;
+      }
+
+      if (isLoading.value || isLoadingMoreProjects.value) return;
+
+      if (currentPage.value == 1) {
+        isLoading.value = true;
+      } else {
+        isLoadingMoreProjects.value = true;
+      }
+
+      _logger.i(
+        'Fetching projects - Page: ${currentPage.value}, Limit: $pageLimit',
+      ); // Added pageLimit logging
+
+      final response = await _projectService.getAllProjects(
+        page: currentPage.value,
+        limit: pageLimit, // Make sure this is 5
+      );
+
+      _logger.i(
+        'API Response - Success: ${response.success}, Data length: ${response.data.length}',
+      );
+      _logger.i(
+        'Metadata - Page: ${response.metadata.page}, Limit: ${response.metadata.limit}, Total: ${response.metadata.total}, TotalPages: ${response.metadata.totalPage}',
+      );
+
+      if (response.success) {
+        if (currentPage.value == 1) {
+          projects.value = response.data;
+        } else {
+          projects.addAll(response.data);
+        }
+
+        totalProjects.value = response.metadata.total;
+        totalPages.value = response.metadata.totalPage;
+
+        // Check if there are more pages
+        hasMoreProjects.value = currentPage.value < response.metadata.totalPage;
+
+        _logger.i('Projects loaded: ${response.data.length}');
+        _logger.i('Total projects in list: ${projects.length}');
+        _logger.i('Has more: ${hasMoreProjects.value}');
+      } else {
+        EasyLoading.showError('Failed to load projects: ${response.message}');
+      }
+    } catch (e) {
+      _logger.e('Error fetching projects: $e');
+      EasyLoading.showError('Failed to load projects');
+    } finally {
+      isLoading.value = false;
+      isLoadingMoreProjects.value = false;
+    }
   }
 
   /// Load all employees from API or local storage

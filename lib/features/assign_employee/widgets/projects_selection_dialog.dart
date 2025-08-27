@@ -13,7 +13,7 @@ class ProjectSelectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ScheduleController>();
+    final controller = Get.put(ScheduleController());
 
     return Dialog(
       backgroundColor: Colors.transparent,
