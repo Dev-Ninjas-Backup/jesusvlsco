@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
+
+import 'package:jesusvlsco/model/taskresponse_model.dart';
+
+
 
 // ignore: camel_case_types
 class User_Taskcontroller extends GetxController {
+  
   // Timer related
   Timer? _timer;
   final RxString elapsedTime = '00:00:00'.obs;
@@ -16,6 +24,31 @@ class User_Taskcontroller extends GetxController {
   final RxString assignedTo = 'Afiq Nishat Kanta'.obs;
   final RxString startTime = '3/06/25 at 05:00'.obs;
   final RxString endTime = '27/06/25 at 05:00'.obs;
+  static const String _baseUrl = 'https://lgcglobalcontractingltd.com';
+  static const String _token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImppaGFkbXVnZGhvNzM1QGdtYWlsLmNvbSIsInJvbGVzIjoiRU1QTE9ZRUUiLCJzdWIiOiJhN2Y3MjM0OC0zYTUyLTQ0MjYtOGI5Mi02NTZjMDE4NTNhMTMiLCJpYXQiOjE3NTYxOTUyMzksImV4cCI6MTc2Mzk3MTIzOX0.GYqCH2fl3JI5EPEh-Yxocb1bkWyyaSWpwklNfVX8TGo';
+
+  Future<List<Task>> fetchTasks() async {
+    final uri = Uri.parse('$_baseUrl/js/employee/project/task/all?page=1&limit=10');
+    final headers = {
+      'Authorization': 'Bearer $_token',
+      'Accept': 'application/json',
+    };
+
+    try {
+      final response = await http.get(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        final TaskResponse taskResponse = TaskResponse.fromJson(jsonResponse);
+        print('Fetched ${taskResponse.data} tasks');
+        return taskResponse.data.tasks;
+      } else {
+        throw Exception('Failed to load tasks: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load tasks: $e');
+    }
+  }
   
   // Task history
   final RxList<Map<String, dynamic>> taskHistory = <Map<String, dynamic>>[].obs;
@@ -24,6 +57,7 @@ class User_Taskcontroller extends GetxController {
   void onInit() {
     super.onInit();
     _loadTaskHistory();
+    fetchTasks();
   }
 
   @override

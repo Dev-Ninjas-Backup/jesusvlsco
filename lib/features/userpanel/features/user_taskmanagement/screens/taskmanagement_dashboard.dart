@@ -4,16 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/activity_log.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/overduetask.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/weekly_calender.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/wide_list.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/activity_log.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/all_task_details.dart';
 import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/widgets/common_button.dart';
+import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/widgets/user_widelist.dart';
 
 class UserTaskmanagementDashboard extends StatefulWidget {
   const UserTaskmanagementDashboard({super.key});
@@ -23,7 +21,23 @@ class UserTaskmanagementDashboard extends StatefulWidget {
       _UserTaskmanagementDashboardState();
 }
 
-class _UserTaskmanagementDashboardState extends State<UserTaskmanagementDashboard> {
+class _UserTaskmanagementDashboardState
+    extends State<UserTaskmanagementDashboard>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double maxScroll = 500.0;
@@ -67,106 +81,135 @@ class _UserTaskmanagementDashboardState extends State<UserTaskmanagementDashboar
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildSearchTextField(),
-            Padding(
-              padding: EdgeInsets.only(left: Sizer.wp(8.0), right: Sizer.wp(8.0)),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: _customButton(
-                      // width: Sizer.wp(155),
-                      color: AppColors.button1,
-                      text: "Due",
-                      onPressed: () {
-                        Get.to(OverdueTask());
-                      },
-                    ),
-                  ),
-                  SizedBox(width: Sizer.wp(8)),
-                  Flexible(
-                    child: CustomButton1(
-                      width: Sizer.wp(120),
-                      color: AppColors.primary,
-                      text: "Add Task",
-                      onPressed: () {
-                        Get.to(AddTaskPage());
-                      },
-                    ),
-                  ),
-                  SizedBox(width: Sizer.wp(8)),
-                  Flexible(
-                    child: CustomButton1(
-                      width: Sizer.wp(120),
-                      color: AppColors.primary,
-                      text: "Activity",
-                      onPressed: () {
-                        Get.to(ActivityFeedScreen());
-                      },
-                    ),
-                  ),
+      body: Column(
+        children: [
+          _buildSearchTextField(),
+
+          // Custom TabBar
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16.0)),
+            child: Container(
+              height: Sizer.hp(48),
+              decoration: BoxDecoration(
+                color: AppColors.primaryBackground,
+                borderRadius: BorderRadius.circular(Sizer.wp(8)),
+                border: Border.all(color: AppColors.border.withOpacity(0.3)),
+              ),
+              child: TabBar(
+                indicatorSize: TabBarIndicatorSize.tab,
+                controller: _tabController,
+                indicator: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(Sizer.wp(8)),
+                ),
+                indicatorPadding: EdgeInsets.all(Sizer.wp(4)),
+                labelColor: AppColors.textWhite,
+                unselectedLabelColor: AppColors.primary,
+                labelStyle: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  fontWeight: FontWeight.w500,
+                ),
+                dividerColor: Colors.transparent,
+                tabs: const [
+                  Tab(text: "All Tasks"),
+                  Tab(text: "Submitted Tasks"),
                 ],
               ),
             ),
-            SizedBox(height: Sizer.hp(16)),
+          ),
 
-            //List items start
-            Row(
+          SizedBox(height: Sizer.hp(16)),
+
+          // TabBarView content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(left: Sizer.wp(16.0)),
-                  child: Text(
-                    'Views by:',
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(16),
-                      color: AppColors.backgroundDark,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.menu_open_sharp,
-                    color: AppColors.backgroundDark,
-                  ),
-                ),
-                Text(
-                  'List',
+                // All Tasks Tab Content
+                _buildAllTasksContent(),
+
+                // Submitted Tasks Tab Content
+                _buildSubmittedTasksContent(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAllTasksContent() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //List items start
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: Sizer.wp(16.0)),
+                child: Text(
+                  'Views by:',
                   style: AppTextStyle.regular().copyWith(
                     fontSize: Sizer.wp(16),
                     color: AppColors.backgroundDark,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.calendar_today,
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.menu_open_sharp,
+                  color: AppColors.backgroundDark,
+                ),
+              ),
+              Text(
+                'List',
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  color: AppColors.backgroundDark,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: AppColors.backgroundDark,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(Datewisetasks());
+                },
+                child: Text(
+                  'Dates',
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: Sizer.wp(16),
                     color: AppColors.backgroundDark,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Get.to(WeeklyCalender());
-                  },
-                  child: Text(
-                    'Dates',
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(16),
-                      color: AppColors.backgroundDark,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: Sizer.hp(400), child: WideList()),
-            SizedBox(height: Sizer.hp(400), child: WideList()),
-          ],
-        ),
+              ),
+            ],
+          ),
+          SizedBox(height: Sizer.hp(400), child: UserWidelist()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubmittedTasksContent() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //List items start for submitted tasks
+          SizedBox(height: Sizer.hp(400), child: WideList()),
+        ],
       ),
     );
   }
@@ -178,47 +221,60 @@ Widget _buildSearchTextField() {
       horizontal: Sizer.wp(16),
       vertical: Sizer.hp(24),
     ),
-    child: Container(
-      height: Sizer.hp(48),
-      width: Sizer.wp(360),
-      decoration: BoxDecoration(
-        color: AppColors.primaryBackground,
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(Sizer.wp(10)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.textSecondary.withOpacity(0.1),
-            blurRadius: 3,
-            offset: const Offset(0, 4),
+    child: Row(
+      children: [
+        Container(
+          height: Sizer.hp(48),
+          width: Sizer.wp(250),
+          decoration: BoxDecoration(
+            color: AppColors.primaryBackground,
+            border: Border.all(color: AppColors.border),
+            borderRadius: BorderRadius.circular(Sizer.wp(10)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.textSecondary.withOpacity(0.1),
+                blurRadius: 3,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: TextField(
-        textAlign: TextAlign.start,
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          border: InputBorder.none,
-          hintText: 'Search articles',
-          hintStyle: AppTextStyle.regular().copyWith(
-            fontSize: Sizer.wp(14),
-            color: AppColors.textSecondary.withOpacity(0.6),
-         
-          ),
-          suffixIcon: Container(
-            padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(
-              'assets/icons/search-normal.svg',
-              height: Sizer.hp(20),
-              width: Sizer.wp(20),
+          child: TextField(
+            textAlign: TextAlign.start,
+            decoration: InputDecoration(
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              border: InputBorder.none,
+              hintText: 'Search articles',
+              hintStyle: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: AppColors.textSecondary.withOpacity(0.6),
+              ),
+              suffixIcon: Container(
+                padding: const EdgeInsets.all(8),
+                child: SvgPicture.asset(
+                  'assets/icons/search-normal.svg',
+                  height: Sizer.hp(20),
+                  width: Sizer.wp(20),
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: Sizer.wp(16),
+                vertical: Sizer.hp(12),
+              ),
             ),
           ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: Sizer.wp(16),
-            vertical: Sizer.hp(12),
-          ),
         ),
-      ),
+        SizedBox(width: Sizer.wp(8)),
+        CustomButton1(
+          
+          width: Sizer.wp(100),
+          color: AppColors.primary,
+          text: "Activity",
+          onPressed: () {
+            Get.to(User_Activitylog());
+          },
+        ),
+      ],
     ),
   );
 }
@@ -270,5 +326,3 @@ Widget _customButton({
     ),
   );
 }
-
-
