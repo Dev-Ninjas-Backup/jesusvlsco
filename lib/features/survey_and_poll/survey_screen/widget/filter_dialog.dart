@@ -35,7 +35,7 @@ class FilterDialog extends StatelessWidget {
                           .toList();
 
                       if (selected.contains("All")) {
-                        controller.loadSurveys(); // Load all
+                        controller.getActiveSurveys(); // Load all
                       } else {
                         controller.surveys.value = controller.surveys
                             .where((s) => selected.contains(s.status))

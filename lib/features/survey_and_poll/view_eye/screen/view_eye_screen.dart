@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_response_screen/screen/survey_response_screen.dart';
 import '../../../../core/common/widgets/custom_appbar.dart';
-import '../../survey_report/screen/survey_report_screen.dart';
 import '../controller/view_eye_controller.dart';
 import '../widget/quick_view_card.dart';
 
@@ -11,6 +10,7 @@ class ViewEyeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final controller = Get.put(ViewEyeController());
 
     return Scaffold(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/poll/create_new_poll/screen/create_new_poll_screen.dart';
-import 'package:jesusvlsco/features/poll/create_new_poll_two/screen/create_new_poll_two_screen.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/controller/create_new_survey_screen_controller.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/controller/open_ended_field_controller.dart';
 import 'package:jesusvlsco/features/survey_and_poll/create_new_survey_screen/controller/rating_field_controller.dart';
