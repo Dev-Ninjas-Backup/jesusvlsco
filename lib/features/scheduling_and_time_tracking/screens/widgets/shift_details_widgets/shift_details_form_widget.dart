@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_details_controller.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 
 /// Form section widget for shift details
@@ -39,10 +38,8 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           label: 'Location',
           hintText: 'Type Location',
           controller: controller.locationController,
-          suffixIcon: GestureDetector(
-            onTap: () => controller.pickCurrentLocation(),
-            child: const Icon(Icons.my_location, color: Colors.blue),
-          ),
+          hasLocationIcon: true,
+          onLocationTap: () => controller.pickCurrentLocation(),
         ),
 
         SizedBox(height: Sizer.hp(24)),
@@ -71,17 +68,41 @@ class ShiftDetailsFormWidget extends StatelessWidget {
     bool isDropdown = false,
     int maxLines = 1,
     Widget? suffixIcon,
+    bool hasLocationIcon = false,
+    VoidCallback? onLocationTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyle.f16W600().copyWith(
-            color: const Color(0xFF484848),
-            height: 1.5,
-          ),
-        ),
+        // Label with optional location icon
+        hasLocationIcon
+            ? Row(
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyle.f16W600().copyWith(
+                      color: const Color(0xFF484848),
+                      height: 1.5,
+                    ),
+                  ),
+                  SizedBox(width: Sizer.wp(8)),
+                  GestureDetector(
+                    onTap: onLocationTap,
+                    child: const Icon(
+                      Icons.my_location,
+                      color: Colors.blue,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              )
+            : Text(
+                label,
+                style: AppTextStyle.f16W600().copyWith(
+                  color: const Color(0xFF484848),
+                  height: 1.5,
+                ),
+              ),
         SizedBox(height: Sizer.hp(8)),
         Container(
           width: double.infinity,
@@ -115,7 +136,7 @@ class ShiftDetailsFormWidget extends StatelessWidget {
                       size: Sizer.wp(20),
                       color: const Color(0xFF949494),
                     )
-                  : suffixIcon,
+                  : (hasLocationIcon ? null : suffixIcon),
             ),
           ),
         ),
