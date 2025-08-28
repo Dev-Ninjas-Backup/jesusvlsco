@@ -30,9 +30,9 @@ class UserViewSingleTemplateScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ---------- Title ----------
-                    const Text(
-                      "Employee Satisfaction Survey Template",
-                      style: TextStyle(
+                    Text(
+                      controller.surveyTitle.value,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
                         color: Color(0xFF4E53B1),
@@ -41,55 +41,25 @@ class UserViewSingleTemplateScreen extends StatelessWidget {
                     const SizedBox(height: 8),
 
                     // ---------- Subtitle ----------
-                    const Text(
-                      "This survey gathers feedback on employee satisfaction with workplace practices. "
-                      "Your responses will help us improve our work environment and address any concerns.",
-                      style: TextStyle(color: Colors.black54, fontSize: 14),
+                    Text(
+                      controller.surveyDescription.value,
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
-                    // ---------- Owner, Duration, Status ----------
-                    Row(
-                      children: const [
-                        Icon(Icons.person, size: 18, color: Colors.black54),
-                        SizedBox(width: 6),
-                        Text("Owner: Admin", style: TextStyle(fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.calendar_today,
-                          size: 16,
-                          color: Colors.black54,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "Duration: May 1 - May 15, 2025",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: const [
-                        Text(
-                          "Status: ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          "Active",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
+                    // ---------- Status ----------
+                    Text(
+                      "Status: ${controller.surveyStatus.value}",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: controller.surveyStatus.value == "ACTIVE"
+                            ? Colors.green
+                            : Colors.red,
+                      ),
                     ),
                     const SizedBox(height: 12),
 
@@ -104,9 +74,10 @@ class UserViewSingleTemplateScreen extends StatelessWidget {
 
                     // ---------- Progress indicator ----------
                     ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(4)), // rounded corners
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                       child: LinearProgressIndicator(
-                        value: (controller.currentIndex.value + 1) /
+                        value:
+                            (controller.currentIndex.value + 1) /
                             controller.questions.length,
                         color: Colors.green,
                         backgroundColor: Colors.grey[300],
@@ -137,92 +108,99 @@ class UserViewSingleTemplateScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                q["question"],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                "Please select one option that best represents your opinion",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            q["question"],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
 
-                    // ---------- Options ----------
-                    ...List.generate(q["options"].length, (index) {
-                      return Obx(() {
-                        final isSelected =
-                            controller.selectedAnswer.value == index;
-                        return GestureDetector(
-                          onTap: () => controller.selectedAnswer.value = index,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: isSelected
-                                    ? const Color(0xFF4E53B1)
-                                    : Colors.grey.shade400,
-                                width: 1.3,
+                    // ---------- Options / Answer Input ----------
+                    if (q["type"] == "OPEN_ENDED") ...[
+                      TextField(
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          hintText: "Type your answer...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          controller.answers[q["id"]] = value;
+                        },
+                      ),
+                    ] else ...[
+                      ...List.generate(q["options"].length, (index) {
+                        final option = q["options"][index]; // {id, text}
+                        return Obx(() {
+                          final isSelected =
+                              controller.selectedAnswer.value == index;
+                          return GestureDetector(
+                            onTap: () {
+                              controller.selectedAnswer.value = index;
+                              controller.answers[q["id"]] = option;
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 14,
+                                horizontal: 12,
                               ),
-                              borderRadius: BorderRadius.circular(8),
-                              color: isSelected
-                                  ? const Color(0xFF4E53B1).withOpacity(0.08)
-                                  : Colors.transparent,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  isSelected
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_off,
+                              decoration: BoxDecoration(
+                                border: Border.all(
                                   color: isSelected
                                       ? const Color(0xFF4E53B1)
-                                      : Colors.grey,
-                                  size: 20,
+                                      : Colors.grey.shade400,
+                                  width: 1.3,
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  q["options"][index],
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                borderRadius: BorderRadius.circular(8),
+                                color: isSelected
+                                    ? const Color(0xFF4E53B1).withOpacity(0.08)
+                                    : Colors.transparent,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isSelected
+                                        ? Icons.radio_button_checked
+                                        : Icons.radio_button_off,
                                     color: isSelected
                                         ? const Color(0xFF4E53B1)
-                                        : Colors.black87,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
+                                        : Colors.grey,
+                                    size: 20,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    option["text"],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: isSelected
+                                          ? const Color(0xFF4E53B1)
+                                          : Colors.black87,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      });
-                    }),
+                          );
+                        });
+                      }),
+                    ],
                   ],
                 ),
               ),
             ),
 
-            // -------- Bottom Buttons using CustomButton --------
+            // -------- Bottom Buttons --------
             SafeArea(
               top: false,
               child: Padding(

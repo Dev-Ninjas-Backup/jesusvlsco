@@ -1,89 +1,98 @@
+import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:jesusvlsco/features/user_survey_poll/user_poll/screen/user_poll_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
 class UserViewSingleTemplateController extends GetxController {
-  // TODO: replace with API model later
   final questions = <Map<String, dynamic>>[].obs;
   final currentIndex = 0.obs;
 
-  // selected answer index
+  // selected option index (UI highlight)
   final selectedAnswer = Rxn<int>();
+
+  // user answers -> {questionId: answer}
+  // answer can be String (OPEN_ENDED), Map (SELECT), int (RANGE)
+  final answers = <String, dynamic>{}.obs;
+
+  // survey info
+  final surveyTitle = ''.obs;
+  final surveyDescription = ''.obs;
+  final surveyStatus = ''.obs;
+
+  final String token = StorageService.token ?? '';
+
+  late String surveyId;
 
   @override
   void onInit() {
     super.onInit();
-    fetchSurveyDetail();
+    final args = Get.arguments;
+    if (args != null && args["id"] != null) {
+      surveyId = args["id"];
+      fetchSurveyDetail(surveyId);
+    }
   }
 
-  /// TODO: Fetch survey details (title, questions, progress) from API using surveyId
-  void fetchSurveyDetail() async {
-    // simulate API delay
-    await Future.delayed(const Duration(milliseconds: 500));
+  /// Fetch survey details
+  Future<void> fetchSurveyDetail(String surveyId) async {
+    try {
+      final url =
+          "https://lgcglobalcontractingltd.com/js/employee/survey/$surveyId/assigned";
 
-    questions.value = [
-      {
-        "id": 1,
-        "question": "How satisfied are you with the current safety protocols on-site?",
-        "options": [
-          "Very Satisfied",
-          "Satisfied",
-          "Neutral",
-          "Unsatisfied",
-          "Very Unsatisfied"
-        ]
-      },
-      {
-        "id": 2,
-        "question": "How would you rate the communication within your team?",
-        "options": [
-          "Excellent",
-          "Good",
-          "Average",
-          "Poor",
-          "Very Poor"
-        ]
-      },
-      {
-        "id": 3,
-        "question": "Do you feel supported by your manager/supervisor?",
-        "options": [
-          "Strongly Agree",
-          "Agree",
-          "Neutral",
-          "Disagree",
-          "Strongly Disagree"
-        ]
-      },
-      {
-        "id": 4,
-        "question": "How would you rate your overall work-life balance?",
-        "options": [
-          "Very Good",
-          "Good",
-          "Fair",
-          "Poor",
-          "Very Poor"
-        ]
-      },
-      {
-        "id": 5,
-        "question": "Would you recommend this company as a good place to work?",
-        "options": [
-          "Definitely Yes",
-          "Probably Yes",
-          "Not Sure",
-          "Probably No",
-          "Definitely No"
-        ]
-      },
-      // more dummy questions...
-    ];
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "accept": "*/*",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data["success"] == true && data["data"] != null) {
+          final survey = data["data"];
+
+          surveyTitle.value = survey["title"] ?? "";
+          surveyDescription.value = survey["description"] ?? "";
+          surveyStatus.value = survey["status"] ?? "";
+
+          final List<dynamic> qList = survey["questions"] ?? [];
+          questions.value = qList.map((q) {
+            return {
+              "id": q["id"],
+              "question": q["question"],
+              "description": q["description"],
+              "type": q["type"], // SELECT / OPEN_ENDED / RANGE
+              "options": (q["options"] as List).map((opt) {
+                return {
+                  "id": opt["id"], // optionId
+                  "text": opt["text"],
+                };
+              }).toList(),
+              "rangeStart": q["rangeStart"],
+              "rangeEnd": q["rangeEnd"],
+            };
+          }).toList();
+        }
+      } else {
+        Get.snackbar("Error", "Failed to load survey details");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+    }
+  }
+
+  void saveAnswer(String questionId, dynamic answer) {
+    answers[questionId] = answer;
   }
 
   void nextQuestion() {
     if (currentIndex.value < questions.length - 1) {
       currentIndex.value++;
-      selectedAnswer.value = null; // reset for new question
+      selectedAnswer.value = null;
     }
   }
 
@@ -96,9 +105,53 @@ class UserViewSingleTemplateController extends GetxController {
 
   bool get isLastQuestion => currentIndex.value == questions.length - 1;
 
-  void submitSurvey() {
-    // TODO: Call API to submit answers
-    Get.snackbar("Submitted", "Your responses have been submitted successfully.");
-    Get.to(UserPollScreen());
+  /// Submit answers
+  Future<void> submitSurvey() async {
+    try {
+      if (surveyId.isEmpty) {
+        Get.snackbar("Error", "Survey ID missing");
+        return;
+      }
+
+      final List<Map<String, dynamic>> formattedAnswers = [];
+      answers.forEach((questionId, answer) {
+        formattedAnswers.add({
+          "questionId": questionId,
+          "answerText": answer is String ? answer : null,
+          "options": answer is Map<String, dynamic>
+              ? [
+                  {"optionId": answer["id"]},
+                ]
+              : [],
+          "rate": answer is int ? answer : null,
+        });
+      });
+
+      final url =
+          "https://lgcglobalcontractingltd.com/js/employee/survey/$surveyId/response";
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          "accept": "*/*",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode({"answers": formattedAnswers}),
+      );
+
+      print(response.body);
+
+      final data = json.decode(response.body);
+
+      if (response.statusCode == 201 && data["success"] == true) {
+        Get.snackbar("Success", "Survey submitted successfully");
+        Get.offAll(() => const UserSurveyScreen());
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Submission failed");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+    }
   }
 }

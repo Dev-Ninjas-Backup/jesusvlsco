@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:jesusvlsco/core/services/storage_service.dart';
 
 import '../../user_view_single_template/screen/user_view_single_template_screen.dart';
 
 class UserSurveyController extends GetxController {
-  // raw list (will replace with API model later)
+  // raw list for surveys only
   final surveys = <Map<String, dynamic>>[].obs;
 
   /// search input controller
@@ -13,34 +17,63 @@ class UserSurveyController extends GetxController {
   /// search text
   final searchQuery = ''.obs;
 
+  final String token = StorageService.token ?? '';
+
+  final String surveysUrl =
+      "https://lgcglobalcontractingltd.com/js/employee/survey/assigned?page=1&limit=10";
+
   @override
   void onInit() {
     super.onInit();
     fetchSurveys();
   }
 
-  /// TODO: Replace this with real API call
+  /// Fetch surveys from API
   Future<void> fetchSurveys() async {
-    // simulate network
-    await Future.delayed(const Duration(milliseconds: 300));
-    surveys.value = [
-      {"title": "Employee Satisfaction"},
-      {"title": "Workplace Safety"},
-      {"title": "Remote Work Flexibility"},
-      {"title": "Employee Wellness Program"},
-      {"title": "Diversity & Inclusion"},
-      {"title": "Team Collaboration"},
-      {"title": "New Policy Awareness"},
-      {"title": "Employee Engagement"},
-    ];
+    try {
+      final response = await http.get(
+        Uri.parse(surveysUrl),
+        headers: {
+          "accept": "*/*",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      print("Surveys response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data["success"] == true && data["data"] != null) {
+          final List<dynamic> surveyList = data["data"];
+          surveys.value = surveyList.map((s) {
+            return {
+              "id": s["id"],
+              "title": s["title"],
+              "description": s["description"],
+              "status": s["status"],
+              "type": "survey",
+            };
+          }).toList();
+          debugPrint("✅ Surveys loaded: ${surveys.length}");
+        } else {
+          Get.snackbar("Error", "No surveys found");
+        }
+      } else {
+        Get.snackbar("Error", "Failed to load surveys");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+    }
   }
 
   /// filtered list based on searchQuery
   List<Map<String, dynamic>> get filteredSurveys {
     if (searchQuery.value.trim().isEmpty) return surveys;
     final q = searchQuery.value.toLowerCase();
-    return surveys.where((s) {
-      final t = (s["title"] ?? "").toString().toLowerCase();
+    return surveys.where((survey) {
+      final t = (survey["title"] ?? "").toString().toLowerCase();
       return t.contains(q);
     }).toList();
   }
@@ -50,9 +83,9 @@ class UserSurveyController extends GetxController {
     searchQuery.value = value;
   }
 
-  /// TODO: Implement navigation or API action when user taps "Take survey"
+  /// navigate to survey details
   void takeSurvey(Map<String, dynamic> survey) {
-    Get.to(() => UserViewSingleTemplateScreen(), arguments: survey);
-    debugPrint("TODO: takeSurvey -> ${survey['title']}");
+    Get.to(() => const UserViewSingleTemplateScreen(), arguments: survey);
+    debugPrint("Taking survey -> ${survey['title']}");
   }
 }
