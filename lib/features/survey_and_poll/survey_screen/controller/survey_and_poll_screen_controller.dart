@@ -10,14 +10,13 @@ import 'package:jesusvlsco/features/survey_and_poll/survey_screen/model/survey_p
 
 class SurveyAndPollScreenController extends GetxController {
   var surveys = <Survey>[].obs;
-  var surveyAnalytics = <SurveyCircleStatisticsAnalyticsModel>[].obs; 
+  var surveyAnalytics = <SurveyCircleStatisticsAnalyticsModel>[].obs;
   var poolResponses = <PoolResponseModel>[].obs;
   var selectedDate = ''.obs;
   RxBool isLoading = false.obs;
   RxBool isLoadingAnalytics = false.obs;
   RxBool isLoadingPoolResponses = false.obs;
-  RxBool isSelectedUser = false.obs;
-
+  var selectedSurveys = <String, bool>{}.obs;
 
   @override
   void onInit() {
@@ -25,6 +24,103 @@ class SurveyAndPollScreenController extends GetxController {
     getActiveSurveys();
     getSurveyAnalytics();
     getPoolResponses();
+    ever(surveys, (_) => _initializeSelectedSurveys());
+  }
+
+  //for deleting the survey
+  void _initializeSelectedSurveys() {
+    selectedSurveys.clear();
+    for (var survey in surveys) {
+      selectedSurveys[survey.id] = false;
+    }
+  }
+
+  void toggleSurveySelection(String surveyId) {
+    selectedSurveys[surveyId] = !(selectedSurveys[surveyId] ?? false);
+    selectedSurveys.refresh();
+  }
+
+  // Toggle checkbox state (for deleting the survey/first ListView.builder list)
+  Future<void> deleteSelectedSurveys() async {
+    final surveysToDelete = selectedSurveys.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+
+    if (surveysToDelete.isEmpty) {
+      Get.snackbar('Info', 'No surveys selected for deletion');
+      return;
+    }
+
+    final confirm = await Get.dialog<bool>(
+      AlertDialog(
+        title: Text('Confirm Deletion'),
+        content: Text(
+          'Are you sure you want to delete ${surveysToDelete.length} survey(s)?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async{
+              Get.back(result: true);
+              Get.snackbar("Alert", "Deleted Successfully");
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final token = await StorageService.getAuthToken();
+    if (token == null || token.isEmpty) {
+      Get.snackbar('Error', 'Authentication token not found');
+      return;
+    }
+
+    bool hasError = false;
+    try {
+      //  Get.dialog(Center(child: CircularProgressIndicator()), barrierDismissible: false);
+
+      for (var surveyId in surveysToDelete) {
+        final response = await http.delete(
+          Uri.parse(
+            'https://lgcglobalcontractingltd.com/js/admin/survey/$surveyId/delete',
+          ),
+          headers: {'accept': '*/*', 'Authorization': 'Bearer $token'},
+        );
+
+        if (response.statusCode != 200) {
+          final jsonBody = json.decode(response.body);
+          Get.snackbar(
+            'Error',
+            jsonBody['message'] ??
+                'Failed to delete survey $surveyId: ${response.statusCode}',
+          );
+          hasError = true;
+          break;
+        }
+      }
+
+      if (!hasError) {
+        surveys.removeWhere((survey) => surveysToDelete.contains(survey.id));
+        selectedSurveys.removeWhere((key, _) => surveysToDelete.contains(key));
+        await refreshData();
+        Get.snackbar('Success', 'Selected surveys deleted successfully');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Exception occurred while deleting surveys: $e');
+      hasError = true;
+    } finally {
+      Get.back();
+      if (hasError) {
+        await getActiveSurveys();
+      }
+    }
   }
 
 
@@ -35,7 +131,7 @@ class SurveyAndPollScreenController extends GetxController {
     const int limit = 10;
     bool hasMore = true;
 
-    surveys.clear(); // Reset before loading
+    surveys.clear();
     isLoading.value = true;
 
     while (hasMore) {
@@ -97,9 +193,9 @@ class SurveyAndPollScreenController extends GetxController {
 
 
   //This is for get survey circle statistics(second ListView.builder)
-   Future<void> getSurveyAnalytics() async {
+  Future<void> getSurveyAnalytics() async {
     final token = await StorageService.getAuthToken();
-    
+
     if (token == null || token.isEmpty) {
       Get.snackbar('Error', 'Authentication token not found');
       return;
@@ -108,31 +204,34 @@ class SurveyAndPollScreenController extends GetxController {
     isLoadingAnalytics.value = true;
     surveyAnalytics.clear();
 
-
     try {
       final response = await http.get(
-        Uri.parse('https://lgcglobalcontractingltd.com/js/admin/survey-response/responses/analytics'),
-        headers: {
-          'accept': '*/*',
-          'Authorization': 'Bearer $token',
-        },
+        Uri.parse(
+          'https://lgcglobalcontractingltd.com/js/admin/survey-response/responses/analytics',
+        ),
+        headers: {'accept': '*/*', 'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
         final jsonBody = json.decode(response.body);
-        
+
         if (jsonBody['success'] == true && jsonBody['data'] != null) {
           final List<dynamic> data = jsonBody['data'];
-          
+
           final analytics = data
-              .map((item) => SurveyCircleStatisticsAnalyticsModel.fromJson(item))
+              .map(
+                (item) => SurveyCircleStatisticsAnalyticsModel.fromJson(item),
+              )
               .toList();
-          
+
           surveyAnalytics.addAll(analytics);
-          
+
           print('Successfully loaded ${analytics.length} survey analytics');
         } else {
-          Get.snackbar('Error', jsonBody['message'] ?? 'Failed to load analytics');
+          Get.snackbar(
+            'Error',
+            jsonBody['message'] ?? 'Failed to load analytics',
+          );
         }
       } else {
         Get.snackbar(
@@ -153,10 +252,10 @@ class SurveyAndPollScreenController extends GetxController {
   // Get Pool Responses/Survey Progress Card(third ListView.builder)
   Future<void> getPoolResponses() async {
     final token = await StorageService.getAuthToken();
-    
+
     print('Starting getPoolResponses...');
     print('Token available: ${token != null && token.isNotEmpty}');
-    
+
     if (token == null || token.isEmpty) {
       Get.snackbar('Error', 'Authentication token not found');
       return;
@@ -167,11 +266,10 @@ class SurveyAndPollScreenController extends GetxController {
 
     try {
       final response = await http.get(
-        Uri.parse('https://lgcglobalcontractingltd.com/js/pool/pool-response/all'),
-        headers: {
-          'accept': '*/*',
-          'Authorization': 'Bearer $token',
-        },
+        Uri.parse(
+          'https://lgcglobalcontractingltd.com/js/pool/pool-response/all',
+        ),
+        headers: {'accept': '*/*', 'Authorization': 'Bearer $token'},
       );
 
       print('Pool Response - Status code: ${response.statusCode}');
@@ -179,29 +277,32 @@ class SurveyAndPollScreenController extends GetxController {
 
       if (response.statusCode == 200) {
         final jsonBody = json.decode(response.body);
-        
+
         if (jsonBody['success'] == true && jsonBody['data'] != null) {
           final List<dynamic> data = jsonBody['data'];
-          
+
           print('Pool Response - Data length: ${data.length}');
-          
+
           final pools = data
               .map((item) => PoolResponseModel.fromJson(item))
               .toList();
-          
+
           poolResponses.addAll(pools);
-          
+
           print('Successfully loaded ${pools.length} pool responses');
           print('poolResponses observable length: ${poolResponses.length}');
-          
-          // Debug: Print first pool if available
+
           if (pools.isNotEmpty) {
             final firstPool = pools.first;
-            print('First pool: ${firstPool.title}, Options: ${firstPool.options.length}');
+            print(
+              'First pool: ${firstPool.title}, Options: ${firstPool.options.length}',
+            );
           }
-          
         } else {
-          Get.snackbar('Error', jsonBody['message'] ?? 'Failed to load pool responses');
+          Get.snackbar(
+            'Error',
+            jsonBody['message'] ?? 'Failed to load pool responses',
+          );
         }
       } else {
         Get.snackbar(
@@ -211,7 +312,10 @@ class SurveyAndPollScreenController extends GetxController {
         print('Pool Response - Error body: ${response.body}');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Exception occurred while loading pool responses: $e');
+      Get.snackbar(
+        'Error',
+        'Exception occurred while loading pool responses: $e',
+      );
       print('Pool Response - Exception: $e');
     } finally {
       isLoadingPoolResponses.value = false;
@@ -233,22 +337,28 @@ class SurveyAndPollScreenController extends GetxController {
   // Function to get analytics for a specific survey
   SurveyCircleStatisticsAnalyticsModel? getAnalyticsForSurvey(String surveyId) {
     try {
-      return surveyAnalytics.firstWhere((analytics) => analytics.surveyId == surveyId);
+      return surveyAnalytics.firstWhere(
+        (analytics) => analytics.surveyId == surveyId,
+      );
     } catch (e) {
       return null;
     }
   }
-
 }
+
 
 class Survey {
   final String id;
   final String title;
   final String status;
 
-  Survey({required this.title, required this.status,required this.id});
+  Survey({required this.title, required this.status, required this.id});
 
   factory Survey.fromJson(Map<String, dynamic> json) {
-    return Survey(id: json["id"],title: json['title'] ?? '', status: json['status'] ?? '');
+    return Survey(
+      id: json["id"],
+      title: json['title'] ?? '',
+      status: json['status'] ?? '',
+    );
   }
 }

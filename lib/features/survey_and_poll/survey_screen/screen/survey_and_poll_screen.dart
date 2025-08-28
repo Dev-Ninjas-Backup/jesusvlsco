@@ -59,16 +59,38 @@ class SurveyAndPollScreen extends StatelessWidget {
                     builder: (context) => ActionDialog(
                       onView: () => debugPrint('View tapped'),
                       onEdit: () => debugPrint('Edit tapped'),
-                      onDelete: () => debugPrint('Delete tapped'),
+                      //onDelete: () => debugPrint('Delete tapped'),
+                      onDelete:
+                        //delete function will work here
+                        controller.selectedSurveys.values.any(
+                              (selected) => selected,
+                            )
+                            ? () => controller.deleteSelectedSurveys()
+                            : null,
+                            //Get.snackbar("alert", "delete success");
+                      
                     ),
                   );
                 },
               ),
               Row(
                 children: [
-                  SizedBox(
-                    width: 40,
-                    child: Checkbox(value: false, onChanged: (val) {}),
+                  Obx(
+                    () => Checkbox(
+                      value:
+                          controller.selectedSurveys.values.every(
+                            (selected) => selected,
+                          ) &&
+                          controller.surveys.isNotEmpty,
+                      onChanged: (value) {
+                        for (var survey in controller.surveys) {
+                          controller.selectedSurveys[survey.id] =
+                              value ?? false;
+                        }
+                        controller.selectedSurveys.refresh();
+                        //controller.isSelectedUser.value = value ??false;
+                      },
+                    ),
                   ),
                   Text("Survey Title", style: TextStyle(fontSize: 16)),
                   Spacer(flex: 2),
@@ -99,11 +121,15 @@ class SurveyAndPollScreen extends StatelessWidget {
                                 children: [
                                   SizedBox(
                                     width: 40,
-                                    child: Checkbox(
-                                      value: controller.isSelectedUser.value,
-                                      onChanged: (value) {
-                                        controller.isSelectedUser.value = value ??false;
-                                      },
+                                    child: Obx(
+                                      () => Checkbox(
+                                        value:
+                                            controller.selectedSurveys[survey
+                                                .id] ??
+                                            false,
+                                        onChanged: (value) => controller
+                                            .toggleSurveySelection(survey.id),
+                                      ),
                                     ),
                                   ),
                                   Expanded(
