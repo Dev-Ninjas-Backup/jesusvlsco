@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/common/widgets/custom_appbar.dart';
-import '../../../../core/common/widgets/custom_button.dart';
+import '../../../../core/common/widgets/custom_text_field.dart';
 import '../controller/user_poll_controller.dart';
+import '../../user_survey/widget/survey_tile.dart';
+import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import '../../user_survey/screen/user_survey_screen.dart';
 
 class UserPollScreen extends StatelessWidget {
   const UserPollScreen({super.key});
@@ -12,170 +14,126 @@ class UserPollScreen extends StatelessWidget {
     final controller = Get.put(UserPollController());
 
     return Scaffold(
-      appBar: Custom_appbar(title: "Poll"),
-      body: Obx(() {
-        final poll = controller.pollQuestion as Map<String, dynamic>;
+      appBar: Custom_appbar(title: "Survey & Poll"),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search box
+            CustomTextField(
+              hintText: "Search polls",
+              controller: controller.searchController,
+              onChanged: controller.updateSearch,
+            ),
 
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              Text(
-                poll["title"] ?? "",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Color(0xFF4E53B1),
+            const SizedBox(height: 18),
+
+            // Tab buttons
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTabButton(
+                    title: 'Surveys',
+                    isSelected: false,
+                    onTap: () {
+                      Get.to(() => const UserSurveyScreen());
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTabButton(
+                    title: 'Polls',
+                    isSelected: true,
+                    onTap: () {
+                      // Already on poll screen
+                    },
+                  ),
+                ),
+              ],
+            ),
 
-              // Owner, Duration, Status
-              Row(
-                children: const [
-                  Icon(Icons.person, size: 16, color: Colors.black54),
-                  SizedBox(width: 6),
-                  Text("Owner: Admin", style: TextStyle(fontSize: 14)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: const [
-                  Icon(Icons.calendar_today, size: 16, color: Colors.black54),
-                  SizedBox(width: 6),
-                  Text(
-                    "Duration: May 1 - May 15, 2025",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: const [
-                  Text(
-                    "Status: ",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    "Active",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
+            const SizedBox(height: 18),
 
-              // Question
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF4E53B1),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      "1",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      poll["question"] ?? "",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+            // Section header
+            const Text(
+              "Available polls",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF4E53B1),
               ),
-              const SizedBox(height: 16),
+            ),
+            const SizedBox(height: 8),
 
-              // Options
-              ...List.generate((poll["options"] as List).length, (index) {
-                final option = (poll["options"] as List)[index];
-                return Obx(() {
-                  final isSelected = controller.selectedAnswer.value == index;
-                  return GestureDetector(
-                    onTap: () => controller.selectedAnswer.value = index,
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: isSelected
-                              ? const Color(0xFF4E53B1)
-                              : Colors.grey.shade400,
-                          width: 1.3,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                        color: isSelected
-                            ? const Color(0xFF4E53B1).withValues(alpha: 0.08)
-                            : Colors.transparent,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            isSelected
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_off,
-                            color: isSelected
-                                ? const Color(0xFF4E53B1)
-                                : Colors.grey,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            option,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isSelected
-                                  ? const Color(0xFF4E53B1)
-                                  : Colors.black87,
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                });
+            // Subheader row "Poll title"
+            const Text(
+              "Poll title",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 10),
+
+            // List
+            Expanded(
+              child: Obx(() {
+                final list = controller.filteredPolls;
+                if (controller.polls.isEmpty) {
+                  // still loading or no data
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (list.isEmpty) {
+                  return const Center(child: Text("No polls found"));
+                }
+
+                return ListView.separated(
+                  itemCount: list.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 0),
+                  itemBuilder: (context, index) {
+                    final item = list[index];
+                    final title = (item['title'] ?? '').toString();
+                    return SurveyTile(
+                      title: title,
+                      buttonText: "Take poll",
+                      onTap: () => controller.takePoll(item),
+                    );
+                  },
+                );
               }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-              const Spacer(),
-
-              // ✅ Submit button
-              CustomButton(
-                onPressed: controller.submitPoll,
-                text: "Submit",
-                isExpanded: true,
-                decorationColor: const Color(0xFF4E53B1),
-                textColor: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                borderRadius: 8,
-              ),
-              SizedBox(height: 8),
-            ],
+  /// Build tab button widget
+  Widget _buildTabButton({
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF4E53B1) : Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF4E53B1) : Colors.grey[300]!,
           ),
-        );
-      }),
+        ),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey[600],
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+      ),
     );
   }
 }

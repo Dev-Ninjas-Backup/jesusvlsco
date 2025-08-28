@@ -4,6 +4,7 @@ import '../../../../core/common/widgets/custom_text_field.dart';
 import '../controller/user_survey_controller.dart';
 import '../widget/survey_tile.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import '../../user_poll/screen/user_poll_screen.dart';
 
 class UserSurveyScreen extends StatelessWidget {
   const UserSurveyScreen({super.key});
@@ -28,9 +29,36 @@ class UserSurveyScreen extends StatelessWidget {
 
             const SizedBox(height: 18),
 
+            // Tab buttons
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTabButton(
+                    title: 'Surveys',
+                    isSelected: true,
+                    onTap: () {
+                      // Already on survey screen
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTabButton(
+                    title: 'Polls',
+                    isSelected: false,
+                    onTap: () {
+                      Get.to(() => const UserPollScreen());
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
             // Section header
             const Text(
-              "Available survey",
+              "Available surveys",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -39,13 +67,10 @@ class UserSurveyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Subheader row "Survey title"
+            // Subheader row
             const Text(
               "Survey title",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
 
@@ -54,7 +79,6 @@ class UserSurveyScreen extends StatelessWidget {
               child: Obx(() {
                 final list = controller.filteredSurveys;
                 if (controller.surveys.isEmpty) {
-                  // still loading or no data
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (list.isEmpty) {
@@ -69,6 +93,7 @@ class UserSurveyScreen extends StatelessWidget {
                     final title = (item['title'] ?? '').toString();
                     return SurveyTile(
                       title: title,
+                      buttonText: "Take survey",
                       onTap: () => controller.takeSurvey(item),
                     );
                   },
@@ -76,6 +101,36 @@ class UserSurveyScreen extends StatelessWidget {
               }),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Build tab button widget
+  Widget _buildTabButton({
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF4E53B1) : Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF4E53B1) : Colors.grey[300]!,
+          ),
+        ),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey[600],
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
         ),
       ),
     );

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class SurveyTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
-  final String? buttonText;
 
   const SurveyTile({
     super.key,
     required this.title,
     required this.onTap,
-    this.buttonText,
   });
 
   @override
@@ -60,9 +58,9 @@ class SurveyTile extends StatelessWidget {
                 ),
 
               ),
-              child: Text(
-                buttonText ?? "Take survey",
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              child: const Text(
+                "Take survey",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
