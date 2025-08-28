@@ -12,6 +12,7 @@ import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dar
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
 import '../../../../core/services/storage_service.dart';
+import '../../../scheduling_and_time_tracking/screens/views/shift_details_screen.dart';
 
 class UserDrawer extends StatelessWidget {
   const UserDrawer({super.key});
@@ -48,6 +49,7 @@ class UserDrawer extends StatelessWidget {
               text: 'Survey & Poll',
               onTap: () {
                 Get.to(UserSurveyScreen());
+                // Get.to(ShiftDetailsScreen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),
@@ -83,7 +85,7 @@ class UserDrawer extends StatelessWidget {
               imagePath: 'assets/icons/drawer_time-off_requests.png',
               text: 'Time-off requests',
               onTap: () {
-                TimeOffRequestsScreen();
+                Get.to(TimeOffRequestsScreen());
               },
             ),
             SizedBox(height: Sizer.hp(24)),

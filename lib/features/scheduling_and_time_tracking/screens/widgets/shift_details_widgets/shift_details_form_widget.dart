@@ -32,33 +32,6 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           controller: controller.jobController,
           isDropdown: false,
         ),
-
-        // SizedBox(height: Sizer.hp(24)),
-
-        // Users
-        // Column(
-        //   crossAxisAlignment: CrossAxisAlignment.end,
-        //   children: [
-        //     _buildFormField(
-        //       label: 'Users',
-        //       hintText: 'Select Users',
-        //       controller: controller.usersController,
-        //       isDropdown: false,
-        //     ),
-        //     SizedBox(height: Sizer.hp(8)),
-        //     GestureDetector(
-        //       onTap: () => controller.addUser(),
-        //       child: Text(
-        //         'Add User',
-        //         style: AppTextStyle.f12W400().copyWith(
-        //           color: AppColors.primary,
-        //           height: 1.5,
-        //           decoration: TextDecoration.underline,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
         SizedBox(height: Sizer.hp(24)),
 
         // Location
@@ -66,6 +39,10 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           label: 'Location',
           hintText: 'Type Location',
           controller: controller.locationController,
+          suffixIcon: GestureDetector(
+            onTap: () => controller.pickCurrentLocation(),
+            child: const Icon(Icons.my_location, color: Colors.blue),
+          ),
         ),
 
         SizedBox(height: Sizer.hp(24)),
@@ -80,24 +57,6 @@ class ShiftDetailsFormWidget extends StatelessWidget {
               controller: controller.noteController,
               maxLines: 4,
             ),
-            // SizedBox(height: Sizer.hp(12)),
-            // Row(
-            //   children: [
-            //     Icon(
-            //       Icons.attach_file,
-            //       size: Sizer.wp(18),
-            //       color: const Color(0xFF5B5B5B),
-            //     ),
-            //     SizedBox(width: Sizer.wp(6)),
-            //     Text(
-            //       'Attachment',
-            //       style: AppTextStyle.f14W400().copyWith(
-            //         color: const Color(0xFF5B5B5B),
-            //         height: 1.45,
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ],
@@ -111,6 +70,7 @@ class ShiftDetailsFormWidget extends StatelessWidget {
     required TextEditingController controller,
     bool isDropdown = false,
     int maxLines = 1,
+    Widget? suffixIcon,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,14 +109,13 @@ class ShiftDetailsFormWidget extends StatelessWidget {
               errorBorder: InputBorder.none,
               disabledBorder: InputBorder.none,
               isDense: true,
-              contentPadding: EdgeInsets.zero,
               suffixIcon: isDropdown
                   ? Icon(
                       Icons.keyboard_arrow_down,
                       size: Sizer.wp(20),
                       color: const Color(0xFF949494),
                     )
-                  : null,
+                  : suffixIcon,
             ),
           ),
         ),

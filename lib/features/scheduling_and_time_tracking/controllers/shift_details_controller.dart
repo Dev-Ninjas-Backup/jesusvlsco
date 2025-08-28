@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
@@ -289,6 +291,50 @@ class ShiftDetailsController extends GetxController {
     // In real implementation, calculate actual duration
     duration.value = '08:00 Hours';
     _logger.i('Duration calculated: ${duration.value}');
+  }
+
+  Future<void> pickCurrentLocation() async {
+    // Implement location picking logic here
+    try {
+      _logger.i('Requesting location permission');
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        EasyLoading.showError('Location permission denied');
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        EasyLoading.showError('Location permission denied forever');
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      );
+
+      _logger.i(
+        'Current location: ${position.latitude}, ${position.longitude}',
+      );
+
+      //convert GPS -> address
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude,
+          position.longitude,
+        );
+
+        Placemark place = placemarks[0];
+        locationController.text =
+            '${place.name}, ${place.locality}, ${place.country}';
+      } catch (e) {
+        _logger.e('Error converting location: $e');
+      }
+      EasyLoading.showSuccess('Location picked successfully');
+    } catch (error) {
+      _logger.e('Error picking location: $error');
+      EasyLoading.showError('Failed to pick location');
+    }
   }
 
   /// Build custom time picker dialog

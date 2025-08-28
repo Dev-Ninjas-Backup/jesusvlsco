@@ -10,6 +10,7 @@ import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_details_screen.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
 
 import '../../../userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';

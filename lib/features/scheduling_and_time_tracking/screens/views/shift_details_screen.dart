@@ -7,7 +7,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_date_time_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_form_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_tasks_widget.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_activity_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_action_buttons_widget.dart';
 
 /// Shift Details Screen for creating and managing shift schedules
@@ -21,12 +20,6 @@ class ShiftDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ShiftDetailsController());
-    final args = Get.arguments as Map<String, dynamic>;
-
-    final employee = args['employee'];
-    final slotIndex = args['slotIndex'];
-    final projectId = args['projectId'];
-    final projectTitle = args['projectTitle'];
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -55,10 +48,6 @@ class ShiftDetailsScreen extends StatelessWidget {
                     ShiftDetailsTasksWidget(controller: controller),
 
                     SizedBox(height: Sizer.hp(20)),
-
-                    // Shift Activity Section
-                    // ShiftDetailsActivityWidget(controller: controller),
-                    // SizedBox(height: Sizer.hp(32)),
 
                     // Action Buttons
                     ShiftDetailsActionButtonsWidget(controller: controller),
