@@ -255,7 +255,7 @@ class ShiftDetailsController extends GetxController {
 
   /// Publish the shift
   void publish() {
-    _logger.i('Publishing shift');
+    _logger.i('Publishing shift....');
 
     // Validate form data
     if (shiftTitleController.text.isEmpty) {
@@ -265,6 +265,11 @@ class ShiftDetailsController extends GetxController {
 
     if (jobController.text.isEmpty) {
       EasyLoading.showError('Please enter job');
+      return;
+    }
+
+    if (locationController.text.isEmpty) {
+      EasyLoading.showError('Please enter location');
       return;
     }
 

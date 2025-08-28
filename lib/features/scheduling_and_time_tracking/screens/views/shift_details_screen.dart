@@ -9,9 +9,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_tasks_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_action_buttons_widget.dart';
 
-/// Shift Details Screen for creating and managing shift schedules
-/// Clean UI implementation following MVC pattern
-/// Matches the Figma design with separated components
 class ShiftDetailsScreen extends StatelessWidget {
   final Map<String, dynamic>? extra;
 

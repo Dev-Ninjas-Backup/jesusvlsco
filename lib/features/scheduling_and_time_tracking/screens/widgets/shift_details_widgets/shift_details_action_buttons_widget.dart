@@ -15,59 +15,6 @@ class ShiftDetailsActionButtonsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Save as Templates and Save Draft
-        // Row(
-        //   children: [
-        //     Expanded(
-        //       child: GestureDetector(
-        //         onTap: () => controller.saveAsTemplate(),
-        //         child: Container(
-        //           height: Sizer.hp(48),
-        //           decoration: BoxDecoration(
-        //             border: Border.all(color: AppColors.primary),
-        //             borderRadius: BorderRadius.circular(8),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               'Save as Templates',
-        //               style: AppTextStyle.f16W500().copyWith(
-        //                 color: AppColors.primary,
-        //                 height: 1.5,
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-
-        //     SizedBox(width: Sizer.wp(12)),
-
-        //     Expanded(
-        //       child: GestureDetector(
-        //         onTap: () => controller.saveDraft(),
-        //         child: Container(
-        //           height: Sizer.hp(48),
-        //           decoration: BoxDecoration(
-        //             border: Border.all(color: AppColors.primary),
-        //             borderRadius: BorderRadius.circular(8),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               'Save Draft',
-        //               style: AppTextStyle.f16W500().copyWith(
-        //                 color: AppColors.primary,
-        //                 height: 1.5,
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-
-        // SizedBox(height: Sizer.hp(8)),
-
         // Publish button
         GestureDetector(
           onTap: () => controller.publish(),
