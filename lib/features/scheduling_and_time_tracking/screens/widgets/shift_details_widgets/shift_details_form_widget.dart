@@ -3,8 +3,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shi
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 
-/// Form section widget for shift details
-/// Contains all form fields for shift information
 class ShiftDetailsFormWidget extends StatelessWidget {
   final ShiftDetailsController controller;
 
