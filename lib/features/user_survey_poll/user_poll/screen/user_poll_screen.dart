@@ -14,7 +14,7 @@ class UserPollScreen extends StatelessWidget {
     final controller = Get.put(UserPollController());
 
     return Scaffold(
-      appBar: Custom_appbar(title: "Poll"),
+      appBar: Custom_appbar(title: "Survey & Poll"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: Column(
