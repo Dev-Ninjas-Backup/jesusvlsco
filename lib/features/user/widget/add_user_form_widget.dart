@@ -187,7 +187,7 @@ Widget _buildDateField(
         child: Obx(() {
           final dob = controller.selectedDateOfBirth.value;
           final display = dob != null
-              ? '${dob.day}/${dob.month}/${dob.year}'
+              ? dob.toIso8601String()//'${dob.day}/${dob.month}/${dob.year}'
               : hint;
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
