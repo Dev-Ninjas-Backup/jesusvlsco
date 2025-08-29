@@ -11,4 +11,9 @@ class AdminBottomNavigationController extends GetxController {
   void resetToHome() {
     currentIndex.value = 0;
   }
+
+  void resetToUsers(){
+    currentIndex.value =2;
+  }
+
 }

@@ -61,6 +61,9 @@ class AdminListController extends GetxController {
     super.onInit();
     fetchAdmins(); // Initial load
   }
+  
+  //to refresh data
+ 
 
   Future<void> fetchAdmins() async {
   if (isLoading.value || !hasMore.value) return;

@@ -7,11 +7,12 @@ import '../widget/progress_indigator_widget.dart';
 import '../widget/section_header_widget.dart';
 
 class AddUserScreen extends StatelessWidget {
-  const AddUserScreen({super.key});
+  AddUserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AddUserController());
+    // final AddUserController controller = Get.find<AddUserController>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
