@@ -4,7 +4,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_date_picker_widget.dart';
+import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_model.dart';
+import 'package:jesusvlsco/features/assign_employee/service/assigned_users_service.dart';
 import 'package:jesusvlsco/features/assign_employee/service/project_service.dart';
+import 'package:jesusvlsco/features/splasho_screen/controller/splasho_controller.dart';
 import 'package:logger/logger.dart';
 
 import '../models/project_model.dart';
@@ -12,6 +15,11 @@ import '../models/project_model.dart';
 class ScheduleController extends GetxController {
   final Logger _logger = Logger();
   final ProjectService projectService = ProjectService();
+  AssignedUsersService? _assignedUsersService;
+  final SplashController _splashController = Get.find();
+
+  var assignedUsers = <AssignedUserData>[].obs;
+  var isLoadingAssignedUsers = false.obs;
 
   // Dropdown values
   var dropdownValue = "Everyone".obs;
@@ -31,6 +39,8 @@ class ScheduleController extends GetxController {
   final int pageLimit = 5;
 
   // Date selection
+  var selectedStartDate = Rx<DateTime?>(null);
+  var selectedEndDate = Rx<DateTime?>(null);
   var selectedDate = DateTime.now().obs;
 
   // Time selection
@@ -46,6 +56,7 @@ class ScheduleController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _initRepository();
     fetchProjects();
   }
 
@@ -53,6 +64,12 @@ class ScheduleController extends GetxController {
   void onClose() {
     notesController.dispose();
     super.onClose();
+  }
+
+  Future<void> _initRepository() async {
+    final token = await _splashController.getAuthToken();
+    _assignedUsersService = AssignedUsersService();
+    _logger.i("Repository initialized with token");
   }
 
   Future<void> fetchProjects({bool isRefresh = false}) async {
@@ -128,31 +145,49 @@ class ScheduleController extends GetxController {
     await fetchProjects(isRefresh: true);
   }
 
-  void selectProject(ProjectModel project) {
+  Future<void> selectProject(ProjectModel project) async {
     selectedProject.value = project;
     _logger.i('Selected project: ${project.title}');
     _logger.i('Selected id: ${project.id}');
+
+    // Fetch assigned users when project is selected
+    await fetchAssignedUsers();
   }
 
-  void clearSelection() {
-    selectedProject.value = null;
-  }
+  Future<void> fetchAssignedUsers() async {
+    if (selectedProject.value == null) {
+      _logger.w('No project selected for fetching assigned users');
+      return;
+    }
 
-  // Mock employee data (keeping your existing data)
-  var employees = [
-    {
-      "name": "Sarah Johnson",
-      "role": "Manager",
-      "offDay": "Friday",
-      "image": "https://randomuser.me/api/portraits/women/44.jpg",
-    },
-    {
-      "name": "Emma Willson",
-      "role": "Manager",
-      "offDay": "Friday",
-      "image": "https://randomuser.me/api/portraits/women/45.jpg",
-    },
-  ];
+    if (_assignedUsersService == null) {
+      _logger.w('Assigned users service not initialized');
+      return;
+    }
+
+    try {
+      isLoadingAssignedUsers.value = true;
+
+      final response = await _assignedUsersService!.getAssignedUsers(
+        projectId: selectedProject.value!.id,
+        startDate: selectedStartDate.value,
+        endDate: selectedEndDate.value,
+      );
+
+      if (response.success) {
+        assignedUsers.value = response.data;
+        _logger.i('Assigned users loaded: ${response.data.length}');
+      } else {
+        _logger.e('Failed to load assigned users: ${response.message}');
+        EasyLoading.showError('Failed to load assigned users');
+      }
+    } catch (e) {
+      _logger.e('Error fetching assigned users: $e');
+      EasyLoading.showError('Failed to load assigned users');
+    } finally {
+      isLoadingAssignedUsers.value = false;
+    }
+  }
 
   Future<void> onDatePressed() async {
     try {
@@ -177,4 +212,98 @@ class ScheduleController extends GetxController {
       EasyLoading.showError('Failed to show date picker');
     }
   }
+
+  Future<void> onDateRangePressed() async {
+    try {
+      _logger.i('Date range button pressed');
+
+      final DateTimeRange? pickedRange = await showDateRangePicker(
+        context: Get.context!,
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2030),
+        initialDateRange:
+            (selectedStartDate.value != null && selectedEndDate.value != null)
+            ? DateTimeRange(
+                start: selectedStartDate.value!,
+                end: selectedEndDate.value!,
+              )
+            : null,
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Color(0xFF4E53B1), // Your primary color
+                onPrimary: Colors.white,
+                surface: Colors.white,
+                onSurface: Colors.black,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedRange != null) {
+        selectedStartDate.value = pickedRange.start;
+        selectedEndDate.value = pickedRange.end;
+
+        _logger.i(
+          'Date range selected: ${DateFormat('yyyy-MM-dd').format(pickedRange.start)} to ${DateFormat('yyyy-MM-dd').format(pickedRange.end)}',
+        );
+
+        EasyLoading.showSuccess(
+          'Date range: ${DateFormat('MMM dd').format(pickedRange.start)} - ${DateFormat('MMM dd, yyyy').format(pickedRange.end)}',
+        );
+
+        // Refresh assigned users with date filter if project is selected
+        if (selectedProject.value != null) {
+          await fetchAssignedUsers();
+        }
+      }
+    } catch (error) {
+      _logger.e('Error showing date range picker: $error');
+      EasyLoading.showError('Failed to show date range picker');
+    }
+  }
+
+  void clearDateRange() {
+    selectedStartDate.value = null;
+    selectedEndDate.value = null;
+
+    // Refresh assigned users without date filter if project is selected
+    if (selectedProject.value != null) {
+      fetchAssignedUsers();
+    }
+  }
+
+  String get dateRangeText {
+    if (selectedStartDate.value != null && selectedEndDate.value != null) {
+      return '${DateFormat('MMM dd').format(selectedStartDate.value!)} - ${DateFormat('MMM dd').format(selectedEndDate.value!)}';
+    }
+    return 'Select Date Range';
+  }
+
+  bool get hasDateRange {
+    return selectedStartDate.value != null && selectedEndDate.value != null;
+  }
+
+  void clearSelection() {
+    selectedProject.value = null;
+  }
+
+  // Mock employee data (keeping your existing data)
+  var employees = [
+    {
+      "name": "Sarah Johnson",
+      "role": "Manager",
+      "offDay": "Friday",
+      "image": "https://randomuser.me/api/portraits/women/44.jpg",
+    },
+    {
+      "name": "Emma Willson",
+      "role": "Manager",
+      "offDay": "Friday",
+      "image": "https://randomuser.me/api/portraits/women/45.jpg",
+    },
+  ];
 }
