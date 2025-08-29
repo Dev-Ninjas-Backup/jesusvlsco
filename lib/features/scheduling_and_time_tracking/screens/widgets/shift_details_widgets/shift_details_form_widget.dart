@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_details_controller.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
 
 class ShiftDetailsFormWidget extends StatelessWidget {
   final ShiftDetailsController controller;
@@ -38,7 +40,95 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           controller: controller.locationController,
           hasLocationIcon: true,
           onLocationTap: () => controller.pickCurrentLocation(),
+          onChanged: (value) => controller.searchLocation(value),
+          isLocationField: true,
         ),
+
+        // Map Widget - Show when location is picked
+        Obx(() {
+          if (controller.isSearching.value) {
+            return Column(
+              children: [
+                SizedBox(height: Sizer.hp(12)),
+                Container(
+                  height: Sizer.hp(60),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFFC8CAE7)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        SizedBox(width: 8),
+                        Text('Searching location...'),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          if (controller.showMap.value &&
+              controller.latitude != null &&
+              controller.longitude != null) {
+            return Column(
+              children: [
+                SizedBox(height: Sizer.hp(12)),
+                Container(
+                  height: Sizer.hp(200),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFFC8CAE7)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(
+                          controller.latitude!,
+                          controller.longitude!,
+                        ),
+                        zoom: 15.0,
+                      ),
+                      markers: {
+                        Marker(
+                          markerId: const MarkerId('selected_location'),
+                          position: LatLng(
+                            controller.latitude!,
+                            controller.longitude!,
+                          ),
+                          infoWindow: const InfoWindow(
+                            title: 'Selected Location',
+                          ),
+                        ),
+                      },
+                      zoomControlsEnabled: true,
+                      myLocationButtonEnabled: false,
+                      myLocationEnabled: false,
+                      onTap: (LatLng position) {
+                        // Allow user to select different location by tapping on map
+                        controller.selectLocation(
+                          position.latitude,
+                          position.longitude,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        }),
 
         SizedBox(height: Sizer.hp(24)),
 
@@ -68,6 +158,8 @@ class ShiftDetailsFormWidget extends StatelessWidget {
     Widget? suffixIcon,
     bool hasLocationIcon = false,
     VoidCallback? onLocationTap,
+    Function(String)? onChanged,
+    bool isLocationField = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +204,7 @@ class ShiftDetailsFormWidget extends StatelessWidget {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
+            onChanged: onChanged,
             style: AppTextStyle.f12W400().copyWith(
               color: const Color(0xFF949494),
               height: 1.5,

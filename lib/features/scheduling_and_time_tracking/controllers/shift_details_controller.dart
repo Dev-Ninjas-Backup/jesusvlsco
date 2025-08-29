@@ -456,6 +456,7 @@ import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 import '../../../core/utils/constants/sizer.dart';
 import '../../../core/utils/constants/colors.dart';
@@ -501,6 +502,14 @@ class ShiftDetailsController extends GetxController {
   // Location lat/lng
   double? latitude;
   double? longitude;
+
+  // Map visibility
+  var showMap = false.obs;
+
+  // Search suggestions
+  var locationSuggestions = <String>[].obs;
+  var isSearching = false.obs;
+  Timer? _searchTimer;
 
   @override
   void onInit() {
@@ -748,6 +757,9 @@ class ShiftDetailsController extends GetxController {
         if (data["success"] == true) {
           EasyLoading.showSuccess("Shift published successfully");
           _logger.i("Shift created: ${data["data"]["id"]}");
+
+          // Navigate to assign employee screen after successful publish
+          SchedulingRoutes.toAssignEmployee();
         } else {
           EasyLoading.showError(data["message"] ?? "Publish failed");
         }
@@ -836,9 +848,102 @@ class ShiftDetailsController extends GetxController {
       locationController.text =
           '${place.name}, ${place.locality}, ${place.country}';
 
+      // Show map after picking location
+      showMap.value = true;
+
       EasyLoading.showSuccess('Location picked successfully');
     } catch (error) {
       EasyLoading.showError('Failed to pick location');
+    }
+  }
+
+  /// Search for location based on typed text
+  Future<void> searchLocation(String query) async {
+    // Cancel previous timer
+    _searchTimer?.cancel();
+
+    if (query.isEmpty || query.length < 3) {
+      locationSuggestions.clear();
+      showMap.value = false;
+      isSearching.value = false;
+      return;
+    }
+
+    // Show searching indicator immediately
+    isSearching.value = true;
+
+    // Set a timer to debounce the search
+    _searchTimer = Timer(const Duration(milliseconds: 800), () async {
+      await _performLocationSearch(query);
+    });
+  }
+
+  /// Perform the actual location search
+  Future<void> _performLocationSearch(String query) async {
+    try {
+      // Use geocoding to search for locations
+      List<Location> locations = await locationFromAddress(query);
+
+      if (locations.isNotEmpty) {
+        // Take the first result
+        Location location = locations.first;
+        latitude = location.latitude;
+        longitude = location.longitude;
+
+        // Get place details for the found location
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          latitude!,
+          longitude!,
+        );
+
+        if (placemarks.isNotEmpty) {
+          Placemark place = placemarks.first;
+
+          // Update location field with formatted address
+          String formattedAddress = '';
+          if (place.name != null && place.name!.isNotEmpty) {
+            formattedAddress += place.name!;
+          }
+          if (place.locality != null && place.locality!.isNotEmpty) {
+            if (formattedAddress.isNotEmpty) formattedAddress += ', ';
+            formattedAddress += place.locality!;
+          }
+          if (place.country != null && place.country!.isNotEmpty) {
+            if (formattedAddress.isNotEmpty) formattedAddress += ', ';
+            formattedAddress += place.country!;
+          }
+
+          // Show map with found location
+          showMap.value = true;
+        }
+      } else {
+        // No location found
+        showMap.value = false;
+      }
+    } catch (error) {
+      _logger.w('Location search failed: $error');
+      showMap.value = false;
+      // Don't show error for search failures as user might still be typing
+    } finally {
+      isSearching.value = false;
+    }
+  }
+
+  /// Select a location from coordinates
+  Future<void> selectLocation(double lat, double lng) async {
+    try {
+      latitude = lat;
+      longitude = lng;
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        locationController.text =
+            '${place.name}, ${place.locality}, ${place.country}';
+        showMap.value = true;
+      }
+    } catch (error) {
+      EasyLoading.showError('Failed to get location details');
     }
   }
 
@@ -926,6 +1031,7 @@ class ShiftDetailsController extends GetxController {
 
   @override
   void onClose() {
+    _searchTimer?.cancel();
     shiftTitleController.dispose();
     jobController.dispose();
     usersController.dispose();
