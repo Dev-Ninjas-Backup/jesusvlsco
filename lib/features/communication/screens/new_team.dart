@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/features/communication/controllers/create_new_team_controller.dart';
+import 'package:jesusvlsco/features/communication/widgets/chose_user_for_team.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/common_button.dart';
 
+// ignore: must_be_immutable
 class NewTeam extends StatelessWidget {
-  const NewTeam({super.key});
+  CreateNewTeamController createNewTeamController = Get.put(
+    CreateNewTeamController(),
+  );
+  NewTeam({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Custom_appbar(title: "New Team",),
+      appBar: Custom_appbar(title: "New Team"),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              createNewTeamController.pickImage();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,29 +84,116 @@ class NewTeam extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: Sizer.hp(8)),
-                _buildSearchTextField(),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "Team Title"),
+                ),
               ],
             ),
           ),
           SizedBox(height: Sizer.hp(16)),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: Sizer.wp(16)),
-                child: Text(
-                  "Choose members",
-                  style: TextStyle(
-                    fontSize: Sizer.wp(18),
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              "Description",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextFormField(
+              maxLines: 4,
+              decoration: InputDecoration(
+                hintText: "Brief Description about team",
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Select Department",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Obx(() {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(width: 1, color: Colors.black),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: createNewTeamController.selectedDepartment.value,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    isExpanded: true,
+                    items: createNewTeamController.departments.map((
+                      String department,
+                    ) {
+                      return DropdownMenuItem<String>(
+                        value: department,
+                        child: Text(department),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        createNewTeamController.selectedDepartment.value =
+                            newValue;
+                      }
+                    },
                   ),
                 ),
               ),
-            ],
+            );
+          }),
+          SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+              onTap: () {
+                //Select User show Model action here,
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ChoseUserForTeam();
+                  },
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      "Select User",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Icon(Icons.keyboard_arrow_down),
+                  ],
+                ),
+              ),
+            ),
           ),
-          SizedBox(height: Sizer.hp(16)),
-          _buildropdownrow(title: 'Select Team'),
-          _buildropdownrow(title: 'Select specific members'),
+
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -125,100 +222,32 @@ class NewTeam extends StatelessWidget {
   }
 }
 
-Widget _buildSearchTextField() {
-  return Container(
-    height: Sizer.hp(48),
+// Widget _buildSearchTextField() {
+//   return Container(
+//     height: Sizer.hp(48),
 
-    decoration: BoxDecoration(
-      color: AppColors.primaryBackground,
-      border: Border.all(color: AppColors.border),
-      borderRadius: BorderRadius.circular(Sizer.wp(10)),
-    ),
-    child: TextField(
-      textAlign: TextAlign.start,
-      decoration: InputDecoration(
-        enabledBorder: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        border: InputBorder.none,
-        hintText: 'Enter team name here ',
-        hintStyle: AppTextStyle.regular().copyWith(
-          fontSize: Sizer.wp(14),
-          color: AppColors.text,
-        ),
+//     decoration: BoxDecoration(
+//       color: AppColors.primaryBackground,
+//       border: Border.all(color: AppColors.border),
+//       borderRadius: BorderRadius.circular(Sizer.wp(10)),
+//     ),
+//     child: TextField(
+//       textAlign: TextAlign.start,
+//       decoration: InputDecoration(
+//         enabledBorder: InputBorder.none,
+//         focusedBorder: InputBorder.none,
+//         border: InputBorder.none,
+//         hintText: 'Enter team name here ',
+//         hintStyle: AppTextStyle.regular().copyWith(
+//           fontSize: Sizer.wp(14),
+//           color: AppColors.text,
+//         ),
 
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: Sizer.wp(16),
-          vertical: Sizer.hp(12),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildDropdown() {
-  return Container(
-    width: double.infinity,
-    height: Sizer.hp(48),
-    decoration: BoxDecoration(
-      color: AppColors.primaryBackground,
-      border: Border.all(color: AppColors.border),
-      borderRadius: BorderRadius.circular(Sizer.wp(10)),
-    ),
-    child: Padding(
-      padding: EdgeInsets.all(Sizer.wp(12)),
-      child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween, // Aligning items to both ends
-        children: [
-          Expanded(
-            child: DropdownButton<String>(
-              underline: Container(),
-              isExpanded: true, // Make dropdown take full width
-              value: "Select Team", // Keep the default value as "Select Team"
-              style: TextStyle(color: AppColors.text),
-              onChanged: (String? newValue) {
-                // No logic is applied here as per the design you provided
-              },
-              items: _listItems.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-          //
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildropdownrow({String? title}) {
-  return Padding(
-    padding: EdgeInsets.only(
-      left: Sizer.wp(16),
-      top: Sizer.hp(16),
-      right: Sizer.wp(16),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title ?? "",
-          style: TextStyle(
-            fontSize: Sizer.wp(16),
-            fontWeight: FontWeight.w600,
-            color: AppColors.text,
-          ),
-        ),
-        SizedBox(height: Sizer.hp(8)),
-        _buildDropdown(),
-      ],
-    ),
-  );
-}
-
-List<String> _listItems = ["Select Team", "Team1", "Team2", "Team3", "Team4"];
-List<String> _listItems1 = ["Select Team", "Team1", "Team2", "Team3", "Team4"];
-List<String> _listItems2 = ["Select Team", "Team1", "Team2", "Team3", "Team4"];
+//         contentPadding: EdgeInsets.symmetric(
+//           horizontal: Sizer.wp(16),
+//           vertical: Sizer.hp(12),
+//         ),
+//       ),
+//     ),
+//   );
+// }
