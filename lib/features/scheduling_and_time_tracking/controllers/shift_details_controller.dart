@@ -1,3 +1,454 @@
+// import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:get/get.dart';
+// import 'package:flutter_easyloading/flutter_easyloading.dart';
+// import 'package:logger/logger.dart';
+// import 'package:intl/intl.dart';
+// import 'package:http/http.dart' as http;
+
+// import '../../../core/utils/constants/sizer.dart';
+// import '../../../core/utils/constants/colors.dart';
+// import '../../../core/common/styles/global_text_style.dart';
+// import '../../../core/services/storage_service.dart';
+// import '../models/task_model.dart';
+// import '../models/activity_model.dart';
+// import '../screens/widgets/shift_emplate_widgets/add_user_dialog.dart';
+// import '../routes/scheduling_routes.dart';
+// import '../../../core/common/widgets/custom_date_picker_widget.dart';
+
+// class ShiftDetailsController extends GetxController {
+//   final Logger _logger = Logger();
+
+//   // Form controllers
+//   final shiftTitleController = TextEditingController();
+//   final jobController = TextEditingController();
+//   final usersController = TextEditingController();
+//   final locationController = TextEditingController();
+//   final noteController = TextEditingController();
+
+//   // Observable variables for date and time
+//   var selectedDate = DateTime.now().obs;
+//   var selectedDateFormatted = ''.obs;
+//   var isAllDay = true.obs;
+//   var startTime = '9:00 am'.obs;
+//   var endTime = '5:00 pm'.obs;
+//   var duration = '08:00 Hours'.obs;
+
+//   // Tasks and activities lists
+//   var tasks = <TaskModel>[].obs;
+//   var activities = <ActivityModel>[].obs;
+
+//   // Location lat/lng
+//   double? latitude;
+//   double? longitude;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     _loadMockData();
+//     _logger.i('ShiftDetailsController initialized');
+
+//     selectedDateFormatted.value = DateFormat(
+//       'dd/MM/yyyy',
+//     ).format(selectedDate.value);
+//   }
+
+//   void _loadMockData() {
+//     tasks.value = [
+//       const TaskModel(
+//         id: '1',
+//         title: 'Metro Shopping Center',
+//         isCompleted: true,
+//       ),
+//       const TaskModel(
+//         id: '2',
+//         title: 'City Bridge Renovations',
+//         isCompleted: false,
+//       ),
+//     ];
+
+//     activities.value = [
+//       ActivityModel(
+//         id: '1',
+//         userName: 'Emma Willson',
+//         userAvatar: 'https://i.pravatar.cc/150?img=1',
+//         action: 'Shift published by',
+//         timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+//       ),
+//     ];
+//   }
+
+//   // ================= DATE & TIME =================
+//   Future<void> selectDate() async {
+//     try {
+//       final DateTime? picked = await CustomDatePicker.show(
+//         context: Get.context!,
+//         initialDate: selectedDate.value,
+//       );
+
+//       if (picked != null) {
+//         selectedDate.value = picked;
+//         selectedDateFormatted.value = DateFormat('dd/MM/yyyy').format(picked);
+//       }
+//     } catch (error) {
+//       EasyLoading.showError('Failed to show date picker');
+//     }
+//   }
+
+//   void selectStartTime() async {
+//     final TimeOfDay? picked = await Get.dialog<TimeOfDay>(
+//       _buildTimePicker(startTime.value),
+//     );
+//     if (picked != null) {
+//       startTime.value = _formatTimeOfDay(picked);
+//       _calculateDuration();
+//     }
+//   }
+
+//   void selectEndTime() async {
+//     final TimeOfDay? picked = await Get.dialog<TimeOfDay>(
+//       _buildTimePicker(endTime.value),
+//     );
+//     if (picked != null) {
+//       endTime.value = _formatTimeOfDay(picked);
+//       _calculateDuration();
+//     }
+//   }
+
+//   void toggleAllDay() {
+//     isAllDay.value = !isAllDay.value;
+//   }
+
+//   // ================= TASK =================
+//   void toggleTask(String taskId) {
+//     final taskIndex = tasks.indexWhere((task) => task.id == taskId);
+//     if (taskIndex != -1) {
+//       final updatedTask = tasks[taskIndex].copyWith(
+//         isCompleted: !tasks[taskIndex].isCompleted,
+//       );
+//       tasks[taskIndex] = updatedTask;
+//       tasks.refresh();
+//     }
+//   }
+
+//   void addTask() {
+//     Get.dialog(_buildAddTaskDialog());
+//   }
+
+//   // ================= USER =================
+//   Future<void> addUser() async {
+//     final selectedUsers = await showDialog<List<UserModel>>(
+//       context: Get.context!,
+//       builder: (context) => const AddUserDialog(),
+//     );
+
+//     if (selectedUsers != null && selectedUsers.isNotEmpty) {
+//       for (final user in selectedUsers) {
+//         activities.add(
+//           ActivityModel(
+//             id: DateTime.now().millisecondsSinceEpoch.toString(),
+//             userName: user.name,
+//             userAvatar: user.avatar,
+//             action: 'Added to shift',
+//             timestamp: DateTime.now(),
+//           ),
+//         );
+//       }
+//       EasyLoading.showSuccess('${selectedUsers.length} user(s) added to shift');
+//       update();
+//     }
+//   }
+
+//   // ================= SAVE & PUBLISH =================
+//   void saveAsTemplate() {
+//     SchedulingRoutes.toShiftTemplate();
+//   }
+
+//   void saveDraft() {
+//     EasyLoading.showSuccess('Shift saved as draft successfully');
+//   }
+
+//   /// Publish the shift (API integration)
+//   Future<void> publish() async {
+//     _logger.i('Publishing shift...');
+
+//     if (shiftTitleController.text.isEmpty) {
+//       EasyLoading.showError('Please enter shift title');
+//       return;
+//     }
+//     if (jobController.text.isEmpty) {
+//       EasyLoading.showError('Please enter job');
+//       return;
+//     }
+//     if (locationController.text.isEmpty) {
+//       EasyLoading.showError('Please enter location');
+//       return;
+//     }
+
+//     try {
+//       EasyLoading.show(status: 'Publishing...');
+
+//       final token = StorageService.token ?? '';
+//       print("DEBUG TOKEN: $token");
+
+//       DateTime startDateTime;
+//       DateTime endDateTime;
+
+//       if (!isAllDay.value) {
+//         startDateTime = _parseTimeStringToDateTime(
+//           startTime.value,
+//           selectedDate.value,
+//         );
+//         endDateTime = _parseTimeStringToDateTime(
+//           endTime.value,
+//           selectedDate.value,
+//         );
+
+//         if (endDateTime.isBefore(startDateTime)) {
+//           EasyLoading.dismiss();
+//           EasyLoading.showError("End time must be after start time");
+//           return;
+//         }
+//       } else {
+//         // Default all-day shift range (08:00–17:00)
+//         startDateTime = DateTime(
+//           selectedDate.value.year,
+//           selectedDate.value.month,
+//           selectedDate.value.day,
+//           8,
+//           0,
+//         );
+//         endDateTime = DateTime(
+//           selectedDate.value.year,
+//           selectedDate.value.month,
+//           selectedDate.value.day,
+//           17,
+//           0,
+//         );
+//       }
+
+//       final body = {
+//         "currentProjectId": "824aa26d-e4af-4123-9873-4881023fa039",
+//         "date": DateFormat("yyyy-MM-dd").format(selectedDate.value),
+//         "shiftStatus": "PUBLISHED",
+//         "startTime": startDateTime.toUtc().toIso8601String(),
+//         "endTime": endDateTime.toUtc().toIso8601String(),
+//         "shiftTitle": shiftTitleController.text,
+//         "allDay": isAllDay.value,
+//         "job": jobController.text,
+//         "userIds": [],
+//         "taskIds": tasks.map((t) => t.id).toList(),
+//         "location": locationController.text,
+//         "locationLat": latitude ?? 23.8103,
+//         "locationLng": longitude ?? 90.4125,
+//         "note": noteController.text,
+//       };
+
+//       final response = await http.post(
+//         Uri.parse("https://lgcglobalcontractingltd.com/js/shift"),
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Authorization": "Bearer $token",
+//         },
+//         body: jsonEncode(body),
+//       );
+
+//       debugPrint("Response Status: ${response.statusCode}");
+//       debugPrint("Response Body: ${response.body}");
+
+//       EasyLoading.dismiss();
+
+//       if (response.statusCode == 201) {
+//         final data = jsonDecode(response.body);
+//         if (data["success"] == true) {
+//           EasyLoading.showSuccess("Shift published successfully");
+//           _logger.i("Shift created: ${data["data"]["id"]}");
+//         } else {
+//           EasyLoading.showError(data["message"] ?? "Publish failed");
+//         }
+//       } else {
+//         EasyLoading.showError("Failed: ${response.body}");
+//       }
+//     } catch (e) {
+//       EasyLoading.dismiss();
+//       _logger.e("Error publishing shift: $e");
+//       EasyLoading.showError("Failed to publish shift");
+//     }
+//   }
+
+//   // ================= HELPERS =================
+//   void goBack() => SchedulingRoutes.back();
+
+//   String _formatTimeOfDay(TimeOfDay time) {
+//     final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+//     final minute = time.minute.toString().padLeft(2, '0');
+//     final period = time.period == DayPeriod.am ? 'am' : 'pm';
+//     return '$hour:$minute $period';
+//   }
+
+//   DateTime _parseTimeStringToDateTime(String timeString, DateTime baseDate) {
+//     final format = DateFormat("h:mm a");
+//     final parsedTime = format.parse(timeString);
+//     return DateTime(
+//       baseDate.year,
+//       baseDate.month,
+//       baseDate.day,
+//       parsedTime.hour,
+//       parsedTime.minute,
+//     );
+//   }
+
+//   void _calculateDuration() {
+//     try {
+//       final startDateTime = _parseTimeStringToDateTime(
+//         startTime.value,
+//         selectedDate.value,
+//       );
+//       final endDateTime = _parseTimeStringToDateTime(
+//         endTime.value,
+//         selectedDate.value,
+//       );
+
+//       if (endDateTime.isBefore(startDateTime)) {
+//         duration.value = "Invalid range";
+//         return;
+//       }
+
+//       final diff = endDateTime.difference(startDateTime);
+//       final hours = diff.inHours;
+//       final minutes = diff.inMinutes.remainder(60);
+
+//       duration.value =
+//           "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')} Hours";
+//     } catch (e) {
+//       duration.value = "00:00 Hours";
+//     }
+//   }
+
+//   Future<void> pickCurrentLocation() async {
+//     try {
+//       LocationPermission permission = await Geolocator.checkPermission();
+//       if (permission == LocationPermission.denied) {
+//         permission = await Geolocator.requestPermission();
+//       }
+//       if (permission == LocationPermission.deniedForever) {
+//         EasyLoading.showError('Location permission denied forever');
+//         return;
+//       }
+
+//       Position position = await Geolocator.getCurrentPosition(
+//         desiredAccuracy: LocationAccuracy.best,
+//       );
+
+//       latitude = position.latitude;
+//       longitude = position.longitude;
+
+//       List<Placemark> placemarks = await placemarkFromCoordinates(
+//         latitude!,
+//         longitude!,
+//       );
+//       Placemark place = placemarks[0];
+//       locationController.text =
+//           '${place.name}, ${place.locality}, ${place.country}';
+
+//       EasyLoading.showSuccess('Location picked successfully');
+//     } catch (error) {
+//       EasyLoading.showError('Failed to pick location');
+//     }
+//   }
+
+//   Widget _buildTimePicker(String currentTime) {
+//     return Dialog(
+//       child: Container(
+//         margin: EdgeInsets.only(top: Sizer.hp(20)),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Text(
+//               'Select Time',
+//               style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
+//             ),
+//             SizedBox(height: Sizer.hp(20)),
+//             TimePickerDialog(initialTime: TimeOfDay.now()),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildAddTaskDialog() {
+//     final taskController = TextEditingController();
+
+//     return Dialog(
+//       child: Container(
+//         padding: EdgeInsets.all(Sizer.wp(20)),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Text(
+//               'Add New Task',
+//               style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
+//             ),
+//             SizedBox(height: Sizer.hp(20)),
+//             TextField(
+//               controller: taskController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter task title',
+//                 border: OutlineInputBorder(),
+//               ),
+//             ),
+//             SizedBox(height: Sizer.hp(20)),
+//             Row(
+//               children: [
+//                 Expanded(
+//                   child: TextButton(
+//                     onPressed: () => SchedulingRoutes.back(),
+//                     child: const Text('Cancel'),
+//                   ),
+//                 ),
+//                 Expanded(
+//                   child: ElevatedButton(
+//                     onPressed: () {
+//                       if (taskController.text.isNotEmpty) {
+//                         final newTask = TaskModel(
+//                           id: DateTime.now().millisecondsSinceEpoch.toString(),
+//                           title: taskController.text,
+//                           isCompleted: false,
+//                         );
+//                         tasks.add(newTask);
+//                         SchedulingRoutes.back();
+//                       }
+//                     },
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: AppColors.primary,
+//                     ),
+//                     child: const Text(
+//                       'Add',
+//                       style: TextStyle(color: Colors.white),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   void onClose() {
+//     shiftTitleController.dispose();
+//     jobController.dispose();
+//     usersController.dispose();
+//     locationController.dispose();
+//     noteController.dispose();
+//     super.onClose();
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,19 +456,23 @@ import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/utils/constants/sizer.dart';
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/common/styles/global_text_style.dart';
+import '../../../core/services/storage_service.dart';
+import '../../../core/services/network_caller.dart';
+import '../../../core/utils/constants/api_constants.dart';
+import '../../../core/models/response_data.dart';
 import '../models/task_model.dart';
 import '../models/activity_model.dart';
 import '../screens/widgets/shift_emplate_widgets/add_user_dialog.dart';
 import '../routes/scheduling_routes.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
-/// Controller for Shift Details Screen
-/// Manages form data, tasks, activities, and business logic for shift management
 class ShiftDetailsController extends GetxController {
   final Logger _logger = Logger();
+  final NetworkCaller _networkCaller = NetworkCaller();
 
   // Form controllers
   final shiftTitleController = TextEditingController();
@@ -38,22 +493,29 @@ class ShiftDetailsController extends GetxController {
   var tasks = <TaskModel>[].obs;
   var activities = <ActivityModel>[].obs;
 
+  // Dynamic data
+  var selectedProjectId = "".obs;
+  var selectedUserIds = <String>[].obs;
+  var selectedTaskIds = <String>[].obs;
+
+  // Location lat/lng
+  double? latitude;
+  double? longitude;
+
   @override
   void onInit() {
     super.onInit();
     _loadMockData();
     _logger.i('ShiftDetailsController initialized');
 
-    // Initialize formatted date
     selectedDateFormatted.value = DateFormat(
       'dd/MM/yyyy',
     ).format(selectedDate.value);
+
+    fetchProjects(); // ✅ auto project fetch
   }
 
-  /// Load mock data for tasks and activities
   void _loadMockData() {
-    _logger.i('Loading mock data for shift details');
-
     tasks.value = [
       const TaskModel(
         id: '1',
@@ -65,17 +527,6 @@ class ShiftDetailsController extends GetxController {
         title: 'City Bridge Renovations',
         isCompleted: false,
       ),
-      const TaskModel(
-        id: '3',
-        title: 'Golden Hills Estates',
-        isCompleted: false,
-      ),
-      const TaskModel(
-        id: '4',
-        title: 'Riverside Apartments',
-        isCompleted: true,
-      ),
-      const TaskModel(id: '5', title: 'The Commerce Hub', isCompleted: false),
     ];
 
     activities.value = [
@@ -86,42 +537,51 @@ class ShiftDetailsController extends GetxController {
         action: 'Shift published by',
         timestamp: DateTime.now().subtract(const Duration(hours: 2)),
       ),
-      ActivityModel(
-        id: '2',
-        userName: 'Emma Willson',
-        userAvatar: 'https://i.pravatar.cc/150?img=2',
-        action: 'has completed the task',
-        timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      ),
-      ActivityModel(
-        id: '3',
-        userName: 'Emma Willson',
-        userAvatar: 'https://i.pravatar.cc/150?img=3',
-        action: 'has completed the task',
-        timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      ),
-      ActivityModel(
-        id: '4',
-        userName: 'Emma Willson',
-        userAvatar: 'https://i.pravatar.cc/150?img=4',
-        action: 'has completed the task',
-        timestamp: DateTime.now().subtract(const Duration(days: 3)),
-      ),
-      ActivityModel(
-        id: '5',
-        userName: 'Marley Stanton',
-        userAvatar: 'https://i.pravatar.cc/150?img=5',
-        action: 'Shift created by',
-        timestamp: DateTime.now().subtract(const Duration(days: 5)),
-      ),
     ];
   }
 
-  /// Select date using date picker
+  // ================= FETCH PROJECT =================
+  Future<void> fetchProjects() async {
+    _logger.i("🔄 Fetching projects...");
+
+    try {
+      final String? token = await StorageService.getAuthToken();
+      final String url =
+          '${ApiConstants.baseurl}${ApiConstants.allAdminProjects}';
+
+      _logger.i("🌐 Making request to: $url");
+
+      final ResponseData response = await _networkCaller.getRequest(
+        url,
+        token: token != null ? 'Bearer $token' : null,
+      );
+
+      // Debug response
+      _logger.i("Response Status: ${response.statusCode}");
+      _logger.i("Response Body: ${response.responseData}");
+
+      if (response.isSuccess && response.responseData != null) {
+        final data = response.responseData;
+        final projects = data["data"]["projects"] as List? ?? [];
+
+        if (projects.isNotEmpty) {
+          selectedProjectId.value = projects.first["id"];
+          _logger.i("✅ Projects loaded: ${projects.length}");
+          _logger.i("👉 Selected Project ID: ${selectedProjectId.value}");
+        } else {
+          _logger.w("⚠️ No projects found in API response");
+        }
+      } else {
+        _logger.e("⛔ Failed to fetch projects: ${response.errorMessage}");
+      }
+    } catch (e) {
+      _logger.e("💥 Error fetching projects: $e");
+    }
+  }
+
+  // ================= DATE & TIME =================
   Future<void> selectDate() async {
     try {
-      _logger.i('Opening date picker');
-
       final DateTime? picked = await CustomDatePicker.show(
         context: Get.context!,
         initialDate: selectedDate.value,
@@ -130,57 +590,36 @@ class ShiftDetailsController extends GetxController {
       if (picked != null) {
         selectedDate.value = picked;
         selectedDateFormatted.value = DateFormat('dd/MM/yyyy').format(picked);
-        _logger.i('Date selected: ${selectedDateFormatted.value}');
-        EasyLoading.showSuccess(
-          'Date selected: ${DateFormat('MMM dd, yyyy').format(picked)}',
-        );
       }
     } catch (error) {
-      _logger.e('Error showing date picker: $error');
       EasyLoading.showError('Failed to show date picker');
     }
   }
 
-  /// Select start time using time picker
   void selectStartTime() async {
-    _logger.i('Opening start time picker');
-
     final TimeOfDay? picked = await Get.dialog<TimeOfDay>(
       _buildTimePicker(startTime.value),
     );
-
     if (picked != null) {
       startTime.value = _formatTimeOfDay(picked);
       _calculateDuration();
-      _logger.i('Start time selected: ${startTime.value}');
     }
   }
 
-  /// Select end time using time picker
   void selectEndTime() async {
-    _logger.i('Opening end time picker');
-
     final TimeOfDay? picked = await Get.dialog<TimeOfDay>(
       _buildTimePicker(endTime.value),
     );
-
     if (picked != null) {
       endTime.value = _formatTimeOfDay(picked);
       _calculateDuration();
-      _logger.i('End time selected: ${endTime.value}');
     }
   }
 
-  /// Toggle all day option
-  void toggleAllDay() {
-    isAllDay.value = !isAllDay.value;
-    _logger.i('All day toggled: ${isAllDay.value}');
-  }
+  void toggleAllDay() => isAllDay.value = !isAllDay.value;
 
-  /// Toggle task completion status
+  // ================= TASK =================
   void toggleTask(String taskId) {
-    _logger.i('Toggling task completion for task ID: $taskId');
-
     final taskIndex = tasks.indexWhere((task) => task.id == taskId);
     if (taskIndex != -1) {
       final updatedTask = tasks[taskIndex].copyWith(
@@ -188,101 +627,143 @@ class ShiftDetailsController extends GetxController {
       );
       tasks[taskIndex] = updatedTask;
       tasks.refresh();
-
-      _logger.i(
-        'Task ${updatedTask.title} completion status: ${updatedTask.isCompleted}',
-      );
     }
   }
 
-  /// Add new task to the list
-  void addTask() {
-    _logger.i('Opening add task dialog');
-    Get.dialog(_buildAddTaskDialog());
-  }
+  void addTask() => Get.dialog(_buildAddTaskDialog());
 
-  /// Add new user to the shift
+  // ================= USER =================
   Future<void> addUser() async {
-    try {
-      _logger.i('Opening add user dialog');
+    final selectedUsers = await showDialog<List<UserModel>>(
+      context: Get.context!,
+      builder: (context) => const AddUserDialog(),
+    );
 
-      // Show the add user dialog
-      final selectedUsers = await showDialog<List<UserModel>>(
-        context: Get.context!,
-        builder: (context) => const AddUserDialog(),
+    if (selectedUsers != null && selectedUsers.isNotEmpty) {
+      for (final user in selectedUsers) {
+        activities.add(
+          ActivityModel(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            userName: user.name,
+            userAvatar: user.avatar,
+            action: 'Added to shift',
+            timestamp: DateTime.now(),
+          ),
+        );
+
+        selectedUserIds.add(user.id); // ✅ add id for publish
+      }
+      EasyLoading.showSuccess('${selectedUsers.length} user(s) added to shift');
+      update();
+    }
+  }
+
+  // ================= SAVE & PUBLISH =================
+  Future<void> publish() async {
+    _logger.i('Publishing shift...');
+
+    if (shiftTitleController.text.isEmpty ||
+        jobController.text.isEmpty ||
+        locationController.text.isEmpty ||
+        selectedProjectId.value.isEmpty) {
+      EasyLoading.showError('Please fill all required fields');
+      return;
+    }
+
+    try {
+      EasyLoading.show(status: 'Publishing...');
+      final String? token = await StorageService.getAuthToken();
+
+      DateTime startDateTime;
+      DateTime endDateTime;
+
+      if (!isAllDay.value) {
+        startDateTime = _parseTimeStringToDateTime(
+          startTime.value,
+          selectedDate.value,
+        );
+        endDateTime = _parseTimeStringToDateTime(
+          endTime.value,
+          selectedDate.value,
+        );
+
+        if (endDateTime.isBefore(startDateTime)) {
+          EasyLoading.dismiss();
+          EasyLoading.showError("End time must be after start time");
+          return;
+        }
+      } else {
+        // Default all-day shift range (08:00–17:00)
+        startDateTime = DateTime(
+          selectedDate.value.year,
+          selectedDate.value.month,
+          selectedDate.value.day,
+          8,
+          0,
+        );
+        endDateTime = DateTime(
+          selectedDate.value.year,
+          selectedDate.value.month,
+          selectedDate.value.day,
+          17,
+          0,
+        );
+      }
+
+      final Map<String, dynamic> requestBody = {
+        "currentProjectId": selectedProjectId.value,
+        "date": DateFormat("yyyy-MM-dd").format(selectedDate.value),
+        "shiftStatus": "PUBLISHED",
+        "startTime": startDateTime.toUtc().toIso8601String(),
+        "endTime": endDateTime.toUtc().toIso8601String(),
+        "shiftTitle": shiftTitleController.text,
+        "allDay": isAllDay.value,
+        "job": jobController.text,
+        "userIds": selectedUserIds.toList(),
+        "taskIds": selectedTaskIds.toList(),
+        "location": locationController.text,
+        "locationLat": latitude ?? 23.8103,
+        "locationLng": longitude ?? 90.4125,
+        "note": noteController.text,
+      };
+
+      final String url = '${ApiConstants.baseurl}${ApiConstants.createShift}';
+
+      _logger.i("🌐 Publishing shift to: $url");
+      _logger.i("📤 Request body: $requestBody");
+
+      final ResponseData response = await _networkCaller.postRequest(
+        url,
+        body: requestBody,
+        token: token != null ? 'Bearer $token' : null,
       );
 
-      if (selectedUsers != null && selectedUsers.isNotEmpty) {
-        _logger.i('Users selected: ${selectedUsers.length}');
+      _logger.i("Response Status: ${response.statusCode}");
+      _logger.i("Response Body: ${response.responseData}");
 
-        // Add activity for each selected user
-        for (final user in selectedUsers) {
-          activities.add(
-            ActivityModel(
-              id: DateTime.now().millisecondsSinceEpoch.toString(),
-              userName: user.name,
-              userAvatar: user.avatar,
-              action: 'Added to shift',
-              timestamp: DateTime.now(),
-            ),
-          );
+      EasyLoading.dismiss();
+
+      if (response.isSuccess) {
+        final data = response.responseData;
+        if (data["success"] == true) {
+          EasyLoading.showSuccess("Shift published successfully");
+          _logger.i("Shift created: ${data["data"]["id"]}");
+        } else {
+          EasyLoading.showError(data["message"] ?? "Publish failed");
         }
-
-        EasyLoading.showSuccess(
-          '${selectedUsers.length} user(s) added to shift',
-        );
-        update();
       } else {
-        _logger.i('No users selected');
+        EasyLoading.showError("Failed: ${response.errorMessage}");
       }
-    } catch (error) {
-      _logger.e('Error adding user: $error');
-      EasyLoading.showError('Failed to add user');
+    } catch (e) {
+      EasyLoading.dismiss();
+      _logger.e("Error publishing shift: $e");
+      EasyLoading.showError("Failed to publish shift");
     }
   }
 
-  /// Save shift as template
-  void saveAsTemplate() {
-    _logger.i('Navigating to save as template screen');
-    SchedulingRoutes.toShiftTemplate();
-  }
+  // ================= HELPERS =================
+  void goBack() => SchedulingRoutes.back();
 
-  /// Save shift as draft
-  void saveDraft() {
-    _logger.i('Saving shift as draft');
-    EasyLoading.showSuccess('Shift saved as draft successfully');
-  }
-
-  /// Publish the shift
-  void publish() {
-    _logger.i('Publishing shift....');
-
-    // Validate form data
-    if (shiftTitleController.text.isEmpty) {
-      EasyLoading.showError('Please enter shift title');
-      return;
-    }
-
-    if (jobController.text.isEmpty) {
-      EasyLoading.showError('Please enter job');
-      return;
-    }
-
-    if (locationController.text.isEmpty) {
-      EasyLoading.showError('Please enter location');
-      return;
-    }
-
-    EasyLoading.showSuccess('Shift published successfully');
-  }
-
-  /// Navigate back to previous screen
-  void goBack() {
-    _logger.i('Navigating back');
-    SchedulingRoutes.back();
-  }
-
-  /// Format TimeOfDay to string
   String _formatTimeOfDay(TimeOfDay time) {
     final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
     final minute = time.minute.toString().padLeft(2, '0');
@@ -290,25 +771,51 @@ class ShiftDetailsController extends GetxController {
     return '$hour:$minute $period';
   }
 
-  /// Calculate duration between start and end time
+  DateTime _parseTimeStringToDateTime(String timeString, DateTime baseDate) {
+    final format = DateFormat("h:mm a");
+    final parsedTime = format.parse(timeString);
+    return DateTime(
+      baseDate.year,
+      baseDate.month,
+      baseDate.day,
+      parsedTime.hour,
+      parsedTime.minute,
+    );
+  }
+
   void _calculateDuration() {
-    // Simple duration calculation for demo
-    // In real implementation, calculate actual duration
-    duration.value = '08:00 Hours';
-    _logger.i('Duration calculated: ${duration.value}');
+    try {
+      final startDateTime = _parseTimeStringToDateTime(
+        startTime.value,
+        selectedDate.value,
+      );
+      final endDateTime = _parseTimeStringToDateTime(
+        endTime.value,
+        selectedDate.value,
+      );
+
+      if (endDateTime.isBefore(startDateTime)) {
+        duration.value = "Invalid range";
+        return;
+      }
+
+      final diff = endDateTime.difference(startDateTime);
+      final hours = diff.inHours;
+      final minutes = diff.inMinutes.remainder(60);
+
+      duration.value =
+          "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')} Hours";
+    } catch (e) {
+      duration.value = "00:00 Hours";
+    }
   }
 
   Future<void> pickCurrentLocation() async {
-    // Implement location picking logic here
     try {
-      _logger.i('Requesting location permission');
-
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        EasyLoading.showError('Location permission denied');
         permission = await Geolocator.requestPermission();
       }
-
       if (permission == LocationPermission.deniedForever) {
         EasyLoading.showError('Location permission denied forever');
         return;
@@ -318,31 +825,23 @@ class ShiftDetailsController extends GetxController {
         desiredAccuracy: LocationAccuracy.best,
       );
 
-      _logger.i(
-        'Current location: ${position.latitude}, ${position.longitude}',
+      latitude = position.latitude;
+      longitude = position.longitude;
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude!,
+        longitude!,
       );
+      Placemark place = placemarks[0];
+      locationController.text =
+          '${place.name}, ${place.locality}, ${place.country}';
 
-      //convert GPS -> address
-      try {
-        List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude,
-          position.longitude,
-        );
-
-        Placemark place = placemarks[0];
-        locationController.text =
-            '${place.name}, ${place.locality}, ${place.country}';
-      } catch (e) {
-        _logger.e('Error converting location: $e');
-      }
       EasyLoading.showSuccess('Location picked successfully');
     } catch (error) {
-      _logger.e('Error picking location: $error');
       EasyLoading.showError('Failed to pick location');
     }
   }
 
-  /// Build custom time picker dialog
   Widget _buildTimePicker(String currentTime) {
     return Dialog(
       child: Container(
@@ -362,7 +861,6 @@ class ShiftDetailsController extends GetxController {
     );
   }
 
-  /// Build add task dialog
   Widget _buildAddTaskDialog() {
     final taskController = TextEditingController();
 
@@ -403,7 +901,9 @@ class ShiftDetailsController extends GetxController {
                           isCompleted: false,
                         );
                         tasks.add(newTask);
-                        _logger.i('New task added: ${newTask.title}');
+                        selectedTaskIds.add(
+                          newTask.id,
+                        ); // ✅ add taskId for publish
                         SchedulingRoutes.back();
                       }
                     },
@@ -426,7 +926,6 @@ class ShiftDetailsController extends GetxController {
 
   @override
   void onClose() {
-    _logger.i('ShiftDetailsController disposing');
     shiftTitleController.dispose();
     jobController.dispose();
     usersController.dispose();
