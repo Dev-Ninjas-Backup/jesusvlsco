@@ -140,7 +140,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  controller.selectedProject.value?.title ??
+                  controller.scheduleController.selectedProject.value?.title ??
                       'Select a project to continue',
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedProject.value != null

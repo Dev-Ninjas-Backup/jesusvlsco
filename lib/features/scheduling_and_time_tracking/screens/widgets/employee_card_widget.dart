@@ -4,7 +4,9 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
 
+
 class EmployeeCardWidget extends StatelessWidget {
+  
   final EmployeeModel employee;
   final Function(int) onSchedulePressed;
 
@@ -13,9 +15,10 @@ class EmployeeCardWidget extends StatelessWidget {
     required this.employee,
     required this.onSchedulePressed,
   });
-
+  
   @override
   Widget build(BuildContext context) {
+    
     return Column(
       children: [
         // Employee info card

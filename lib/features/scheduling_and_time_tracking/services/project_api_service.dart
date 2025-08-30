@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/models/response_data.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:logger/logger.dart';
+
+import '../models/assign_shift_model.dart';
 
 /// ProjectApiService handles all project-related API calls
 /// This service manages communication with the project endpoints
@@ -450,6 +455,51 @@ class ProjectApiService {
         statusCode: 500,
         responseData: null,
         errorMessage: 'Failed to update request status. Please try again.',
+      );
+    }
+  }
+
+  static Future<AssignShiftModel> getAssignShift(String projectId) async {
+    try {
+      final token = await StorageService.getAuthToken();
+      final url = Uri.parse(
+        // "https://lgcglobalcontractingltd.com/js/shift/assigned-users/$projectId"
+        '${ApiConstants.baseurl}/shift/assigned-users/$projectId'
+      );
+      print('Fetching assigned users and shifts for project ID: $projectId');
+      final response = await http.get(
+       url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          
+          // 'Content-Type': 'application/json',
+          // 'Authorization': 'Bearer $token',
+          // // Add any required headers (e.g., authorization)
+        },
+      );
+      print("token: $token");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        print("jsonData$jsonData");
+        return AssignShiftModel.fromJson(jsonData);
+
+      } else {
+        print("response code: ${response.statusCode}");
+        return AssignShiftModel(
+          success: false,
+          message: 'Failed to fetch projects: ${response.statusCode}',
+          data: [],
+          
+        );
+      }
+    } catch (e) {
+      print("error message $e");
+      return AssignShiftModel(
+        success: false,
+        message: 'Error fetching projects: $e',
+        data: [],
       );
     }
   }

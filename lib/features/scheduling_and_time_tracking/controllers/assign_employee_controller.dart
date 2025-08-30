@@ -9,6 +9,7 @@ import '../../assign_employee/service/project_service.dart';
 import '../screens/widgets/filter_dialog.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 import '../routes/scheduling_routes.dart';
+import '../services/project_api_service.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
 /// This includes handling employee data, search, filtering, and scheduling operations
@@ -23,6 +24,7 @@ class AssignEmployeeController extends GetxController {
   var activeEmployeesCount = 5.obs;
   var selectedDate = DateTime.now().obs;
   var projects = <ProjectModel>[].obs;
+
   var selectedProject = Rx<ProjectModel?>(null);
 
   // Pagination variables
@@ -36,12 +38,62 @@ class AssignEmployeeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    ever(
+      scheduleController.selectedProject,
+      (_) => fetchAssignShift(scheduleController.selectedProject.value!.id),
+    );
     fetchProjects();
     loadEmployees();
   }
 
   Future<void> refreshProjects() async {
     await fetchProjects(isRefresh: true);
+  }
+
+  Future<void> fetchAssignShift(String projectId) async {
+    try {
+      isLoading.value = true;
+
+      // Call the API
+      final response = await ProjectApiService.getAssignShift(projectId);
+
+      print(
+        'API AssignShift - Success: ${response.success}, Data length: ${response.data.length}',
+      );
+
+      if (response.success) {
+        // Extract and log user names and shifts
+        for (var projectData in response.data) {
+          final user = projectData.user;
+          final shifts = projectData.shifts;
+
+          print(
+            'User: ${user.firstName} ${user.lastName}, Email: ${user.email}',
+          );
+          print(
+            'Shifts for ${user.firstName} ${user.lastName}: ${shifts.length}',
+          );
+
+          for (var shift in shifts) {
+            print(
+              'Shift: ${shift.title}, Date: ${shift.date}, Location: ${shift.location}',
+            );
+          }
+        }
+
+        print('Projects loaded: ${response.data.length}');
+        print('Total projects in list: ${projects.length}');
+        print('Has more: ${hasMoreProjects.value}');
+      } else {
+        EasyLoading.showError('Failed to load projects: ${response.message}');
+      }
+    } catch (e) {
+      print('Error fetching projects: $e');
+      EasyLoading.showError('Failed to load projects');
+    } finally {
+      isLoading.value = false;
+      isLoadingMoreProjects.value = false;
+    }
   }
 
   Future<void> fetchProjects({bool isRefresh = false}) async {
@@ -66,7 +118,7 @@ class AssignEmployeeController extends GetxController {
 
       final response = await scheduleController.projectService.getAllProjects(
         page: currentPage.value,
-        limit: pageLimit, // Make sure this is 5
+        limit: pageLimit,
       );
 
       _logger.i(
