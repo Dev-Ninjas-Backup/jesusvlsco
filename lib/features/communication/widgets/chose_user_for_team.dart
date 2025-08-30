@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
+import 'package:jesusvlsco/features/communication/controllers/create_new_team_controller.dart';
 import 'package:jesusvlsco/features/user/widget/user_tile.dart';
 
 class ChoseUserForTeam extends StatelessWidget {
@@ -9,20 +10,22 @@ class ChoseUserForTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserListController userListController = Get.find<UserListController>();
+    CreateNewTeamController createNewTeamController = Get.find<CreateNewTeamController>();
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      insetPadding: EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Choose User",
                     style: TextStyle(
                       fontSize: 16,
@@ -32,9 +35,9 @@ class ChoseUserForTeam extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      Get.back();
+                      Get.back(); // Close dialog without saving
                     },
-                    icon: Icon(Icons.backspace),
+                    icon: const Icon(Icons.close),
                   ),
                 ],
               ),
@@ -42,11 +45,10 @@ class ChoseUserForTeam extends StatelessWidget {
                 final users = userListController.employeeProfiles;
 
                 if (userListController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
-
                 if (users.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text(
                       "No users found",
                       style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -54,11 +56,11 @@ class ChoseUserForTeam extends StatelessWidget {
                   );
                 }
                 return SizedBox(
-                  height: 600,
+                  height: 400, // Reduced height to accommodate buttons
                   child: SingleChildScrollView(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: users.length,
                       itemBuilder: (context, index) {
                         final user = users[index];
@@ -68,6 +70,38 @@ class ChoseUserForTeam extends StatelessWidget {
                   ),
                 );
               }),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close dialog without saving
+                    },
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () {
+                      createNewTeamController.updateSelectedMembers();
+                      Get.back(); // Close dialog after saving
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue, // Adjust color to match your theme
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Done",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
