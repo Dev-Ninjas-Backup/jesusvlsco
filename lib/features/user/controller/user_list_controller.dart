@@ -74,13 +74,13 @@ class UserListController extends GetxController {
   var hasMore = true.obs;
   RxInt totalEmployeeCount = 0.obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchEmployeeProfiles(); // Initial load
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    fetchEmployeeProfiles(); // Initial load
+  }
 
-  Future<void> fetchEmployeeProfiles({bool loadMore = false}) async {
+  Future<void> fetchEmployeeProfiles() async { //{bool loadMore = false}
     if (isLoading.value || !hasMore.value) return;
 
     isLoading.value = true;
