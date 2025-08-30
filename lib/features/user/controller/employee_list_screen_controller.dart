@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 class EmployeeListScreenController extends GetxController {
-  RxInt roleSelectedButton = 0.obs;
-  final List<String> roleButtonList = ['Employee', 'Admin'];
-
+  var roleSelectedButton = 0.obs;
+  var roleButtonList = ["Employee", "Admin", "Team"].obs;
 }

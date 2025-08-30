@@ -5,10 +5,13 @@ import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 import 'package:jesusvlsco/features/user/controller/employee_list_screen_controller.dart';
 import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
+import 'package:jesusvlsco/features/user/controller/team_list_controller.dart';
+import 'package:jesusvlsco/features/user/model/team_list_model.dart';
 import 'package:jesusvlsco/features/user/widget/action_button_row.dart';
 import 'package:jesusvlsco/features/user/widget/admin_tile.dart';
 import 'package:jesusvlsco/features/user/widget/build_role_selection_button.dart';
 import 'package:jesusvlsco/features/user/widget/user_tile.dart';
+import 'package:jesusvlsco/features/user/widget/team_tile.dart';
 
 class EmployeeListScreen extends StatelessWidget {
   EmployeeListScreen({super.key});
@@ -20,6 +23,9 @@ class EmployeeListScreen extends StatelessWidget {
   final UserListController userListController = Get.put(UserListController());
   final AdminListController adminListController = Get.put(
     AdminListController(),
+  );
+  final TeamListController teamListController = Get.put(
+    TeamListController(),
   );
 
   OutlineInputBorder getOutlineBorder() {
@@ -42,7 +48,6 @@ class EmployeeListScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
             children: [
               const SizedBox(height: 10),
               BuildRoleSelectionButton(
@@ -50,9 +55,10 @@ class EmployeeListScreen extends StatelessWidget {
                 controller: controller,
                 adminListController: adminListController,
                 userListController: userListController,
+                teamListController: teamListController,
               ),
               Text(
-                "Employee List",
+                controller.roleSelectedButton.value == 2 ? "Team List" : "Employee List",
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 18,
@@ -60,7 +66,9 @@ class EmployeeListScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                "All Employee Info. in One Place",
+                controller.roleSelectedButton.value == 2
+                    ? "All Team Info. in One Place"
+                    : "All Employee Info. in One Place",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 14,
@@ -92,30 +100,30 @@ class EmployeeListScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      spacing: 15,
                       children: [
                         Icon(Icons.check_box_outline_blank),
-                        Text("Name"),
+                        SizedBox(width: 15),
+                        Text(controller.roleSelectedButton.value == 2 ? "Team Name" : "Name"),
                       ],
                     ),
-                    Text("ID"),
+                    Text(controller.roleSelectedButton.value == 2 ? "Team ID" : "ID"),
                   ],
                 ),
               ),
               Divider(),
               Expanded(
                 child: Obx(() {
-                  final isUserRole = controller.roleSelectedButton.value == 0;
-                  final items = isUserRole
-                      ? userListController
-                            .employeeProfiles //users
-                      : adminListController.admin;
-                      
+                  final roleIndex = controller.roleSelectedButton.value;
+                  final items = roleIndex == 0
+                      ? userListController.employeeProfiles
+                      : roleIndex == 1
+                          ? adminListController.admin
+                          : teamListController.teams;
+
                   if (items.isEmpty) {
                     return Center(
                       child: Text(
-                        "Wait for ${isUserRole ? 'users' : 'admins'} load data",
-                        //"No ${isUserRole ? 'users' : 'admins'} found",
+                        "Wait for ${roleIndex == 0 ? 'users' : roleIndex == 1 ? 'admins' : 'teams'} load data",
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     );
@@ -124,19 +132,26 @@ class EmployeeListScreen extends StatelessWidget {
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      if (isUserRole) {
+                      if (roleIndex == 0) {
                         final user = items[index] as EmployeeProfile;
                         if (userListController.isLoading == true) {
                           return Center(child: CircularProgressIndicator());
                         } else {
                           return UserTile(employee: user);
                         }
-                      } else {
+                      } else if (roleIndex == 1) {
                         final admin = items[index] as Admin;
                         return AdminTile(
                           admin: admin,
                           onChanged: () =>
                               adminListController.toggleSelection(index),
+                        );
+                      } else {
+                        final team = items[index] as TeamListModel;
+                        return TeamTile(
+                          team: team,
+                          onChanged: () =>
+                              teamListController.toggleSelection(index),
                         );
                       }
                     },
