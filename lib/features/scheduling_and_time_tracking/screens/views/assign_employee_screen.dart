@@ -440,7 +440,7 @@ class AssignEmployeeScreen extends StatelessWidget {
               Text(
                 assignShiftModel.message.isNotEmpty
                     ? assignShiftModel.message
-                    : 'Do not select any project',
+                    : 'Please select a project',
                 style: AppTextStyle.f16W500().copyWith(
                   color: const Color(0xFF949494),
                   height: 1.5,

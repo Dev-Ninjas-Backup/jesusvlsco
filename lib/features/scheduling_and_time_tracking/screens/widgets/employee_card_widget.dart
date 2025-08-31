@@ -177,12 +177,13 @@ class EmployeeCardWidget extends StatelessWidget {
           final shiftDate = dateFormat.format(shift.date);
           final shiftTime =
               '${timeFormat.format(shift.startTime)} - ${timeFormat.format(shift.endTime)}';
+          final shiftTitle = shift.title;
 
           return GestureDetector(
             onTap: () => onSchedulePressed(index),
             child: Container(
-              width: Sizer.hp(100),
-              height: Sizer.hp(81),
+              //width: Sizer.hp(100),
+              //height: Sizer.hp(81),
               padding: EdgeInsets.all(Sizer.wp(8)),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -209,6 +210,13 @@ class EmployeeCardWidget extends StatelessWidget {
                   SizedBox(height: Sizer.hp(4)),
                   Text(
                     shiftTime,
+                    style: AppTextStyle.f12W400().copyWith(
+                      color: const Color(0xFF484848),
+                    ),
+                  ),
+                  SizedBox(height: Sizer.hp(4)),
+                  Text(
+                    shiftTitle,
                     style: AppTextStyle.f12W400().copyWith(
                       color: const Color(0xFF484848),
                     ),
