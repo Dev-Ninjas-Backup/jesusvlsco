@@ -111,104 +111,100 @@ class ShiftDetailsDateTimeWidget extends StatelessWidget {
 
         SizedBox(height: Sizer.hp(12)),
 
-        // Start and End time selection
-        Obx(
-          () => !controller.isAllDay.value
-              ? Row(
-                  children: [
-                    // Start time
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            'Start',
-                            style: AppTextStyle.f14W400().copyWith(
-                              color: const Color(0xFF949494),
-                              height: 1.45,
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(8)),
-                          GestureDetector(
-                            onTap: () => controller.selectStartTime(),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Sizer.wp(12),
-                                vertical: Sizer.hp(8),
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color(0xFF949494),
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                controller.startTime.value,
-                                style: AppTextStyle.f14W400().copyWith(
-                                  color: const Color(0xFF949494),
-                                  height: 1.45,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+        // Start and End time selection (Always Visible)
+        Row(
+          children: [
+            // Start time
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    'Start',
+                    style: AppTextStyle.f14W400().copyWith(
+                      color: const Color(0xFF949494),
+                      height: 1.45,
                     ),
-
-                    SizedBox(width: Sizer.wp(16)),
-
-                    // End time
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            'End',
-                            style: AppTextStyle.f14W400().copyWith(
-                              color: const Color(0xFF949494),
-                              height: 1.45,
-                            ),
-                          ),
-                          SizedBox(width: Sizer.wp(8)),
-                          GestureDetector(
-                            onTap: () => controller.selectEndTime(),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Sizer.wp(12),
-                                vertical: Sizer.hp(8),
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color(0xFF949494),
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                controller.endTime.value,
-                                style: AppTextStyle.f14W400().copyWith(
-                                  color: const Color(0xFF949494),
-                                  height: 1.45,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  ),
+                  SizedBox(width: Sizer.wp(8)),
+                  GestureDetector(
+                    onTap: () => controller.selectStartTime(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Sizer.wp(12),
+                        vertical: Sizer.hp(8),
                       ),
-                    ),
-
-                    SizedBox(width: Sizer.wp(16)),
-
-                    // Duration display
-                    Obx(
-                      () => Text(
-                        controller.duration.value,
-                        style: AppTextStyle.f12W400().copyWith(
-                          color: const Color(0xFF484848),
-                          height: 1.5,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF949494)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Obx(
+                        () => Text(
+                          controller.startTime.value,
+                          style: AppTextStyle.f14W400().copyWith(
+                            color: const Color(0xFF949494),
+                            height: 1.45,
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                )
-              : const SizedBox(),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(width: Sizer.wp(16)),
+
+            // End time
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    'End',
+                    style: AppTextStyle.f14W400().copyWith(
+                      color: const Color(0xFF949494),
+                      height: 1.45,
+                    ),
+                  ),
+                  SizedBox(width: Sizer.wp(8)),
+                  GestureDetector(
+                    onTap: () => controller.selectEndTime(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Sizer.wp(12),
+                        vertical: Sizer.hp(8),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF949494)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Obx(
+                        () => Text(
+                          controller.endTime.value,
+                          style: AppTextStyle.f14W400().copyWith(
+                            color: const Color(0xFF949494),
+                            height: 1.45,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(width: Sizer.wp(16)),
+
+            // Duration display
+            Obx(
+              () => Text(
+                controller.duration.value,
+                style: AppTextStyle.f12W400().copyWith(
+                  color: const Color(0xFF484848),
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

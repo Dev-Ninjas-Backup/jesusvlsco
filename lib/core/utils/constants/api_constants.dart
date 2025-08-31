@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const baseurl = "http://148.230.86.72:5005/js";
+  static const baseurl = "https://lgcglobalcontractingltd.com/js";
 
   // ----------------------- Admin ------------------------
 
@@ -24,6 +24,13 @@ class ApiConstants {
       '/admin/time-off-request/all-requests';
   static const String updateRequestApprovedOrRejected =
       '/admin/time-off-request/update-request/{id}'; // Patch
+
+  //!-------------------- Shift Management ------------------
+  static const String createShift = '/shift'; // POST /shift
+  static const String getAllShifts = '/shift'; // GET /shift
+  static const String getShiftById = '/shift/{id}'; // GET /shift/{id}
+  static const String updateShift = '/shift/{id}'; // PUT /shift/{id}
+  static const String deleteShift = '/shift/{id}'; // DELETE /shift/{id}
 
   //!-------------------- Payroll ------------------
 
