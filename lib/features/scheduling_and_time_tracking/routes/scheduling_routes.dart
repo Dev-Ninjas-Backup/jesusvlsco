@@ -76,7 +76,7 @@ class SchedulingRoutes {
     // Shift Details Screen
     GetPage(
       name: shiftDetails,
-      page: () => const ShiftDetailsScreen(),
+      page: () => ShiftDetailsScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<ShiftDetailsController>(() => ShiftDetailsController());
       }),

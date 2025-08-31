@@ -491,6 +491,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             onSchedulePressed: (scheduleIndex) => controller.onSchedulePressed(
               projectData,
               scheduleIndex,
+              true,
               context,
             ),
           );
