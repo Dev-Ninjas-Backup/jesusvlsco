@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_screen.dart';
 import 'package:jesusvlsco/features/user/widget/action_button_row.dart';
+import 'package:jesusvlsco/features/user/widget/employee_list_filter_dialog.dart';
 
 class ActionButtonsController extends GetxController {
   var selectedIndex = 0.obs;
@@ -21,14 +22,18 @@ class ActionButtonsController extends GetxController {
         Get.to(AddUserScreen());
         break;
       case 1:
-        Get.snackbar(
-          'Action',
-          'Filter button pressed',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: const Color(0xFF6366F1),
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
+        Get.dialog(
+          const EmployeeListFilterDialog(),
+          barrierDismissible: true, // tap outside to close
         );
+        // Get.snackbar(
+        //   'Action',
+        //   'Filter button pressed',
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: const Color(0xFF6366F1),
+        //   colorText: Colors.white,
+        //   duration: const Duration(seconds: 2),
+        // );
         break;
       case 2:
         Get.snackbar(

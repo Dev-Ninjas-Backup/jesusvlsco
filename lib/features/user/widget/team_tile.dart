@@ -13,42 +13,58 @@ class TeamTile extends StatelessWidget {
     return Column(
       children: [
         Obx(
-          () => ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Checkbox(
-              value: team.isSelected.value,
-              onChanged: (_) => onChanged(),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            title: Row(
+          () => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
               children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage: team.image != null && team.image!.isNotEmpty
-                      ? NetworkImage(team.image!)
-                      : null,
-                  child: team.image == null || team.image!.isEmpty
-                      ? const Icon(Icons.group)
-                      : null,
+                // Checkbox
+                Checkbox(
+                  value: team.isSelected.value,
+                  onChanged: (_) => onChanged(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
-                const SizedBox(width: 8),
+
+                // First 50%: Avatar + Title
                 Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 16,
+                        backgroundImage: team.image != null && team.image!.isNotEmpty
+                            ? NetworkImage(team.image!)
+                            : null,
+                        child: team.image == null || team.image!.isEmpty
+                            ? const Icon(Icons.group)
+                            : null,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          team.title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Second 50%: ID text
+                Expanded(
+                  flex: 1,
                   child: Text(
-                    team.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    team.id ?? 'N/A',
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
-            ),
-            trailing: Text(
-              team.id ?? 'N/A',
-              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
         ),

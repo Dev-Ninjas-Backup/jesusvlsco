@@ -1,66 +1,73 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/user/model/team_list_model.dart';
 
 class TeamListController extends GetxController {
-  var teams = <TeamListModel>[].obs;
-  RxInt limit = 10.obs;
-  var isLoading = false.obs;
-  RxInt currentPage = 0.obs;
-  RxInt? lastPage;
-  RxBool initialInProgress = false.obs;
+  final teams = <TeamListModel>[].obs;
+
+  final RxInt currentPage = 1.obs;
+  final int limit = 8;
+  final RxBool isLoading = false.obs;
+  final RxBool hasMore = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Fetch teams only when explicitly needed (e.g., Team tab selected)
+    fetchTeams();
   }
 
-  void fetchTeams() async {
-    if (lastPage != null && lastPage! < currentPage.value + 1) {
-      return;
-    }
+  Future<void> fetchTeams() async {
+    if (isLoading.value || !hasMore.value) return;
 
-    currentPage++;
-    if (currentPage == 1) {
-      teams.clear();
-      initialInProgress.value = true;
-    } else {
-      isLoading.value = true;
-    }
-
-    final url = Uri.parse("${ApiConstants.baseurl}/admin/team/get-all-teams?page=$currentPage&limit=$limit");
+    isLoading.value = true;
     final token = await StorageService.getAuthToken();
 
     try {
-      final response = await http.get(
-        url,
-        headers: {
-          'accept': '*/*',
-          'Authorization': 'Bearer $token',
-        },
-      );
+      while (hasMore.value) {
+        final url = Uri.parse(
+          "${ApiConstants.baseurl}/admin/team/get-all-teams?page=${currentPage.value}&limit=$limit",
+        );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<dynamic> teamData = data['data']['teams'] ?? [];
-        lastPage = RxInt(data['data']['meta']['last_page'] ?? currentPage.value);
+        final response = await http.get(
+          url,
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer $token',
+          },
+        );
 
-        teams.addAll(teamData.map((json) => TeamListModel.fromJson(json)).toList());
-      } else {
-        Get.snackbar('Error', 'Failed to fetch teams: ${response.statusCode}');
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          final List<dynamic> teamData = data['data']['teams'] ?? [];
+
+          if (teamData.isEmpty) {
+            hasMore.value = false;
+          } else {
+            final newTeams = teamData
+                .map((json) => TeamListModel.fromJson(json))
+                .toList();
+            teams.addAll(newTeams);
+            currentPage.value++;
+          }
+
+          // stop if last page reached
+          final lastPage = data['data']['meta']?['last_page'] ?? currentPage.value;
+          if (currentPage.value > lastPage || teamData.length < limit) {
+            hasMore.value = false;
+          }
+        } else {
+          hasMore.value = false;
+          Get.snackbar('Error', 'Failed to fetch teams: ${response.statusCode}');
+        }
       }
     } catch (e) {
+      hasMore.value = false;
       Get.snackbar('Error', 'Network error: $e');
     } finally {
-      if (currentPage == 1) {
-        initialInProgress.value = false;
-      } else {
-        isLoading.value = false;
-      }
+      isLoading.value = false;
     }
   }
 

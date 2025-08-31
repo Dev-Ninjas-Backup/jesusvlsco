@@ -10,6 +10,7 @@ import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashbo
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
+import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
 import 'package:jesusvlsco/features/time_off_request/time_off_request_project_overView_screen/screen/time_off_request_project_overview_screen.dart';
 import '../../../announcements/admin_announcement/screens/add_announcement.dart';
@@ -680,7 +681,9 @@ class AdminDashboardScreen extends StatelessWidget {
           style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(AssignEmployeeScreen());
+          },
           child: Text(
             'View all',
             style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
@@ -825,7 +828,9 @@ class AdminDashboardScreen extends StatelessWidget {
           style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(SurveyAndPollScreen());
+          },
           child: Text(
             'View all',
             style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
