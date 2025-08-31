@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/shift_details_controller.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_shift_model.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_sheet_appbar.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_date_time_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_form_widget.dart';
@@ -10,14 +11,13 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/shift_details_widgets/shift_details_action_buttons_widget.dart';
 
 class ShiftDetailsScreen extends StatelessWidget {
+  final controller = Get.put(ShiftDetailsController());
   final Map<String, dynamic>? extra;
 
-  const ShiftDetailsScreen({super.key, this.extra});
+  ShiftDetailsScreen({super.key, this.extra});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ShiftDetailsController());
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: const TimeSheetAppBar(title: "Shift Details"),

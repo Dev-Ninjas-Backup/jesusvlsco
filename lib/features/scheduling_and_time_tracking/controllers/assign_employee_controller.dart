@@ -335,8 +335,9 @@ class AssignEmployeeController extends GetxController {
 
   /// Handle schedule slot press
   void onSchedulePressed(
-    ProjectData employee,
+    ProjectData projectData,
     int slotIndex,
+    bool isEditable,
     BuildContext context,
   ) {
     // Check if a project is selected
@@ -348,15 +349,10 @@ class AssignEmployeeController extends GetxController {
     // Navigate to shift details screen with project and employee data
     SchedulingRoutes.toShiftDetails(
       arguments: {
-        'employee': employee,
+        'projectData': projectData,
         'slotIndex': slotIndex,
-        'projectId': scheduleController.selectedProject.value!.id,
-        'projectTitle': scheduleController.selectedProject.value!.title,
+        'isEditable': isEditable,
       },
-    );
-
-    _logger.i(
-      'Navigating to shift details with project ID: ${scheduleController.selectedProject.value!.id}',
     );
   }
 
