@@ -10,6 +10,7 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/employee_card_widget.dart';
 
 import '../../../assign_employee/widgets/projects_selection_dialog.dart';
+import '../../models/assign_shift_model.dart';
 
 class AssignEmployeeScreen extends StatelessWidget {
   const AssignEmployeeScreen({super.key});
@@ -17,6 +18,7 @@ class AssignEmployeeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AssignEmployeeController());
+    final assignShiftModel = AssignShiftModel;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -140,7 +142,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  controller.selectedProject.value?.title ??
+                  controller.scheduleController.selectedProject.value?.title ??
                       'Select a project to continue',
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedProject.value != null
@@ -422,6 +424,33 @@ class AssignEmployeeScreen extends StatelessWidget {
         );
       }
 
+      final assignShiftModel = controller.assignShiftModel.value;
+
+      if (!assignShiftModel.success) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: Sizer.wp(64),
+                color: const Color(0xFF949494),
+              ),
+              SizedBox(height: Sizer.hp(16)),
+              Text(
+                assignShiftModel.message.isNotEmpty
+                    ? assignShiftModel.message
+                    : 'Do not select any project',
+                style: AppTextStyle.f16W500().copyWith(
+                  color: const Color(0xFF949494),
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
       final employees = controller.filteredEmployees;
 
       if (employees.isEmpty) {
@@ -456,11 +485,14 @@ class AssignEmployeeScreen extends StatelessWidget {
           color: const Color(0xFFE5E5E5),
         ),
         itemBuilder: (context, index) {
-          final employee = employees[index];
+          final projectData = employees[index];
           return EmployeeCardWidget(
-            employee: employee,
-            onSchedulePressed: (scheduleIndex) =>
-                controller.onSchedulePressed(employee, scheduleIndex, context),
+            projectData: projectData,
+            onSchedulePressed: (scheduleIndex) => controller.onSchedulePressed(
+              projectData,
+              scheduleIndex,
+              context,
+            ),
           );
         },
       );

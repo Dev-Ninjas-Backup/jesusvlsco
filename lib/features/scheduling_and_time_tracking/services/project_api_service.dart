@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/models/response_data.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:logger/logger.dart';
+
+import '../models/assign_shift_model.dart';
 
 /// ProjectApiService handles all project-related API calls
 /// This service manages communication with the project endpoints
@@ -450,6 +455,62 @@ class ProjectApiService {
         statusCode: 500,
         responseData: null,
         errorMessage: 'Failed to update request status. Please try again.',
+      );
+    }
+  }
+
+  static Future<AssignShiftModel> getAssignShift(String projectId) async {
+    try {
+      final token = await StorageService.getAuthToken();
+      if (token == null || token.isEmpty) {
+        print('Error: No auth token found');
+        return AssignShiftModel(
+          success: false,
+          message: 'Authentication token is missing',
+          data: [],
+        );
+      }
+
+      final url = Uri.parse(
+        '${ApiConstants.baseurl}/shift/assigned-users/$projectId',
+      );
+      print('Fetching assigned users and shifts for project ID: $projectId');
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        try {
+          final jsonData = json.decode(response.body);
+          print('Response JSON: ${jsonEncode(jsonData)}');
+          return AssignShiftModel.fromJson(jsonData);
+        } catch (e) {
+          print('Error parsing JSON response: $e');
+          return AssignShiftModel(
+            success: false,
+            message: 'Failed to parse response data: $e',
+            data: [],
+          );
+        }
+      } else {
+        print('HTTP error: Status code ${response.statusCode}');
+        return AssignShiftModel(
+          success: false,
+          message: 'Failed to fetch shifts: HTTP ${response.statusCode}',
+          data: [],
+        );
+      }
+    } catch (e) {
+      print('Error fetching shifts: $e');
+      return AssignShiftModel(
+        success: false,
+        message: 'Error fetching shifts: $e',
+        data: [],
       );
     }
   }

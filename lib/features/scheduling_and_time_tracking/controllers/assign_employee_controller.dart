@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_shift_model.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 import '../../assign_employee/models/project_model.dart';
@@ -9,12 +10,19 @@ import '../../assign_employee/service/project_service.dart';
 import '../screens/widgets/filter_dialog.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 import '../routes/scheduling_routes.dart';
+import '../services/project_api_service.dart';
 
 /// AssignEmployeeController manages the business logic for employee assignment
 /// This includes handling employee data, search, filtering, and scheduling operations
 class AssignEmployeeController extends GetxController {
   final Logger _logger = Logger();
   final ScheduleController scheduleController = Get.put(ScheduleController());
+  final assignShiftModel = AssignShiftModel(
+    success: false,
+    message: '',
+    data: [],
+  ).obs;
+  final filteredEmployees = <ProjectData>[].obs;
 
   // Observable variables for state management
   var isLoading = false.obs;
@@ -23,6 +31,7 @@ class AssignEmployeeController extends GetxController {
   var activeEmployeesCount = 5.obs;
   var selectedDate = DateTime.now().obs;
   var projects = <ProjectModel>[].obs;
+
   var selectedProject = Rx<ProjectModel?>(null);
 
   // Pagination variables
@@ -36,12 +45,33 @@ class AssignEmployeeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    ever(
+      scheduleController.selectedProject,
+      (_) => fetchAssignShift(scheduleController.selectedProject.value!.id),
+    );
     fetchProjects();
     loadEmployees();
   }
 
   Future<void> refreshProjects() async {
     await fetchProjects(isRefresh: true);
+  }
+
+  Future<void> fetchAssignShift(String projectId) async {
+    isLoading.value = true;
+    try {
+      final model = await ProjectApiService.getAssignShift(projectId);
+      assignShiftModel.value = model;
+      filteredEmployees.assignAll(model.data);
+    } catch (e) {
+      assignShiftModel.value = AssignShiftModel(
+        success: false,
+        message: 'Error fetching employees: $e',
+        data: [],
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchProjects({bool isRefresh = false}) async {
@@ -66,7 +96,7 @@ class AssignEmployeeController extends GetxController {
 
       final response = await scheduleController.projectService.getAllProjects(
         page: currentPage.value,
-        limit: pageLimit, // Make sure this is 5
+        limit: pageLimit,
       );
 
       _logger.i(
@@ -182,21 +212,21 @@ class AssignEmployeeController extends GetxController {
   }
 
   /// Get filtered employees based on search text
-  List<EmployeeModel> get filteredEmployees {
-    if (searchText.value.isEmpty) {
-      return employees;
+  void filterEmployees(String query) {
+    if (query.isEmpty) {
+      filteredEmployees.assignAll(assignShiftModel.value.data);
+    } else {
+      filteredEmployees.assignAll(
+        assignShiftModel.value.data.where((projectData) {
+          final fullName =
+              '${projectData.user.firstName} ${projectData.user.lastName}';
+          return fullName.toLowerCase().contains(query.toLowerCase()) ||
+              projectData.project.title.toLowerCase().contains(
+                query.toLowerCase(),
+              );
+        }).toList(),
+      );
     }
-    return employees
-        .where(
-          (employee) =>
-              employee.name.toLowerCase().contains(
-                searchText.value.toLowerCase(),
-              ) ||
-              employee.position.toLowerCase().contains(
-                searchText.value.toLowerCase(),
-              ),
-        )
-        .toList();
   }
 
   /// Handle publish button press
@@ -305,12 +335,10 @@ class AssignEmployeeController extends GetxController {
 
   /// Handle schedule slot press
   void onSchedulePressed(
-    EmployeeModel employee,
+    ProjectData employee,
     int slotIndex,
     BuildContext context,
   ) {
-    _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
-
     // Check if a project is selected
     if (scheduleController.selectedProject.value == null) {
       EasyLoading.showError('Please select a project first');

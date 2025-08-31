@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
@@ -10,6 +9,7 @@ import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
 import 'package:jesusvlsco/features/time_off_request/time_off_request_project_overView_screen/screen/time_off_request_project_overview_screen.dart';
 import '../../../announcements/admin_announcement/screens/add_announcement.dart';
@@ -935,7 +935,9 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildAssignView() {
     return Expanded(
       child: CustomButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(AssignEmployeeScreen());
+        },
         imagePath: 'assets/icons/assign.png',
         text: 'Assign',
         fontSize: Sizer.wp(16),
@@ -992,7 +994,7 @@ class AdminDashboardScreen extends StatelessWidget {
     return Expanded(
       child: CustomButton(
         onPressed: () {
-          Get.to(() => const AddUserScreen());
+          Get.to(AddUserScreen());
         },
         imagePath: 'assets/icons/user.png',
         text: 'Add users',

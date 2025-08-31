@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/bottom_navigation/screen/admin_bottom_navigation_scaffold.dart';
 
 import '../controller/add_user_controller.dart';
 import '../widget/profile_view_toggle_widget.dart';
@@ -12,6 +14,8 @@ class ViewUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AdminBottomNavigationController bottomNavigationController =
+        Get.find<AdminBottomNavigationController>();
     final controller = Get.put(AddUserController());
 
     return Scaffold(
@@ -83,8 +87,11 @@ class ViewUserScreen extends StatelessWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               // Navigate to next screen
+                              Get.offAll(AdminBottomNavigationScaffold());
+                              bottomNavigationController.changeIndex(2);
+                              
                               Get.snackbar(
                                 'Success',
                                 'Profile updated successfully!',

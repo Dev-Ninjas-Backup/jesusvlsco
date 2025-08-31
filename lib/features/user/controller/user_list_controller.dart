@@ -5,14 +5,16 @@ import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
 class EmployeeProfile {
+  final String id;
   final int employeeID;
   final Profile profile;
   final RxBool isSelected = false.obs;
 
-  EmployeeProfile({required this.employeeID, required this.profile});
+  EmployeeProfile( {required this.id,required this.employeeID, required this.profile});
 
   factory EmployeeProfile.fromJson(Map<String, dynamic> json) {
     return EmployeeProfile(
+      id: json["id"] ?? "",
       employeeID: json['employeeID'],
       profile: Profile.fromJson(json['profile']),
     );
@@ -20,6 +22,7 @@ class EmployeeProfile {
 }
 
 class Profile {
+  
   final String firstName;
   final String lastName;
   final String jobTitle;
@@ -71,13 +74,13 @@ class UserListController extends GetxController {
   var hasMore = true.obs;
   RxInt totalEmployeeCount = 0.obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchEmployeeProfiles(); // Initial load
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    fetchEmployeeProfiles(); // Initial load
+  }
 
-  Future<void> fetchEmployeeProfiles({bool loadMore = false}) async {
+  Future<void> fetchEmployeeProfiles() async { //{bool loadMore = false}
     if (isLoading.value || !hasMore.value) return;
 
     isLoading.value = true;

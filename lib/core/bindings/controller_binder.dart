@@ -3,6 +3,8 @@ import 'package:jesusvlsco/core/controllers/app_controller.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
+import 'package:jesusvlsco/features/user/controller/add_user_controller.dart';
+import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override

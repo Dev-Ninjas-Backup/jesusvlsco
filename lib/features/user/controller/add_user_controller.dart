@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
+import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
+import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_education_screen.dart';
 import 'package:jesusvlsco/features/user/screen/add_user_experience_screen.dart';
 
@@ -10,6 +12,13 @@ import '../screen/add_user_payroll_screen.dart';
 import '../screen/view_user_screen.dart';
 
 class AddUserController extends GetxController {
+  AdminListController adminListController = Get.put(AdminListController());
+  UserListController userListController = Get.put(UserListController());
+  void refreshEmployeeAdmin() async {
+    adminListController.fetchAdmins();
+    userListController.fetchEmployeeProfiles();
+  }
+
   // Observable variables
   final RxString firstName = ''.obs;
   final RxString lastName = ''.obs;
@@ -182,8 +191,12 @@ class AddUserController extends GetxController {
     );
 
     if (picked != null) {
-      // Save the selected date so the UI can react to it
-      selectedDateOfBirth.value = picked;
+      // Save the selected date as a DateTime object in UTC
+      selectedDateOfBirth.value = DateTime.utc(
+        picked.year,
+        picked.month,
+        picked.day,
+      );
     }
   }
 
@@ -870,8 +883,13 @@ class AddUserController extends GetxController {
     return null;
   }
 
-  void savePayroll() {
-    _postPayrollSettings();
+  void savePayroll() async {
+    await _postPayrollSettings();
+    //refreshEmployeeAdmin();
+    adminListController.fetchAdmins;
+    userListController.fetchEmployeeProfiles;
+    print("info, employee and admin refresh");
+    Get.snackbar("info", "employee and admin refresh");
   }
 
   Future<void> _postPayrollSettings() async {
@@ -998,6 +1016,7 @@ class AddUserController extends GetxController {
     );
 
     // Finished — navigate to view user screen
+    //Get.to(AdminDashboardScreen());
     Get.to(ViewUserScreen());
   }
 
