@@ -462,43 +462,54 @@ class ProjectApiService {
   static Future<AssignShiftModel> getAssignShift(String projectId) async {
     try {
       final token = await StorageService.getAuthToken();
+      if (token == null || token.isEmpty) {
+        print('Error: No auth token found');
+        return AssignShiftModel(
+          success: false,
+          message: 'Authentication token is missing',
+          data: [],
+        );
+      }
+
       final url = Uri.parse(
-        // "https://lgcglobalcontractingltd.com/js/shift/assigned-users/$projectId"
-        '${ApiConstants.baseurl}/shift/assigned-users/$projectId'
+        '${ApiConstants.baseurl}/shift/assigned-users/$projectId',
       );
       print('Fetching assigned users and shifts for project ID: $projectId');
+
       final response = await http.get(
-       url,
+        url,
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
-          
-          // 'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer $token',
-          // // Add any required headers (e.g., authorization)
         },
       );
-      print("token: $token");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        print("jsonData$jsonData");
-        return AssignShiftModel.fromJson(jsonData);
-
+        try {
+          final jsonData = json.decode(response.body);
+          print('Response JSON: ${jsonEncode(jsonData)}');
+          return AssignShiftModel.fromJson(jsonData);
+        } catch (e) {
+          print('Error parsing JSON response: $e');
+          return AssignShiftModel(
+            success: false,
+            message: 'Failed to parse response data: $e',
+            data: [],
+          );
+        }
       } else {
-        print("response code: ${response.statusCode}");
+        print('HTTP error: Status code ${response.statusCode}');
         return AssignShiftModel(
           success: false,
-          message: 'Failed to fetch projects: ${response.statusCode}',
+          message: 'Failed to fetch shifts: HTTP ${response.statusCode}',
           data: [],
-          
         );
       }
     } catch (e) {
-      print("error message $e");
+      print('Error fetching shifts: $e');
       return AssignShiftModel(
         success: false,
-        message: 'Error fetching projects: $e',
+        message: 'Error fetching shifts: $e',
         data: [],
       );
     }

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/controllers/assign_employee_controller.dart';
-
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_shift_model.dart';
 
 class EmployeeCardWidget extends StatelessWidget {
-  
-  final EmployeeModel employee;
+  final ProjectData projectData;
   final Function(int) onSchedulePressed;
 
   const EmployeeCardWidget({
     super.key,
-    required this.employee,
+    required this.projectData,
     required this.onSchedulePressed,
   });
-  
+
   @override
   Widget build(BuildContext context) {
-    
     return Column(
       children: [
         // Employee info card
@@ -32,6 +30,9 @@ class EmployeeCardWidget extends StatelessWidget {
 
   /// Build employee information card
   Widget _buildEmployeeCard() {
+    final user = projectData.user;
+    final project = projectData.project;
+
     return Container(
       height: Sizer.hp(135),
       decoration: BoxDecoration(
@@ -55,8 +56,10 @@ class EmployeeCardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage(employee.avatar),
+                image: NetworkImage(user.profileUrl),
                 fit: BoxFit.cover,
+                onError: (exception, stackTrace) =>
+                    const AssetImage('assets/images/default_avatar.png'),
               ),
             ),
           ),
@@ -68,21 +71,23 @@ class EmployeeCardWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Name and position
+                  // Name and availability
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Text(
-                            employee.name,
-                            style: AppTextStyle.f18W600().copyWith(
-                              color: const Color(0xFF5B5B5B),
-                              height: 1.5,
+                          Flexible(
+                            child: Text(
+                              '${user.firstName} ${user.lastName}',
+                              style: AppTextStyle.f18W600().copyWith(
+                                color: const Color(0xFF5B5B5B),
+                                height: 1.5,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          // Active indicator
-                          if (employee.isActive)
+                          if (user.isAvailable)
                             Padding(
                               padding: EdgeInsets.all(Sizer.wp(8)),
                               child: Container(
@@ -97,7 +102,7 @@ class EmployeeCardWidget extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        employee.position,
+                        project.title, // Using project title as position
                         style: AppTextStyle.f16W600().copyWith(
                           color: AppColors.primary,
                           height: 1.5,
@@ -108,7 +113,7 @@ class EmployeeCardWidget extends StatelessWidget {
 
                   SizedBox(height: Sizer.hp(8)),
 
-                  // Time and project count
+                  // Shift count
                   Row(
                     children: [
                       Icon(
@@ -127,7 +132,7 @@ class EmployeeCardWidget extends StatelessWidget {
                           ),
                           SizedBox(width: Sizer.wp(4)),
                           Text(
-                            '${employee.projectCount}',
+                            '${projectData.shifts.length}',
                             style: AppTextStyle.f18W600().copyWith(
                               color: const Color(0xFF484848),
                               height: 1.5,
@@ -142,7 +147,7 @@ class EmployeeCardWidget extends StatelessWidget {
 
                   // Off day
                   Text(
-                    'Off Day: ${employee.offDay}',
+                    'Off Day: ${user.offDay.join(", ")}',
                     style: AppTextStyle.f12W400().copyWith(
                       color: AppColors.primary,
                       height: 1.5,
@@ -163,22 +168,26 @@ class EmployeeCardWidget extends StatelessWidget {
       height: Sizer.hp(81),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: employee.scheduleSlots.length,
+        itemCount: projectData.shifts.length,
         separatorBuilder: (context, index) => SizedBox(width: Sizer.wp(12)),
         itemBuilder: (context, index) {
-          final isSelected = employee.scheduleSlots[index];
+          final shift = projectData.shifts[index];
+          final dateFormat = DateFormat('MMM dd');
+          final timeFormat = DateFormat('HH:mm');
+          final shiftDate = dateFormat.format(shift.date);
+          final shiftTime =
+              '${timeFormat.format(shift.startTime)} - ${timeFormat.format(shift.endTime)}';
 
           return GestureDetector(
             onTap: () => onSchedulePressed(index),
             child: Container(
-              width: Sizer.hp(81),
+              width: Sizer.hp(100),
               height: Sizer.hp(81),
+              padding: EdgeInsets.all(Sizer.wp(8)),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: isSelected
-                    ? Border.all(color: AppColors.primary, width: 2)
-                    : Border.all(color: const Color(0xFF484848)),
+                border: Border.all(color: AppColors.primary, width: 2),
                 boxShadow: [
                   BoxShadow(
                     color: const Color.fromRGBO(169, 183, 221, 0.08),
@@ -188,14 +197,23 @@ class EmployeeCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Center(
-                child: Icon(
-                  isSelected ? Icons.check : Icons.add,
-                  size: Sizer.wp(24),
-                  color: isSelected
-                      ? AppColors.primary
-                      : const Color(0xFF484848),
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    shiftDate,
+                    style: AppTextStyle.f14W600().copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  SizedBox(height: Sizer.hp(4)),
+                  Text(
+                    shiftTime,
+                    style: AppTextStyle.f12W400().copyWith(
+                      color: const Color(0xFF484848),
+                    ),
+                  ),
+                ],
               ),
             ),
           );

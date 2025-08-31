@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_shift_model.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 import '../../assign_employee/models/project_model.dart';
@@ -16,6 +17,12 @@ import '../services/project_api_service.dart';
 class AssignEmployeeController extends GetxController {
   final Logger _logger = Logger();
   final ScheduleController scheduleController = Get.put(ScheduleController());
+  final assignShiftModel = AssignShiftModel(
+    success: false,
+    message: '',
+    data: [],
+  ).obs;
+  final filteredEmployees = <ProjectData>[].obs;
 
   // Observable variables for state management
   var isLoading = false.obs;
@@ -51,48 +58,19 @@ class AssignEmployeeController extends GetxController {
   }
 
   Future<void> fetchAssignShift(String projectId) async {
+    isLoading.value = true;
     try {
-      isLoading.value = true;
-
-      // Call the API
-      final response = await ProjectApiService.getAssignShift(projectId);
-
-      print(
-        'API AssignShift - Success: ${response.success}, Data length: ${response.data.length}',
-      );
-
-      if (response.success) {
-        // Extract and log user names and shifts
-        for (var projectData in response.data) {
-          final user = projectData.user;
-          final shifts = projectData.shifts;
-
-          print(
-            'User: ${user.firstName} ${user.lastName}, Email: ${user.email}',
-          );
-          print(
-            'Shifts for ${user.firstName} ${user.lastName}: ${shifts.length}',
-          );
-
-          for (var shift in shifts) {
-            print(
-              'Shift: ${shift.title}, Date: ${shift.date}, Location: ${shift.location}',
-            );
-          }
-        }
-
-        print('Projects loaded: ${response.data.length}');
-        print('Total projects in list: ${projects.length}');
-        print('Has more: ${hasMoreProjects.value}');
-      } else {
-        EasyLoading.showError('Failed to load projects: ${response.message}');
-      }
+      final model = await ProjectApiService.getAssignShift(projectId);
+      assignShiftModel.value = model;
+      filteredEmployees.assignAll(model.data);
     } catch (e) {
-      print('Error fetching projects: $e');
-      EasyLoading.showError('Failed to load projects');
+      assignShiftModel.value = AssignShiftModel(
+        success: false,
+        message: 'Error fetching employees: $e',
+        data: [],
+      );
     } finally {
       isLoading.value = false;
-      isLoadingMoreProjects.value = false;
     }
   }
 
@@ -234,21 +212,21 @@ class AssignEmployeeController extends GetxController {
   }
 
   /// Get filtered employees based on search text
-  List<EmployeeModel> get filteredEmployees {
-    if (searchText.value.isEmpty) {
-      return employees;
+  void filterEmployees(String query) {
+    if (query.isEmpty) {
+      filteredEmployees.assignAll(assignShiftModel.value.data);
+    } else {
+      filteredEmployees.assignAll(
+        assignShiftModel.value.data.where((projectData) {
+          final fullName =
+              '${projectData.user.firstName} ${projectData.user.lastName}';
+          return fullName.toLowerCase().contains(query.toLowerCase()) ||
+              projectData.project.title.toLowerCase().contains(
+                query.toLowerCase(),
+              );
+        }).toList(),
+      );
     }
-    return employees
-        .where(
-          (employee) =>
-              employee.name.toLowerCase().contains(
-                searchText.value.toLowerCase(),
-              ) ||
-              employee.position.toLowerCase().contains(
-                searchText.value.toLowerCase(),
-              ),
-        )
-        .toList();
   }
 
   /// Handle publish button press
@@ -357,12 +335,10 @@ class AssignEmployeeController extends GetxController {
 
   /// Handle schedule slot press
   void onSchedulePressed(
-    EmployeeModel employee,
+    ProjectData employee,
     int slotIndex,
     BuildContext context,
   ) {
-    _logger.i('Schedule pressed for ${employee.name}, slot: $slotIndex');
-
     // Check if a project is selected
     if (scheduleController.selectedProject.value == null) {
       EasyLoading.showError('Please select a project first');
