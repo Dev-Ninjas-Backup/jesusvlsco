@@ -8,7 +8,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_screen.dart';
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/screens/user_dashboard_screen.dart';
-import 'package:jesusvlsco/features/user/screen/user_user_info_screen.dart';
+import 'package:jesusvlsco/features/user_profile/views/user_profile_screen.dart';
 import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
 import '../../user/screen/user_communication_screen.dart';
 
@@ -26,7 +26,7 @@ class UserBottomNavigationScaffold extends StatelessWidget {
         case 1:
           return UserCommunicationScreen();
         case 2:
-          return UserUserInfoScreen();
+          return UserProfileScreen();
         case 3:
           // return TimeSheetScreen();
           return AssignEmployeeScreen();
