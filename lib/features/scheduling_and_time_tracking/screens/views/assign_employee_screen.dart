@@ -486,13 +486,13 @@ class AssignEmployeeScreen extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final projectData = employees[index];
-          return EmployeeCardWidget(
-            projectData: projectData,
-            onSchedulePressed: (scheduleIndex) => controller.onSchedulePressed(
-              projectData,
-              scheduleIndex,
-              true,
-              context,
+          return GestureDetector(
+            onTap: () =>
+                controller.onSchedulePressed(projectData, 0, false, context),
+            child: EmployeeCardWidget(
+              projectData: projectData,
+              onSchedulePressed: (scheduleIndex) => controller
+                  .onSchedulePressed(projectData, scheduleIndex, true, context),
             ),
           );
         },

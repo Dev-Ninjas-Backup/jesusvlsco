@@ -35,7 +35,7 @@ class ShiftDetailsActionButtonsWidget extends StatelessWidget {
                 ),
                 SizedBox(width: Sizer.wp(12)),
                 Text(
-                  'Publish',
+                  controller.isEditable ? 'Update' : 'Publish',
                   style: AppTextStyle.f16W500().copyWith(
                     color: Colors.white,
                     height: 1.5,
