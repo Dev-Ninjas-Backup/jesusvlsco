@@ -16,7 +16,6 @@ import '../../../core/utils/constants/api_constants.dart';
 import '../../../core/models/response_data.dart';
 import '../models/task_model.dart';
 import '../models/activity_model.dart';
-import '../screens/widgets/shift_emplate_widgets/add_user_dialog.dart';
 import '../routes/scheduling_routes.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 
@@ -51,7 +50,7 @@ class ShiftDetailsController extends GetxController {
 
   // Dynamic data
   var selectedProjectId = "".obs;
-  var selectedUserIds = <String>[].obs;
+  var selectedUserIds = <String>[];
   var selectedTaskIds = <String>[].obs;
 
   // Location lat/lng
@@ -69,7 +68,7 @@ class ShiftDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    print('userName: ${projectData?.user.firstName}}');
     isEditableMode();
 
     selectedDateFormatted.value = DateFormat(
@@ -99,11 +98,19 @@ class ShiftDetailsController extends GetxController {
         selectedProjectId.value = projectData!.project.id;
         latitude = projectData!.shifts[scheduleIndex].lat;
         longitude = projectData!.shifts[scheduleIndex].lng;
+        selectedUserIds.add(projectData!.user.id);
         pickCurrentLocation();
       } else {
         debugPrint(
           'Invalid project data ${projectData!.project.title} or schedule index $scheduleIndex',
         );
+      }
+    } else {
+      if (projectData?.project.id != null) {
+        selectedProjectId.value = projectData!.project.id;
+        selectedUserIds.add(projectData!.user.id);
+      } else {
+        debugPrint('No project ID provided in arguments');
       }
     }
   }
@@ -232,25 +239,17 @@ class ShiftDetailsController extends GetxController {
 
       final String url = '${ApiConstants.baseurl}${ApiConstants.createShift}';
 
-      _logger.i("🌐 Publishing shift to: $url");
-      _logger.i("📤 Request body: $requestBody");
-
       final ResponseData response = await _networkCaller.postRequest(
         url,
         body: requestBody,
         token: token != null ? 'Bearer $token' : null,
       );
-
-      _logger.i("Response Status: ${response.statusCode}");
-      _logger.i("Response Body: ${response.responseData}");
-
       EasyLoading.dismiss();
 
       if (response.isSuccess) {
         final data = response.responseData;
         if (data["success"] == true) {
-          EasyLoading.showSuccess("Shift published successfully");
-          _logger.i("Shift created: ${data["data"]["id"]}");
+          EasyLoading.showSuccess(data["message"] ?? "Shift published");
 
           // Navigate to assign employee screen after successful publish
           SchedulingRoutes.toAssignEmployee();
@@ -331,8 +330,8 @@ class ShiftDetailsController extends GetxController {
         desiredAccuracy: LocationAccuracy.best,
       );
 
-      latitude = position.latitude;
-      longitude = position.longitude;
+      latitude = isEditable ? latitude : position.latitude;
+      longitude = isEditable ? longitude : position.longitude;
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
         latitude!,
@@ -539,7 +538,7 @@ class ShiftDetailsController extends GetxController {
     tasks.close();
     activities.close();
     selectedProjectId.close();
-    selectedUserIds.close();
+    selectedUserIds.clear();
     selectedTaskIds.close();
     locationSuggestions.close();
     isSearching.close();

@@ -50,7 +50,6 @@ class AssignEmployeeController extends GetxController {
       (_) => fetchAssignShift(scheduleController.selectedProject.value!.id),
     );
     fetchProjects();
-    loadEmployees();
   }
 
   Future<void> refreshProjects() async {
@@ -131,78 +130,6 @@ class AssignEmployeeController extends GetxController {
     } finally {
       isLoading.value = false;
       isLoadingMoreProjects.value = false;
-    }
-  }
-
-  /// Load all employees from API or local storage
-  Future<void> loadEmployees() async {
-    try {
-      isLoading.value = true;
-
-      // Mock data for demonstration - replace with actual API call
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      employees.value = [
-        EmployeeModel(
-          id: '1',
-          name: 'Sarah Johnson',
-          position: 'Manager',
-          avatar: 'https://i.pravatar.cc/150?img=1',
-          isActive: true,
-          projectCount: 1,
-          offDay: 'Friday',
-          scheduleSlots: List.generate(7, (index) => false),
-        ),
-        EmployeeModel(
-          id: '2',
-          name: 'Emma Willson',
-          position: 'Manager',
-          avatar: 'https://i.pravatar.cc/150?img=2',
-          isActive: true,
-          projectCount: 1,
-          offDay: 'Friday',
-          scheduleSlots: List.generate(7, (index) => false),
-        ),
-        EmployeeModel(
-          id: '3',
-          name: 'Cameron William.',
-          position: 'Manager',
-          avatar: 'https://i.pravatar.cc/150?img=3',
-          isActive: true,
-          projectCount: 1,
-          offDay: 'Friday',
-          scheduleSlots: List.generate(7, (index) => false),
-        ),
-        EmployeeModel(
-          id: '4',
-          name: 'Cameron Williamson',
-          position: 'Manager',
-          avatar: 'https://i.pravatar.cc/150?img=4',
-          isActive: true,
-          projectCount: 1,
-          offDay: 'Friday',
-          scheduleSlots: List.generate(7, (index) => false),
-        ),
-        EmployeeModel(
-          id: '5',
-          name: 'Lisa Thampson',
-          position: 'Manager',
-          avatar: 'https://i.pravatar.cc/150?img=5',
-          isActive: true,
-          projectCount: 1,
-          offDay: 'Friday',
-          scheduleSlots: List.generate(7, (index) => false),
-        ),
-      ];
-
-      // Update active count
-      activeEmployeesCount.value = employees.where((e) => e.isActive).length;
-
-      isLoading.value = false;
-    } catch (error) {
-      isLoading.value = false;
-      _logger.e('Error loading employees: $error');
-      EasyLoading.showError('Failed to load employees');
     }
   }
 
@@ -298,26 +225,10 @@ class AssignEmployeeController extends GetxController {
         EasyLoading.showSuccess(
           'Date selected: ${DateFormat('MMM dd, yyyy').format(pickedDate)}',
         );
-        // Here you can add logic to filter data by selected date
-        await _filterByDate(pickedDate);
       }
     } catch (error) {
       _logger.e('Error showing date picker: $error');
       EasyLoading.showError('Failed to show date picker');
-    }
-  }
-
-  /// Filter employees by selected date
-  Future<void> _filterByDate(DateTime date) async {
-    try {
-      _logger.i(
-        'Filtering employees by date: ${DateFormat('yyyy-MM-dd').format(date)}',
-      );
-      // Add your date filtering logic here
-      // For now, just reload the data
-      await loadEmployees();
-    } catch (error) {
-      _logger.e('Error filtering by date: $error');
     }
   }
 
