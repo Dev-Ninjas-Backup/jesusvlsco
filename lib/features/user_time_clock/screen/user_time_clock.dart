@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
+import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
 
 class UserTimeClock extends StatelessWidget {
   final UserTimeClockController userTimeClockController = Get.put(UserTimeClockController());
@@ -76,37 +77,45 @@ class UserTimeClock extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Column(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.amber),
-                        Text("My requests"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Column(
-                      children: [
-                        Icon(Icons.calendar_month_outlined, color: Colors.blue),
-                        Text("Time sheet"),
-                      ],
+              GestureDetector(
+                    onTap: (){
+                      Get.to(UserRequest());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Row(
+                        spacing: 8,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.amber),
+                          Text("My requests"),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+                  
+              //     Container(
+              //       padding: const EdgeInsets.all(16),
+              //       decoration: BoxDecoration(
+              //         border: Border.all(width: 1, color: Colors.grey.shade300),
+              //         borderRadius: BorderRadius.circular(8),
+              //       ),
+              //       child: const Column(
+              //         children: [
+              //           Icon(Icons.calendar_month_outlined, color: Colors.blue),
+              //           Text("Time sheet"),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 36),
             ],
           )),

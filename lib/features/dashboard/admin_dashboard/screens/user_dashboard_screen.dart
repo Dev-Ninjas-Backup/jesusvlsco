@@ -1042,6 +1042,10 @@ class UserDashboardScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
+      leading: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.notifications, color: AppColors.primary),
+      ),
       title: Text(
         'Dashboard',
         style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
