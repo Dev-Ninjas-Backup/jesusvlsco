@@ -76,7 +76,7 @@ class _UserWidelistState extends State<UserWidelist> {
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              width: Sizer.wp(1200),
+              width: Sizer.wp(1300),
               child: Column(
                 children: [
                   _buildHeader(),
@@ -101,23 +101,25 @@ class _UserWidelistState extends State<UserWidelist> {
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       color: AppColors.border1,
-      child: Row(
-        children: [
-          SizedBox(width: 60, child: Checkbox(value: true, onChanged: null, activeColor: AppColors.primary)),
-          ...[
-            "Title", "Status", "Label", "Start Time", "Due Date", "Assign To"
-          ].map((text) => SizedBox(
-            width: Sizer.wp(200),
-            child: Text(
-              text,
-              style: AppTextStyle.regular().copyWith(
-                fontSize: Sizer.wp(16),
-                fontWeight: FontWeight.w600,
-                color: AppColors.primary,
+      child: SingleChildScrollView(
+        child: Row(
+          children: [
+            SizedBox(width: 60, child: Checkbox(value: true, onChanged: null, activeColor: AppColors.primary)),
+            ...[
+              "Title", "Status", "Label", "Start Time", "Due Date", "Assign To"
+            ].map((text) => SizedBox(
+              width: Sizer.wp(200),
+              child: Text(
+                text,
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
               ),
-            ),
-          )),
-        ],
+            )),
+          ],
+        ),
       ),
     );
   }

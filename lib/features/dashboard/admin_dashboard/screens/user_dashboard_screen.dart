@@ -7,9 +7,12 @@ import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
+import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_screen.dart';
+import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
+import 'package:jesusvlsco/features/user_time_clock/screen/user_time_clock.dart';
 
 import '../../../userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
 
@@ -31,7 +34,8 @@ class UserDashboardScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              _buildAlertView(),
+              SizedBox(height: 24),
+              _buildProfileContainer(),
               SpacingHelper.h16(),
               _buildShiftCard(),
               SpacingHelper.h16(),
@@ -174,6 +178,127 @@ class UserDashboardScreen extends StatelessWidget {
                 await controller.clockOut(lat: 0.0, lng: 0.0);
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileContainer() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white24,
+        border: Border.all(width: 1, color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          CircleAvatar(radius: 28, child: FittedBox(child: Text("MR"))),
+          SizedBox(height: 16),
+          Text(
+            "Good morning, Md. Marufur",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  //Time clock action work here
+                  Get.to(UserTimeClock());
+                },
+                child: SizedBox(
+                  child: Column(
+                    children: [
+                      IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.green.shade100,
+                        ),
+                        onPressed: () {
+                          Get.to(UserTimeClock());
+                        },
+                        icon: Icon(
+                          Icons.watch_later_rounded,
+                          color: Colors.green,
+                        ),
+                      ),
+                      Text(
+                        "Time Clock",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  //schedule action work here
+                  Get.to(AssignEmployeeScreen());
+                },
+                child: SizedBox(
+                  child: Column(
+                    children: [
+                      IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.blue.shade100,
+                        ),
+                        onPressed: () {
+                          Get.to(AssignEmployeeScreen());
+                        },
+                        icon: Icon(Icons.calendar_today, color: Colors.blue),
+                      ),
+                      Text(
+                        "Schedule",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  //project or third index route here
+                  Get.find<BottomNavigationController>().changeIndex(4);
+                },
+                child: SizedBox(
+                  child: Column(
+                    children: [
+                      IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.teal.shade100,
+                        ),
+                        onPressed: () {
+                          Get.find<BottomNavigationController>().changeIndex(4);
+                        },
+                        icon: Icon(Icons.folder_rounded, color: Colors.teal),
+                      ),
+                      Text(
+                        "Project",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -785,53 +910,6 @@ class UserDashboardScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildAlertView() {
-    return Obx(
-      () => controller.showAlert.value
-          ? Container(
-              padding: EdgeInsets.all(Sizer.wp(12)),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                border: Border.all(color: Colors.red.shade200),
-                borderRadius: BorderRadius.circular(Sizer.wp(12)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.notifications_outlined,
-                    color: Colors.red,
-                    size: Sizer.wp(25),
-                  ),
-                  SpacingHelper.w8(),
-                  Expanded(
-                    child: Text(
-                      controller.alertMessage.value,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.f14W400().copyWith(
-                        color: AppColors.error,
-                      ),
-                    ),
-                  ),
-                  _buildDismissButton(),
-                ],
-              ),
-            )
-          : const SizedBox.shrink(),
-    );
-  }
-
-  Widget _buildDismissButton() {
-    return GestureDetector(
-      onTap: controller.dismissAlert,
-      child: Text(
-        "Dismiss",
-        style: AppTextStyle.f16W500().copyWith(color: AppColors.error),
       ),
     );
   }

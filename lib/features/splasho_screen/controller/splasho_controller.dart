@@ -98,6 +98,7 @@ class SplashController extends GetxController {
       String? userData = prefs.getString('user_data');
 
       if (userData != null) {
+        print('user data $userData');
         return json.decode(userData) as Map<String, dynamic>;
       }
       return null;
