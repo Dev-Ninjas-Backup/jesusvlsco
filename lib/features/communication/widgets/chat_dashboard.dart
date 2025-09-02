@@ -1,155 +1,348 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
+import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
+import 'package:jesusvlsco/features/communication/model/private_chat_models.dart'
+    as chat_models;
+import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
 
+/// Enhanced Chat Dashboard
+/// Displays real private chat conversations using WebSocket data
+/// Provides interface for conversation selection and management
 class ChatDashboard extends StatelessWidget {
   ChatDashboard({super.key});
 
-  // Dummy Data
-  final List<Map<String, String>> _dummyData = [
-    {
-      'name': 'Sarah Johnson',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-    {
-      'name': 'Marvin McKinney',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-    {
-      'name': 'Kristin Watson',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-    {
-      'name': 'Esther Howard',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-    {
-      'name': 'Arlene McCoy',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-    {
-      'name': 'Kristin Watson',
-      'message': 'Thanks for the project....',
-      'time': '2 min ago',
-      'unread': '2',
-    },
-  ];
+  // Get private chat controller
+  final PrivateChatController _chatController =
+      Get.find<PrivateChatController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Padding(
-        padding: EdgeInsets.all(Sizer.wp(16)),
-        child: _buildUserList(),
-      ),
-    );
-  }
-
-  // User List
-  Widget _buildUserList() {
-    return ListView.builder(
-      itemCount: _dummyData.length,
-      itemBuilder: (context, index) {
-        return _buildListItem(_dummyData[index]);
-      },
-    );
-  }
-
-  // List Item for each user
-  Widget _buildListItem(Map<String, String> data) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: Sizer.hp(8),
-        horizontal: Sizer.wp(16),
-      ),
+      padding: EdgeInsets.all(Sizer.wp(16)),
+      child: _buildConversationsList(),
+    );
+  }
+
+  /// Build conversations list
+  Widget _buildConversationsList() {
+    return Obx(() {
+      final conversations = _chatController.filteredConversations;
+      final isLoading = _chatController.isLoading.value;
+
+      // Debug logging
+      print('🔍 ChatDashboard Debug:');
+      print('  - isLoading: $isLoading');
+      print('  - conversations count: ${conversations.length}');
+      print('  - searchQuery: "${_chatController.searchQuery.value}"');
+
+      if (conversations.isNotEmpty) {
+        print(
+          '  - First conversation: ${conversations.first.participant.profile.displayName}',
+        );
+        print('  - Last message: ${conversations.first.lastMessage.content}');
+      }
+
+      if (isLoading && conversations.isEmpty) {
+        return _buildLoadingState();
+      }
+
+      if (conversations.isEmpty) {
+        return _buildEmptyState();
+      }
+
+      return RefreshIndicator(
+        onRefresh: () => _chatController.refreshChat(),
+        child: ListView.builder(
+          itemCount: conversations.length,
+          itemBuilder: (context, index) {
+            final conversation = conversations[index];
+            print(
+              '  - Building conversation ${index + 1}: ${conversation.participant.profile.displayName}',
+            );
+            return _buildConversationItem(conversation);
+          },
+        ),
+      );
+    });
+  }
+
+  /// Build loading state
+  Widget _buildLoadingState() {
+    return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              // Profile Avatar
-              CircleAvatar(
-                radius: Sizer.wp(15),
-                backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
-                ),
-              ),
-              SizedBox(width: Sizer.wp(12)),
-              // Message and time
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data['name'] ?? '',
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(16),
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: Sizer.hp(4)),
-                    Text(
-                      data['message'] ?? '',
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(14),
-                        color: AppColors.textfield,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Time and Unread Badge
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    data['time'] ?? '',
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(12),
-                      color: AppColors.textSecondary.withOpacity(0.6),
-                    ),
-                  ),
-                  SizedBox(height: Sizer.hp(4)),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Sizer.wp(8),
-                      vertical: Sizer.hp(4),
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.circle,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      data['unread'] ?? '',
-                      style: AppTextStyle.regular().copyWith(
-                        fontSize: Sizer.wp(12),
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
-          SizedBox(height: Sizer.hp(8)),
-          Divider(color: AppColors.border2, height: 1), // Divider added here
+          SizedBox(height: Sizer.hp(16)),
+          Text(
+            'Loading conversations...',
+            style: AppTextStyle.regular().copyWith(
+              fontSize: Sizer.wp(14),
+              color: AppColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  /// Build empty state
+  Widget _buildEmptyState() {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              CupertinoIcons.chat_bubble_2,
+              size: Sizer.wp(60),
+              color: AppColors.textSecondary.withValues(alpha: 0.3),
+            ),
+            SizedBox(height: Sizer.hp(16)),
+            Text(
+              'No conversations yet',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(16),
+                fontWeight: FontWeight.w600,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            SizedBox(height: Sizer.hp(8)),
+            Text(
+              'Start a new conversation to get started',
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: AppColors.textSecondary.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: Sizer.hp(20)),
+            // Add refresh button
+            ElevatedButton.icon(
+              onPressed: () {
+                print('🔄 Manual refresh triggered');
+                _chatController.refreshChat();
+              },
+              icon: Icon(Icons.refresh, size: Sizer.wp(18)),
+              label: Text('Refresh'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizer.wp(20),
+                  vertical: Sizer.hp(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build individual conversation item
+  Widget _buildConversationItem(
+    chat_models.PrivateChatConversation conversation,
+  ) {
+    // Add safety checks for null data
+    if (conversation.participant.profile.displayName.isEmpty) {
+      print('⚠️ Warning: Conversation has empty display name');
+      return SizedBox.shrink();
+    }
+
+    return InkWell(
+      onTap: () => _openConversation(conversation),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: Sizer.hp(12),
+          horizontal: Sizer.wp(4),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                // Profile Avatar
+                _buildProfileAvatar(conversation),
+                SizedBox(width: Sizer.wp(12)),
+                // Message content and info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name and timestamp row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Participant name
+                          Expanded(
+                            child: Text(
+                              conversation.participant.profile.displayName,
+                              style: AppTextStyle.regular().copyWith(
+                                fontSize: Sizer.wp(16),
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // Timestamp
+                          Text(
+                            _formatTimestamp(
+                              conversation.lastMessage.createdAt,
+                            ),
+                            style: AppTextStyle.regular().copyWith(
+                              fontSize: Sizer.wp(12),
+                              color: AppColors.textSecondary.withValues(
+                                alpha: 0.6,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Sizer.hp(4)),
+                      // Last message and unread indicator row
+                      Row(
+                        children: [
+                          // Last message preview
+                          Expanded(
+                            child: Text(
+                              conversation.lastMessage.content.isNotEmpty
+                                  ? conversation.lastMessage.content
+                                  : 'No message content',
+                              style: AppTextStyle.regular().copyWith(
+                                fontSize: Sizer.wp(14),
+                                color: conversation.isRead
+                                    ? AppColors.textSecondary
+                                    : AppColors.textPrimary,
+                                fontWeight: conversation.isRead
+                                    ? FontWeight.w400
+                                    : FontWeight.w500,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // Unread indicator
+                          if (!conversation.isRead)
+                            Container(
+                              margin: EdgeInsets.only(left: Sizer.wp(8)),
+                              width: Sizer.wp(8),
+                              height: Sizer.wp(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: Sizer.hp(12)),
+            // Divider
+            Divider(color: AppColors.border2, height: 1, thickness: 0.5),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build profile avatar with online status
+  Widget _buildProfileAvatar(chat_models.PrivateChatConversation conversation) {
+    return Stack(
+      children: [
+        // Main avatar
+        Container(
+          width: Sizer.wp(50),
+          height: Sizer.wp(50),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.2),
+              width: 2,
+            ),
+          ),
+          child: CircleAvatar(
+            radius: Sizer.wp(23),
+            backgroundImage: conversation.participant.profile.profileUrl != null
+                ? NetworkImage(conversation.participant.profile.profileUrl!)
+                : null,
+            backgroundColor: AppColors.primaryBackground,
+            child: conversation.participant.profile.profileUrl == null
+                ? Text(
+                    _getInitials(conversation.participant.profile.displayName),
+                    style: AppTextStyle.regular().copyWith(
+                      fontSize: Sizer.wp(16),
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  )
+                : null,
+          ),
+        ),
+        // Online status indicator (placeholder for future implementation)
+        Positioned(
+          bottom: 2,
+          right: 2,
+          child: Container(
+            width: Sizer.wp(12),
+            height: Sizer.wp(12),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.progresstext,
+              border: Border.all(color: AppColors.background, width: 2),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Get initials from name for avatar placeholder
+  String _getInitials(String name) {
+    final names = name.trim().split(' ');
+    if (names.length >= 2) {
+      return '${names[0][0]}${names[1][0]}'.toUpperCase();
+    } else if (names.isNotEmpty) {
+      return names[0][0].toUpperCase();
+    }
+    return 'U';
+  }
+
+  /// Format timestamp for display
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inMinutes < 1) {
+      return 'Now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d ago';
+    } else {
+      return '${timestamp.day}/${timestamp.month}/${timestamp.year}';
+    }
+  }
+
+  /// Open conversation in chat screen
+  void _openConversation(chat_models.PrivateChatConversation conversation) {
+    // Select the conversation in the controller
+    _chatController.selectConversation(conversation);
+
+    // Navigate to chat screen
+    Get.to(() => const Admin_chatscreen());
   }
 }

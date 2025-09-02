@@ -161,7 +161,9 @@ class UserViewSingleTemplateScreen extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                                 color: isSelected
-                                    ? const Color(0xFF4E53B1).withOpacity(0.08)
+                                    ? const Color(
+                                        0xFF4E53B1,
+                                      ).withValues(alpha: 0.08)
                                     : Colors.transparent,
                               ),
                               child: Row(

@@ -45,7 +45,7 @@ class AddProjectScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFA9B7DD).withOpacity(0.08),
+            color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: const Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,
@@ -154,7 +154,7 @@ class AddProjectScreen extends StatelessWidget {
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedTeam.value != null
                         ? AppColors.text
-                        : AppColors.text.withOpacity(0.6),
+                        : AppColors.text.withValues(alpha: 0.6),
                     height: 1.5,
                   ),
                 ),
@@ -212,7 +212,7 @@ class AddProjectScreen extends StatelessWidget {
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedManager.value != null
                         ? AppColors.text
-                        : AppColors.text.withOpacity(0.6),
+                        : AppColors.text.withValues(alpha: 0.6),
                     height: 1.5,
                   ),
                 ),
@@ -259,7 +259,7 @@ class AddProjectScreen extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Enter project location',
               hintStyle: AppTextStyle.f14W400().copyWith(
-                color: AppColors.text.withOpacity(0.6),
+                color: AppColors.text.withValues(alpha: 0.6),
                 height: 1.5,
               ),
               border: InputBorder.none,
@@ -291,7 +291,7 @@ class AddProjectScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: isValid
               ? AppColors.primary
-              : AppColors.primary.withOpacity(0.5),
+              : AppColors.primary.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),
         child: Material(

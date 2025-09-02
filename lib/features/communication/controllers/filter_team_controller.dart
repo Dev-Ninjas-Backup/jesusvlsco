@@ -4,36 +4,36 @@ import 'package:get/get.dart';
 // Controller for managing dropdown state and functionality
 class DropdownController extends GetxController {
   final TextEditingController searchController = TextEditingController();
-  
+
   final RxList<String> _allItems = <String>[].obs;
   final RxList<String> _filteredItems = <String>[].obs;
   final RxList<String> _selectedItems = <String>[].obs;
   final RxBool _isOpen = false.obs;
-  
+
   // Getters
   List<String> get allItems => _allItems;
   List<String> get filteredItems => _filteredItems;
   List<String> get selectedItems => _selectedItems;
   bool get isOpen => _isOpen.value;
-  
+
   @override
   void onInit() {
     super.onInit();
     searchController.addListener(_filterItems);
   }
-  
+
   @override
   void onClose() {
     searchController.dispose();
     super.onClose();
   }
-  
+
   // Initialize dropdown with items
   void initializeItems(List<String> items) {
     _allItems.assignAll(items);
     _filteredItems.assignAll(items);
   }
-  
+
   // Filter items based on search query
   void _filterItems() {
     final query = searchController.text.toLowerCase();
@@ -41,11 +41,11 @@ class DropdownController extends GetxController {
       _filteredItems.assignAll(_allItems);
     } else {
       _filteredItems.assignAll(
-        _allItems.where((item) => item.toLowerCase().contains(query)).toList()
+        _allItems.where((item) => item.toLowerCase().contains(query)).toList(),
       );
     }
   }
-  
+
   // Toggle dropdown open/close state
   void toggleDropdown() {
     _isOpen.value = !_isOpen.value;
@@ -53,13 +53,13 @@ class DropdownController extends GetxController {
       searchController.clear();
     }
   }
-  
+
   // Close dropdown
   void closeDropdown() {
     _isOpen.value = false;
     searchController.clear();
   }
-  
+
   // Select/deselect item
   void toggleItemSelection(String item) {
     if (_selectedItems.contains(item)) {
@@ -68,29 +68,29 @@ class DropdownController extends GetxController {
       _selectedItems.add(item);
     }
   }
-  
+
   // Clear all selections
   void clearSelection() {
     _selectedItems.clear();
   }
-  
+
   // Select all filtered items
   void selectAll() {
     _selectedItems.assignAll(_filteredItems);
   }
-  
+
   // Get display text for dropdown button
   String getDisplayText(String hintText) {
     if (_selectedItems.isEmpty) return hintText;
     if (_selectedItems.length == 1) return _selectedItems.first;
     return '${_selectedItems.length} teams selected';
   }
-  
+
   // Check if item is selected
   bool isItemSelected(String item) {
     return _selectedItems.contains(item);
   }
-  
+
   // Get selected value (last selected item or null)
   String? getSelectedValue() {
     return _selectedItems.isNotEmpty ? _selectedItems.last : null;
@@ -176,7 +176,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
               border: Border.all(color: Colors.grey.shade300),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: Offset(0, 4),
                 ),
@@ -231,7 +231,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
               widget.onChanged(null);
               _overlayEntry?.markNeedsBuild();
             },
-            child: Text('Clear', style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+            child: Text(
+              'Clear',
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -239,7 +242,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
               widget.onChanged(controller.getSelectedValue());
               _overlayEntry?.markNeedsBuild();
             },
-            child: Text('Select all', style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+            child: Text(
+              'Select all',
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+            ),
           ),
         ],
       ),
@@ -248,53 +254,61 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Widget _buildItemsList() {
     return Expanded(
-      child: Obx(() => ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: controller.filteredItems.length,
-        itemBuilder: (context, index) {
-          final item = controller.filteredItems[index];
-          final isSelected = controller.isItemSelected(item);
-          final isTeamB = item == 'Team B';
-          
-          return InkWell(
-            onTap: () {
-              controller.toggleItemSelection(item);
-              widget.onChanged(controller.getSelectedValue());
-              _overlayEntry?.markNeedsBuild();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              color: isSelected ? Colors.blue.shade50 : null,
-              child: Row(
-                children: [
-                  Container(
-                    width: 18,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: isSelected ? Colors.blue : Colors.grey.shade400,
-                        width: 2,
+      child: Obx(
+        () => ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: controller.filteredItems.length,
+          itemBuilder: (context, index) {
+            final item = controller.filteredItems[index];
+            final isSelected = controller.isItemSelected(item);
+            final isTeamB = item == 'Team B';
+
+            return InkWell(
+              onTap: () {
+                controller.toggleItemSelection(item);
+                widget.onChanged(controller.getSelectedValue());
+                _overlayEntry?.markNeedsBuild();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                color: isSelected ? Colors.blue.shade50 : null,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: isSelected
+                              ? Colors.blue
+                              : Colors.grey.shade400,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(3),
+                        color: isSelected ? Colors.blue : null,
                       ),
-                      borderRadius: BorderRadius.circular(3),
-                      color: isSelected ? Colors.blue : null,
+                      child: isSelected
+                          ? Icon(Icons.check, size: 12, color: Colors.white)
+                          : null,
                     ),
-                    child: isSelected ? Icon(Icons.check, size: 12, color: Colors.white) : null,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    item,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isTeamB ? Colors.blue : Colors.black87,
-                      fontWeight: isTeamB ? FontWeight.w600 : FontWeight.normal,
+                    SizedBox(width: 12),
+                    Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isTeamB ? Colors.blue : Colors.black87,
+                        fontWeight: isTeamB
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      )),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -317,20 +331,28 @@ class _CustomDropdownState extends State<CustomDropdown> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Obx(() => Text(
-                  controller.getDisplayText(widget.hintText),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: controller.selectedItems.isEmpty ? Colors.grey.shade600 : Colors.black87,
+                child: Obx(
+                  () => Text(
+                    controller.getDisplayText(widget.hintText),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: controller.selectedItems.isEmpty
+                          ? Colors.grey.shade600
+                          : Colors.black87,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                )),
+                ),
               ),
-              Obx(() => Icon(
-                controller.isOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                color: Colors.grey.shade600,
-                size: 20,
-              )),
+              Obx(
+                () => Icon(
+                  controller.isOpen
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: Colors.grey.shade600,
+                  size: 20,
+                ),
+              ),
             ],
           ),
         ),
@@ -339,28 +361,25 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 }
 
+// Dummy data list directly in the page
+final List<String> dummyTeams = [
+  'Team A',
+  'Team B',
+  'Team C',
+  'Team D',
+  'Alpha Team',
+  'Beta Team',
+  'Gamma Team',
+  'Delta Team',
+  'Development Team',
+  'Marketing Team',
+];
 
+final RxnString selectedTeam = RxnString();
 
-  // Dummy data list directly in the page
-  final List<String> dummyTeams = [
-    'Team A',
-    'Team B', 
-    'Team C',
-    'Team D',
-    'Alpha Team',
-    'Beta Team',
-    'Gamma Team',
-    'Delta Team',
-    'Development Team',
-    'Marketing Team',
-  ];
-
-  final RxnString selectedTeam = RxnString();
-
-  void onTeamChanged(String? value) {
-    selectedTeam.value = value;
-    if (value != null) {
-      print('Selected team: $value');
-    }
-  
+void onTeamChanged(String? value) {
+  selectedTeam.value = value;
+  if (value != null) {
+    print('Selected team: $value');
   }
+}

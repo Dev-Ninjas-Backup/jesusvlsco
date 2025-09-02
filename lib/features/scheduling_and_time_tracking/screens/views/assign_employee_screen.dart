@@ -67,7 +67,7 @@ class AssignEmployeeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -102,7 +102,7 @@ class AssignEmployeeScreen extends StatelessWidget {
                         child: Icon(
                           Icons.refresh,
                           size: Sizer.wp(20),
-                          color: AppColors.primary.withOpacity(0.7),
+                          color: AppColors.primary.withValues(alpha: 0.7),
                         ),
                       ),
               ),
@@ -133,7 +133,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(Sizer.wp(8)),
             border: Border.all(
               color: controller.selectedProject.value != null
-                  ? AppColors.primary.withOpacity(0.5)
+                  ? AppColors.primary.withValues(alpha: 0.5)
                   : const Color(0xFFC8CAE7),
               width: 1,
             ),
@@ -147,7 +147,7 @@ class AssignEmployeeScreen extends StatelessWidget {
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedProject.value != null
                         ? AppColors.text
-                        : AppColors.text.withOpacity(0.6),
+                        : AppColors.text.withValues(alpha: 0.6),
                     height: 1.5,
                   ),
                   maxLines: 1,

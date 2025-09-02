@@ -20,7 +20,7 @@ class AssignedEmployeeList extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -49,7 +49,7 @@ class AssignedEmployeeList extends StatelessWidget {
                         vertical: Sizer.hp(4),
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
@@ -172,10 +172,10 @@ class AssignedEmployeeList extends StatelessWidget {
             height: Sizer.hp(48),
             padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
+              color: AppColors.primary.withValues(alpha: 0.05),
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -268,7 +268,7 @@ class AssignedEmployeeList extends StatelessWidget {
                   height: Sizer.wp(40),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                   ),
                   child: user.profile?.profileUrl != null
                       ? ClipOval(

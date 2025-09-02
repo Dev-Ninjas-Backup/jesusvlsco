@@ -29,7 +29,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: SafeArea(
-          child: SingleChildScrollView( 
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(height: Sizer.hp(205)),
@@ -43,7 +43,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -81,7 +81,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
 
                         _buildResendOption(
                           method: ResendMethod.call,
-                           imagePath: IconPath.call,
+                          imagePath: IconPath.call,
                           text: AppText.resendViaCall,
                         ),
                         SizedBox(height: Sizer.hp(16)),
@@ -103,7 +103,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                                 context.pushNamed(RouteNames.loginwithemail);
                               }
                               if (_selectedMethod == ResendMethod.call) {
-                                context.pushNamed (RouteNames.loginwithphone);
+                                context.pushNamed(RouteNames.loginwithphone);
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -116,9 +116,9 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                             ),
                             child: Text(
                               AppText.resendCode,
-                              style: AppTextStyle.semibold(
-                           
-                              ).copyWith(color: Colors.white),
+                              style: AppTextStyle.semibold().copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -129,7 +129,7 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
                 ),
                 SizedBox(height: Sizer.hp(48)),
               ],
-            ),  
+            ),
           ),
         ),
       ),
@@ -179,20 +179,21 @@ class _VerifyMethodScreenState extends State<VerifyMethodScreen> {
             const SizedBox(width: 12),
             Image.asset(
               imagePath,
-              width:Sizer.wp(24),
+              width: Sizer.wp(24),
               height: Sizer.hp(24),
-              color: isSelected ? AppColors.primary : AppColors.textSecondary 
+              color: isSelected ? AppColors.primary : AppColors.textSecondary,
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 text,
-                style: AppTextStyle.baseTextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ).copyWith(
-                  color: isSelected ? AppColors.primary : AppColors.color3,
-                ),
+                style:
+                    AppTextStyle.baseTextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ).copyWith(
+                      color: isSelected ? AppColors.primary : AppColors.color3,
+                    ),
               ),
             ),
           ],

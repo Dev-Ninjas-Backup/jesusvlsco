@@ -17,10 +17,11 @@ class Phoneotpverify extends StatefulWidget {
 }
 
 class _PhoneotpverifyState extends State<Phoneotpverify> {
-  final List<TextEditingController> _controllers =
-      List.generate(4, (index) => TextEditingController());
-  final List<FocusNode> _focusNodes =
-      List.generate(4, (index) => FocusNode());
+  final List<TextEditingController> _controllers = List.generate(
+    4,
+    (index) => TextEditingController(),
+  );
+  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
 
   @override
   void initState() {
@@ -32,120 +33,115 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          gradient: AppColors.loginGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.loginGradient),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding:  EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
+              padding: EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
               child: Container(
-                  // width: Sizer.wp(360),
-                  // height: 386,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Sizer.wp(24),
-                    vertical: Sizer.hp(48),
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundLight,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+                // width: Sizer.wp(360),
+                // height: 386,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizer.wp(24),
+                  vertical: Sizer.hp(48),
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundLight,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppText.enterDigitCode,
+                      style: AppTextStyle.semibold().copyWith(
+                        color: AppColors.textPrimary,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        AppText.enterDigitCode,
-                        style: AppTextStyle.semibold().copyWith(
-                          color: AppColors.textPrimary,
-                        ),
+                    ),
+                    SizedBox(height: Sizer.hp(8)),
+                    Text(
+                      "${AppText.sentTo}+91 1234567890",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.regular().copyWith(
+                        color: AppColors.textSecondary,
                       ),
-                      SizedBox(height: Sizer.hp(8)),
-                      Text(
-                        "${AppText.sentTo}+91 1234567890",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.regular().copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                    ),
+                    SizedBox(height: Sizer.hp(24)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        4,
+                        (index) => _buildOTPField(index),
                       ),
-                      SizedBox(height: Sizer.hp(24)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          4,
-                          (index) => _buildOTPField(index),
-                        ),
-                      ),
-                      SizedBox(height: Sizer.hp(24)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppText.didntGet,
-                            style: AppTextStyle.semiregular().copyWith(
-                              color: AppColors.textSecondary,
-                            ),
+                    ),
+                    SizedBox(height: Sizer.hp(24)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppText.didntGet,
+                          style: AppTextStyle.semiregular().copyWith(
+                            color: AppColors.textSecondary,
                           ),
-                          GestureDetector(
-                            onTap: (){
-                              context.pushNamed(RouteNames.verifyMethod);
-                            },
-                            child: Text(
-                                AppText.moreOptions,
-                                style: AppTextStyle.regular().copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(height: Sizer.hp(24)),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context.pushNamed(RouteNames.verifycomplete);
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.pushNamed(RouteNames.verifyMethod);
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
                           child: Text(
-                            AppText.verify,
-                            style: AppTextStyle.textbold().copyWith(
-                              color: AppColors.textWhite,
-                              fontWeight: FontWeight.w600,
+                            AppText.moreOptions,
+                            style: AppTextStyle.regular().copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: Sizer.hp(24)),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.pushNamed(RouteNames.verifycomplete);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          AppText.verify,
+                          style: AppTextStyle.textbold().copyWith(
+                            color: AppColors.textWhite,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                        SizedBox(height: Sizer.hp(24)),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: Sizer.hp(24)),
+                  ],
+                ),
               ),
             ),
           ],
@@ -182,9 +178,7 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
           counterText: '',
           contentPadding: EdgeInsets.zero,
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         onChanged: (value) => _handleOTPInput(index, value),
         onTap: () => _controllers[index].selection = TextSelection.fromPosition(
           TextPosition(offset: _controllers[index].text.length),

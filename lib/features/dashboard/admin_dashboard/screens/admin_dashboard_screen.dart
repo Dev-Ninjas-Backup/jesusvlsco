@@ -78,7 +78,7 @@ class AdminDashboardScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(Sizer.wp(12)),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFA9B7DD).withOpacity(0.08),
+                color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
                 offset: const Offset(0, 4),
                 blurRadius: 8,
                 spreadRadius: 0,
@@ -219,7 +219,7 @@ class AdminDashboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFA9B7DD).withOpacity(0.08),
+            color: Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,
@@ -233,7 +233,7 @@ class AdminDashboardScreen extends StatelessWidget {
             width: Sizer.wp(40),
             height: Sizer.wp(40),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(Sizer.wp(8)),
             ),
             child: Center(
@@ -342,7 +342,7 @@ class AdminDashboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFA9B7DD).withOpacity(0.08),
+            color: Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,
@@ -446,7 +446,7 @@ class AdminDashboardScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(Sizer.wp(12)),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFA9B7DD).withOpacity(0.08),
+                color: Color(0xFFA9B7DD).withValues(alpha: 0.08),
                 offset: Offset(0, 4),
                 blurRadius: 8,
                 spreadRadius: 0,
@@ -622,7 +622,7 @@ class AdminDashboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFA9B7DD).withOpacity(0.08),
+            color: Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,
@@ -731,7 +731,7 @@ class AdminDashboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFFA9B7DD).withOpacity(0.08),
+            color: Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,

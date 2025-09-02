@@ -20,7 +20,7 @@ class ResponsePage extends StatelessWidget {
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: AppColors.primaryBackground,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.arrow_left,
@@ -65,7 +65,7 @@ class ResponsePage extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.border.withOpacity(0.3),
+                    color: AppColors.border.withValues(alpha: 0.3),
                     spreadRadius: 1,
                     blurRadius: 10,
                     offset: const Offset(0, 2),
@@ -82,7 +82,6 @@ class ResponsePage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(Sizer.wp(12)),
                     child: _buildProgressCard(
-                
                       persentcolor: AppColors.progresstext,
                       title: '210 /250',
                       subtitle: 'Users have viewed',
@@ -92,11 +91,13 @@ class ResponsePage extends StatelessWidget {
                       iconColor: Colors.green,
                     ),
                   ),
-                  
+
                   Padding(
-                    padding:  EdgeInsets.only(right: Sizer.wp(12), left: Sizer.wp(4)),
+                    padding: EdgeInsets.only(
+                      right: Sizer.wp(12),
+                      left: Sizer.wp(4),
+                    ),
                     child: _buildProgressCard(
-                  
                       persentcolor: AppColors.error,
                       title: '40 /250',
                       subtitle: 'Users have not viewed',
@@ -109,23 +110,20 @@ class ResponsePage extends StatelessWidget {
                 ],
               ),
             ),
-             SizedBox(height: Sizer.hp( 16)),
+            SizedBox(height: Sizer.hp(16)),
             Container(
-                    width: Sizer.wp(360),
-                  height: Sizer.hp(671),
+              width: Sizer.wp(360),
+              height: Sizer.hp(671),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(Sizer.wp(12)),
-                // border: Border.all(color: AppColors.border, width: 1), 
+                // border: Border.all(color: AppColors.border, width: 1),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  
-                  decoration: BoxDecoration(
-                   
-                  ),
-            
+                  decoration: BoxDecoration(),
+
                   child: ListView.builder(
                     itemCount: announcementcontroller.dummyUsers.length,
                     itemBuilder: (context, index) {
@@ -134,8 +132,8 @@ class ResponsePage extends StatelessWidget {
                         name: announcementcontroller.dummyUsers[index]['name'],
                         profileImageUrl: announcementcontroller
                             .dummyUsers[index]['profileImageUrl'],
-                        statusText:
-                            announcementcontroller.dummyUsers[index]['statusText'],
+                        statusText: announcementcontroller
+                            .dummyUsers[index]['statusText'],
                         statusColor: announcementcontroller
                             .dummyUsers[index]['statusColor'],
                       );
@@ -150,87 +148,88 @@ class ResponsePage extends StatelessWidget {
     );
   }
 
- Widget _buildProgressCard({
-  required String title,
-  required String subtitle,
-  required double progress,
-  required Color progressColor,
-  required IconData icon,
-  required Color iconColor,
-  required Color persentcolor,
-}) {
-  return Container(
-    width: Sizer.wp(159),
-    height: Sizer.hp(164),
-    decoration: BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.border.withOpacity(0.3),
-          spreadRadius: 1,
-          blurRadius: 10,
-          offset: const Offset(0, 2),
-        ),
-      ],
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(Sizer.wp(12)),
-      border: Border.all(color: AppColors.border, width: 1),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Progress Circle
-          CircularPercentIndicator(
-            radius: Sizer.wp(25.0),
-            lineWidth: 10.0,
-            animation: true,
-            percent: progress,
-            circularStrokeCap: CircularStrokeCap.round,
-            progressColor: progressColor,
-            backgroundColor: AppColors.secondary,
-          ),
-          SizedBox(height: Sizer.hp(4)), // Add some space between the progress circle and the percentage text
-
-          // Percentage Text
-          Text(
-            "${(progress * 100).toInt()}%",
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(12),
-              fontWeight: FontWeight.w600,
-              color: persentcolor,
-            ),
-          ),
-          SizedBox(height: Sizer.hp(6)), // Space between the percentage and the title text
-
-          // Title Text
-          Text(
-            title,
-            style: AppTextStyle.textlarge().copyWith(
-              fontSize: Sizer.wp(16),
-              fontWeight: FontWeight.w600,
-              color: AppColors.text,
-            ),
-            textAlign: TextAlign.center, // Ensure title is centered
-          ),
-          SizedBox(height: Sizer.hp(6)), // Space between title and subtitle
-
-          // Subtitle Text
-          Text(
-            subtitle,
-            style: AppTextStyle.textlarge().copyWith(
-              fontSize: Sizer.wp(14),
-              fontWeight: FontWeight.w400,
-              color: AppColors.text,
-            ),
-            textAlign: TextAlign.center, // Ensure subtitle is centered
+  Widget _buildProgressCard({
+    required String title,
+    required String subtitle,
+    required double progress,
+    required Color progressColor,
+    required IconData icon,
+    required Color iconColor,
+    required Color persentcolor,
+  }) {
+    return Container(
+      width: Sizer.wp(159),
+      height: Sizer.hp(164),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.border.withValues(alpha: 0.3),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Sizer.wp(12)),
+        border: Border.all(color: AppColors.border, width: 1),
       ),
-    ),
-  );
-}
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Progress Circle
+            CircularPercentIndicator(
+              radius: Sizer.wp(25.0),
+              lineWidth: 10.0,
+              animation: true,
+              percent: progress,
+              circularStrokeCap: CircularStrokeCap.round,
+              progressColor: progressColor,
+              backgroundColor: AppColors.secondary,
+            ),
+            SizedBox(
+              height: Sizer.hp(4),
+            ), // Add some space between the progress circle and the percentage text
+            // Percentage Text
+            Text(
+              "${(progress * 100).toInt()}%",
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(12),
+                fontWeight: FontWeight.w600,
+                color: persentcolor,
+              ),
+            ),
+            SizedBox(
+              height: Sizer.hp(6),
+            ), // Space between the percentage and the title text
+            // Title Text
+            Text(
+              title,
+              style: AppTextStyle.textlarge().copyWith(
+                fontSize: Sizer.wp(16),
+                fontWeight: FontWeight.w600,
+                color: AppColors.text,
+              ),
+              textAlign: TextAlign.center, // Ensure title is centered
+            ),
+            SizedBox(height: Sizer.hp(6)), // Space between title and subtitle
+            // Subtitle Text
+            Text(
+              subtitle,
+              style: AppTextStyle.textlarge().copyWith(
+                fontSize: Sizer.wp(14),
+                fontWeight: FontWeight.w400,
+                color: AppColors.text,
+              ),
+              textAlign: TextAlign.center, // Ensure subtitle is centered
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildUserRow({
     required String name,
@@ -241,9 +240,9 @@ class ResponsePage extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
-      
+
         border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1)),
       ),
       child: Row(
@@ -255,7 +254,6 @@ class ResponsePage extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                
                 color: isSelected ? Colors.blue.shade600 : Colors.transparent,
                 border: Border.all(
                   color: isSelected ? Colors.blue.shade600 : Color(0xFFD1D5DB),
@@ -268,9 +266,9 @@ class ResponsePage extends StatelessWidget {
                   : null,
             ),
           ),
-    
+
           const SizedBox(width: 12),
-    
+
           // Profile Image
           CircleAvatar(
             radius: 22,
@@ -283,9 +281,9 @@ class ResponsePage extends StatelessWidget {
                 ? Icon(Icons.person, color: Color(0xFF9CA3AF), size: 24)
                 : null,
           ),
-    
+
           const SizedBox(width: 12),
-    
+
           // Name
           Expanded(
             child: Text(
@@ -297,12 +295,12 @@ class ResponsePage extends StatelessWidget {
               ),
             ),
           ),
-    
+
           // Status Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(

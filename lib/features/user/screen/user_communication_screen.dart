@@ -10,24 +10,25 @@ import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/sizer.dart';
 import '../../../routes/config/route_constants.dart';
 import '../../communication/screens/admin_chat_screen.dart';
-import '../../communication/screens/create_new.dart';
+import '../../communication/screens/create_new_chat_screen.dart';
 import '../../communication/widgets/chat_dashboard.dart';
 
 class UserCommunicationScreen extends StatefulWidget {
-   UserCommunicationScreen({super.key});
+  UserCommunicationScreen({super.key});
 
   @override
-  State<UserCommunicationScreen> createState() => _UserCommunicationScreenState();
+  State<UserCommunicationScreen> createState() =>
+      _UserCommunicationScreenState();
 }
 
 class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
   int _selectedTabIndex = 0;
- // Default selected tab index
+  // Default selected tab index
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar:_buildAppBar(),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
           Padding(
@@ -69,9 +70,8 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
                     ),
                     SizedBox(width: Sizer.wp(8)),
 
-
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Get.to(ChatSetting());
                       },
                       child: Container(
@@ -171,10 +171,11 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
     switch (_selectedTabIndex) {
       case 0:
         return InkWell(
-            onTap: (){
-              Get.to(Admin_chatscreen());
-            },
-            child: ChatDashboard());
+          onTap: () {
+            Get.to(Admin_chatscreen());
+          },
+          child: ChatDashboard(),
+        );
       case 1:
         return _buildUnreadContent();
       case 2:
@@ -213,7 +214,7 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
           hintText: 'Search',
           hintStyle: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(14),
-            color: AppColors.textSecondary.withOpacity(0.6),
+            color: AppColors.textSecondary.withValues(alpha: 0.6),
           ),
           suffixIcon: Container(
             padding: const EdgeInsets.all(8),
@@ -239,10 +240,9 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
   // AppBar Widget
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: IconButton(
         icon: Icon(
           CupertinoIcons.arrow_left,
@@ -251,7 +251,6 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
         ),
         onPressed: () {
           Get.back();
-
         },
       ),
       title: Text(

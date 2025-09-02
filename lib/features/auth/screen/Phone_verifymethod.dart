@@ -27,13 +27,16 @@ class Phoneverifymethod extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 48,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -43,10 +46,7 @@ class Phoneverifymethod extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      AppText.welcome,
-                      style: AppTextStyle.textlarge(),
-                    ),
+                    Text(AppText.welcome, style: AppTextStyle.textlarge()),
                     SizedBox(height: Sizer.hp(8)),
                     Text(
                       AppText.loginToProfile,
@@ -67,22 +67,23 @@ class Phoneverifymethod extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: Sizer.hp(20)),
-                    Obx(()=>
-                    controller.isLoading.value ? Center(
-                                    child: SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: LoadingIndicator(
-                                        indicatorType: Indicator.ballPulseSync,
+                    Obx(
+                      () => controller.isLoading.value
+                          ? Center(
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: LoadingIndicator(
+                                  indicatorType: Indicator.ballPulseSync,
 
-                                        colors: [AppColors.primary],
-                                        strokeWidth: 2,
-                                        backgroundColor: Colors.transparent,
-                                      ),
-                                    ),
-                                  ):
-                    
-                     _buildVerifyButton(controller)),
+                                  colors: [AppColors.primary],
+                                  strokeWidth: 2,
+                                  backgroundColor: Colors.transparent,
+                                ),
+                              ),
+                            )
+                          : _buildVerifyButton(controller),
+                    ),
                   ],
                 ),
               ),
@@ -93,12 +94,17 @@ class Phoneverifymethod extends StatelessWidget {
     );
   }
 
-  Widget _buildPhoneNumberInput(PhoneController controller, BuildContext context) {
+  Widget _buildPhoneNumberInput(
+    PhoneController controller,
+    BuildContext context,
+  ) {
     return Obx(
       () => Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: controller.isValidPhone.value ? AppColors.primary : AppColors.textSecondaryGrey,
+            color: controller.isValidPhone.value
+                ? AppColors.primary
+                : AppColors.textSecondaryGrey,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -110,7 +116,7 @@ class Phoneverifymethod extends StatelessWidget {
               child: TextField(
                 controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
-                
+
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(15),
@@ -122,7 +128,10 @@ class Phoneverifymethod extends StatelessWidget {
                   border: InputBorder.none,
                   hintText: 'Enter phone number',
                   hintStyle: TextStyle(color: AppColors.textSecondaryGrey),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 16,
+                  ),
                 ),
                 style: const TextStyle(
                   fontSize: 16,
@@ -137,7 +146,10 @@ class Phoneverifymethod extends StatelessWidget {
     );
   }
 
-  Widget _buildCountryCodePicker(PhoneController controller, BuildContext context) {
+  Widget _buildCountryCodePicker(
+    PhoneController controller,
+    BuildContext context,
+  ) {
     return CountryCodePicker(
       onChanged: controller.updateCountryCode,
       initialSelection: 'US',
@@ -146,8 +158,12 @@ class Phoneverifymethod extends StatelessWidget {
       showOnlyCountryWhenClosed: false,
       alignLeft: false,
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      textStyle: AppTextStyle.regular().copyWith(color: AppColors.textSecondary),
-      dialogTextStyle: AppTextStyle.regular().copyWith(color: AppColors.textSecondary),
+      textStyle: AppTextStyle.regular().copyWith(
+        color: AppColors.textSecondary,
+      ),
+      dialogTextStyle: AppTextStyle.regular().copyWith(
+        color: AppColors.textSecondary,
+      ),
       searchDecoration: const InputDecoration(
         hintText: 'Search country',
         border: OutlineInputBorder(),
@@ -165,7 +181,9 @@ class Phoneverifymethod extends StatelessWidget {
         width: Sizer.wp(312),
         height: Sizer.hp(48),
         child: ElevatedButton(
-          onPressed: controller.isLoading.value ? null : controller.loginWithPhone,
+          onPressed: controller.isLoading.value
+              ? null
+              : controller.loginWithPhone,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.color1,
             elevation: 0,

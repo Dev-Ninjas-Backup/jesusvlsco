@@ -42,7 +42,9 @@ class AddTaskPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.textSecondary.withOpacity(0.1),
+                            color: AppColors.textSecondary.withValues(
+                              alpha: 0.1,
+                            ),
                             blurRadius: 3,
                             offset: const Offset(0, 4),
                           ),
@@ -85,8 +87,8 @@ class AddTaskPage extends StatelessWidget {
                                 ),
 
                                 InkWell(
-                                  onTap: (){
-                                     Get.to(Adddetails());
+                                  onTap: () {
+                                    Get.to(Adddetails());
                                   },
                                   child: Text(
                                     'Add more details',
@@ -113,13 +115,11 @@ class AddTaskPage extends StatelessWidget {
                     // First Button
                     Flexible(
                       child: customButton(
-                          textcolor: AppColors.primaryBackground,
+                        textcolor: AppColors.primaryBackground,
                         bgcolor: AppColors.primary,
-                    brcolor: Colors.transparent,
+                        brcolor: Colors.transparent,
                         text: 'Publish Task',
-                        onPressed: () => {
-
-                        },
+                        onPressed: () => {},
                         width: Sizer.wp(
                           176,
                         ), // Adjusted width for the first button
@@ -134,8 +134,8 @@ class AddTaskPage extends StatelessWidget {
                       child: customButton(
                         textcolor: AppColors.textPrimary,
 
-                       bgcolor: AppColors.primaryBackground,
-                    brcolor: AppColors.primary,
+                        bgcolor: AppColors.primaryBackground,
+                        brcolor: AppColors.primary,
                         text: 'Draft Task',
                         onPressed: () => {},
                         width: Sizer.wp(
@@ -156,17 +156,17 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
   return AppBar(
     shadowColor: AppColors.textWhite,
     backgroundColor: Colors.white,
-    elevation: 4,
-     leading: IconButton(
-          icon: Icon(
-            CupertinoIcons.arrow_left,
-            color: AppColors.backgroundDark,
-            size: Sizer.wp(24),
-          ),
-          onPressed: () {
-          Get.back();
-          },
-        ),
+    elevation: 0.1,
+    leading: IconButton(
+      icon: Icon(
+        CupertinoIcons.arrow_left,
+        color: AppColors.backgroundDark,
+        size: Sizer.wp(24),
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    ),
     title: Text(
       'Add Task',
       style: AppTextStyle.regular().copyWith(

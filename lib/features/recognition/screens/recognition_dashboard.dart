@@ -13,10 +13,9 @@ import 'package:jesusvlsco/features/recognition/screens/send_recognition.dart';
 class RecognitionDashboard extends StatelessWidget {
   const RecognitionDashboard({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-final RecognitionController controller = Get.put(RecognitionController());
+    final RecognitionController controller = Get.put(RecognitionController());
     return Scaffold(
       appBar: _buildAppBar(),
       body: Column(
@@ -34,8 +33,7 @@ final RecognitionController controller = Get.put(RecognitionController());
                     bgcolor: AppColors.primary,
                     brcolor: AppColors.primary,
                     onPressed: () {
-
-                    Get.to(SendRecognition());
+                      Get.to(SendRecognition());
                     },
                   ),
                 ),
@@ -60,7 +58,7 @@ final RecognitionController controller = Get.put(RecognitionController());
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 _buildDatePicker(() {
-                 controller.selectDate(context);
+                  controller.selectDate(context);
                 }),
               ],
             ),
@@ -118,7 +116,7 @@ final RecognitionController controller = Get.put(RecognitionController());
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: AppColors.textSecondary.withOpacity(0.1),
+              color: AppColors.textSecondary.withValues(alpha: 0.1),
               blurRadius: 3,
               offset: const Offset(0, 4),
             ),
@@ -194,8 +192,8 @@ final RecognitionController controller = Get.put(RecognitionController());
     return AppBar(
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
-     leading: IconButton(
+      elevation: 0.1,
+      leading: IconButton(
         icon: Icon(
           CupertinoIcons.arrow_left,
           color: AppColors.backgroundDark,

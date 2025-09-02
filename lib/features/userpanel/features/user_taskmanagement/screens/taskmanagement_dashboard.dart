@@ -48,7 +48,7 @@ class _UserTaskmanagementDashboardState
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.arrow_left,
@@ -93,7 +93,9 @@ class _UserTaskmanagementDashboardState
               decoration: BoxDecoration(
                 color: AppColors.primaryBackground,
                 borderRadius: BorderRadius.circular(Sizer.wp(8)),
-                border: Border.all(color: AppColors.border.withOpacity(0.3)),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.3),
+                ),
               ),
               child: TabBar(
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -232,7 +234,7 @@ Widget _buildSearchTextField() {
             borderRadius: BorderRadius.circular(Sizer.wp(10)),
             boxShadow: [
               BoxShadow(
-                color: AppColors.textSecondary.withOpacity(0.1),
+                color: AppColors.textSecondary.withValues(alpha: 0.1),
                 blurRadius: 3,
                 offset: const Offset(0, 4),
               ),
@@ -247,7 +249,7 @@ Widget _buildSearchTextField() {
               hintText: 'Search articles',
               hintStyle: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(14),
-                color: AppColors.textSecondary.withOpacity(0.6),
+                color: AppColors.textSecondary.withValues(alpha: 0.6),
               ),
               suffixIcon: Container(
                 padding: const EdgeInsets.all(8),
@@ -266,7 +268,6 @@ Widget _buildSearchTextField() {
         ),
         SizedBox(width: Sizer.wp(8)),
         CustomButton1(
-          
           width: Sizer.wp(100),
           color: AppColors.primary,
           text: "Activity",

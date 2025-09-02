@@ -80,7 +80,7 @@ class EditAndLikeRecognition extends StatelessWidget {
           ),
 
           Padding(
-            padding:  EdgeInsets.all(Sizer.wp(16)),
+            padding: EdgeInsets.all(Sizer.wp(16)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -126,7 +126,7 @@ class EditAndLikeRecognition extends StatelessWidget {
               ],
             ),
           ),
-           Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
             child: Divider(color: AppColors.border2, height: 1),
           ),
@@ -140,7 +140,7 @@ PreferredSizeWidget _buildAppBar() {
   return AppBar(
     shadowColor: Colors.white,
     backgroundColor: Colors.white,
-    elevation: 4,
+    elevation: 0.1,
     leading: Icon(
       CupertinoIcons.arrow_left,
       color: AppColors.backgroundDark,

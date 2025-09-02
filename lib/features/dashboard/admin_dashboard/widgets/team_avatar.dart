@@ -19,7 +19,7 @@ class TeamAvatar extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.primary.withOpacity(0.4),
+        color: AppColors.primary.withValues(alpha: 0.4),
       ),
       child: Text(
         initial,

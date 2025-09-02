@@ -27,7 +27,7 @@ class DeleteProjectDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizer.wp(12)),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFA9B7DD).withOpacity(0.25),
+              color: const Color(0xFFA9B7DD).withValues(alpha: 0.25),
               offset: const Offset(0, 0),
               blurRadius: 12,
               spreadRadius: 0,

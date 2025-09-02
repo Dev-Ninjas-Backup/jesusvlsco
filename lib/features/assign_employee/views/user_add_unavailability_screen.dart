@@ -76,7 +76,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
             value: controller.isFullDayOff.value,
             onChanged: (val) => controller.isFullDayOff.value = val,
             activeColor: AppColors.primary,
-            activeTrackColor: AppColors.primary.withOpacity(0.5),
+            activeTrackColor: AppColors.primary.withValues(alpha: 0.5),
             inactiveThumbColor: Colors.grey.shade400,
             inactiveTrackColor: Colors.grey.shade300,
           ),

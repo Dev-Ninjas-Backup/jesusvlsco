@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +8,9 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
 import 'package:jesusvlsco/features/communication/screens/chat_info.dart';
-import 'package:jesusvlsco/features/communication/screens/create_new.dart';
+import 'package:jesusvlsco/features/communication/screens/create_new_chat_screen.dart';
 import 'package:jesusvlsco/features/communication/widgets/chat_dashboard.dart';
+import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
 import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class CommunicationDashboard extends StatefulWidget {
@@ -24,13 +23,19 @@ class CommunicationDashboard extends StatefulWidget {
 class _CommunicationDashboardState extends State<CommunicationDashboard> {
   int _selectedTabIndex = 0; // Default selected tab index
 
+  // Get private chat controller for search and connection status
+  final PrivateChatController _chatController =
+      Get.find<PrivateChatController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar:_buildAppBar(),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
+          // Connection Status
+          _buildConnectionStatus(),
           Padding(
             padding: EdgeInsets.all(Sizer.wp(16)),
             child: Row(
@@ -48,7 +53,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Get.to(CreateNew()); 
+                        Get.to(CreateNew());
                       },
                       child: Container(
                         height: Sizer.hp(34),
@@ -61,7 +66,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                           padding: EdgeInsets.all(Sizer.wp(8)),
                           child: SvgPicture.asset(
                             "assets/icons/edit.svg",
-                      
+
                             height: Sizer.hp(18),
                             width: Sizer.wp(18),
                           ),
@@ -70,8 +75,8 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                     ),
                     SizedBox(width: Sizer.wp(8)),
                     InkWell(
-                      onTap: (){
-                   Get.to(ChatInfoScreen());
+                      onTap: () {
+                        Get.to(ChatInfoScreen());
                       },
                       child: Container(
                         height: Sizer.hp(34),
@@ -84,7 +89,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
                           padding: EdgeInsets.all(Sizer.wp(8)),
                           child: SvgPicture.asset(
                             "assets/icons/settings.svg",
-                      
+
                             height: Sizer.hp(18),
                             width: Sizer.wp(18),
                           ),
@@ -170,10 +175,11 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
     switch (_selectedTabIndex) {
       case 0:
         return InkWell(
-          onTap: (){
+          onTap: () {
             Get.to(Admin_chatscreen());
           },
-          child: ChatDashboard());
+          child: ChatDashboard(),
+        );
       case 1:
         return _buildUnreadContent();
       case 2:
@@ -199,7 +205,6 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
   Widget _buildSearchTextField() {
     return Container(
       height: Sizer.hp(48),
-
       decoration: BoxDecoration(
         color: AppColors.primaryBackground,
         border: Border.all(color: AppColors.border),
@@ -207,14 +212,15 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
       ),
       child: TextField(
         textAlign: TextAlign.start,
+        onChanged: (value) => _chatController.searchQuery.value = value,
         decoration: InputDecoration(
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           border: InputBorder.none,
-          hintText: 'Search',
+          hintText: 'Search conversations...',
           hintStyle: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(14),
-            color: AppColors.textSecondary.withOpacity(0.6),
+            color: AppColors.textSecondary.withValues(alpha: 0.6),
           ),
           suffixIcon: Container(
             padding: const EdgeInsets.all(8),
@@ -222,7 +228,6 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
               padding: EdgeInsets.all(Sizer.wp(6)),
               child: SvgPicture.asset(
                 "assets/icons/search-normal.svg",
-
                 height: Sizer.hp(20),
                 width: Sizer.wp(20),
               ),
@@ -237,13 +242,70 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
     );
   }
 
+  /// Build connection status indicator
+  Widget _buildConnectionStatus() {
+    return Obx(() {
+      final isConnected = _chatController.isConnected;
+      final statusText = _chatController.connectionStatusText;
+
+      return Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: Sizer.wp(16),
+          vertical: Sizer.hp(8),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: Sizer.wp(16),
+          vertical: Sizer.hp(8),
+        ),
+        decoration: BoxDecoration(
+          color: isConnected ? AppColors.progresstext : AppColors.circle,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: Sizer.wp(10),
+              height: Sizer.wp(10),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: Sizer.wp(8)),
+            Icon(
+              isConnected ? CupertinoIcons.wifi : CupertinoIcons.wifi_slash,
+              color: Colors.white,
+              size: Sizer.wp(16),
+            ),
+            SizedBox(width: Sizer.wp(8)),
+            Text(
+              statusText,
+              style: AppTextStyle.regular().copyWith(
+                fontSize: Sizer.wp(14),
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   // AppBar Widget
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-   
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: IconButton(
         icon: Icon(
           CupertinoIcons.arrow_left,
@@ -252,7 +314,6 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
         ),
         onPressed: () {
           Get.back();
-         
         },
       ),
       title: Text(
@@ -272,7 +333,7 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
             size: Sizer.wp(24),
           ),
           onPressed: () {
-             context.pushNamed(RouteNames.drawer);
+            context.pushNamed(RouteNames.drawer);
           },
         ),
       ],

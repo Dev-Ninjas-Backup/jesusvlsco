@@ -124,7 +124,7 @@ class ApiAndIntegration extends StatelessWidget {
               SizedBox(height: 5),
               Text(
                 'Your API key is used to authenticate API requests.',
-                style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+                style: TextStyle(color: Colors.grey.withValues(alpha: 0.8)),
               ),
               SizedBox(height: 20),
 
@@ -140,7 +140,7 @@ class ApiAndIntegration extends StatelessWidget {
               SizedBox(height: 5),
               Text(
                 'YThe URL where we will send webhook notifications.',
-                style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+                style: TextStyle(color: Colors.grey.withValues(alpha: 0.8)),
               ),
               SizedBox(height: 30),
             ],

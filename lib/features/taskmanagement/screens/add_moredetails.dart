@@ -31,7 +31,7 @@ class Adddetails extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.textSecondary.withOpacity(0.1),
+                    color: AppColors.textSecondary.withValues(alpha: 0.1),
                     blurRadius: 3,
                     offset: const Offset(0, 4),
                   ),
@@ -80,7 +80,7 @@ class Adddetails extends StatelessWidget {
                 // First Button
                 Flexible(
                   child: customButton(
-                         textcolor: AppColors.primaryBackground,
+                    textcolor: AppColors.primaryBackground,
                     bgcolor: AppColors.primary,
                     brcolor: Colors.transparent,
                     text: 'Publish Task',
@@ -95,7 +95,7 @@ class Adddetails extends StatelessWidget {
                 // Second Button
                 Flexible(
                   child: customButton(
-                     bgcolor: AppColors.primaryBackground,
+                    bgcolor: AppColors.primaryBackground,
                     brcolor: AppColors.primary,
                     text: 'Draft Task',
                     onPressed: () => {},
@@ -117,17 +117,17 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
   return AppBar(
     shadowColor: AppColors.textWhite,
     backgroundColor: Colors.white,
-    elevation: 4,
-      leading: IconButton(
-          icon: Icon(
-            CupertinoIcons.arrow_left,
-            color: AppColors.backgroundDark,
-            size: Sizer.wp(24),
-          ),
-          onPressed: () {
-          Get.back();
-          },
-        ),
+    elevation: 0.1,
+    leading: IconButton(
+      icon: Icon(
+        CupertinoIcons.arrow_left,
+        color: AppColors.backgroundDark,
+        size: Sizer.wp(24),
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    ),
     title: Text(
       'Add Task',
       style: AppTextStyle.regular().copyWith(

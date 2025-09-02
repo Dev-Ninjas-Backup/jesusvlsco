@@ -5,6 +5,7 @@ import 'package:jesusvlsco/features/bottom_navigation/controller/admin_bottom_na
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/user/controller/add_user_controller.dart';
 import 'package:jesusvlsco/features/user/controller/admin_list_controller.dart';
+import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
@@ -13,5 +14,8 @@ class ControllerBinder extends Bindings {
     Get.put(LoginController());
     Get.put(AdminBottomNavigationController());
     Get.put(BottomNavigationController());
+    
+    // Initialize communication controllers
+    Get.lazyPut<PrivateChatController>(() => PrivateChatController(), fenix: true);
   }
 }

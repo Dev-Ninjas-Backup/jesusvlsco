@@ -5,14 +5,13 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/core/utils/constants/icon_path.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
+import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
 import 'package:jesusvlsco/features/user/screen/add_member_screen.dart';
-
-import 'chat_info.dart';
 
 class Admin_chatscreen extends StatefulWidget {
   const Admin_chatscreen({super.key});
@@ -23,68 +22,169 @@ class Admin_chatscreen extends StatefulWidget {
 
 class Admin_chatscreenState extends State<Admin_chatscreen> {
   final TextEditingController _messageController = TextEditingController();
-  final List<ChatMessage> _messages = [
-    ChatMessage(
-      text: "Hey! How is the new project coming along?",
-      isMe: false,
-      time: "9:40",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    ),
-    ChatMessage(
-      text:
-          "Going great! Just finished the wireframes... Will share them with you shortly.",
-      isMe: true,
-      time: "9:41",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    ),
-    ChatMessage(
-      text: "Hey! How is the new project coming along?",
-      isMe: false,
-      time: "9:41",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    ),
-    ChatMessage(
-      text:
-          "Going great! Just finished the wireframes... Will share them with you shortly.",
-      isMe: true,
-      time: "9:41",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    ),
-    ChatMessage(
-      text: "Hey! How is the new project coming along?",
-      isMe: false,
-      time: "9:41",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    ),
-    ChatMessage(
-      text:
-          "Going great! Just finished the wireframes... Will share them with you shortly.",
-      isMe: true,
-      time: "9:41",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    ),
-  ];
+  final ScrollController _scrollController = ScrollController();
+  final FocusNode _messageFocusNode = FocusNode();
+  late final PrivateChatController _chatController;
 
+  @override
+  void initState() {
+    super.initState();
+    _chatController = Get.find<PrivateChatController>();
 
-  void _sendMessage(String message) {
-    if (message.trim().isNotEmpty) {
-      setState(() {
-        _messages.add(
-          ChatMessage(
-            text: message,
-            isMe: true,
-            time: TimeOfDay.now().format(context),
-            avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-          ),
-        );
-        _messageController.clear();
+    // Listen to message changes and auto-scroll to bottom
+    ever(_chatController.currentMessages, (messages) {
+      if (messages.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollToBottom();
+        });
+      }
+    });
+
+    // Auto-scroll when keyboard appears
+    _messageFocusNode.addListener(() {
+      if (_messageFocusNode.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          _scrollToBottom();
+        });
+      }
+    });
+
+    // Auto-scroll when user starts typing
+    _messageController.addListener(() {
+      if (_messageFocusNode.hasFocus && _scrollController.hasClients) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _scrollToBottom();
+        });
+      }
+    });
+
+    // Initial scroll to bottom when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _scrollToBottom();
       });
+    });
+  }
+
+  /// Auto-scroll to bottom like Facebook Messenger
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      try {
+        final maxScrollExtent = _scrollController.position.maxScrollExtent;
+        if (maxScrollExtent > 0) {
+          _scrollController.animateTo(
+            maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      } catch (e) {
+        // Handle any scroll errors gracefully
+        print('Scroll error: $e');
+      }
+    }
+  }
+
+  /// Send message using the private chat controller
+  Future<void> _sendMessage(String message) async {
+    if (message.trim().isEmpty) return;
+
+    final selectedConversation = _chatController.selectedConversation.value;
+    if (selectedConversation == null) {
+      Get.snackbar('Error', 'No conversation selected');
+      return;
+    }
+
+    try {
+      await _chatController.sendMessage(
+        recipientId: selectedConversation.participant.id,
+        content: message.trim(),
+      );
+      _messageController.clear();
+
+      // Auto-scroll to bottom after sending message
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom();
+      });
+    } catch (error) {
+      Get.snackbar('Error', 'Failed to send message: $error');
+    }
+  }
+
+  /// Generate user initials from display name
+  String _getUserInitials(String displayName) {
+    if (displayName.isEmpty) return 'U';
+
+    final nameParts = displayName.trim().split(' ');
+    if (nameParts.length == 1) {
+      return nameParts[0].substring(0, 1).toUpperCase();
+    } else {
+      return '${nameParts[0].substring(0, 1)}${nameParts[1].substring(0, 1)}'
+          .toUpperCase();
+    }
+  }
+
+  /// Create avatar widget with initials fallback
+  Widget _buildAvatarWidget(
+    String? avatarUrl,
+    String displayName, {
+    double radius = 16,
+  }) {
+    // Check if it's a demo/placeholder image or invalid URL
+    final isDemoImage =
+        avatarUrl == null ||
+        avatarUrl.isEmpty ||
+        avatarUrl.contains('randomuser.me') ||
+        avatarUrl.contains('placeholder') ||
+        avatarUrl.contains('demo');
+
+    if (!isDemoImage) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: NetworkImage(avatarUrl),
+        onBackgroundImageError: (error, stackTrace) {
+          // If image fails to load, rebuild with initials
+          setState(() {});
+        },
+        child: null,
+      );
+    } else {
+      // Show initials instead of demo image
+      final initials = _getUserInitials(displayName);
+      return CircleAvatar(
+        radius: radius,
+        backgroundColor: AppColors.primary.withValues(alpha: 0.8),
+        child: Text(
+          initials,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: radius * 0.7,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+  }
+
+  /// Format timestamp for display
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      return DateFormat('HH:mm').format(dateTime);
+    } else if (difference.inDays == 1) {
+      return 'Yesterday ${DateFormat('HH:mm').format(dateTime)}';
+    } else {
+      return DateFormat('MMM dd, HH:mm').format(dateTime);
     }
   }
 
   @override
   void dispose() {
     _messageController.dispose();
+    _scrollController.dispose();
+    _messageFocusNode.dispose();
     super.dispose();
   }
 
@@ -107,24 +207,77 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                   color: AppColors.primaryBackground,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 8,
-                  ),
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    final message = _messages[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _buildMessageBubble(message, index),
+                child: Obx(() {
+                  final messages = _chatController.currentMessages;
+                  final currentUserId = _chatController.currentUserId.value;
+
+                  if (messages.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.chat_bubble_outline,
+                            size: Sizer.wp(80),
+                            color: AppColors.textSecondary.withValues(
+                              alpha: 0.3,
+                            ),
+                          ),
+                          SizedBox(height: Sizer.hp(16)),
+                          Text(
+                            'No messages yet',
+                            style: AppTextStyle.regular().copyWith(
+                              fontSize: Sizer.wp(18),
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          SizedBox(height: Sizer.hp(8)),
+                          Text(
+                            'Start the conversation!',
+                            style: AppTextStyle.regular().copyWith(
+                              fontSize: Sizer.wp(14),
+                              color: AppColors.textSecondary.withValues(
+                                alpha: 0.7,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
-                  },
-                ),
+                  }
+
+                  return ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 8,
+                    ),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      final isMe = message.sender.id == currentUserId;
+
+                      // Convert to UI message format with real user data
+                      final chatMessage = ChatMessage(
+                        text: message.content,
+                        isMe: isMe,
+                        time: _formatTime(message.createdAt),
+                        avatar: message.sender.profile.profileUrl,
+                        displayName: message.sender.profile.displayName,
+                      );
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildMessageBubble(chatMessage, index),
+                      );
+                    },
+                  );
+                }),
               ),
             ),
           ),
-          // Message input area using MessageBar from chat_bubbles
+          // Message input area using original design
           Padding(
             padding: EdgeInsets.all(Sizer.wp(16)),
             child: Row(
@@ -135,7 +288,6 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                     decoration: BoxDecoration(
                       color: AppColors.primaryBackground,
                       borderRadius: BorderRadius.circular(12),
-
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.border1,
@@ -154,6 +306,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                             child: TextField(
                               textAlign: TextAlign.start,
                               controller: _messageController,
+                              focusNode: _messageFocusNode,
                               decoration: InputDecoration(
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
@@ -164,6 +317,16 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                                 ),
                                 border: InputBorder.none,
                               ),
+                              onSubmitted: (value) => _sendMessage(value),
+                              onTap: () {
+                                // Scroll to bottom when user taps on text field
+                                Future.delayed(
+                                  const Duration(milliseconds: 300),
+                                  () {
+                                    _scrollToBottom();
+                                  },
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -218,11 +381,16 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
     );
   }
 
+  /// Build message bubble with proper styling
   Widget _buildMessageBubble(ChatMessage message, int index) {
     // Check if this message should have a tail (last message in a sequence from the same sender)
     bool shouldShowTail = true;
-    if (index < _messages.length - 1) {
-      shouldShowTail = _messages[index + 1].isMe != message.isMe;
+    final messages = _chatController.currentMessages;
+    if (index < messages.length - 1) {
+      final currentUserId = _chatController.currentUserId.value;
+      final nextMessage = messages[index + 1];
+      final nextIsMe = nextMessage.sender.id == currentUserId;
+      shouldShowTail = nextIsMe != message.isMe;
     }
 
     return Padding(
@@ -234,15 +402,12 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
             : MainAxisAlignment.start,
         children: [
           if (!message.isMe) ...[
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(message.avatar),
-            ),
+            _buildAvatarWidget(message.avatar, message.displayName),
             // const SizedBox(width: 8 ),
           ],
           Flexible(
             child: BubbleNormal(
-              text: message.text,        
+              text: message.text,
               isSender: message.isMe,
               color: AppColors.border3,
               tail: shouldShowTail,
@@ -256,10 +421,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
           ),
           if (message.isMe) ...[
             // const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(message.avatar),
-            ),
+            _buildAvatarWidget(message.avatar, message.displayName),
           ],
         ],
       ),
@@ -272,7 +434,7 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
         color: AppColors.border3,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -280,80 +442,110 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
       ),
       child: Padding(
         padding: EdgeInsets.all(Sizer.wp(16)),
-        child: Row(
-          children: [
-            // Profile avatar
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                Container(
-                  width: Sizer.wp(40),
-                  height: Sizer.wp(40),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFFE8E8EE),
-                    border: Border.all(color: AppColors.primary, width: 2),
-                  ),
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundImage: const NetworkImage(
-                      'https://randomuser.me/api/portraits/men/1.jpg',
-                    ),
-                  ),
-                ),
+        child: Obx(() {
+          final selectedConversation =
+              _chatController.selectedConversation.value;
+          final participantName =
+              selectedConversation?.participant.profile.displayName ??
+              'Project ABC';
+          final participantAvatar =
+              selectedConversation?.participant.profile.profileUrl;
 
-                Container(
-                  width: Sizer.wp(10),
-                  height: Sizer.wp(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.primaryBackground,
-                      width: 1,
-                    ),
-                    shape: BoxShape.circle,
-                    color: AppColors.progresstext,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 12),
-            // Name and status
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          return Row(
+            children: [
+              // Profile avatar
+              Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  const Text(
-                    'Project ABC',
-                    style: TextStyle(
-                      color: Color(0xFF333333),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                  Container(
+                    width: Sizer.wp(40),
+                    height: Sizer.wp(40),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xFFE8E8EE),
+                      // border: Border.all(color: AppColors.primary, width: 2),
+                    ),
+                    child: ClipOval(
+                      child: _buildAvatarWidget(
+                        participantAvatar,
+                        participantName,
+                        radius: 18,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    'Online',
-                    style: TextStyle(
-                      color: Color(0xFF4A90E2),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
+                  Container(
+                    width: Sizer.wp(10),
+                    height: Sizer.wp(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: AppColors.primaryBackground,
+                        width: 1,
+                      ),
+                      shape: BoxShape.circle,
+                      color: AppColors.progresstext,
                     ),
                   ),
                 ],
               ),
-            ),
-            // Action buttons
-            SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
-            const SizedBox(width: 8),
-            SvgPicture.asset('assets/icons/Camera.svg', width: 24, height: 24),
-            const SizedBox(width: 8),
-            MoreVertMenu()
-
-          ],
-        ),
+              const SizedBox(width: 12),
+              // Name and status
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      participantName,
+                      style: const TextStyle(
+                        color: Color(0xFF333333),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Online',
+                      style: TextStyle(
+                        color: Color(0xFF4A90E2),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Action buttons
+              SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
+              const SizedBox(width: 8),
+              SvgPicture.asset(
+                'assets/icons/Camera.svg',
+                width: 24,
+                height: 24,
+              ),
+              const SizedBox(width: 8),
+              const MoreVertMenu(),
+            ],
+          );
+        }),
       ),
     );
   }
+}
+
+/// Simple message model for UI compatibility
+class ChatMessage {
+  final String text;
+  final bool isMe;
+  final String time;
+  final String? avatar;
+  final String displayName;
+
+  ChatMessage({
+    required this.text,
+    required this.isMe,
+    required this.time,
+    this.avatar,
+    required this.displayName,
+  });
 }
 
 class MoreVertMenu extends StatefulWidget {
@@ -365,11 +557,16 @@ class MoreVertMenu extends StatefulWidget {
 
 class _MoreVertMenuState extends State<MoreVertMenu> {
   void _showPopupMenu(GlobalKey buttonKey) async {
-    final RenderBox button = buttonKey.currentContext!.findRenderObject() as RenderBox;
-    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
+    final RenderBox button =
+        buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
 
     // Get position of the button (icon)
-    final Offset buttonTopLeft = button.localToGlobal(Offset.zero, ancestor: overlay);
+    final Offset buttonTopLeft = button.localToGlobal(
+      Offset.zero,
+      ancestor: overlay,
+    );
     final Size buttonSize = button.size;
 
     // Define where the menu should appear: near the top-right
@@ -402,33 +599,51 @@ class _MoreVertMenuState extends State<MoreVertMenu> {
       color: Colors.white,
       elevation: 6,
       items: [
-        PopupMenuItem(value: 'Chat information', child: GestureDetector(
-          onTap: () => Get.to(ChatInfoScreen()),
+        PopupMenuItem(
+          value: 'Chat information',
+          child: GestureDetector(
+            onTap: () => Get.snackbar('Info', 'Chat info feature coming soon!'),
+            child: Row(
+              children: [
+                Icon(Icons.error_outline, color: AppColors.textBlackShade),
+                const SizedBox(width: 15),
+                Text(
+                  'Chat information',
+                  style: TextStyle(color: AppColors.textBlackShade),
+                ),
+              ],
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          value: 'Add member',
+          child: GestureDetector(
+            onTap: () => Get.to(AddMemberScreen()),
+            child: Row(
+              children: [
+                Icon(Icons.add, color: AppColors.textBlackShade),
+                const SizedBox(width: 15),
+                Text(
+                  'Add member',
+                  style: TextStyle(color: AppColors.textBlackShade),
+                ),
+              ],
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          value: 'Delete chat',
           child: Row(
             children: [
-              Icon(Icons.error_outline, color: AppColors.textBlackShade,),
-              SizedBox(width: 15,),
-              Text('Chat information', style: TextStyle(color: AppColors.textBlackShade,),),
+              Icon(Icons.delete_forever, color: AppColors.textBlackShade),
+              const SizedBox(width: 15),
+              Text(
+                'Delete chat',
+                style: TextStyle(color: AppColors.textBlackShade),
+              ),
             ],
           ),
-        )),
-        PopupMenuItem(value: 'Add member', child: GestureDetector(
-          onTap: () => Get.to(AddMemberScreen()),
-          child: Row(
-            children: [
-              Icon(Icons.add, color: AppColors.textBlackShade,),
-              SizedBox(width: 15,),
-              Text('Add member',  style: TextStyle(color: AppColors.textBlackShade,),),
-            ],
-          ),
-        )),
-        PopupMenuItem(value: 'Delete chat', child: Row(
-          children: [
-            Icon(Icons.delete_forever, color: AppColors.textBlackShade,),
-            SizedBox(width: 15,),
-            Text('Delete chat',  style: TextStyle(color: AppColors.textBlackShade,),),
-          ],
-        )),
+        ),
       ],
     );
 
@@ -455,18 +670,4 @@ class _MoreVertMenuState extends State<MoreVertMenu> {
       ),
     );
   }
-}
-
-class ChatMessage {
-  final String text;
-  final bool isMe;
-  final String time;
-  final String avatar;
-
-  ChatMessage({
-    required this.text,
-    required this.isMe,
-    required this.time,
-    required this.avatar,
-  });
 }
