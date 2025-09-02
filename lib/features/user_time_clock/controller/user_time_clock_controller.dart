@@ -1,12 +1,22 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/services/location_controller.dart';
+import 'package:jesusvlsco/core/services/storage_service.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 
 class UserTimeClockController extends GetxController {
   // Observable for live user location
-  final Rx<LatLng> currentLocation = LatLng(23.780836861126474, 90.40062738047668).obs;
-  final LocationController locationController = Get.put(LocationController()); // Initialize LocationController
+  final Rx<LatLng> currentLocation = LatLng(
+    23.780836861126474,
+    90.40062738047668,
+  ).obs;
+  final LocationController locationController = Get.put(
+    LocationController(),
+  ); // Initialize LocationController
   GoogleMapController? mapController; // To control the Google Map
 
   @override
@@ -47,5 +57,45 @@ class UserTimeClockController extends GetxController {
   void onClose() {
     mapController?.dispose();
     super.onClose();
+  }
+
+  //for clock in
+  void clockInNow() {
+    clockInUser(currentLocation.value);
+  }
+
+  Future<void> clockInUser(LatLng location) async {
+    final url = Uri.parse(
+      '${ApiConstants.baseurl}/employee/time-clock/process-clock',
+    );
+    final token = await StorageService.getAuthToken();
+
+    final headers = {
+      'accept': '*/*',
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final body = jsonEncode({
+      'date': DateTime.now().toUtc().toIso8601String(),
+      'lat': location.latitude,
+      'lng': location.longitude,
+      'action': 'CLOCK_IN',
+    });
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        print('Clock-in successful: ${response.body}');
+      } else {
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        final String errorMessage =
+            responseBody['data']?['message'] ?? 'Unknown error';
+        Get.snackbar("error", "$errorMessage");
+        print('Clock-in failed: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error during clock-in: $e');
+    }
   }
 }
