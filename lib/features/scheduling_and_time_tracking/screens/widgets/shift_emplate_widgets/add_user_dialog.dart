@@ -199,8 +199,10 @@ class _AddUserDialogState extends State<AddUserDialog> {
             height: Sizer.wp(40),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary.withOpacity(0.1),
-              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+              color: AppColors.primary.withValues(alpha: 0.1),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.3),
+              ),
               image: user.avatar.isNotEmpty
                   ? DecorationImage(
                       image: NetworkImage(user.avatar),

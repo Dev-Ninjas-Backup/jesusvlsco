@@ -83,7 +83,7 @@ class TeamSelectionDialog extends StatelessWidget {
             child: Text(
               'No teams available',
               style: AppTextStyle.f14W400().copyWith(
-                color: AppColors.text.withOpacity(0.6),
+                color: AppColors.text.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
@@ -130,7 +130,7 @@ class TeamSelectionDialog extends StatelessWidget {
                           : Text(
                               'Scroll to load more',
                               style: AppTextStyle.f12W400().copyWith(
-                                color: AppColors.text.withOpacity(0.6),
+                                color: AppColors.text.withValues(alpha: 0.6),
                               ),
                             ),
                     ),
@@ -159,7 +159,7 @@ class TeamSelectionDialog extends StatelessWidget {
         padding: EdgeInsets.all(Sizer.wp(16)),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withOpacity(0.1)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
           border: Border.all(
@@ -174,7 +174,7 @@ class TeamSelectionDialog extends StatelessWidget {
               width: Sizer.wp(40),
               height: Sizer.wp(40),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(Sizer.wp(8)),
               ),
               child: Icon(
@@ -199,7 +199,7 @@ class TeamSelectionDialog extends StatelessWidget {
                   Text(
                     '${team.members.length} members',
                     style: AppTextStyle.f12W400().copyWith(
-                      color: AppColors.text.withOpacity(0.6),
+                      color: AppColors.text.withValues(alpha: 0.6),
                     ),
                   ),
                 ],

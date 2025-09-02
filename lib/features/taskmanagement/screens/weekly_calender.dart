@@ -22,7 +22,7 @@ class WeeklyCalender extends StatelessWidget {
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.arrow_left,
@@ -60,7 +60,10 @@ class WeeklyCalender extends StatelessWidget {
           children: [
             _buildSearchTextField(),
             Padding(
-              padding: EdgeInsets.only(left: Sizer.wp(16.0),right: Sizer.wp(16.0)),
+              padding: EdgeInsets.only(
+                left: Sizer.wp(16.0),
+                right: Sizer.wp(16.0),
+              ),
               child: Row(
                 children: [
                   Flexible(
@@ -85,7 +88,6 @@ class WeeklyCalender extends StatelessWidget {
                     text: "Activity",
                     onPressed: () {},
                   ),
-                  
                 ],
               ),
             ),
@@ -180,7 +182,7 @@ Widget _buildSearchTextField() {
         borderRadius: BorderRadius.circular(Sizer.wp(10)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textSecondary.withOpacity(0.1),
+            color: AppColors.textSecondary.withValues(alpha: 0.1),
             blurRadius: 3,
             offset: const Offset(0, 4),
           ),
@@ -195,7 +197,7 @@ Widget _buildSearchTextField() {
           hintText: 'Search articles',
           hintStyle: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(14),
-            color: AppColors.textSecondary.withOpacity(0.6),
+            color: AppColors.textSecondary.withValues(alpha: 0.6),
           ),
           suffixIcon: Container(
             padding: const EdgeInsets.all(8),
@@ -222,12 +224,11 @@ Widget _customButton({
   // required double width,
 }) {
   return SizedBox(
-    width: Sizer.wp(170)  ,
+    width: Sizer.wp(170),
     height: Sizer.hp(40),
     child: ElevatedButton(
-
       style: ElevatedButton.styleFrom(
-alignment: Alignment.centerLeft,
+        alignment: Alignment.centerLeft,
         backgroundColor: AppColors.button1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
@@ -236,7 +237,7 @@ alignment: Alignment.centerLeft,
       onPressed: () {},
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-    
+
         children: [
           CircleAvatar(
             radius: Sizer.wp(10),
@@ -258,8 +259,8 @@ alignment: Alignment.centerLeft,
               fontWeight: FontWeight.w500,
             ),
           ),
+
           // SizedBox(width: Sizer.wp(8)),
-          
         ],
       ),
     ),
@@ -338,7 +339,6 @@ class WeeklyCalendarView extends StatelessWidget {
           color: isSelected
               ? Colors.blue[50]
               : Colors.transparent, // Highlight the selected date
-          
         ),
         child: Row(
           children: [
@@ -368,8 +368,8 @@ class WeeklyCalendarView extends StatelessWidget {
                           : AppColors.textPrimary,
                     ),
                   ),
+
                   // Dotted Divider
-                  
                 ],
               ),
             ),
@@ -388,11 +388,11 @@ class WeeklyCalendarView extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-                    child: CustomPaint(
-                      size: const Size(double.infinity, 1),
-                      painter: DottedLinePainter(),
-                    ),
-                  ),
+              child: CustomPaint(
+                size: const Size(double.infinity, 1),
+                painter: DottedLinePainter(),
+              ),
+            ),
           ],
         ),
       ),
@@ -410,7 +410,7 @@ class DottedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.grey.withOpacity(0.4)
+      ..color = Colors.grey.withValues(alpha: 0.4)
       ..strokeWidth = 1;
 
     const dashWidth = 4.0;

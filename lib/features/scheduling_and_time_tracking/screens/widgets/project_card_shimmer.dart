@@ -46,7 +46,7 @@ class _ProjectCardShimmerState extends State<ProjectCardShimmer>
         border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFA9B7DD).withOpacity(0.08),
+            color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
             offset: const Offset(0, 4),
             blurRadius: 8,
             spreadRadius: 0,
@@ -150,9 +150,9 @@ class _ProjectCardShimmerState extends State<ProjectCardShimmer>
         borderRadius: BorderRadius.circular(borderRadius ?? Sizer.wp(4)),
         gradient: LinearGradient(
           colors: [
-            AppColors.border.withOpacity(0.3),
-            AppColors.border.withOpacity(0.1),
-            AppColors.border.withOpacity(0.3),
+            AppColors.border.withValues(alpha: 0.3),
+            AppColors.border.withValues(alpha: 0.1),
+            AppColors.border.withValues(alpha: 0.3),
           ],
           stops: [
             _animation.value - 0.3,
@@ -175,9 +175,9 @@ class _ProjectCardShimmerState extends State<ProjectCardShimmer>
         shape: BoxShape.circle,
         gradient: LinearGradient(
           colors: [
-            AppColors.border.withOpacity(0.3),
-            AppColors.border.withOpacity(0.1),
-            AppColors.border.withOpacity(0.3),
+            AppColors.border.withValues(alpha: 0.3),
+            AppColors.border.withValues(alpha: 0.1),
+            AppColors.border.withValues(alpha: 0.3),
           ],
           stops: [
             _animation.value - 0.3,

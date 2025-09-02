@@ -16,7 +16,9 @@ class Notificationpage extends StatefulWidget {
 
 class _NotificationpageState extends State<Notificationpage> {
   // GetX controller instance. Get.put() ensures it's initialized and available.
-  final NotificationController _notificationController = Get.put(NotificationController());
+  final NotificationController _notificationController = Get.put(
+    NotificationController(),
+  );
 
   @override
   void initState() {
@@ -33,10 +35,10 @@ class _NotificationpageState extends State<Notificationpage> {
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: (){},
+          onPressed: () {},
         ),
         title: Text(
           'Notification',
@@ -70,11 +72,11 @@ class _NotificationpageState extends State<Notificationpage> {
 
               // If no notifications, show a centered message
               if (_notificationController.notifications.isEmpty) {
-                return  Center(
+                return Center(
                   child: Text(
                     'No notifications received yet.',
-                    style: AppTextStyle.regular()),
-                  
+                    style: AppTextStyle.regular(),
+                  ),
                 );
               }
 
@@ -99,11 +101,17 @@ class _NotificationpageState extends State<Notificationpage> {
                     for (var appNotification in unreadNotifications)
                       _notificationTile(
                         iconData: Icons.notifications,
-                        title: appNotification.message.notification?.title ?? 'No Title',
-                        subtitle: appNotification.message.notification?.body ?? 'No Body',
+                        title:
+                            appNotification.message.notification?.title ??
+                            'No Title',
+                        subtitle:
+                            appNotification.message.notification?.body ??
+                            'No Body',
                         isRead: appNotification.isRead,
                         // Use the messageId for toggling read status in the controller
-                        onTap: () => _notificationController.toggleReadStatus(appNotification.message.messageId!),
+                        onTap: () => _notificationController.toggleReadStatus(
+                          appNotification.message.messageId!,
+                        ),
                       ),
 
                     // Read Section
@@ -123,11 +131,17 @@ class _NotificationpageState extends State<Notificationpage> {
                     for (var appNotification in readNotifications)
                       _notificationTile(
                         iconData: Icons.notifications,
-                        title: appNotification.message.notification?.title ?? 'No Title',
-                        subtitle: appNotification.message.notification?.body ?? 'No Body',
+                        title:
+                            appNotification.message.notification?.title ??
+                            'No Title',
+                        subtitle:
+                            appNotification.message.notification?.body ??
+                            'No Body',
                         isRead: appNotification.isRead,
                         // Use the messageId for toggling read status in the controller
-                        onTap: () => _notificationController.toggleReadStatus(appNotification.message.messageId!),
+                        onTap: () => _notificationController.toggleReadStatus(
+                          appNotification.message.messageId!,
+                        ),
                       ),
                   ],
                 ),
@@ -161,8 +175,8 @@ Widget _notificationTile({
         ),
         child: Container(
           width: Sizer.wp(362),
-          // height: Sizer.hp(88), // Height might need to be dynamic based on content
 
+          // height: Sizer.hp(88), // Height might need to be dynamic based on content
           decoration: BoxDecoration(
             border: Border.all(
               color: isRead ? Colors.transparent : AppColors.primary,

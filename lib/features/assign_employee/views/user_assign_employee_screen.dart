@@ -85,7 +85,7 @@ class AssignEmployeeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -120,7 +120,7 @@ class AssignEmployeeScreen extends StatelessWidget {
                         child: Icon(
                           Icons.refresh,
                           size: Sizer.wp(20),
-                          color: AppColors.primary.withOpacity(0.7),
+                          color: AppColors.primary.withValues(alpha: 0.7),
                         ),
                       ),
               ),
@@ -150,7 +150,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(Sizer.wp(8)),
             border: Border.all(
               color: controller.selectedProject.value != null
-                  ? AppColors.primary.withOpacity(0.5)
+                  ? AppColors.primary.withValues(alpha: 0.5)
                   : const Color(0xFFC8CAE7),
               width: 1,
             ),
@@ -164,7 +164,7 @@ class AssignEmployeeScreen extends StatelessWidget {
                   style: AppTextStyle.f14W400().copyWith(
                     color: controller.selectedProject.value != null
                         ? AppColors.text
-                        : AppColors.text.withOpacity(0.6),
+                        : AppColors.text.withValues(alpha: 0.6),
                     height: 1.5,
                   ),
                   maxLines: 1,
@@ -300,7 +300,7 @@ class AssignEmployeeScreen extends StatelessWidget {
               "${controller.assignedUsers.length} employees",
               style: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(14),
-                color: AppColors.text.withOpacity(0.6),
+                color: AppColors.text.withValues(alpha: 0.6),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -344,14 +344,14 @@ class AssignEmployeeScreen extends StatelessWidget {
           Icon(
             Icons.work_outline,
             size: Sizer.wp(64),
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
           ),
           SizedBox(height: Sizer.hp(16)),
           Text(
             'No Project Selected',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(18),
-              color: AppColors.text.withOpacity(0.8),
+              color: AppColors.text.withValues(alpha: 0.8),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -360,7 +360,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             'Please select a project to view assigned employees',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(14),
-              color: AppColors.text.withOpacity(0.6),
+              color: AppColors.text.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),
@@ -380,7 +380,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             'Loading employees...',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(16),
-              color: AppColors.text.withOpacity(0.8),
+              color: AppColors.text.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -396,14 +396,14 @@ class AssignEmployeeScreen extends StatelessWidget {
           Icon(
             Icons.person_off_outlined,
             size: Sizer.wp(64),
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
           ),
           SizedBox(height: Sizer.hp(16)),
           Text(
             'No Employees Found',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(18),
-              color: AppColors.text.withOpacity(0.8),
+              color: AppColors.text.withValues(alpha: 0.8),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -412,7 +412,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             'No employees are assigned to this project',
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(14),
-              color: AppColors.text.withOpacity(0.6),
+              color: AppColors.text.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),
@@ -432,7 +432,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade200),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: const Offset(0, 3),
@@ -461,7 +461,7 @@ class AssignEmployeeScreen extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
       ),
       child: user.profileUrl.isNotEmpty
           ? ClipRRect(
@@ -485,7 +485,7 @@ class AssignEmployeeScreen extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
       ),
       child: Center(
         child: Text(
@@ -543,7 +543,7 @@ class AssignEmployeeScreen extends StatelessWidget {
         Text(
           "Off Days: ${user.formattedOffDays}",
           style: AppTextStyle.regular().copyWith(
-            color: AppColors.text.withOpacity(0.7),
+            color: AppColors.text.withValues(alpha: 0.7),
             fontSize: Sizer.wp(12),
           ),
         ),
@@ -629,9 +629,9 @@ class AssignEmployeeScreen extends StatelessWidget {
       height: Sizer.hp(100),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: statusColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: statusColor.withOpacity(0.3)),
+        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -651,7 +651,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             shift.formattedTime,
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(12),
-              color: statusColor.withOpacity(0.8),
+              color: statusColor.withValues(alpha: 0.8),
             ),
             textAlign: TextAlign.center,
             maxLines: 1,

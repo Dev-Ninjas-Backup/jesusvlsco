@@ -261,7 +261,7 @@ class UserDashboardScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Sizer.wp(12)),
       decoration: BoxDecoration(
-        color: AppColors.recognitionColor.withOpacity(0.1),
+        color: AppColors.recognitionColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
       ),
       child: Padding(
@@ -390,7 +390,7 @@ class UserDashboardScreen extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(Sizer.wp(8)),
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(Sizer.wp(8)),
           ),
           child: Text(
@@ -776,7 +776,7 @@ class UserDashboardScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: task['isToday']
                   ? AppColors.taskCard
-                  : AppColors.primary.withOpacity(0.4),
+                  : AppColors.primary.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(Sizer.wp(20)),
             ),
             child: Text(

@@ -27,7 +27,7 @@ class ActivityFeedScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 3), // changes position of shadow
@@ -41,7 +41,7 @@ class ActivityFeedScreen extends StatelessWidget {
 
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.zero, 
+                  padding: EdgeInsets.zero,
                   itemCount: activityController.dummyActivities.length,
                   itemBuilder: (context, index) {
                     final activity = activityController.dummyActivities[index];
@@ -96,7 +96,7 @@ class ActivityFeedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(Sizer.wp(8)),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SvgPicture.asset(
                   IconPath.celender,
@@ -173,17 +173,17 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
   return AppBar(
     shadowColor: AppColors.textWhite,
     backgroundColor: Colors.white,
-    elevation: 4,
-   leading: IconButton(
-          icon: Icon(
-            CupertinoIcons.arrow_left,
-            color: AppColors.backgroundDark,
-            size: Sizer.wp(24),
-          ),
-          onPressed: () {
-          Get.back();
-          },
-        ),
+    elevation: 0.1,
+    leading: IconButton(
+      icon: Icon(
+        CupertinoIcons.arrow_left,
+        color: AppColors.backgroundDark,
+        size: Sizer.wp(24),
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    ),
     title: Text(
       'Activity Log',
       style: AppTextStyle.regular().copyWith(

@@ -1,6 +1,11 @@
 import 'package:get/get.dart';
+import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
 
+/// Enhanced Chat Controller
+/// Manages both legacy and new private chat functionality
+/// Provides interface for existing UI components
 class ChatController extends GetxController {
+  // Legacy data (keeping for backwards compatibility)
   final List<String> members = const [
     'Theresa Webb',
     'Robert Fox',
@@ -47,4 +52,22 @@ class ChatController extends GetxController {
       'date': '13/06/2025',
     },
   ];
+
+  // Private chat controller instance
+  PrivateChatController get privateChatController => Get.find<PrivateChatController>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Private chat controller is now initialized globally via ControllerBinder
+  }
+
+  /// Check if private chat is connected
+  bool get isPrivateChatConnected => privateChatController.isConnected;
+
+  /// Get unread messages count for UI
+  int get unreadMessagesCount => privateChatController.unreadCount.value;
+
+  /// Get connection status for UI display
+  String get connectionStatus => privateChatController.connectionStatusText;
 }

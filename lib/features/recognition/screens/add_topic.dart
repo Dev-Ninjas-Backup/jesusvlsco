@@ -45,7 +45,7 @@ class AddTopic extends StatelessWidget {
                         Flexible(
                           child: _commonButton(
                             () {
-                               Get.back();
+                              Get.back();
                             },
                             bgcolor: AppColors.primary,
                             textcolor: AppColors.textWhite,
@@ -92,7 +92,7 @@ PreferredSizeWidget _buildAppBar() {
   return AppBar(
     shadowColor: Colors.white,
     backgroundColor: Colors.white,
-    elevation: 4,
+    elevation: 0.1,
     leading: IconButton(
       icon: Icon(
         CupertinoIcons.arrow_left,
@@ -195,6 +195,6 @@ Widget _buildGridView() {
       height: Sizer.hp(200),
       width: double.infinity,
       child: gridview_card(), // Assuming gridview_card widget exists
-    ), 
+    ),
   );
 }

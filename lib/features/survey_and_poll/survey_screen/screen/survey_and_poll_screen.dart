@@ -61,14 +61,14 @@ class SurveyAndPollScreen extends StatelessWidget {
                       onEdit: () => debugPrint('Edit tapped'),
                       //onDelete: () => debugPrint('Delete tapped'),
                       onDelete:
-                        //delete function will work here
-                        controller.selectedSurveys.values.any(
-                              (selected) => selected,
-                            )
-                            ? () => controller.deleteSelectedSurveys()
-                            : null,
-                            //Get.snackbar("alert", "delete success");
-                      
+                          //delete function will work here
+                          controller.selectedSurveys.values.any(
+                            (selected) => selected,
+                          )
+                          ? () => controller.deleteSelectedSurveys()
+                          : null,
+
+                      //Get.snackbar("alert", "delete success");
                     ),
                   );
                 },
@@ -148,9 +148,9 @@ class SurveyAndPollScreen extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       color: survey.status == "Completed"
                                           // ignore: deprecated_member_use
-                                          ? Colors.yellow.withOpacity(0.3)
+                                          ? Colors.yellow.withValues(alpha: 0.3)
                                           // ignore: deprecated_member_use
-                                          : Colors.green.withOpacity(0.1),
+                                          : Colors.green.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(

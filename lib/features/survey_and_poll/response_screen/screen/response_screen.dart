@@ -50,12 +50,18 @@ class ResponseScreen extends StatelessWidget {
               children: [
                 SizedBox(width: 40, child: Text("")),
                 Expanded(
-                    child: Text("Name",
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "Name",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
                 SizedBox(
-                    width: 100,
-                    child: Text("Status",
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                  width: 100,
+                  child: Text(
+                    "Status",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
               ],
             ),
           ),
@@ -97,13 +103,16 @@ class ResponseScreen extends StatelessWidget {
                           height: 40,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color:
-                            isActive ? const Color(0xFF4E53B1) : Colors.white,
+                            color: isActive
+                                ? const Color(0xFF4E53B1)
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: isActive
                                   ? Colors.transparent
-                                  : const Color(0xFF4E53B1).withOpacity(0.3),
+                                  : const Color(
+                                      0xFF4E53B1,
+                                    ).withValues(alpha: 0.3),
                               width: 1.2,
                             ),
                           ),
@@ -159,7 +168,7 @@ class ResponseScreen extends StatelessWidget {
               ),
             ),
             progressColor: color,
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withValues(alpha: 0.2),
             circularStrokeCap: CircularStrokeCap.round,
             animation: true,
             animationDuration: 800,

@@ -57,7 +57,7 @@ class ProjectSelectionDialog extends StatelessWidget {
                 () => Text(
                   '${controller.totalProjects.value} projects available',
                   style: AppTextStyle.f12W400().copyWith(
-                    color: AppColors.text.withOpacity(0.6),
+                    color: AppColors.text.withValues(alpha: 0.6),
                   ),
                 ),
               ),
@@ -111,7 +111,7 @@ class ProjectSelectionDialog extends StatelessWidget {
                   Text(
                     'Loading projects...',
                     style: AppTextStyle.f14W400().copyWith(
-                      color: AppColors.text.withOpacity(0.6),
+                      color: AppColors.text.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -131,13 +131,13 @@ class ProjectSelectionDialog extends StatelessWidget {
                   Icon(
                     Icons.folder_open,
                     size: Sizer.wp(48),
-                    color: AppColors.text.withOpacity(0.3),
+                    color: AppColors.text.withValues(alpha: 0.3),
                   ),
                   SizedBox(height: Sizer.hp(16)),
                   Text(
                     'No projects available',
                     style: AppTextStyle.f16W500().copyWith(
-                      color: AppColors.text.withOpacity(0.8),
+                      color: AppColors.text.withValues(alpha: 0.8),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -145,7 +145,7 @@ class ProjectSelectionDialog extends StatelessWidget {
                   Text(
                     'Try refreshing or check back later',
                     style: AppTextStyle.f14W400().copyWith(
-                      color: AppColors.text.withOpacity(0.6),
+                      color: AppColors.text.withValues(alpha: 0.6),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -158,7 +158,7 @@ class ProjectSelectionDialog extends StatelessWidget {
                         vertical: Sizer.hp(8),
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(Sizer.wp(8)),
                         border: Border.all(color: AppColors.primary),
                       ),
@@ -224,7 +224,9 @@ class ProjectSelectionDialog extends StatelessWidget {
                                 Text(
                                   'Loading more projects...',
                                   style: AppTextStyle.f12W400().copyWith(
-                                    color: AppColors.text.withOpacity(0.6),
+                                    color: AppColors.text.withValues(
+                                      alpha: 0.6,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -234,7 +236,7 @@ class ProjectSelectionDialog extends StatelessWidget {
                               child: Text(
                                 'Scroll down for more projects',
                                 style: AppTextStyle.f12W400().copyWith(
-                                  color: AppColors.text.withOpacity(0.6),
+                                  color: AppColors.text.withValues(alpha: 0.6),
                                 ),
                               ),
                             ),
@@ -263,7 +265,7 @@ class ProjectSelectionDialog extends StatelessWidget {
         padding: EdgeInsets.all(Sizer.wp(16)),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withOpacity(0.1)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
           border: Border.all(
@@ -277,7 +279,7 @@ class ProjectSelectionDialog extends StatelessWidget {
               width: Sizer.wp(40),
               height: Sizer.wp(40),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(Sizer.wp(8)),
               ),
               child: Icon(
@@ -305,14 +307,14 @@ class ProjectSelectionDialog extends StatelessWidget {
                       Icon(
                         Icons.location_on_outlined,
                         size: Sizer.wp(12),
-                        color: AppColors.text.withOpacity(0.6),
+                        color: AppColors.text.withValues(alpha: 0.6),
                       ),
                       SizedBox(width: Sizer.wp(4)),
                       Expanded(
                         child: Text(
                           project.projectLocation,
                           style: AppTextStyle.f12W400().copyWith(
-                            color: AppColors.text.withOpacity(0.6),
+                            color: AppColors.text.withValues(alpha: 0.6),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

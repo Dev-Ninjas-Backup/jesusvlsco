@@ -61,7 +61,7 @@ class TimeOffRequestsSection extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(Sizer.wp(8)),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Icon(
@@ -319,9 +319,9 @@ class TimeOffRequestsSection extends StatelessWidget {
                   vertical: Sizer.hp(4),
                 ),
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.1),
+                  color: statusColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: statusColor.withOpacity(0.3)),
+                  border: Border.all(color: statusColor.withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   request.status.displayName,
@@ -373,7 +373,7 @@ class TimeOffRequestsSection extends StatelessWidget {
               vertical: Sizer.hp(6),
             ),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
@@ -395,7 +395,7 @@ class TimeOffRequestsSection extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(Sizer.wp(10)),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Column(

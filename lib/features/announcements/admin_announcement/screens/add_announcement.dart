@@ -45,7 +45,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.arrow_left,
@@ -132,7 +132,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     width: Sizer.wp(360),
                     child: TextField(
                       maxLines: 2,
-                      decoration: InputDecoration( 
+                      decoration: InputDecoration(
                         hintText: "Enter announcement title here",
                         hintStyle: AppTextStyle.regular().copyWith(
                           fontSize: Sizer.wp(14),

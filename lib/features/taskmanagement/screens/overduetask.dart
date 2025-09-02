@@ -6,15 +6,11 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/taskmanagement/controller/overduecontroller.dart';
 
-
-
-
 class OverdueTask extends StatelessWidget {
   const OverdueTask({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: _buildAppBar(),
       backgroundColor: const Color(0xFFF0F0F0),
@@ -30,7 +26,7 @@ class OverdueTask extends StatelessWidget {
 
   // Task List Container
   Widget _buildTaskList() {
-       final Overduecontroller overduecontroller = Get.put(Overduecontroller());
+    final Overduecontroller overduecontroller = Get.put(Overduecontroller());
     return Container(
       height: Sizer.hp(400),
       decoration: BoxDecoration(
@@ -38,7 +34,7 @@ class OverdueTask extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 5,
             blurRadius: 7,
             offset: const Offset(0, 3),
@@ -57,7 +53,6 @@ class OverdueTask extends StatelessWidget {
 
   // Task Row Widget
   Widget _buildTaskRow(OverduetaskModel task) {
-    
     return Padding(
       padding: EdgeInsets.all(Sizer.wp(16)),
       child: Column(
@@ -182,17 +177,17 @@ class OverdueTask extends StatelessWidget {
     return AppBar(
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
-       leading: IconButton(
-          icon: Icon(
-            CupertinoIcons.arrow_left,
-            color: AppColors.backgroundDark,
-            size: Sizer.wp(24),
-          ),
-          onPressed: () {
-          Get.back();
-          },
+      elevation: 0.1,
+      leading: IconButton(
+        icon: Icon(
+          CupertinoIcons.arrow_left,
+          color: AppColors.backgroundDark,
+          size: Sizer.wp(24),
         ),
+        onPressed: () {
+          Get.back();
+        },
+      ),
       title: Text(
         'Task Details',
         style: TextStyle(

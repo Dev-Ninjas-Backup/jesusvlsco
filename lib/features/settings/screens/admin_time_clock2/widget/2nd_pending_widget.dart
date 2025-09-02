@@ -15,7 +15,7 @@ class ApprovedPendingWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +128,7 @@ class ApprovedPendingWidget extends StatelessWidget {
                   icon: Icons.check_circle_outline_outlined,
                   brColor: Colors.green.shade500,
                   iconColor: Colors.green.shade700,
-                  bgColor: Colors.green.withOpacity(0.4),
+                  bgColor: Colors.green.withValues(alpha: 0.4),
                   text: 'Approved',
                   textcolor: Colors.green.shade700,
                 ),

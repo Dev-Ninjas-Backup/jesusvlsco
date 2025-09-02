@@ -92,7 +92,7 @@ Widget _buildChatHeaderSection(BuildContext context) {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFA9B7DD).withOpacity(0.08),
+                        color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -147,7 +147,7 @@ Widget _buildMembersListSection(BuildContext context) {
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: const Color(0xFFA9B7DD).withOpacity(0.08),
+          color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
           blurRadius: 8,
           offset: const Offset(0, 4),
         ),

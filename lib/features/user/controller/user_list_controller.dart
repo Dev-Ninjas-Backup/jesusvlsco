@@ -73,6 +73,8 @@ class UserListController extends GetxController {
   var isLoading = false.obs;
   var hasMore = true.obs;
   RxInt totalEmployeeCount = 0.obs;
+  var searchQuery = ''.obs;
+  var isSearching = false.obs;
 
   @override
   void onInit() {
@@ -80,20 +82,31 @@ class UserListController extends GetxController {
     fetchEmployeeProfiles(); // Initial load
   }
 
-  Future<void> fetchEmployeeProfiles() async { //{bool loadMore = false}
-    if (isLoading.value || !hasMore.value) return;
+  Future<void> fetchEmployeeProfiles({bool loadMore = false, String? searchTerm}) async {
+    if (isLoading.value || (!hasMore.value && loadMore)) return;
 
     isLoading.value = true;
     final token = await StorageService.getAuthToken();
-    final url = Uri.parse(
-      '${ApiConstants.baseurl}/admin/user?role=EMPLOYEE&page=${currentPage.value}&limit=$limit',
-    );
+    
+    // Reset pagination for new search
+    if (!loadMore && searchTerm != null) {
+      currentPage.value = 1;
+      employeeProfiles.clear();
+      hasMore.value = true;
+    }
+
+    // Build URL with search parameter if provided
+    String url = '${ApiConstants.baseurl}/admin/user?role=EMPLOYEE&page=${currentPage.value}&limit=$limit';
+    if (searchTerm != null && searchTerm.isNotEmpty) {
+      url += '&searchTerm=${Uri.encodeComponent(searchTerm)}';
+    }
+    
+    final uri = Uri.parse(url);
     print(">>>>call user");
 
     try {
-      //final response = await http.get(Uri.parse(url));
       final response = await http.get(
-        url,
+        uri,
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -101,7 +114,7 @@ class UserListController extends GetxController {
         },
       );
       print("Bearer $token");
-      print("Sending GET request to: $url");
+      print("Sending GET request to: $uri");
       print("Request headers:");
       print({
         'Authorization': 'Bearer $token',
@@ -120,7 +133,12 @@ class UserListController extends GetxController {
             return EmployeeProfile.fromJson(userJson);
           }).toList();
 
-          employeeProfiles.addAll(newProfiles);
+          if (loadMore) {
+            employeeProfiles.addAll(newProfiles);
+          } else {
+            employeeProfiles.value = newProfiles;
+          }
+          
           totalEmployeeCount.value = employeeProfiles.length;
           currentPage.value++;
           print("Total employees fetched so far: ${totalEmployeeCount.value}");
@@ -133,6 +151,33 @@ class UserListController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// Search employees with debouncing
+  void searchEmployees(String query) {
+    searchQuery.value = query;
+    isSearching.value = query.isNotEmpty;
+    
+    // Reset and fetch with search term
+    fetchEmployeeProfiles(loadMore: false, searchTerm: query);
+  }
+
+  /// Load more employees (pagination)
+  void loadMoreEmployees() {
+    if (!isLoading.value && hasMore.value) {
+      String? currentSearch = searchQuery.value.isNotEmpty ? searchQuery.value : null;
+      fetchEmployeeProfiles(loadMore: true, searchTerm: currentSearch);
+    }
+  }
+
+  /// Clear search and reload initial data
+  void clearSearch() {
+    searchQuery.value = '';
+    isSearching.value = false;
+    employeeProfiles.clear();
+    currentPage.value = 1;
+    hasMore.value = true;
+    fetchEmployeeProfiles();
   }
 
   ///For delete and add employee after selected

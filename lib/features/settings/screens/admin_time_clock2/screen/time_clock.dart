@@ -281,7 +281,7 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
             borderRadius: BorderRadius.circular(Sizer.wp(12)),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFA9B7DD).withOpacity(0.08),
+                color: const Color(0xFFA9B7DD).withValues(alpha: 0.08),
                 offset: const Offset(0, 4),
                 blurRadius: 8,
                 spreadRadius: 0,

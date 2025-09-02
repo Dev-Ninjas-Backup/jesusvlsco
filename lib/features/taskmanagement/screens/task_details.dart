@@ -49,7 +49,7 @@ class TaskDetailsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: const Offset(0, 3),
@@ -187,7 +187,7 @@ class TaskDetailsScreen extends StatelessWidget {
     return AppBar(
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: Icon(
         CupertinoIcons.arrow_left,
         color: AppColors.backgroundDark,
@@ -283,7 +283,7 @@ Widget _button_row(BuildContext context) {
     children: [
       Flexible(
         child: customButton(
-       textcolor: AppColors.primaryBackground,
+          textcolor: AppColors.primaryBackground,
           bgcolor: AppColors.progress1,
           brcolor: AppColors.primary,
           text: "Mark task as done",
@@ -294,7 +294,7 @@ Widget _button_row(BuildContext context) {
       SizedBox(width: Sizer.wp(16)),
       Flexible(
         child: customButton(
-            textcolor: AppColors.primaryBackground,
+          textcolor: AppColors.primaryBackground,
           bgcolor: Colors.transparent,
           brcolor: AppColors.primary,
           text: "Edit",

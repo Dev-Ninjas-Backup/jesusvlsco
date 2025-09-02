@@ -21,7 +21,7 @@ class Datewisetasks extends StatelessWidget {
       appBar: AppBar(
         shadowColor: AppColors.textWhite,
         backgroundColor: Colors.white,
-        elevation: 4,
+        elevation: 0.1,
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.arrow_left,
@@ -58,7 +58,7 @@ class Datewisetasks extends StatelessWidget {
         child: Column(
           children: [
             _buildSearchTextField(),
-            
+
             SizedBox(height: Sizer.hp(8)),
 
             //List items start
@@ -150,7 +150,7 @@ Widget _buildSearchTextField() {
         borderRadius: BorderRadius.circular(Sizer.wp(10)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textSecondary.withOpacity(0.1),
+            color: AppColors.textSecondary.withValues(alpha: 0.1),
             blurRadius: 3,
             offset: const Offset(0, 4),
           ),
@@ -165,7 +165,7 @@ Widget _buildSearchTextField() {
           hintText: 'Search articles',
           hintStyle: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(14),
-            color: AppColors.textSecondary.withOpacity(0.6),
+            color: AppColors.textSecondary.withValues(alpha: 0.6),
           ),
           suffixIcon: Container(
             padding: const EdgeInsets.all(8),
@@ -184,7 +184,6 @@ Widget _buildSearchTextField() {
     ),
   );
 }
-
 
 Widget _customButton1({
   required Color color,
@@ -219,7 +218,7 @@ class DottedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.grey.withOpacity(0.4)
+      ..color = Colors.grey.withValues(alpha: 0.4)
       ..strokeWidth = 1;
 
     const dashWidth = 4.0;

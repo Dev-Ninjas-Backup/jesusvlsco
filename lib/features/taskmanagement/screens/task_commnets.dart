@@ -7,7 +7,6 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
-
 class TaskCommnets extends StatelessWidget {
   const TaskCommnets({super.key});
 
@@ -27,7 +26,7 @@ class TaskCommnets extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: const Offset(0, 3),
@@ -58,7 +57,7 @@ class TaskCommnets extends StatelessWidget {
     return AppBar(
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: Icon(
         CupertinoIcons.arrow_left,
         color: AppColors.backgroundDark,
@@ -124,51 +123,48 @@ class TaskCommnets extends StatelessWidget {
   }
 }
 
+Widget _commnetsection(BuildContext context) {
+  return Row(
+    children: [
+      CircleAvatar(
+        radius: Sizer.wp(20),
+        backgroundImage: NetworkImage(
+          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+        ),
+      ),
+      SizedBox(width: Sizer.hp(8)),
 
-  Widget _commnetsection(BuildContext context) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: Sizer.wp(20),
-          backgroundImage: NetworkImage(
-            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+      Expanded(
+        child: Container(
+          height: Sizer.hp(40),
+
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(Sizer.wp(8)),
+            border: Border.all(color: AppColors.border2),
           ),
-        ),
-        SizedBox(width: Sizer.hp(8)),
-    
-        Expanded(
-          child: Container(
-            height: Sizer.hp(40),
-    
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(Sizer.wp(8)),
-              border: Border.all(color: AppColors.border2),
-            ),
-            child: TextField(
-              controller: TextEditingController(),
-              style: AppTextStyle.semiregular().copyWith(
-                color: Colors.black87,
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(16),
-                hintText: "Write a comment",
-                hintStyle: AppTextStyle.semiregular().copyWith(
-                  color: Color(0xFF9CA3AF),
-                ),
+          child: TextField(
+            controller: TextEditingController(),
+            style: AppTextStyle.semiregular().copyWith(color: Colors.black87),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.all(16),
+              hintText: "Write a comment",
+              hintStyle: AppTextStyle.semiregular().copyWith(
+                color: Color(0xFF9CA3AF),
               ),
             ),
           ),
         ),
-        SizedBox(width: Sizer.hp(8)),
-        SvgPicture.asset(
-          'assets/icons/send.svg',
-          height: Sizer.hp(24),
-          width: Sizer.wp(24),
-        ),
-      ],
-    );
-  }
+      ),
+      SizedBox(width: Sizer.hp(8)),
+      SvgPicture.asset(
+        'assets/icons/send.svg',
+        height: Sizer.hp(24),
+        width: Sizer.wp(24),
+      ),
+    ],
+  );
+}

@@ -76,7 +76,7 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textSecondary.withOpacity(0.1),
+              color: AppColors.textSecondary.withValues(alpha: 0.1),
               blurRadius: Sizer.wp(10),
               offset: Offset(0, -Sizer.hp(2)),
             ),
@@ -119,7 +119,7 @@ class AdminBottomNavigationScaffold extends StatelessWidget {
         height: Sizer.hp(65),
         decoration: BoxDecoration(
           color: isActive
-              ? AppColors.primary.withOpacity(0.1)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
         ),

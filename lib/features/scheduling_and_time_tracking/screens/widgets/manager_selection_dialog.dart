@@ -84,7 +84,7 @@ class ManagerSelectionDialog extends StatelessWidget {
             child: Text(
               'No managers available',
               style: AppTextStyle.f14W400().copyWith(
-                color: AppColors.text.withOpacity(0.6),
+                color: AppColors.text.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
@@ -132,7 +132,7 @@ class ManagerSelectionDialog extends StatelessWidget {
                           : Text(
                               'Scroll to load more',
                               style: AppTextStyle.f12W400().copyWith(
-                                color: AppColors.text.withOpacity(0.6),
+                                color: AppColors.text.withValues(alpha: 0.6),
                               ),
                             ),
                     ),
@@ -161,7 +161,7 @@ class ManagerSelectionDialog extends StatelessWidget {
         padding: EdgeInsets.all(Sizer.wp(16)),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withOpacity(0.1)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(Sizer.wp(8)),
           border: Border.all(
@@ -177,7 +177,7 @@ class ManagerSelectionDialog extends StatelessWidget {
               height: Sizer.wp(40),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Sizer.wp(20)),
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
               ),
               child:
                   manager.avatar.isNotEmpty &&
@@ -218,7 +218,7 @@ class ManagerSelectionDialog extends StatelessWidget {
                   Text(
                     manager.position,
                     style: AppTextStyle.f12W400().copyWith(
-                      color: AppColors.text.withOpacity(0.6),
+                      color: AppColors.text.withValues(alpha: 0.6),
                     ),
                   ),
                 ],

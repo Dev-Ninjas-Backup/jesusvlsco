@@ -49,7 +49,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
     return AppBar(
       shadowColor: AppColors.textWhite,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: IconButton(
         icon: Icon(
           CupertinoIcons.arrow_left,
@@ -76,9 +76,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
             color: AppColors.backgroundDark,
             size: Sizer.wp(24),
           ),
-          onPressed: () {
-        
-          },
+          onPressed: () {},
         ),
       ],
     );
@@ -110,7 +108,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
 
           boxShadow: [
             BoxShadow(
-              color: AppColors.textSecondary.withOpacity(0.1),
+              color: AppColors.textSecondary.withValues(alpha: 0.1),
               blurRadius: 3,
               offset: const Offset(0, 4),
             ),
@@ -125,7 +123,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
             hintText: 'Search articles',
             hintStyle: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(14),
-              color: AppColors.textSecondary.withOpacity(0.6),
+              color: AppColors.textSecondary.withValues(alpha: 0.6),
             ),
             suffixIcon: Container(
               padding: const EdgeInsets.all(8),
@@ -243,8 +241,8 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
 
   Widget _buildAnnouncementsList() {
     final AnnouncementController _announcementController = Get.put(
-  AnnouncementController(),
-);
+      AnnouncementController(),
+    );
     return Container(
       height: Sizer.hp(500),
       child: Obx(() {

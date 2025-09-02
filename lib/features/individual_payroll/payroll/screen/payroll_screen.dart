@@ -138,7 +138,7 @@ PreferredSizeWidget _buildAppBar() {
   return AppBar(
     shadowColor: Colors.white,
     backgroundColor: Colors.white,
-    elevation: 4,
+    elevation: 0.1,
     leading: IconButton(
       icon: Icon(
         CupertinoIcons.arrow_left,

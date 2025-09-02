@@ -40,7 +40,7 @@ class BadgeLibrary extends StatelessWidget {
         children: [
           _buildButton(
             onPressed: () {
-                Get.to(SendRecognition());
+              Get.to(SendRecognition());
             },
             text: "Send recognition",
             bgcolor: AppColors.textWhite,
@@ -50,7 +50,7 @@ class BadgeLibrary extends StatelessWidget {
           SizedBox(width: Sizer.wp(8)),
           _buildButton(
             onPressed: () {
-                   Get.to(BadgeLibrary());
+              Get.to(BadgeLibrary());
             },
             text: "Badge library",
             bgcolor: AppColors.primary,
@@ -65,7 +65,7 @@ class BadgeLibrary extends StatelessWidget {
   // Reusable Section for Category Button with Icon and Text
   Widget _buildCategoryButtonRow() {
     return Padding(
-      padding: EdgeInsets.only(right: Sizer.wp(16),bottom: Sizer.hp(16)),
+      padding: EdgeInsets.only(right: Sizer.wp(16), bottom: Sizer.hp(16)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -86,7 +86,11 @@ class BadgeLibrary extends StatelessWidget {
   // Reusable Section Title with Add Button
   Widget _buildSectionTitleWithButton(String title, String buttonText) {
     return Padding(
-      padding: EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16),bottom: Sizer.hp(16)),
+      padding: EdgeInsets.only(
+        left: Sizer.wp(16),
+        right: Sizer.wp(16),
+        bottom: Sizer.hp(16),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -101,7 +105,7 @@ class BadgeLibrary extends StatelessWidget {
           _buildCategoryButton(
             iconsuffix: Icons.add,
             onPress: () {
-              Get.to(AddTopic()); 
+              Get.to(AddTopic());
             },
             iconprefix: Icons.add,
             text: buttonText,
@@ -131,7 +135,7 @@ class BadgeLibrary extends StatelessWidget {
     return AppBar(
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
-      elevation: 4,
+      elevation: 0.1,
       leading: IconButton(
         icon: Icon(
           CupertinoIcons.arrow_left,

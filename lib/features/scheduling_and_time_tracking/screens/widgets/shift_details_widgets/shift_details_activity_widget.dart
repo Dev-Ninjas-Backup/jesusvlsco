@@ -10,10 +10,7 @@ import '../../../controllers/shift_details_controller.dart';
 class ShiftDetailsActivityWidget extends StatelessWidget {
   final ShiftDetailsController controller;
 
-  const ShiftDetailsActivityWidget({
-    super.key,
-    required this.controller,
-  });
+  const ShiftDetailsActivityWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +52,9 @@ class ShiftDetailsActivityWidget extends StatelessWidget {
                       height: Sizer.wp(44),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                         ),
                         image: activity.userAvatar.isNotEmpty
                             ? DecorationImage(

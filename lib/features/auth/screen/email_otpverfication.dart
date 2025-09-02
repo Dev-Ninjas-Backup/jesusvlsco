@@ -42,7 +42,7 @@ class EmailOtpverfication extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -52,7 +52,7 @@ class EmailOtpverfication extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(height: Sizer.hp(8)),
-                      
+
                       /// Title
                       Text(
                         AppText.check,
@@ -61,7 +61,7 @@ class EmailOtpverfication extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: Sizer.hp(12)),
-                      
+
                       /// Subtitle
                       Text(
                         AppText.toconfirm,
@@ -71,36 +71,36 @@ class EmailOtpverfication extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: Sizer.hp(24)),
-                      
+
                       /// OTP Fields
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          
                           6,
                           (index) => _buildOTPField(controller, index),
                         ),
                       ),
                       SizedBox(height: Sizer.hp(24)),
-                      
+
                       /// Verify Button
-                      Obx(() => SizedBox(
-                        width: Sizer.wp(312),
-                        height: Sizer.wp(48),
-                        child: ElevatedButton(
-                          onPressed: controller.isLoading.value 
-                            ? null 
-                            : controller.verifyOtp,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.color1,
-                            foregroundColor: AppColors.backgroundLight,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      Obx(
+                        () => SizedBox(
+                          width: Sizer.wp(312),
+                          height: Sizer.wp(48),
+                          child: ElevatedButton(
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : controller.verifyOtp,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.color1,
+                              foregroundColor: AppColors.backgroundLight,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: controller.isLoading.value 
-                            ? Center(
+                            child: controller.isLoading.value
+                                ? Center(
                                     child: SizedBox(
                                       width: 40,
                                       height: 40,
@@ -113,26 +113,27 @@ class EmailOtpverfication extends StatelessWidget {
                                       ),
                                     ),
                                   )
-                            : Text(
-                                AppText.verify,
-                                style: AppTextStyle.semibold().copyWith(
-                                  color: AppColors.textWhite,
-                                ),
-                              ),
+                                : Text(
+                                    AppText.verify,
+                                    style: AppTextStyle.semibold().copyWith(
+                                      color: AppColors.textWhite,
+                                    ),
+                                  ),
+                          ),
                         ),
-                      )),
+                      ),
                       SizedBox(height: Sizer.hp(8)),
-                      
+
                       // /// Resend OTP Button
                       // Obx(() => TextButton(
-                      //   onPressed: controller.isLoading.value 
-                      //     ? null 
+                      //   onPressed: controller.isLoading.value
+                      //     ? null
                       //     : controller.resendOtp,
                       //   child: Text(
                       //     '📧 Resend OTP',
                       //     style: AppTextStyle.semiregular().copyWith(
-                      //       color: controller.isLoading.value 
-                      //         ? AppColors.color3.withOpacity(0.5)
+                      //       color: controller.isLoading.value
+                      //         ? AppColors.color3.withValues(alpha: 0.5)
                       //         : AppColors.color1,
                       //     ),
                       //   ),
