@@ -134,6 +134,8 @@ class UserProfileController extends GetxController {
   String get displayPhone =>
       phoneController.text.isNotEmpty ? phoneController.text : 'No Phone';
 
+  
+
   @override
   void onClose() {
     firstNameController.dispose();
@@ -146,4 +148,16 @@ class UserProfileController extends GetxController {
     nationalityController.dispose();
     super.onClose();
   }
+
+  //for greetings
+  String get timeBasedGreeting {
+  final hour = DateTime.now().hour;
+
+  if (hour >= 5 && hour < 12) return 'Good morning';
+  if (hour >= 12 && hour < 17) return 'Good afternoon';
+  if (hour >= 17 && hour < 21) return 'Good evening';
+  return 'Good night';
+}
+String get displayFirsName => firstNameController.text.trim() ?? 'No Job Title';
+
 }

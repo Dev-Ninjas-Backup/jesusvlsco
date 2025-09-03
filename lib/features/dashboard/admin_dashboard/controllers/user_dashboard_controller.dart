@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
+import 'package:jesusvlsco/features/user_profile/controller/user_profile_controller.dart';
 
 class UserDashboardController extends GetxController {
+  final UserProfileController userProfileController= Get.put(UserProfileController());
   final RxString alertMessage =
       "Urgent Shift change for tomorrow, your shift starts at 8:00 AM instead of 9:00 AM"
           .obs;

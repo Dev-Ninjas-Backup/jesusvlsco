@@ -98,4 +98,44 @@ class UserTimeClockController extends GetxController {
       print('Error during clock-in: $e');
     }
   }
+
+  //for clock out
+  void clockOutNow() {
+    clockOutUser(currentLocation.value);
+  }
+
+  Future<void> clockOutUser(LatLng location) async {
+    final url = Uri.parse(
+      '${ApiConstants.baseurl}/employee/time-clock/process-clock',
+    );
+    final token = await StorageService.getAuthToken();
+
+    final headers = {
+      'accept': '*/*',
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final body = jsonEncode({
+      'date': DateTime.now().toUtc().toIso8601String(),
+      'lat': location.latitude,
+      'lng': location.longitude,
+      'action': 'CLOCK_OUT',
+    });
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        print('Clock-in successful: ${response.body}');
+      } else {
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        final String errorMessage =
+            responseBody['data']?['message'] ?? 'Unknown error';
+        Get.snackbar("error", "$errorMessage");
+        print('Clock-in failed: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error during clock-in: $e');
+    }
+  }
 }

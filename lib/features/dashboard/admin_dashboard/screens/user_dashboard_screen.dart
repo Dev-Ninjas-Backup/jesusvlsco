@@ -194,10 +194,18 @@ class UserDashboardScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          CircleAvatar(radius: 28, child: FittedBox(child: Text("MR"))),
+          CircleAvatar(
+            radius: 28,
+            child: FittedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(controller.userProfileController.displayFirsName),
+              ),
+            ),
+          ),
           SizedBox(height: 16),
           Text(
-            "Good morning, Md. Marufur",
+            "${controller.userProfileController.timeBasedGreeting}, ${controller.userProfileController.displayName}",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,

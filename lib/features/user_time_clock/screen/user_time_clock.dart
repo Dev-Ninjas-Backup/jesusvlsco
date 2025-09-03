@@ -95,8 +95,10 @@ class UserTimeClock extends StatelessWidget {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async{
                                   //if needed here to clock out request action 
+                                  Get.back();
+                                  userTimeClockController.clockOutNow();
                                 },
                                 child: Text(
                                   "clock out",
