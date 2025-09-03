@@ -79,8 +79,11 @@ class UserTimeClock extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async{
                                   //here clock in post request work
+                                  Get.back();
+                                  userTimeClockController.clockInNow();
+                                  
                                 },
                                 child: Text(
                                   "clock in",

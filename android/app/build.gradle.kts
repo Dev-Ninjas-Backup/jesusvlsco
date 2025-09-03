@@ -27,7 +27,7 @@ android {
 
     // Firebase Auth (and some other libraries) require a minimum SDK of 23.
     // Override the default Flutter-provided minSdk to ensure manifest merge succeeds.
-    minSdk = 23
+    minSdkVersion(flutter.minSdkVersion.toInt())
 
         targetSdk = 36
         versionCode = flutter.versionCode

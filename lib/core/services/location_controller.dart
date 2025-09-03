@@ -14,7 +14,7 @@ class LocationController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeNotifications();
-    _listenToBackgroundService();
+    //_listenToBackgroundService();
   }
 
   Future<void> _initializeNotifications() async {
