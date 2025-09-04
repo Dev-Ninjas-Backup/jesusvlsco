@@ -513,15 +513,15 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                   ],
                 ),
               ),
-              // Action buttons
-              SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
-              const SizedBox(width: 8),
-              SvgPicture.asset(
-                'assets/icons/Camera.svg',
-                width: 24,
-                height: 24,
-              ),
-              const SizedBox(width: 8),
+              // // Action buttons
+              // SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
+              // const SizedBox(width: 8),
+              // SvgPicture.asset(
+              //   'assets/icons/Camera.svg',
+              //   width: 24,
+              //   height: 24,
+              // ),
+              // const SizedBox(width: 8),
               const MoreVertMenu(),
             ],
           );

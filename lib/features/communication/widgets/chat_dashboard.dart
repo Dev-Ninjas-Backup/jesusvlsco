@@ -206,40 +206,22 @@ class ChatDashboard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: Sizer.hp(4)),
-                      // Last message and unread indicator row
-                      Row(
-                        children: [
-                          // Last message preview
-                          Expanded(
-                            child: Text(
-                              conversation.lastMessage.content.isNotEmpty
-                                  ? conversation.lastMessage.content
-                                  : 'No message content',
-                              style: AppTextStyle.regular().copyWith(
-                                fontSize: Sizer.wp(14),
-                                color: conversation.isRead
-                                    ? AppColors.textSecondary
-                                    : AppColors.textPrimary,
-                                fontWeight: conversation.isRead
-                                    ? FontWeight.w400
-                                    : FontWeight.w500,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          // Unread indicator
-                          if (!conversation.isRead)
-                            Container(
-                              margin: EdgeInsets.only(left: Sizer.wp(8)),
-                              width: Sizer.wp(8),
-                              height: Sizer.wp(8),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                        ],
+                      // Last message preview (removed unread indicator)
+                      Text(
+                        conversation.lastMessage.content.isNotEmpty
+                            ? conversation.lastMessage.content
+                            : 'No message content',
+                        style: AppTextStyle.regular().copyWith(
+                          fontSize: Sizer.wp(14),
+                          color: conversation.isRead
+                              ? AppColors.textSecondary
+                              : AppColors.textPrimary,
+                          fontWeight: conversation.isRead
+                              ? FontWeight.w400
+                              : FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -255,54 +237,35 @@ class ChatDashboard extends StatelessWidget {
     );
   }
 
-  /// Build profile avatar with online status
+  /// Build profile avatar (removed dummy online status)
   Widget _buildProfileAvatar(chat_models.PrivateChatConversation conversation) {
-    return Stack(
-      children: [
-        // Main avatar
-        Container(
-          width: Sizer.wp(50),
-          height: Sizer.wp(50),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              width: 2,
-            ),
-          ),
-          child: CircleAvatar(
-            radius: Sizer.wp(23),
-            backgroundImage: conversation.participant.profile.profileUrl != null
-                ? NetworkImage(conversation.participant.profile.profileUrl!)
-                : null,
-            backgroundColor: AppColors.primaryBackground,
-            child: conversation.participant.profile.profileUrl == null
-                ? Text(
-                    _getInitials(conversation.participant.profile.displayName),
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(16),
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
-                    ),
-                  )
-                : null,
-          ),
+    return Container(
+      width: Sizer.wp(50),
+      height: Sizer.wp(50),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.2),
+          width: 2,
         ),
-        // Online status indicator (placeholder for future implementation)
-        Positioned(
-          bottom: 2,
-          right: 2,
-          child: Container(
-            width: Sizer.wp(12),
-            height: Sizer.wp(12),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.progresstext,
-              border: Border.all(color: AppColors.background, width: 2),
-            ),
-          ),
-        ),
-      ],
+      ),
+      child: CircleAvatar(
+        radius: Sizer.wp(23),
+        backgroundImage: conversation.participant.profile.profileUrl != null
+            ? NetworkImage(conversation.participant.profile.profileUrl!)
+            : null,
+        backgroundColor: AppColors.primaryBackground,
+        child: conversation.participant.profile.profileUrl == null
+            ? Text(
+                _getInitials(conversation.participant.profile.displayName),
+                style: AppTextStyle.regular().copyWith(
+                  fontSize: Sizer.wp(16),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              )
+            : null,
+      ),
     );
   }
 
