@@ -34,20 +34,24 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          // Connection Status
-          _buildConnectionStatus(),
           Padding(
             padding: EdgeInsets.all(Sizer.wp(16)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Chat',
-                  style: AppTextStyle.regular().copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Chat',
+                      style: AppTextStyle.regular().copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(width: Sizer.wp(8)),
+                    _buildConnectionIndicator(),
+                  ],
                 ),
                 Row(
                   children: [
@@ -242,57 +246,22 @@ class _CommunicationDashboardState extends State<CommunicationDashboard> {
     );
   }
 
-  /// Build connection status indicator
-  Widget _buildConnectionStatus() {
+  /// Build professional connection indicator (green/red dot)
+  Widget _buildConnectionIndicator() {
     return Obx(() {
       final isConnected = _chatController.isConnected;
-      final statusText = _chatController.connectionStatusText;
 
       return Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: Sizer.wp(16),
-          vertical: Sizer.hp(8),
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: Sizer.wp(16),
-          vertical: Sizer.hp(8),
-        ),
+        width: Sizer.wp(10),
+        height: Sizer.wp(10),
         decoration: BoxDecoration(
-          color: isConnected ? AppColors.progresstext : AppColors.circle,
-          borderRadius: BorderRadius.circular(12),
+          shape: BoxShape.circle,
+          color: isConnected ? Colors.green : Colors.red,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: (isConnected ? Colors.green : Colors.red).withOpacity(0.3),
               blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: Sizer.wp(10),
-              height: Sizer.wp(10),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(width: Sizer.wp(8)),
-            Icon(
-              isConnected ? CupertinoIcons.wifi : CupertinoIcons.wifi_slash,
-              color: Colors.white,
-              size: Sizer.wp(16),
-            ),
-            SizedBox(width: Sizer.wp(8)),
-            Text(
-              statusText,
-              style: AppTextStyle.regular().copyWith(
-                fontSize: Sizer.wp(14),
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+              offset: const Offset(0, 0),
             ),
           ],
         ),

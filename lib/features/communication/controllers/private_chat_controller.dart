@@ -114,9 +114,7 @@ class PrivateChatController extends GetxController {
     ) {
       _logger.i('🔄 Connection state changed to: $state');
       connectionState.value = state;
-      if (state == chat_models.ConnectionState.connected) {
-        EasyLoading.dismiss();
-      }
+      // Remove EasyLoading dismiss here - let UI handle connection status
     });
 
     // Listen to conversation changes to update unread count
@@ -179,7 +177,6 @@ class PrivateChatController extends GetxController {
     try {
       isConnecting.value = true;
       isLoading.value = true; // Set loading state for conversations
-      EasyLoading.show(status: 'Connecting to chat...');
 
       await _webSocketService.connect();
 
@@ -374,20 +371,30 @@ class PrivateChatController extends GetxController {
     unreadCount.value = unread;
   }
 
-  /// Get filtered conversations based on search query
+  /// Get filtered conversations based on search query, sorted by most recent
   List<chat_models.PrivateChatConversation> get filteredConversations {
+    List<chat_models.PrivateChatConversation> result;
+
     if (searchQuery.value.isEmpty) {
-      return conversations.toList();
+      result = conversations.toList();
+    } else {
+      final query = searchQuery.value.toLowerCase();
+      result = conversations.where((conversation) {
+        final participantName = conversation.participant.profile.displayName
+            .toLowerCase();
+        final lastMessageContent = conversation.lastMessage.content
+            .toLowerCase();
+        return participantName.contains(query) ||
+            lastMessageContent.contains(query);
+      }).toList();
     }
 
-    final query = searchQuery.value.toLowerCase();
-    return conversations.where((conversation) {
-      final participantName = conversation.participant.profile.displayName
-          .toLowerCase();
-      final lastMessageContent = conversation.lastMessage.content.toLowerCase();
-      return participantName.contains(query) ||
-          lastMessageContent.contains(query);
-    }).toList();
+    // Sort by most recent message first (real-time sorting)
+    result.sort(
+      (a, b) => b.lastMessage.createdAt.compareTo(a.lastMessage.createdAt),
+    );
+
+    return result;
   }
 
   /// Check if user is online (placeholder for future implementation)
