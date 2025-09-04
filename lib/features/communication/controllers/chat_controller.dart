@@ -54,7 +54,8 @@ class ChatController extends GetxController {
   ];
 
   // Private chat controller instance
-  PrivateChatController get privateChatController => Get.find<PrivateChatController>();
+  PrivateChatController get privateChatController =>
+      Get.find<PrivateChatController>();
 
   @override
   void onInit() {

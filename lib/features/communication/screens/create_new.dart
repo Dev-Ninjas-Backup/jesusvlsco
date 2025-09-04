@@ -17,7 +17,9 @@ class CreateNew extends StatelessWidget {
   Widget build(BuildContext context) {
     // Initialize controllers
     final UserListController userController = Get.put(UserListController());
-    final PrivateChatController chatController = Get.put(PrivateChatController());
+    final PrivateChatController chatController = Get.put(
+      PrivateChatController(),
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -87,7 +89,10 @@ class CreateNew extends StatelessWidget {
   }
 }
 
-Widget buildSuggestedUserList(UserListController userController, PrivateChatController chatController) {
+Widget buildSuggestedUserList(
+  UserListController userController,
+  PrivateChatController chatController,
+) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
     child: Container(
@@ -105,7 +110,8 @@ Widget buildSuggestedUserList(UserListController userController, PrivateChatCont
       ),
       child: Obx(() {
         // Handle loading state for initial load
-        if (userController.isLoading.value && userController.employeeProfiles.isEmpty) {
+        if (userController.isLoading.value &&
+            userController.employeeProfiles.isEmpty) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(20.0),
@@ -113,16 +119,17 @@ Widget buildSuggestedUserList(UserListController userController, PrivateChatCont
             ),
           );
         }
-        
+
         // Handle empty state
-        if (userController.employeeProfiles.isEmpty && !userController.isLoading.value) {
+        if (userController.employeeProfiles.isEmpty &&
+            !userController.isLoading.value) {
           return Center(
             child: Padding(
               padding: EdgeInsets.all(Sizer.wp(20)),
               child: Text(
-                userController.isSearching.value 
-                  ? 'No employees found for "${userController.searchQuery.value}"'
-                  : 'No employees found',
+                userController.isSearching.value
+                    ? 'No employees found for "${userController.searchQuery.value}"'
+                    : 'No employees found',
                 style: AppTextStyle.regular().copyWith(
                   fontSize: Sizer.wp(14),
                   color: AppColors.text,
@@ -131,19 +138,23 @@ Widget buildSuggestedUserList(UserListController userController, PrivateChatCont
             ),
           );
         }
-        
+
         return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
             // Load more when reaching 80% of scroll
-            if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent * 0.8) {
+            if (scrollInfo.metrics.pixels >=
+                scrollInfo.metrics.maxScrollExtent * 0.8) {
               userController.loadMoreEmployees();
             }
             return false;
           },
           child: ListView.separated(
             padding: EdgeInsets.all(Sizer.wp(8)),
-            itemCount: userController.employeeProfiles.length + 
-                       (userController.hasMore.value ? 1 : 0), // +1 for loading indicator
+            itemCount:
+                userController.employeeProfiles.length +
+                (userController.hasMore.value
+                    ? 1
+                    : 0), // +1 for loading indicator
             separatorBuilder: (context, index) => Divider(
               color: AppColors.border3,
               height: 1,
@@ -154,12 +165,10 @@ Widget buildSuggestedUserList(UserListController userController, PrivateChatCont
               if (index == userController.employeeProfiles.length) {
                 return Padding(
                   padding: EdgeInsets.all(Sizer.wp(16)),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
               }
-              
+
               final employee = userController.employeeProfiles[index];
               return ListTile(
                 contentPadding: EdgeInsets.symmetric(
@@ -233,17 +242,19 @@ Widget buildSuggestedUserList(UserListController userController, PrivateChatCont
 }
 
 /// Start a new chat with the selected employee
-Future<void> _startChatWithEmployee(EmployeeProfile employee, PrivateChatController chatController) async {
+Future<void> _startChatWithEmployee(
+  EmployeeProfile employee,
+  PrivateChatController chatController,
+) async {
   try {
     // Navigate to chat screen first
     Get.to(() => Admin_chatscreen());
-    
+
     // Start new conversation with a default welcome message
     await chatController.startNewConversation(
       recipientId: employee.id,
       firstMessage: "Hello ${employee.profile.firstName}! 👋",
     );
-    
   } catch (error) {
     print('Error starting chat with employee: $error');
     // Show error message to user
@@ -292,18 +303,20 @@ Widget _buildSearchTextField(UserListController userController) {
           color: AppColors.text,
           size: Sizer.wp(20),
         ),
-        suffixIcon: Obx(() => userController.searchQuery.value.isNotEmpty
-          ? IconButton(
-              onPressed: () {
-                userController.clearSearch();
-              },
-              icon: Icon(
-                Icons.clear,
-                color: AppColors.text,
-                size: Sizer.wp(20),
-              ),
-            )
-          : const SizedBox.shrink()),
+        suffixIcon: Obx(
+          () => userController.searchQuery.value.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    userController.clearSearch();
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: AppColors.text,
+                    size: Sizer.wp(20),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
       ),
     ),
   );

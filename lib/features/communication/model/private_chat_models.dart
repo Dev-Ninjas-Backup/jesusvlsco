@@ -34,7 +34,9 @@ class PrivateChatMessage {
       isRead: json['isRead'] ?? false,
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       sender: PrivateChatSender.fromJson(json['sender'] ?? {}),
-      file: json['file'] != null ? PrivateChatFile.fromJson(json['file']) : null,
+      file: json['file'] != null
+          ? PrivateChatFile.fromJson(json['file'])
+          : null,
     );
   }
 
@@ -63,10 +65,7 @@ class PrivateChatSender {
   final String id;
   final PrivateChatProfile profile;
 
-  const PrivateChatSender({
-    required this.id,
-    required this.profile,
-  });
+  const PrivateChatSender({required this.id, required this.profile});
 
   /// Create PrivateChatSender from JSON
   factory PrivateChatSender.fromJson(Map<String, dynamic> json) {
@@ -78,10 +77,7 @@ class PrivateChatSender {
 
   /// Convert PrivateChatSender to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'profile': profile.toJson(),
-    };
+    return {'id': id, 'profile': profile.toJson()};
   }
 }
 
@@ -213,10 +209,7 @@ class PrivateChatParticipant {
   final String id;
   final PrivateChatProfile profile;
 
-  const PrivateChatParticipant({
-    required this.id,
-    required this.profile,
-  });
+  const PrivateChatParticipant({required this.id, required this.profile});
 
   /// Create PrivateChatParticipant from JSON
   factory PrivateChatParticipant.fromJson(Map<String, dynamic> json) {
@@ -228,10 +221,7 @@ class PrivateChatParticipant {
 
   /// Convert PrivateChatParticipant to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'profile': profile.toJson(),
-    };
+    return {'id': id, 'profile': profile.toJson()};
   }
 }
 
@@ -256,7 +246,9 @@ class SendMessageRequest {
       userId: json['userId'] ?? '',
       recipientId: json['recipientId'] ?? '',
       dto: MessageDto.fromJson(json['dto'] ?? {}),
-      file: json['file'] != null ? PrivateChatFile.fromJson(json['file']) : null,
+      file: json['file'] != null
+          ? PrivateChatFile.fromJson(json['file'])
+          : null,
     );
   }
 
@@ -276,22 +268,16 @@ class SendMessageRequest {
 class MessageDto {
   final String content;
 
-  const MessageDto({
-    required this.content,
-  });
+  const MessageDto({required this.content});
 
   /// Create MessageDto from JSON
   factory MessageDto.fromJson(Map<String, dynamic> json) {
-    return MessageDto(
-      content: json['content'] ?? '',
-    );
+    return MessageDto(content: json['content'] ?? '');
   }
 
   /// Convert MessageDto to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'content': content,
-    };
+    return {'content': content};
   }
 }
 
@@ -312,12 +298,20 @@ class PrivateChatFullConversation {
   factory PrivateChatFullConversation.fromJson(Map<String, dynamic> json) {
     return PrivateChatFullConversation(
       conversationId: json['conversationId'] ?? '',
-      participants: (json['participants'] as List<dynamic>?)
-          ?.map((p) => PrivateChatSender.fromJson(p as Map<String, dynamic>))
-          .toList() ?? [],
-      messages: (json['messages'] as List<dynamic>?)
-          ?.map((m) => PrivateChatMessage.fromJson(m as Map<String, dynamic>))
-          .toList() ?? [],
+      participants:
+          (json['participants'] as List<dynamic>?)
+              ?.map(
+                (p) => PrivateChatSender.fromJson(p as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
+      messages:
+          (json['messages'] as List<dynamic>?)
+              ?.map(
+                (m) => PrivateChatMessage.fromJson(m as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
     );
   }
 
@@ -352,41 +346,26 @@ enum PrivateChatEvents {
 class PrivateChatError {
   final String message;
 
-  const PrivateChatError({
-    required this.message,
-  });
+  const PrivateChatError({required this.message});
 
   /// Create PrivateChatError from JSON
   factory PrivateChatError.fromJson(Map<String, dynamic> json) {
-    return PrivateChatError(
-      message: json['message'] ?? '',
-    );
+    return PrivateChatError(message: json['message'] ?? '');
   }
 
   /// Convert PrivateChatError to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'message': message,
-    };
+    return {'message': message};
   }
 }
 
 /// Connection state enum
 /// Represents different states of WebSocket connection
-enum ConnectionState {
-  disconnected,
-  connecting,
-  connected,
-  error,
-}
+enum ConnectionState { disconnected, connecting, connected, error }
 
 /// User role enum for business logic enforcement
 /// Determines who can initiate conversations with whom
-enum UserRole {
-  admin,
-  superadmin,
-  employee,
-}
+enum UserRole { admin, superadmin, employee }
 
 /// Extension to get UserRole from string
 extension UserRoleExtension on UserRole {

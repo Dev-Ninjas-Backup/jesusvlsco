@@ -14,8 +14,11 @@ class ControllerBinder extends Bindings {
     Get.put(LoginController());
     Get.put(AdminBottomNavigationController());
     Get.put(BottomNavigationController());
-    
+
     // Initialize communication controllers
-    Get.lazyPut<PrivateChatController>(() => PrivateChatController(), fenix: true);
+    Get.lazyPut<PrivateChatController>(
+      () => PrivateChatController(),
+      fenix: true,
+    );
   }
 }
