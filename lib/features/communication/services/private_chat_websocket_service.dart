@@ -10,14 +10,14 @@ import 'package:jesusvlsco/features/communication/model/private_chat_models.dart
 /// Manages WebSocket connection for private chat functionality
 /// Implements all events according to websocket.md documentation
 class PrivateChatWebSocketService {
-  static final PrivateChatWebSocketService _instance = 
+  static final PrivateChatWebSocketService _instance =
       PrivateChatWebSocketService._internal();
   factory PrivateChatWebSocketService() => _instance;
   PrivateChatWebSocketService._internal();
 
   final Logger _logger = Logger();
   IO.Socket? _socket;
-  
+
   // Observable streams for real-time updates
   final _connectionState = ConnectionState.disconnected.obs;
   final _currentUserId = Rx<String?>(null);
@@ -26,8 +26,10 @@ class PrivateChatWebSocketService {
   final _errors = <PrivateChatError>[].obs;
 
   // Stream controllers for specific events
-  final _newMessageController = StreamController<PrivateChatMessage>.broadcast();
-  final _newConversationController = StreamController<List<PrivateChatConversation>>.broadcast();
+  final _newMessageController =
+      StreamController<PrivateChatMessage>.broadcast();
+  final _newConversationController =
+      StreamController<List<PrivateChatConversation>>.broadcast();
   final _errorController = StreamController<PrivateChatError>.broadcast();
 
   // Getters for reactive state
@@ -38,8 +40,10 @@ class PrivateChatWebSocketService {
   List<PrivateChatError> get errors => _errors.toList();
 
   // Stream getters for listening to events
-  Stream<PrivateChatMessage> get newMessageStream => _newMessageController.stream;
-  Stream<List<PrivateChatConversation>> get newConversationStream => _newConversationController.stream;
+  Stream<PrivateChatMessage> get newMessageStream =>
+      _newMessageController.stream;
+  Stream<List<PrivateChatConversation>> get newConversationStream =>
+      _newConversationController.stream;
   Stream<PrivateChatError> get errorStream => _errorController.stream;
 
   /// Initialize and connect to private chat WebSocket
@@ -103,9 +107,15 @@ class PrivateChatWebSocketService {
     // Private chat specific events
     _socket!.on(PrivateChatEvents.success.value, _handleSuccess);
     _socket!.on(PrivateChatEvents.error.value, _handleError);
-    _socket!.on(PrivateChatEvents.conversationList.value, _handleConversationList);
+    _socket!.on(
+      PrivateChatEvents.conversationList.value,
+      _handleConversationList,
+    );
     _socket!.on(PrivateChatEvents.newMessage.value, _handleNewMessage);
-    _socket!.on(PrivateChatEvents.newConversation.value, _handleNewConversation);
+    _socket!.on(
+      PrivateChatEvents.newConversation.value,
+      _handleNewConversation,
+    );
   }
 
   /// Handle successful authentication
@@ -115,7 +125,7 @@ class PrivateChatWebSocketService {
       final String userId = data.toString();
       _currentUserId.value = userId;
       _logger.i('✅ Authenticated successfully as user: $userId');
-      
+
       // Load conversations after successful authentication
       loadConversations();
     } catch (error) {
@@ -143,12 +153,15 @@ class PrivateChatWebSocketService {
     try {
       final List<dynamic> conversationList = data as List<dynamic>;
       final conversations = conversationList
-          .map((json) => PrivateChatConversation.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) =>
+                PrivateChatConversation.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
-      
+
       _conversations.assignAll(conversations);
       _logger.i('📄 Loaded ${conversations.length} conversations');
-      
+
       // Notify listeners about the loaded conversations
       _newConversationController.add(conversations);
     } catch (error) {
@@ -161,24 +174,28 @@ class PrivateChatWebSocketService {
   void _handleNewMessage(dynamic data) {
     try {
       final message = PrivateChatMessage.fromJson(data as Map<String, dynamic>);
-      _logger.i('📩 New message received from ${message.sender.profile.displayName}');
-      
+      _logger.i(
+        '📩 New message received from ${message.sender.profile.displayName}',
+      );
+
       // Add message to conversation messages
       final conversationId = message.conversationId;
       if (!_messages.containsKey(conversationId)) {
         _messages[conversationId] = [];
       }
-      
+
       // Remove duplicate messages by ID
       _messages[conversationId]!.removeWhere((msg) => msg.id == message.id);
       _messages[conversationId]!.add(message);
-      
+
       // Sort messages by creation time
-      _messages[conversationId]!.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-      
+      _messages[conversationId]!.sort(
+        (a, b) => a.createdAt.compareTo(b.createdAt),
+      );
+
       // Update conversation list with new last message
       _updateConversationLastMessage(message);
-      
+
       // Notify listeners
       _newMessageController.add(message);
     } catch (error) {
@@ -196,29 +213,40 @@ class PrivateChatWebSocketService {
         // Array payload - refreshed conversation list
         final conversationList = data;
         final conversations = conversationList
-            .map((json) => PrivateChatConversation.fromJson(json as Map<String, dynamic>))
+            .map(
+              (json) => PrivateChatConversation.fromJson(
+                json as Map<String, dynamic>,
+              ),
+            )
             .toList();
-        
+
         _conversations.assignAll(conversations);
-        _logger.i('🆕 Updated conversation list with ${conversations.length} conversations');
-        
+        _logger.i(
+          '🆕 Updated conversation list with ${conversations.length} conversations',
+        );
+
         // Notify listeners
         _newConversationController.add(conversations);
-      } else if (data is Map<String, dynamic> && data.containsKey('conversationId')) {
+      } else if (data is Map<String, dynamic> &&
+          data.containsKey('conversationId')) {
         // Single conversation object with full message history
         final fullConversation = PrivateChatFullConversation.fromJson(data);
-        _logger.i('📂 Loaded single conversation: ${fullConversation.conversationId}');
-        
+        _logger.i(
+          '📂 Loaded single conversation: ${fullConversation.conversationId}',
+        );
+
         // Store messages for this conversation
         _messages[fullConversation.conversationId] = fullConversation.messages;
-        
+
         // Update or add conversation summary to the list
         _updateConversationSummary(fullConversation);
-        
+
         // Notify listeners about the updated conversation list
         _newConversationController.add(_conversations.toList());
       } else {
-        _logger.w('🆕 Received new_conversation with unknown payload format: $data');
+        _logger.w(
+          '🆕 Received new_conversation with unknown payload format: $data',
+        );
       }
     } catch (error) {
       _logger.e('❌ Error parsing new conversation: $error');
@@ -226,17 +254,19 @@ class PrivateChatWebSocketService {
   }
 
   /// Update conversation summary from full conversation data
-  void _updateConversationSummary(PrivateChatFullConversation fullConversation) {
+  void _updateConversationSummary(
+    PrivateChatFullConversation fullConversation,
+  ) {
     // Find if conversation already exists in list
     final existingIndex = _conversations.indexWhere(
       (conv) => conv.chatId == fullConversation.conversationId,
     );
-    
+
     // Get the last message from the full conversation
-    final lastMessage = fullConversation.messages.isNotEmpty 
-        ? fullConversation.messages.last 
+    final lastMessage = fullConversation.messages.isNotEmpty
+        ? fullConversation.messages.last
         : null;
-    
+
     if (existingIndex != -1 && lastMessage != null) {
       // Update existing conversation with new last message
       final existingConv = _conversations[existingIndex];
@@ -249,14 +279,15 @@ class PrivateChatWebSocketService {
         isRead: existingConv.isRead,
       );
       _conversations[existingIndex] = updatedConv;
-    } else if (lastMessage != null && fullConversation.participants.length >= 2) {
+    } else if (lastMessage != null &&
+        fullConversation.participants.length >= 2) {
       // Create new conversation summary if it doesn't exist
       // Find the other participant (not current user)
       final otherParticipant = fullConversation.participants.firstWhere(
         (p) => p.id != _currentUserId.value,
         orElse: () => fullConversation.participants.first,
       );
-      
+
       final newConv = PrivateChatConversation(
         type: 'private',
         chatId: fullConversation.conversationId,
@@ -279,7 +310,7 @@ class PrivateChatWebSocketService {
       _logger.w('⚠️ Cannot load conversations - not connected to server');
       return;
     }
-    
+
     _socket!.emit(PrivateChatEvents.loadConversations.value);
     _logger.i('📤 Requested conversation list');
   }
@@ -297,7 +328,10 @@ class PrivateChatWebSocketService {
       return;
     }
 
-    _socket!.emit(PrivateChatEvents.loadSingleConversation.value, conversationId.trim());
+    _socket!.emit(
+      PrivateChatEvents.loadSingleConversation.value,
+      conversationId.trim(),
+    );
     _logger.i('📤 Requesting conversation history for: $conversationId');
   }
 
@@ -337,8 +371,9 @@ class PrivateChatWebSocketService {
 
       // Emit message to server
       _socket!.emit(PrivateChatEvents.sendMessage.value, request.toJson());
-      _logger.i('📤 Sent message to $recipientId: ${content.substring(0, content.length.clamp(0, 50))}...');
-      
+      _logger.i(
+        '📤 Sent message to $recipientId: ${content.substring(0, content.length.clamp(0, 50))}...',
+      );
     } catch (error) {
       _logger.e('❌ Error sending message: $error');
       _addError(PrivateChatError(message: 'Failed to send message: $error'));
@@ -369,7 +404,7 @@ class PrivateChatWebSocketService {
     final conversationIndex = _conversations.indexWhere(
       (conv) => conv.chatId == message.conversationId,
     );
-    
+
     if (conversationIndex != -1) {
       // Create updated conversation with new last message
       final updatedConversation = PrivateChatConversation(
@@ -380,7 +415,7 @@ class PrivateChatWebSocketService {
         updatedAt: message.createdAt,
         isRead: message.isSentByMe(_currentUserId.value ?? ''),
       );
-      
+
       _conversations[conversationIndex] = updatedConversation;
     }
   }
@@ -388,7 +423,7 @@ class PrivateChatWebSocketService {
   /// Add error to error list
   void _addError(PrivateChatError error) {
     _errors.add(error);
-    
+
     // Limit error list size
     if (_errors.length > 10) {
       _errors.removeAt(0);
@@ -409,7 +444,7 @@ class PrivateChatWebSocketService {
         _socket = null;
         _logger.i('🔌 Disconnected from private chat WebSocket');
       }
-      
+
       _connectionState.value = ConnectionState.disconnected;
       _currentUserId.value = null;
     } catch (error) {

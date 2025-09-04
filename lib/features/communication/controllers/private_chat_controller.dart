@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
-import 'package:jesusvlsco/features/communication/model/private_chat_models.dart' as chat_models;
+import 'package:jesusvlsco/features/communication/model/private_chat_models.dart'
+    as chat_models;
 import 'package:jesusvlsco/features/communication/services/private_chat_websocket_service.dart';
 
 /// Private Chat Controller
@@ -12,7 +13,8 @@ import 'package:jesusvlsco/features/communication/services/private_chat_websocke
 /// Handles message sending, conversation management, and UI state
 class PrivateChatController extends GetxController {
   final Logger _logger = Logger();
-  final PrivateChatWebSocketService _webSocketService = PrivateChatWebSocketService();
+  final PrivateChatWebSocketService _webSocketService =
+      PrivateChatWebSocketService();
 
   // Observable state variables
   final isLoading = false.obs;
@@ -31,7 +33,8 @@ class PrivateChatController extends GetxController {
 
   // Stream subscriptions
   StreamSubscription<chat_models.PrivateChatMessage>? _newMessageSubscription;
-  StreamSubscription<List<chat_models.PrivateChatConversation>>? _newConversationSubscription;
+  StreamSubscription<List<chat_models.PrivateChatConversation>>?
+  _newConversationSubscription;
   StreamSubscription<chat_models.PrivateChatError>? _errorSubscription;
 
   @override
@@ -50,19 +53,18 @@ class PrivateChatController extends GetxController {
   Future<void> _initializeController() async {
     try {
       _logger.i('🚀 Initializing Private Chat Controller');
-      
+
       // Get current user information
       await _loadCurrentUserInfo();
-      
+
       // Set up reactive listeners
       _setupReactiveListeners();
-      
+
       // Set up WebSocket event listeners
       _setupWebSocketListeners();
-      
+
       // Connect to WebSocket
       await connectToChat();
-      
     } catch (error) {
       _logger.e('❌ Error initializing private chat controller: $error');
       EasyLoading.showError('Failed to initialize chat');
@@ -74,23 +76,25 @@ class PrivateChatController extends GetxController {
     try {
       final String? userId = await StorageService.getId();
       final String? userRole = await _getUserRole();
-      
+
       if (userId != null) {
         currentUserId.value = userId;
         _logger.i('👤 Current User ID: $userId');
       }
-      
+
       if (userRole != null) {
-        currentUserRole.value = chat_models.UserRoleExtension.fromString(userRole);
+        currentUserRole.value = chat_models.UserRoleExtension.fromString(
+          userRole,
+        );
         _logger.i('👤 Current User Role: $userRole');
       }
-      
     } catch (error) {
       _logger.e('❌ Error loading user info: $error');
     }
   }
 
   /// Get user role from storage
+  //ToDo: Implement user role retrieval from storage
   Future<String?> _getUserRole() async {
     try {
       // You can implement this based on your existing user storage
@@ -105,7 +109,9 @@ class PrivateChatController extends GetxController {
   /// Set up reactive listeners for state changes
   void _setupReactiveListeners() {
     // Listen to WebSocket service connection state changes
-    ever(_webSocketService.connectionStateObservable, (chat_models.ConnectionState state) {
+    ever(_webSocketService.connectionStateObservable, (
+      chat_models.ConnectionState state,
+    ) {
       _logger.i('🔄 Connection state changed to: $state');
       connectionState.value = state;
       if (state == chat_models.ConnectionState.connected) {
@@ -136,16 +142,18 @@ class PrivateChatController extends GetxController {
       (List<chat_models.PrivateChatConversation> convs) {
         _logger.i('🔄 Received ${convs.length} conversations from WebSocket');
         conversations.assignAll(convs);
-        
+
         // If we have a selected conversation, reload its messages to get the latest history
         if (selectedConversation.value != null) {
-          final messages = _webSocketService.getMessagesForConversation(selectedConversation.value!.chatId);
+          final messages = _webSocketService.getMessagesForConversation(
+            selectedConversation.value!.chatId,
+          );
           currentMessages.assignAll(messages);
         }
-        
+
         // Update loading state
         isLoading.value = false;
-        
+
         _updateUnreadCount();
       },
       onError: (error) {
@@ -172,16 +180,15 @@ class PrivateChatController extends GetxController {
       isConnecting.value = true;
       isLoading.value = true; // Set loading state for conversations
       EasyLoading.show(status: 'Connecting to chat...');
-      
+
       await _webSocketService.connect();
-      
+
       // Update reactive state based on service state
       connectionState.value = _webSocketService.connectionState;
-      
+
       // Don't immediately assign conversations here, let the stream listener handle it
       // This ensures the UI updates properly when conversations are loaded
       _logger.i('🔗 WebSocket connected, waiting for conversations...');
-      
     } catch (error) {
       _logger.e('❌ Error connecting to chat: $error');
       EasyLoading.showError('Failed to connect to chat');
@@ -209,11 +216,10 @@ class PrivateChatController extends GetxController {
     try {
       isLoading.value = true;
       _webSocketService.loadConversations();
-      
+
       // The conversations will be updated via the stream listener
       // when the WebSocket service receives the response
       _logger.i('📤 Requested conversation list from server');
-      
     } catch (error) {
       _logger.e('❌ Error loading conversations: $error');
       EasyLoading.showError('Failed to load conversations');
@@ -230,7 +236,7 @@ class PrivateChatController extends GetxController {
   }) async {
     try {
       final messageContent = content ?? messageController.text.trim();
-      
+
       if (messageContent.isEmpty) {
         EasyLoading.showInfo('Please enter a message');
         return;
@@ -250,9 +256,8 @@ class PrivateChatController extends GetxController {
 
       // Clear message input
       messageController.clear();
-      
+
       _logger.i('✅ Message sent successfully to $recipientId');
-      
     } catch (error) {
       _logger.e('❌ Error sending message: $error');
       EasyLoading.showError('Failed to send message');
@@ -263,11 +268,13 @@ class PrivateChatController extends GetxController {
   /// [conversation] - The conversation to select
   void selectConversation(chat_models.PrivateChatConversation conversation) {
     selectedConversation.value = conversation;
-    
+
     // Load full conversation history from server
     loadConversationHistory(conversation.chatId);
-    
-    _logger.i('📂 Selected conversation with ${conversation.participant.profile.displayName}');
+
+    _logger.i(
+      '📂 Selected conversation with ${conversation.participant.profile.displayName}',
+    );
   }
 
   /// Load full conversation history for a specific conversation
@@ -280,12 +287,14 @@ class PrivateChatController extends GetxController {
       }
 
       // Load messages from local cache first
-      final cachedMessages = _webSocketService.getMessagesForConversation(conversationId);
+      final cachedMessages = _webSocketService.getMessagesForConversation(
+        conversationId,
+      );
       currentMessages.assignAll(cachedMessages);
 
       // Request full conversation history from server
       _webSocketService.loadSingleConversation(conversationId);
-      
+
       _logger.i('� Loading conversation history for: $conversationId');
     } catch (error) {
       _logger.e('❌ Error loading conversation history: $error');
@@ -308,13 +317,9 @@ class PrivateChatController extends GetxController {
       }
 
       // Send the first message (this will create the conversation)
-      await sendMessage(
-        recipientId: recipientId,
-        content: firstMessage,
-      );
-      
+      await sendMessage(recipientId: recipientId, content: firstMessage);
+
       _logger.i('✅ Started new conversation with $recipientId');
-      
     } catch (error) {
       _logger.e('❌ Error starting new conversation: $error');
       EasyLoading.showError('Failed to start conversation');
@@ -323,18 +328,20 @@ class PrivateChatController extends GetxController {
 
   /// Handle new message received
   void _handleNewMessage(chat_models.PrivateChatMessage message) {
-    _logger.i('📩 Handling new message from ${message.sender.profile.displayName}');
-    
+    _logger.i(
+      '📩 Handling new message from ${message.sender.profile.displayName}',
+    );
+
     // Update current messages if this message belongs to selected conversation
     if (selectedConversation.value?.chatId == message.conversationId) {
       // Remove duplicate messages by ID
       currentMessages.removeWhere((msg) => msg.id == message.id);
       currentMessages.add(message);
-      
+
       // Sort messages by creation time
       currentMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     }
-    
+
     // Update conversations list
     conversations.assignAll(_webSocketService.conversations);
     _updateUnreadCount();
@@ -345,15 +352,15 @@ class PrivateChatController extends GetxController {
     if (currentUserId.value == null || currentUserRole.value == null) {
       return false;
     }
-    
+
     if (recipientId == currentUserId.value) {
       return false; // Cannot send to self
     }
-    
+
     // Add your business logic here based on recipient's role
     // For now, allow all communications for admins
-    return currentUserRole.value == chat_models.UserRole.admin || 
-           currentUserRole.value == chat_models.UserRole.superadmin;
+    return currentUserRole.value == chat_models.UserRole.admin ||
+        currentUserRole.value == chat_models.UserRole.superadmin;
   }
 
   /// Check if current user can start conversation with recipient
@@ -372,22 +379,26 @@ class PrivateChatController extends GetxController {
     if (searchQuery.value.isEmpty) {
       return conversations.toList();
     }
-    
+
     final query = searchQuery.value.toLowerCase();
     return conversations.where((conversation) {
-      final participantName = conversation.participant.profile.displayName.toLowerCase();
+      final participantName = conversation.participant.profile.displayName
+          .toLowerCase();
       final lastMessageContent = conversation.lastMessage.content.toLowerCase();
-      return participantName.contains(query) || lastMessageContent.contains(query);
+      return participantName.contains(query) ||
+          lastMessageContent.contains(query);
     }).toList();
   }
 
   /// Check if user is online (placeholder for future implementation)
+  //ToDo: Implement user online status retrieval
   bool isUserOnline(String userId) {
     // This would need to be implemented based on your backend's presence system
     return false;
   }
 
   /// Get last seen time for user (placeholder for future implementation)
+  //ToDo: Implement user last seen time retrieval
   String getLastSeen(String userId) {
     // This would need to be implemented based on your backend's presence system
     return 'Last seen recently';
@@ -418,7 +429,8 @@ class PrivateChatController extends GetxController {
   }
 
   /// Check connection status
-  bool get isConnected => connectionState.value == chat_models.ConnectionState.connected;
+  bool get isConnected =>
+      connectionState.value == chat_models.ConnectionState.connected;
 
   /// Get connection status text
   String get connectionStatusText {

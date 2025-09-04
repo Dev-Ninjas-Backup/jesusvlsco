@@ -10,7 +10,11 @@ class EmployeeProfile {
   final Profile profile;
   final RxBool isSelected = false.obs;
 
-  EmployeeProfile( {required this.id,required this.employeeID, required this.profile});
+  EmployeeProfile({
+    required this.id,
+    required this.employeeID,
+    required this.profile,
+  });
 
   factory EmployeeProfile.fromJson(Map<String, dynamic> json) {
     return EmployeeProfile(
@@ -22,7 +26,6 @@ class EmployeeProfile {
 }
 
 class Profile {
-  
   final String firstName;
   final String lastName;
   final String jobTitle;
@@ -82,12 +85,15 @@ class UserListController extends GetxController {
     fetchEmployeeProfiles(); // Initial load
   }
 
-  Future<void> fetchEmployeeProfiles({bool loadMore = false, String? searchTerm}) async {
+  Future<void> fetchEmployeeProfiles({
+    bool loadMore = false,
+    String? searchTerm,
+  }) async {
     if (isLoading.value || (!hasMore.value && loadMore)) return;
 
     isLoading.value = true;
     final token = await StorageService.getAuthToken();
-    
+
     // Reset pagination for new search
     if (!loadMore && searchTerm != null) {
       currentPage.value = 1;
@@ -96,11 +102,12 @@ class UserListController extends GetxController {
     }
 
     // Build URL with search parameter if provided
-    String url = '${ApiConstants.baseurl}/admin/user?role=EMPLOYEE&page=${currentPage.value}&limit=$limit';
+    String url =
+        '${ApiConstants.baseurl}/admin/user?role=EMPLOYEE&page=${currentPage.value}&limit=$limit';
     if (searchTerm != null && searchTerm.isNotEmpty) {
       url += '&searchTerm=${Uri.encodeComponent(searchTerm)}';
     }
-    
+
     final uri = Uri.parse(url);
     print(">>>>call user");
 
@@ -138,7 +145,7 @@ class UserListController extends GetxController {
           } else {
             employeeProfiles.value = newProfiles;
           }
-          
+
           totalEmployeeCount.value = employeeProfiles.length;
           currentPage.value++;
           print("Total employees fetched so far: ${totalEmployeeCount.value}");
@@ -157,7 +164,7 @@ class UserListController extends GetxController {
   void searchEmployees(String query) {
     searchQuery.value = query;
     isSearching.value = query.isNotEmpty;
-    
+
     // Reset and fetch with search term
     fetchEmployeeProfiles(loadMore: false, searchTerm: query);
   }
@@ -165,7 +172,9 @@ class UserListController extends GetxController {
   /// Load more employees (pagination)
   void loadMoreEmployees() {
     if (!isLoading.value && hasMore.value) {
-      String? currentSearch = searchQuery.value.isNotEmpty ? searchQuery.value : null;
+      String? currentSearch = searchQuery.value.isNotEmpty
+          ? searchQuery.value
+          : null;
       fetchEmployeeProfiles(loadMore: true, searchTerm: currentSearch);
     }
   }
