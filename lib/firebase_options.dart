@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '682936551354',
     projectId: 'jesusvlsco',
     storageBucket: 'jesusvlsco.firebasestorage.app',
-    iosBundleId: 'com.example.jesusvlsco',
+    iosBundleId: 'com.lgc.management',
   );
 }

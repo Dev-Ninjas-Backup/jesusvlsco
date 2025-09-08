@@ -1,3 +1,14 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+// Load key.properties
+val keystoreProperties = Properties().apply {
+    val keystorePropertiesFile = rootProject.file("key.properties")
+    if (keystorePropertiesFile.exists()) {
+        load(FileInputStream(keystorePropertiesFile))
+    }
+}
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -6,7 +17,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.jesusvlsco"
+    namespace = "com.lgc.management"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -23,25 +34,35 @@ android {
 
     defaultConfig {
         
-        applicationId = "com.example.jesusvlsco"
+        applicationId = "com.lgc.management"
 
     // Firebase Auth (and some other libraries) require a minimum SDK of 23.
     // Override the default Flutter-provided minSdk to ensure manifest merge succeeds.
     minSdkVersion(flutter.minSdkVersion.toInt())
 
         targetSdk = 36
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode = 1
+        versionName = "1.0.0"
 
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = file(keystoreProperties.getProperty("storeFile") ?: "")
+            storePassword = keystoreProperties.getProperty("storePassword")
+        }
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+
 }
 
 flutter {
