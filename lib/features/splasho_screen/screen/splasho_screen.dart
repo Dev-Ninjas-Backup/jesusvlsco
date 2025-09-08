@@ -18,7 +18,7 @@ class SplashoScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'JesusVLSco',
+                'LGC Global',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
