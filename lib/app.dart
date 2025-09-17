@@ -17,7 +17,7 @@ class Jesusvlsco extends StatelessWidget {
     AppContext.init(context); // Initialize AppContext with the current context
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Jesus VLSCO',
+      title: 'LGC Global',
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
