@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
+import 'package:jesusvlsco/features/auth/controller/otp_verification_controller.dart';
+import 'package:jesusvlsco/features/auth/screen/phone_otpverify.dart';
+import 'package:jesusvlsco/routes/routing.dart';
 
 class PhoneController extends GetxController {
   // UI State
@@ -65,7 +68,9 @@ class PhoneController extends GetxController {
 
   // Phone login function
   Future<void> loginWithPhone() async {
-    final phone = phoneController.text.trim();
+    final phone = fullPhoneNumber;
+
+    print('phone: $phone');
 
     if (phone.isEmpty) {
       _showSnackbar('❌ Error', 'Please enter your phone number.');
@@ -86,6 +91,8 @@ class PhoneController extends GetxController {
         body: json.encode({"phoneNumber": fullPhoneNumber}),
       );
 
+      print('phone res: ${response.body}');
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         isLoggedIn.value = true;
         _showSnackbar(
@@ -93,12 +100,17 @@ class PhoneController extends GetxController {
           'OTP sent to your phone! 📱',
           isError: false,
         );
-
-        // Get.toNamed('/phone-otp-verification', arguments: fullPhoneNumber);
+        Get.to(
+          Phoneotpverify(
+            phoneNumber: fullPhoneNumber.startsWith('+')
+                ? fullPhoneNumber.substring(1)
+                : fullPhoneNumber,
+          ),
+        );
       } else {
         final responseBody = json.decode(response.body);
         final errorMessage =
-            responseBody['message'] ?? 'Login failed. Please try again.';
+            responseBody['message'] ?? 'Verification failed. Please try again.';
         _showSnackbar('❌ Error', errorMessage);
       }
     } catch (e) {

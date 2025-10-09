@@ -55,13 +55,13 @@ class AuthRoutes {
     ),
 
     //login with OTP
-    GoRoute(
-      path: RoutePaths.loginphoneotp,
-      name: RouteNames.loginphoneotp,
-      builder: (context, state) {
-        return const Phoneotpverify();
-      },
-    ),
+    // GoRoute(
+    //   path: RoutePaths.loginphoneotp,
+    //   name: RouteNames.loginphoneotp,
+    //   builder: (context, state) {
+    //     return  Phoneotpverify();
+    //   },
+    // ),
 
     //verification Complete
     GoRoute(

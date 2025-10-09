@@ -18,6 +18,7 @@ class UserTimeClockController extends GetxController {
     LocationController(),
   ); // Initialize LocationController
   GoogleMapController? mapController; // To control the Google Map
+  final action = ''.obs;
 
   @override
   void onInit() {
@@ -62,6 +63,7 @@ class UserTimeClockController extends GetxController {
   //for clock in
   void clockInNow() {
     clockInUser(currentLocation.value);
+    action.value = 'CLOCK_IN';
   }
 
   Future<void> clockInUser(LatLng location) async {
@@ -80,12 +82,12 @@ class UserTimeClockController extends GetxController {
       'date': DateTime.now().toUtc().toIso8601String(),
       'lat': location.latitude,
       'lng': location.longitude,
-      'action': 'CLOCK_IN',
+      'action': action.value,
     });
 
     try {
       final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('Clock-in successful: ${response.body}');
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -102,6 +104,7 @@ class UserTimeClockController extends GetxController {
   //for clock out
   void clockOutNow() {
     clockOutUser(currentLocation.value);
+    action.value = 'CLOCK_OUT';
   }
 
   Future<void> clockOutUser(LatLng location) async {
@@ -120,12 +123,12 @@ class UserTimeClockController extends GetxController {
       'date': DateTime.now().toUtc().toIso8601String(),
       'lat': location.latitude,
       'lng': location.longitude,
-      'action': 'CLOCK_OUT',
+      'action': action.value,
     });
 
     try {
       final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('Clock-in successful: ${response.body}');
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
