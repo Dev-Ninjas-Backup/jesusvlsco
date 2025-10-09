@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
 
+import '../widget/show_clock_in_dialog.dart';
+
 class UserTimeClock extends StatelessWidget {
   final UserTimeClockController userTimeClockController = Get.put(
     UserTimeClockController(),
@@ -61,66 +63,7 @@ class UserTimeClock extends StatelessWidget {
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Center(
-                      child: AlertDialog(
-                        
-                        title: Text("Choose one",textAlign: TextAlign.center,),
-                        titleTextStyle: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                        actionsAlignment: MainAxisAlignment.center,
-                        actions: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                onPressed: () async{
-                                  //here clock in post request work
-                                  Get.back();
-                                  userTimeClockController.clockInNow();
-                                  
-                                },
-                                child: Text(
-                                  "clock in",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () async{
-                                  //if needed here to clock out request action 
-                                  Get.back();
-                                  userTimeClockController.clockOutNow();
-                                },
-                                child: Text(
-                                  "clock out",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                        iconPadding: EdgeInsets.only(right: 2,bottom: 2),
-                        icon: IconButton(
-                          onPressed: (){
-                            Get.back();
-                          }, icon: Icon(Icons.close,color: Colors.red,)),
-                      ),
-                    );
-                  },
-                );
+                showCustomClockDialog(context);
               },
               child: Container(
                 padding: const EdgeInsets.all(24),

@@ -2,15 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
+import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/routes/routing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../model/user_loginresponse.dart';
+import '../../bottom_navigation/screen/admin_bottom_navigation_scaffold.dart';
+import '../../bottom_navigation/screen/user_bottom_navigation_scaffold.dart';
 
 class Phoneotpverify extends StatefulWidget {
-  const Phoneotpverify({super.key});
+  final String phoneNumber; // Dynamic phone number
+  const Phoneotpverify({super.key, required this.phoneNumber});
 
   @override
   State<Phoneotpverify> createState() => _PhoneotpverifyState();
@@ -18,10 +28,11 @@ class Phoneotpverify extends StatefulWidget {
 
 class _PhoneotpverifyState extends State<Phoneotpverify> {
   final List<TextEditingController> _controllers = List.generate(
-    4,
+    6,
     (index) => TextEditingController(),
   );
-  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -29,6 +40,153 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNodes[0].requestFocus();
     });
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
+  // Collect OTP digits
+  String _getOtpCode() {
+    return _controllers.map((controller) => controller.text).join();
+  }
+
+  // HTTPS API call
+  Future<void> _verifyOtp() async {
+    final otpCode = _getOtpCode();
+    if (otpCode.length != 6 || otpCode.contains(' ')) {
+      _showSnackBar('Please enter a valid 6-digit OTP');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      const String apiUrl = '${ApiConstants.baseurl}/auth/verify/phone';
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'phoneNumber': widget.phoneNumber, 'otp': otpCode}),
+      );
+
+      print('res: ${response.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final decoded = json.decode(response.body);
+        final loginResponse = LoginResponse.fromJson(decoded);
+
+        // 🔥 Save user data to SharedPreferences
+        await _saveUserData(loginResponse);
+        print('userrole: ${loginResponse.data!.user.role}');
+
+        if (mounted) {
+          _showSnackbar(
+            '✅ Success',
+            'Phone verified successfully!',
+            isError: false,
+          );
+
+          // Navigate based on user role instead of verification complete
+          navigateBasedOnRole(loginResponse.data!.user.role);
+        }
+      } else {
+        final errorMessage =
+            jsonDecode(response.body)['message'] ?? 'OTP verification failed';
+        _showSnackBar(errorMessage);
+      }
+    } catch (e) {
+      _showSnackBar('An error occurred: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  // Navigate based on user role
+  void navigateBasedOnRole(String userRole) {
+    // Small delay to ensure UI updates properly
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (userRole == 'ADMIN') {
+        Get.offAll(() => AdminBottomNavigationScaffold());
+      } else {
+        Get.offAll(() => const UserBottomNavigationScaffold());
+      }
+    });
+  }
+
+  // Show snackbar message
+  void _showSnackbar(String title, String message, {bool isError = true}) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: isError ? Colors.red : Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  // Save user data to SharedPreferences
+  Future<void> _saveUserData(LoginResponse loginResponse) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Save authentication token
+      await prefs.setString('auth_token', loginResponse.data!.token);
+
+      // Save user role
+      await prefs.setString('user_role', loginResponse.data!.user.role);
+
+      // Save user ID
+      await prefs.setString('user_id', loginResponse.data!.user.id);
+
+      // Save user email
+      await prefs.setString('user_email', loginResponse.data!.user.email);
+
+      // Save employee ID
+      await prefs.setInt('employee_id', loginResponse.data!.user.employeeID);
+
+      // Save verification status
+      await prefs.setBool('is_verified', loginResponse.data!.user.isVerified);
+
+      // Save login status
+      await prefs.setBool('is_logged_in', true);
+
+      // Optionally save user profile data as JSON string
+      await prefs.setString(
+        'user_profile',
+        json.encode(loginResponse.data!.user.profile?.toJson()),
+      );
+
+      // Save full user data as JSON for future use
+      await prefs.setString(
+        'user_data',
+        json.encode(loginResponse.data!.user.toJson()),
+      );
+
+      print('✅ User data saved to SharedPreferences successfully');
+    } catch (e) {
+      print('🚨 Error saving user data: $e');
+      throw Exception('Failed to save user data');
+    }
+  }
+
+  // Show SnackBar for errors
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -47,8 +205,6 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
             Padding(
               padding: EdgeInsets.only(left: Sizer.wp(16), right: Sizer.wp(16)),
               child: Container(
-                // width: Sizer.wp(360),
-                // height: 386,
                 padding: EdgeInsets.symmetric(
                   horizontal: Sizer.wp(24),
                   vertical: Sizer.hp(48),
@@ -75,7 +231,7 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
                     ),
                     SizedBox(height: Sizer.hp(8)),
                     Text(
-                      "${AppText.sentTo}+91 1234567890",
+                      "${AppText.sentTo}${widget.phoneNumber}", // Display dynamic phone number
                       textAlign: TextAlign.center,
                       style: AppTextStyle.regular().copyWith(
                         color: AppColors.textSecondary,
@@ -85,7 +241,7 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                        4,
+                        6,
                         (index) => _buildOTPField(index),
                       ),
                     ),
@@ -118,9 +274,7 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          context.pushNamed(RouteNames.verifycomplete);
-                        },
+                        onPressed: _isLoading ? null : _verifyOtp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -130,13 +284,17 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(
-                          AppText.verify,
-                          style: AppTextStyle.textbold().copyWith(
-                            color: AppColors.textWhite,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: AppColors.textWhite,
+                              )
+                            : Text(
+                                AppText.verify,
+                                style: AppTextStyle.textbold().copyWith(
+                                  color: AppColors.textWhite,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
                     ),
                     SizedBox(height: Sizer.hp(24)),
@@ -152,8 +310,8 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
 
   Widget _buildOTPField(int index) {
     return Container(
-      width: Sizer.wp(48),
-      height: Sizer.hp(48),
+      width: Sizer.wp(36),
+      height: Sizer.hp(36),
       margin: EdgeInsets.symmetric(horizontal: Sizer.wp(7)),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.color2, width: 1),
@@ -189,7 +347,7 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
 
   void _handleOTPInput(int index, String value) {
     if (value.isNotEmpty) {
-      if (index < 3) {
+      if (index < 5) {
         _focusNodes[index + 1].requestFocus();
       } else {
         _focusNodes[index].unfocus();

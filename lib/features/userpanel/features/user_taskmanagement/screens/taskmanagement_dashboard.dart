@@ -68,18 +68,6 @@ class _UserTaskmanagementDashboardState
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(
-              CupertinoIcons.bars,
-              color: AppColors.backgroundDark,
-              size: Sizer.wp(24),
-            ),
-            onPressed: () {
-              // Handle menu action if needed
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -227,7 +215,7 @@ Widget _buildSearchTextField() {
       children: [
         Container(
           height: Sizer.hp(48),
-          width: Sizer.wp(250),
+          width: Sizer.wp(360),
           decoration: BoxDecoration(
             color: AppColors.primaryBackground,
             border: Border.all(color: AppColors.border),
@@ -265,15 +253,6 @@ Widget _buildSearchTextField() {
               ),
             ),
           ),
-        ),
-        SizedBox(width: Sizer.wp(8)),
-        CustomButton1(
-          width: Sizer.wp(100),
-          color: AppColors.primary,
-          text: "Activity",
-          onPressed: () {
-            Get.to(User_Activitylog());
-          },
         ),
       ],
     ),
