@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/auth/screen/Phone_verifymethod.dart';
 import 'package:jesusvlsco/features/auth/screen/email_otpverfication.dart';
 import 'package:jesusvlsco/features/auth/screen/email_verifymethod.dart';
 import 'package:jesusvlsco/features/auth/screen/login_screen.dart';
-import 'package:jesusvlsco/features/auth/screen/phone_otpverify.dart';
 import 'package:jesusvlsco/features/auth/screen/verification_complete.dart';
 import 'package:jesusvlsco/features/auth/screen/verify_method.dart';
 
 import '../../features/splasho_screen/screen/splasho_screen.dart';
 import '../config/route_constants.dart';
-import '../config/router_config.dart' as app_router;
 
 /// Authentication and onboarding routes
 ///

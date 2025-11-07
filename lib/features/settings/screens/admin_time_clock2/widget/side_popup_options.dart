@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SidePopupOptions extends StatelessWidget {
@@ -15,7 +16,9 @@ class SidePopupOptions extends StatelessWidget {
             title: const Text('Option 1'),
             onTap: () {
               Navigator.pop(context);
-              print('Option 1 selected');
+              if (kDebugMode) {
+                print('Option 1 selected');
+              }
             },
           ),
           ListTile(
@@ -23,7 +26,9 @@ class SidePopupOptions extends StatelessWidget {
             title: const Text('Option 2'),
             onTap: () {
               Navigator.pop(context);
-              print('Option 2 selected');
+              if (kDebugMode) {
+                print('Option 2 selected');
+              }
             },
           ),
           ListTile(
@@ -31,7 +36,9 @@ class SidePopupOptions extends StatelessWidget {
             title: const Text('Option 3'),
             onTap: () {
               Navigator.pop(context);
-              print('Option 3 selected');
+              if (kDebugMode) {
+                print('Option 3 selected');
+              }
             },
           ),
         ],

@@ -162,7 +162,7 @@ class _ApprovedRequestsListState extends State<ApprovedRequestsList> {
               child: SingleChildScrollView(
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
-                child: Container(
+                child: SizedBox(
                   width: Sizer.wp(1272),
                   child: Column(
                     children: [
@@ -271,7 +271,7 @@ class _ApprovedRequestsListState extends State<ApprovedRequestsList> {
 
   /// Build a header cell
   Widget _buildHeaderCell(String title, double width) {
-    return Container(
+    return SizedBox(
       width: width,
       child: Text(
         title,
@@ -293,7 +293,7 @@ class _ApprovedRequestsListState extends State<ApprovedRequestsList> {
       child: Row(
         children: [
           // Employee info
-          Container(
+          SizedBox(
             width: Sizer.wp(236),
             child: Row(
               children: [
@@ -357,7 +357,7 @@ class _ApprovedRequestsListState extends State<ApprovedRequestsList> {
           ),
 
           // Status
-          Container(
+          SizedBox(
             width: Sizer.wp(130),
             child: Container(
               padding: EdgeInsets.symmetric(
@@ -385,7 +385,7 @@ class _ApprovedRequestsListState extends State<ApprovedRequestsList> {
 
   /// Build a leave cell with days and remaining info
   Widget _buildLeaveCell(String days, String remaining, double width) {
-    return Container(
+    return SizedBox(
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

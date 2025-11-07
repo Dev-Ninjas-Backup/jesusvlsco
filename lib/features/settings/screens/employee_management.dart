@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
-import 'package:jesusvlsco/features/settings/widget/checkbox.dart';
 import 'package:jesusvlsco/features/settings/widget/employee_listview.dart';
 import 'package:jesusvlsco/features/settings/widget/textfield.dart';
 import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart';
@@ -18,7 +17,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   final ValueNotifier<String?> valueNotifier = ValueNotifier<String?>(null);
   final TextEditingController controller = TextEditingController();
 
-  bool _isChecked = false;
 
   List<Contact> contacts = [
     Contact(name: 'John Doe', id: 'EMP001'),

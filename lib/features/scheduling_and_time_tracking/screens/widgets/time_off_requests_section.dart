@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,18 +20,26 @@ class TimeOffRequestsSection extends StatelessWidget {
     try {
       controller = Get.find<AccessScheduleController>();
     } catch (e) {
-      print('DEBUG: Controller not found, creating new one: $e');
+      if (kDebugMode) {
+        print('DEBUG: Controller not found, creating new one: $e');
+      }
       controller = Get.put(AccessScheduleController());
     }
 
     // Debug logging
-    print('DEBUG: TimeOffRequestsSection build called');
-    print(
-      'DEBUG: timeOffRequests length: ${controller.timeOffRequests.length}',
-    );
-    print(
-      'DEBUG: isLoadingTimeOffRequests: ${controller.isLoadingTimeOffRequests.value}',
-    );
+    if (kDebugMode) {
+      print('DEBUG: TimeOffRequestsSection build called');
+    }
+    if (kDebugMode) {
+      print(
+        'DEBUG: timeOffRequests length: ${controller.timeOffRequests.length}',
+      );
+    }
+    if (kDebugMode) {
+      print(
+        'DEBUG: isLoadingTimeOffRequests: ${controller.isLoadingTimeOffRequests.value}',
+      );
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),

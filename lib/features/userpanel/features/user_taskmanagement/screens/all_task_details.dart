@@ -185,34 +185,6 @@ Widget _buildSearchTextField() {
   );
 }
 
-Widget _customButton1({
-  required Color color,
-  required String text,
-  required VoidCallback onPressed,
-  required double width,
-}) {
-  return SizedBox(
-    width: width,
-    height: Sizer.hp(40),
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Sizer.wp(8)),
-        ),
-      ),
-      onPressed: onPressed,
-      child: Text(
-        text,
-        style: AppTextStyle.regular().copyWith(
-          fontSize: Sizer.wp(16),
-          color: AppColors.textWhite,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    ),
-  );
-}
 
 class DottedLinePainter extends CustomPainter {
   @override

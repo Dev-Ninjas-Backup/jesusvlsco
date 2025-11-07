@@ -90,7 +90,7 @@ class EmployeeDetailsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      '${employee.name}',
+                      employee.name,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

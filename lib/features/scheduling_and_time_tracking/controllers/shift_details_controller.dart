@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -68,7 +71,9 @@ class ShiftDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print('userName: ${projectData?.user.firstName}}');
+    if (kDebugMode) {
+      print('userName: ${projectData?.user.firstName}}');
+    }
     isEditableMode();
 
     selectedDateFormatted.value = DateFormat(

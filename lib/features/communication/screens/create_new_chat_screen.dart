@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,6 @@ import 'package:jesusvlsco/features/communication/screens/new_team.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/user/controller/user_list_controller.dart';
 import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
-import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
 
 class CreateNew extends StatelessWidget {
   const CreateNew({super.key});
@@ -321,7 +321,9 @@ Future<void> _startChatWithEmployee(
     // Show success dialog
     await _showChatInitiatedDialog(employee);
   } catch (error) {
-    print('Error starting chat with employee: $error');
+    if (kDebugMode) {
+      print('Error starting chat with employee: $error');
+    }
     // Show error message to user
     Get.snackbar(
       'Error',

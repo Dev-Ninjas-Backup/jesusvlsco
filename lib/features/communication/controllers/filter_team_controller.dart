@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -107,14 +108,14 @@ class CustomDropdown extends StatefulWidget {
   final String? tag; // For GetX controller tag
 
   const CustomDropdown({
-    Key? key,
+    super.key,
     required this.items,
     this.selectedValue,
     required this.onChanged,
     this.hintText = "Select Team",
     this.height = 48,
     this.tag,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -380,6 +381,8 @@ final RxnString selectedTeam = RxnString();
 void onTeamChanged(String? value) {
   selectedTeam.value = value;
   if (value != null) {
-    print('Selected team: $value');
+    if (kDebugMode) {
+      print('Selected team: $value');
+    }
   }
 }

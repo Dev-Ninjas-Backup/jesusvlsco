@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
@@ -126,7 +125,7 @@ class EditBadge extends StatelessWidget {
 
   // Reusable TextField Widget
   Widget _customTextField(String hintText, {Icon? icon}) {
-    return Container(
+    return SizedBox(
       height: Sizer.hp(45),
       width: Sizer.wp(360),
       child: TextField(

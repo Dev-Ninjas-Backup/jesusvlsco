@@ -75,7 +75,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
           () => Switch(
             value: controller.isFullDayOff.value,
             onChanged: (val) => controller.isFullDayOff.value = val,
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
             activeTrackColor: AppColors.primary.withValues(alpha: 0.5),
             inactiveThumbColor: Colors.grey.shade400,
             inactiveTrackColor: Colors.grey.shade300,
@@ -112,7 +112,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
                       firstDate: DateTime(2020),
                       lastDate: DateTime(2030),
                     );
-                    if (picked != null) controller.setStartDate(picked);
+                    controller.setStartDate(picked!);
                   },
                 ),
               ),
@@ -128,7 +128,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
                       firstDate: DateTime(2020),
                       lastDate: DateTime(2030),
                     );
-                    if (picked != null) controller.setEndDate(picked);
+                    controller.setEndDate(picked!);
                   },
                 ),
               ),
@@ -186,7 +186,7 @@ class AddUnavailabilityScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Obx(
           () => DropdownButtonFormField<TimeOffRequestType>(
-            value: controller.selectedType.value,
+            initialValue: controller.selectedType.value,
             items: TimeOffRequestType.values.map((type) {
               return DropdownMenuItem(
                 value: type,

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -93,7 +95,7 @@ class UserTimeClockController extends GetxController {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
-        Get.snackbar("error", "$errorMessage");
+        Get.snackbar("error", errorMessage);
         print('Clock-in failed: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
@@ -134,7 +136,7 @@ class UserTimeClockController extends GetxController {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
-        Get.snackbar("error", "$errorMessage");
+        Get.snackbar("error", errorMessage);
         print('Clock-in failed: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {

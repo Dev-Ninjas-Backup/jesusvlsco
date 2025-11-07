@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
-import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 

@@ -99,6 +99,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         target: controller.initialCameraPosition,
                         zoom: 15,
                       ),
+                      // ignore: invalid_use_of_protected_member
                       markers: controller.markers.value,
                       myLocationEnabled: false,
                       myLocationButtonEnabled: false,

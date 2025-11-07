@@ -57,11 +57,6 @@ class ChatController extends GetxController {
   PrivateChatController get privateChatController =>
       Get.find<PrivateChatController>();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Private chat controller is now initialized globally via ControllerBinder
-  }
 
   /// Check if private chat is connected
   bool get isPrivateChatConnected => privateChatController.isConnected;

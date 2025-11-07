@@ -7,11 +7,11 @@ class CustomPieChart extends StatelessWidget {
   final List<RingSegment>? segments;
 
   const CustomPieChart({
-    Key? key,
+    super.key,
     this.size,
     this.strokeWidth,
     this.segments,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

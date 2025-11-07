@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
@@ -128,7 +127,7 @@ PreferredSizeWidget _buildAppBar() {
 Widget _customTextField(String hinttext, {Icon? icon, VoidCallback? onPress}) {
   return InkWell(
     onTap: onPress,
-    child: Container(
+    child: SizedBox(
       height: Sizer.hp(45),
       width: Sizer.wp(360),
       child: TextField(

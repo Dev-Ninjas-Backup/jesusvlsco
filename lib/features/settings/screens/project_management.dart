@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
-import 'package:jesusvlsco/core/utils/constants/colors.dart';
-import 'package:jesusvlsco/features/communication/widgets/common_button.dart';
 import 'package:jesusvlsco/features/settings/widget/project_manager_delete.dart';
 import 'package:jesusvlsco/features/settings/widget/project_manager_selection.dart';
-import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart';
 
 class ProjectManagement extends StatelessWidget {
   final List<String> items = [

@@ -8,8 +8,6 @@ import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_
 import 'package:jesusvlsco/features/splasho_screen/controller/splasho_controller.dart';
 import 'package:logger/logger.dart';
 
-import '../models/assign_user_response_model.dart';
-
 class AssignedUsersService {
   final Logger _logger = Logger();
   final SplashController splashController = Get.find();

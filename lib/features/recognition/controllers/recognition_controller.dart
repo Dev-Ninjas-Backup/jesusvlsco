@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/recognition/screens/create_recognition.dart';
 import 'package:jesusvlsco/features/recognition/screens/send_recognitation_pages.dart';
@@ -133,9 +133,13 @@ class RecognitionController extends GetxController {
         ' ',
       )[0]; // Format the date
       // You can update the UI or use the selected date as needed
-      print("Selected date: $formattedDate");
+      if (kDebugMode) {
+        print("Selected date: $formattedDate");
+      }
     } else {
-      print("No date selected");
+      if (kDebugMode) {
+        print("No date selected");
+      }
     }
   }
 

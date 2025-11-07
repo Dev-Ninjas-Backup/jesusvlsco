@@ -10,7 +10,6 @@ class AuthGuard {
 
   /// Mock authentication state - replace with your actual auth logic
   static bool get _isAuthenticated {
-    // TODO: Replace with actual authentication check
     // Example: return AuthService.instance.isLoggedIn;
     bool isAuthenticated = Get.find<LoginController>().isLoading.value; // Example check
     // For demo purposes
@@ -19,7 +18,6 @@ class AuthGuard {
 
   /// Mock user onboarding state
   static bool get _hasCompletedOnboarding {
-    // TODO: Replace with actual onboarding check
     // Example: return UserPreferences.hasCompletedOnboarding;
     return true; // For demo purposes
   }
@@ -80,13 +78,11 @@ class AuthGuard {
 
   /// Mock admin role check
   static bool _hasAdminRole() {
-    // TODO: Replace with actual role check
     return false;
   }
 
   /// Mock premium access check
   static bool _hasPremiumAccess() {
-    // TODO: Replace with actual premium check
     return false;
   }
 

@@ -14,7 +14,7 @@ import '../../communication/screens/create_new_chat_screen.dart';
 import '../../communication/widgets/chat_dashboard.dart';
 
 class UserCommunicationScreen extends StatefulWidget {
-  UserCommunicationScreen({super.key});
+  const UserCommunicationScreen({super.key});
 
   @override
   State<UserCommunicationScreen> createState() =>

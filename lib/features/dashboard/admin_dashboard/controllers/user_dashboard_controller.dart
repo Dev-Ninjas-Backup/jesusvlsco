@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
@@ -198,9 +200,9 @@ class UserDashboardController extends GetxController {
                   final fn = (m['firstName'] ?? '') as String;
                   final ln = (m['lastName'] ?? '') as String;
                   String initial = '?';
-                  if (fn.isNotEmpty)
+                  if (fn.isNotEmpty) {
                     initial = fn[0].toUpperCase();
-                  else if (ln.isNotEmpty)
+                  } else if (ln.isNotEmpty)
                     initial = ln[0].toUpperCase();
                   teamMembers.add({
                     'initial': initial,

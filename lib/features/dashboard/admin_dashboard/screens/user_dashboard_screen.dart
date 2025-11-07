@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/common/widgets/common_divider.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';

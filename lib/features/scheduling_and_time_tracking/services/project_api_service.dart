@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/models/response_data.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
@@ -463,7 +464,9 @@ class ProjectApiService {
     try {
       final token = await StorageService.getAuthToken();
       if (token == null || token.isEmpty) {
-        print('Error: No auth token found');
+        if (kDebugMode) {
+          print('Error: No auth token found');
+        }
         return AssignShiftModel(
           success: false,
           message: 'Authentication token is missing',
@@ -474,7 +477,9 @@ class ProjectApiService {
       final url = Uri.parse(
         '${ApiConstants.baseurl}/shift/assigned-users/$projectId',
       );
-      print('Fetching assigned users and shifts for project ID: $projectId');
+      if (kDebugMode) {
+        print('Fetching assigned users and shifts for project ID: $projectId');
+      }
 
       final response = await http.get(
         url,
@@ -487,10 +492,14 @@ class ProjectApiService {
       if (response.statusCode == 200) {
         try {
           final jsonData = json.decode(response.body);
-          print('Response JSON: ${jsonEncode(jsonData)}');
+          if (kDebugMode) {
+            print('Response JSON: ${jsonEncode(jsonData)}');
+          }
           return AssignShiftModel.fromJson(jsonData);
         } catch (e) {
-          print('Error parsing JSON response: $e');
+          if (kDebugMode) {
+            print('Error parsing JSON response: $e');
+          }
           return AssignShiftModel(
             success: false,
             message: 'Failed to parse response data: $e',
@@ -498,7 +507,9 @@ class ProjectApiService {
           );
         }
       } else {
-        print('HTTP error: Status code ${response.statusCode}');
+        if (kDebugMode) {
+          print('HTTP error: Status code ${response.statusCode}');
+        }
         return AssignShiftModel(
           success: false,
           message: 'Failed to fetch shifts: HTTP ${response.statusCode}',
@@ -506,7 +517,9 @@ class ProjectApiService {
         );
       }
     } catch (e) {
-      print('Error fetching shifts: $e');
+      if (kDebugMode) {
+        print('Error fetching shifts: $e');
+      }
       return AssignShiftModel(
         success: false,
         message: 'Error fetching shifts: $e',

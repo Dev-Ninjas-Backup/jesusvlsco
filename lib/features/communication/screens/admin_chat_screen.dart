@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use, camel_case_types
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -80,7 +80,9 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
         }
       } catch (e) {
         // Handle any scroll errors gracefully
-        print('Scroll error: $e');
+        if (kDebugMode) {
+          print('Scroll error: $e');
+        }
       }
     }
   }

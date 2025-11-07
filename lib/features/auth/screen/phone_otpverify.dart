@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, deprecated_member_use
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -78,7 +79,9 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
         body: jsonEncode({'phoneNumber': widget.phoneNumber, 'otp': otpCode}),
       );
 
-      print('res: ${response.body}');
+      if (kDebugMode) {
+        print('res: ${response.body}');
+      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final decoded = json.decode(response.body);
@@ -86,7 +89,9 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
 
         // 🔥 Save user data to SharedPreferences
         await _saveUserData(loginResponse);
-        print('userrole: ${loginResponse.data!.user.role}');
+        if (kDebugMode) {
+          print('userrole: ${loginResponse.data!.user.role}');
+        }
 
         if (mounted) {
           _showSnackbar(
@@ -175,9 +180,13 @@ class _PhoneotpverifyState extends State<Phoneotpverify> {
         json.encode(loginResponse.data!.user.toJson()),
       );
 
-      print('✅ User data saved to SharedPreferences successfully');
+      if (kDebugMode) {
+        print('✅ User data saved to SharedPreferences successfully');
+      }
     } catch (e) {
-      print('🚨 Error saving user data: $e');
+      if (kDebugMode) {
+        print('🚨 Error saving user data: $e');
+      }
       throw Exception('Failed to save user data');
     }
   }

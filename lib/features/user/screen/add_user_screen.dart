@@ -7,7 +7,7 @@ import '../widget/progress_indigator_widget.dart';
 import '../widget/section_header_widget.dart';
 
 class AddUserScreen extends StatelessWidget {
-  AddUserScreen({super.key});
+  const AddUserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

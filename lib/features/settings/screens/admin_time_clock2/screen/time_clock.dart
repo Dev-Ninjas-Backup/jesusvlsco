@@ -6,21 +6,18 @@ import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
-import 'package:jesusvlsco/features/admin_time_clock/admin_time_clock_add_shift/screen/admin_time_clock_add_shift_screen.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
-import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/custom_wide_slider/project_assign_wide_slider_widget.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/screen/pending.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/activity_widget.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/date_picker.dart';
 import 'package:jesusvlsco/features/settings/screens/admin_time_clock2/widget/second_date_picker/second_datepicker.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/approved_requests_list.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_time_button.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/custom_wide_slider/custom_wide_slider_widget.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/search_bar.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/time_counter.dart';
 
 class TimeAndClockScreen extends StatefulWidget {
-  TimeAndClockScreen({super.key});
+  const TimeAndClockScreen({super.key});
 
   @override
   State<TimeAndClockScreen> createState() => _TimeAndClockScreenState();
@@ -302,7 +299,7 @@ class _TimeAndClockScreenState extends State<TimeAndClockScreen> {
                         target: dashboardController.initialCameraPosition,
                         zoom: 15,
                       ),
-                      markers: dashboardController.markers.value,
+                      markers: dashboardController.markers,
                       myLocationEnabled: false,
                       myLocationButtonEnabled: false,
                       zoomControlsEnabled: false,

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -40,25 +39,6 @@ class LocationController extends GetxController {
       android: androidSettings,
     );
     await notificationsPlugin.initialize(settings);
-  }
-
-  void _listenToBackgroundService() {
-    FlutterBackgroundService().on('showDialog').listen((event) {
-      if (event != null && event['isNearby'] == true) {
-        Get.dialog(
-          AlertDialog(
-            title: const Text('Location Match'),
-            content: const Text(
-              'You are within 50 meters of the target location!',
-            ),
-            actions: [
-              TextButton(onPressed: () => Get.back(), child: const Text('OK')),
-            ],
-          ),
-          barrierDismissible: false,
-        );
-      }
-    });
   }
 
   Future<void> initializeService() async {
@@ -168,9 +148,11 @@ void onStart(ServiceInstance service) async {
     ).listen(
       (Position position) async {
         // Print current location
-        print(
-          'Current Location: Latitude: ${position.latitude}, Longitude: ${position.longitude}',
-        );
+        if (kDebugMode) {
+          print(
+            'Current Location: Latitude: ${position.latitude}, Longitude: ${position.longitude}',
+          );
+        }
 
         // Calculate and print distance to target location
         double distance = Geolocator.distanceBetween(
@@ -179,14 +161,18 @@ void onStart(ServiceInstance service) async {
           staticLat,
           staticLng,
         );
-        print(
-          'Distance to target location ($staticLat, $staticLng): $distance meters',
-        );
+        if (kDebugMode) {
+          print(
+            'Distance to target location ($staticLat, $staticLng): $distance meters',
+          );
+        }
 
         if (distance <= distanceThreshold) {
-          print(
-            'Within $distanceThreshold meters! Showing notification/dialog',
-          );
+          if (kDebugMode) {
+            print(
+              'Within $distanceThreshold meters! Showing notification/dialog',
+            );
+          }
           service.invoke('showDialog', {'isNearby': true});
           await notificationsPlugin.show(
             0,
@@ -205,7 +191,9 @@ void onStart(ServiceInstance service) async {
         }
       },
       onError: (dynamic error) async {
-        print('Geolocator Error: $error');
+        if (kDebugMode) {
+          print('Geolocator Error: $error');
+        }
         notificationsPlugin.show(
           999,
           'Location Error',
@@ -224,7 +212,9 @@ void onStart(ServiceInstance service) async {
       },
     );
   } catch (e) {
-    print('Location Service Error: $e');
+    if (kDebugMode) {
+      print('Location Service Error: $e');
+    }
     await notificationsPlugin.show(
       999,
       'Location Service Error',

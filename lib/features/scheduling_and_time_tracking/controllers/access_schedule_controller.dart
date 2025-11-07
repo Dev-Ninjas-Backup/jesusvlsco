@@ -401,7 +401,7 @@ class AccessScheduleController extends GetxController {
   String get managerName {
     final manager = projectDetails.value?.manager;
     if (manager != null) {
-      return '${manager.email}';
+      return manager.email;
     }
     return '';
   }

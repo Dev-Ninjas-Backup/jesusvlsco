@@ -11,7 +11,7 @@ class TextFieldWithDropDown extends StatelessWidget {
   final Color? color;
 
   const TextFieldWithDropDown({
-    Key? key,
+    super.key,
     this.text,
     this.color,
     required this.items,
@@ -21,14 +21,14 @@ class TextFieldWithDropDown extends StatelessWidget {
     this.hintText,
     this.decoration,
     required controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String?>(
       valueListenable: valueNotifier,
       builder: (context, value, child) {
-        return Container(
+        return SizedBox(
           height: 50,
           child: TextField(
             controller: TextEditingController(text: value),

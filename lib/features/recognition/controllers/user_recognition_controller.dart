@@ -149,7 +149,6 @@ class UserRecognitionController extends GetxController {
         ? current.likes + 1
         : (current.likes > 0 ? current.likes - 1 : 0);
     recognitions[idx] = current.copyWith(likes: likes, liked: liked);
-    // TODO: send like/unlike to backend
   }
 
   // Add comment locally and clear input. Backend call can be wired here.
@@ -166,7 +165,6 @@ class UserRecognitionController extends GetxController {
     final updatedComments = List<CommentModel>.from(r.comments)
       ..add(newComment);
     recognitions[idx] = r.copyWith(comments: updatedComments);
-    // TODO: send comment to backend
   }
 
   // Convenience helper for the UI to post a comment from the bottom input.

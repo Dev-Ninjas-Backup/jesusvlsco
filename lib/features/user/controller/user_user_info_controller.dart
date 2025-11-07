@@ -6,10 +6,9 @@ class UserUserInfoController extends GetxController {
   final Rxn<UserModel> user = Rxn<UserModel>();
 
   void init(UserModel? u) {
-    if (u != null)
+    if (u != null) {
       user.value = u;
-    // If no user passed, try to read from Get.arguments
-    else if (Get.arguments != null && Get.arguments is UserModel) {
+    } else if (Get.arguments != null && Get.arguments is UserModel) {
       user.value = Get.arguments as UserModel;
     }
   }
@@ -18,20 +17,17 @@ class UserUserInfoController extends GetxController {
     final u = user.value;
     if (u == null) return;
     debugPrint('Open chat with ${u.name}');
-    // TODO: integrate navigation to chat screen
   }
 
   void email() {
     final u = user.value;
     if (u == null) return;
     debugPrint('Compose email to ${u.name}');
-    // TODO: open email composer
   }
 
   void call() {
     final u = user.value;
     if (u == null) return;
     debugPrint('Call ${u.name}');
-    // TODO: trigger phone dialer
   }
 }

@@ -80,7 +80,7 @@ class ChatSetting extends StatelessWidget {
             child: Switch(
               value: isActive,
               onChanged: (bool newValue) {},
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               activeTrackColor: AppColors.primary,
               inactiveThumbColor: Colors.grey,
               inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),

@@ -54,7 +54,6 @@ class CreateNewPollThreeController extends GetxController {
 
   /// 🔹 Next step navigation
   void goToNextStep() {
-    // TODO: Implement API call or navigation
   }
 
   @override

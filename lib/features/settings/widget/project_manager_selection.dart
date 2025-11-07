@@ -4,8 +4,7 @@ import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart
 class ProjectManagerSelection extends StatefulWidget {
   final List<String> items;
 
-  const ProjectManagerSelection({Key? key, required this.items})
-    : super(key: key);
+  const ProjectManagerSelection({super.key, required this.items});
 
   @override
   State<ProjectManagerSelection> createState() =>

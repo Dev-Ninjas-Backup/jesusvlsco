@@ -78,7 +78,6 @@ class TimeSheetAppBar extends StatelessWidget implements PreferredSizeWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          // TODO: Implement menu functionality
         },
         borderRadius: BorderRadius.circular(Sizer.wp(12)),
         child: Container(

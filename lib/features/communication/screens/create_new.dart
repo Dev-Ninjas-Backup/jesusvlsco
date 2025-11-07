@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -177,7 +178,7 @@ Widget buildSuggestedUserList(
                 ),
                 leading: CircleAvatar(
                   radius: Sizer.wp(20),
-                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  backgroundColor: AppColors.primary.withValues(alpha: .1),
                   child: Icon(
                     Icons.person,
                     size: Sizer.wp(20),
@@ -208,7 +209,7 @@ Widget buildSuggestedUserList(
                         employee.profile.department,
                         style: AppTextStyle.regular().copyWith(
                           fontSize: Sizer.wp(12),
-                          color: AppColors.text.withOpacity(0.7),
+                          color: AppColors.text.withValues(alpha: .7),
                         ),
                       ),
                   ],
@@ -221,7 +222,7 @@ Widget buildSuggestedUserList(
                   icon: Container(
                     padding: EdgeInsets.all(Sizer.wp(8)),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: .1),
                       borderRadius: BorderRadius.circular(Sizer.wp(8)),
                     ),
                     child: Icon(
@@ -256,7 +257,9 @@ Future<void> _startChatWithEmployee(
       firstMessage: "Hello ${employee.profile.firstName}! 👋",
     );
   } catch (error) {
-    print('Error starting chat with employee: $error');
+    if (kDebugMode) {
+      print('Error starting chat with employee: $error');
+    }
     // Show error message to user
     Get.snackbar(
       'Error',

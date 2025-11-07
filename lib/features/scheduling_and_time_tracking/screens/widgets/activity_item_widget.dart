@@ -89,7 +89,7 @@ class ActivityItemWidget extends StatelessWidget {
           // Date column
           Column(
             children: [
-              Container(
+              SizedBox(
                 width: 50,
                 child: Text(
                   activity.date,

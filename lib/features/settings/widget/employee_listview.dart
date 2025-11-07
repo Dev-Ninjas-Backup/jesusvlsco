@@ -15,11 +15,11 @@ class EmployeeListview extends StatelessWidget {
   final Function(int index, bool isSelected) onSelectionChanged;
 
   const EmployeeListview({
-    Key? key,
+    super.key,
     required this.contacts,
     required this.onDelete,
     required this.onSelectionChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,8 +5,7 @@ class ProjectManagerDelete extends StatefulWidget {
   final List<String> items;
   final VoidCallback? onDelete; // Optional delete callback
 
-  const ProjectManagerDelete({Key? key, required this.items, this.onDelete})
-    : super(key: key);
+  const ProjectManagerDelete({super.key, required this.items, this.onDelete});
 
   @override
   State<ProjectManagerDelete> createState() => _ProjectManagerDeleteState();

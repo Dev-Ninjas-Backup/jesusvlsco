@@ -276,21 +276,4 @@ class CustomWideSliderWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusChip(String status) {
-    final isApproved = status == 'Approved';
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isApproved ? Colors.green.shade100 : Colors.red.shade100,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        status,
-        style: TextStyle(
-          color: isApproved ? Colors.green : Colors.red,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }

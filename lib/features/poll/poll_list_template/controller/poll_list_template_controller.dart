@@ -32,5 +32,4 @@ class PollListTemplateController extends GetxController {
     if (type != null) pollType.value = type;
   }
 
-// TODO: fetchPollTemplates() API
 }

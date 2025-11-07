@@ -57,7 +57,6 @@ class PublishCreateNewSurveyTwoScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 CustomButton(
                   onPressed: () {
-                    // TODO: handle filter logic
                   },
                   text: "Filter",
                   leadingIcon:

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
@@ -127,7 +128,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
               SizedBox(height: Sizer.hp(8)),
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     height: Sizer.hp(45),
                     width: Sizer.wp(360),
                     child: TextField(
@@ -320,7 +321,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           color: AppColors.backgroundDark,
           fontWeight: FontWeight.w400,
         ),
-        value: value,
+        initialValue: value,
         decoration: const InputDecoration(
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
@@ -470,7 +471,9 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         child: TextButton(
           onPressed: () {
             // Handle button press
-            print('$label pressed');
+            if (kDebugMode) {
+              print('$label pressed');
+            }
           },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 16),

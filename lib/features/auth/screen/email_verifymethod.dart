@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/utils.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 // Text constants class

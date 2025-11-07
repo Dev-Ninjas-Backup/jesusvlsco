@@ -117,7 +117,7 @@ class _ChatSettingsScreenState extends State<ChatSettingsScreen> {
             value: value,
             onChanged: onChanged,
             inactiveThumbColor: AppColors.primaryBackground,
-            activeColor: AppColors.primaryBackground,
+            activeThumbColor: AppColors.primaryBackground,
           ),
         ),
         Divider(color: AppColors.dividerColor, height: 1),

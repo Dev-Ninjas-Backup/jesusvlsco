@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,14 +58,20 @@ class CreateNewTeamController extends GetxController {
         selectedDepartment.value.isEmpty ||
         image.value == null ||
         selectedMembers.isEmpty) {
-      Get.snackbar('Error', 'All fields are required, including at least one selected member');
+      Get.snackbar(
+        'Error',
+        'All fields are required, including at least one selected member',
+      );
       return false;
     }
 
     // Validate UUIDs
     for (var member in selectedMembers) {
       if (!isValidUUID(member.id)) {
-        Get.snackbar('Error', 'Invalid member ID: ${member.id} is not a valid UUID');
+        Get.snackbar(
+          'Error',
+          'Invalid member ID: ${member.id} is not a valid UUID',
+        );
         return false;
       }
     }
@@ -81,7 +88,9 @@ class CreateNewTeamController extends GetxController {
         ..fields['title'] = titleController.text
         ..fields['description'] = descriptionController.text
         ..fields['department'] = selectedDepartment.value
-        ..fields['members'] = jsonEncode(selectedMembers.map((e) => e.id).toList());
+        ..fields['members'] = jsonEncode(
+          selectedMembers.map((e) => e.id).toList(),
+        );
 
       if (image.value != null) {
         request.files.add(
@@ -93,18 +102,34 @@ class CreateNewTeamController extends GetxController {
         );
       }
 
-      print('Sending POST request to: $url');
-      print('Request headers: ${request.headers}');
-      print('Request fields: ${request.fields}');
-      print('Members sent: ${selectedMembers.map((e) => e.id).toList()}');
-      print('Request files: ${request.files.map((f) => f.filename).toList()}');
+      if (kDebugMode) {
+        print('Sending POST request to: $url');
+      }
+      if (kDebugMode) {
+        print('Request headers: ${request.headers}');
+      }
+      if (kDebugMode) {
+        print('Request fields: ${request.fields}');
+      }
+      if (kDebugMode) {
+        print('Members sent: ${selectedMembers.map((e) => e.id).toList()}');
+      }
+      if (kDebugMode) {
+        print(
+          'Request files: ${request.files.map((f) => f.filename).toList()}',
+        );
+      }
 
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       isLoading.value = false;
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: $responseBody');
+      if (kDebugMode) {
+        print('Response status: ${response.statusCode}');
+      }
+      if (kDebugMode) {
+        print('Response body: $responseBody');
+      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar('Success', 'Team created successfully');
@@ -113,23 +138,33 @@ class CreateNewTeamController extends GetxController {
         Get.snackbar("info", "created successfully");
         return true;
       } else {
-        Get.snackbar('Error', 'Failed to create team: ${response.statusCode} - $responseBody');
+        Get.snackbar(
+          'Error',
+          'Failed to create team: ${response.statusCode} - $responseBody',
+        );
         return false;
       }
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Error', 'An error occurred: $e');
-      print('Exception during POST: $e');
+      if (kDebugMode) {
+        print('Exception during POST: $e');
+      }
       return false;
     }
   }
 
   Future<void> updateSelectedMembers() async {
     final userListController = Get.find<UserListController>();
-    if (userListController.employeeProfiles.isEmpty && userListController.hasMore.value) {
+    if (userListController.employeeProfiles.isEmpty &&
+        userListController.hasMore.value) {
       await userListController.fetchEmployeeProfiles();
     }
     selectedMembers.value = userListController.selectedEmployees;
-    print('Updated selectedMembers: ${selectedMembers.map((e) => "${e.profile.firstName} ${e.profile.lastName} (ID: ${e.id})").toList()}');
+    if (kDebugMode) {
+      print(
+        'Updated selectedMembers: ${selectedMembers.map((e) => "${e.profile.firstName} ${e.profile.lastName} (ID: ${e.id})").toList()}',
+      );
+    }
   }
 }

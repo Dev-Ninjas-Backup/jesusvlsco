@@ -10,7 +10,7 @@ class ProposalCard extends StatelessWidget {
   final String? dateText;
 
   const ProposalCard({
-    Key? key,
+    super.key,
     this.onCreatePressed,
     this.onFilterPressed,
     this.onDatePressed,
@@ -18,7 +18,7 @@ class ProposalCard extends StatelessWidget {
     this.createText,
     this.filterText,
     this.dateText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

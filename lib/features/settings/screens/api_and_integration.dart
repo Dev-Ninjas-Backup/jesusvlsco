@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
-import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
-import 'package:jesusvlsco/features/communication/widgets/common_button.dart';
 import 'package:jesusvlsco/features/settings/widget/api_custom_button.dart';
 import 'package:jesusvlsco/features/settings/widget/custom_switch.dart';
-import 'package:jesusvlsco/features/settings/widget/textfield.dart';
 import 'package:jesusvlsco/features/settings/widget/textfield_with_dropdown.dart';
 
 class ApiAndIntegration extends StatelessWidget {

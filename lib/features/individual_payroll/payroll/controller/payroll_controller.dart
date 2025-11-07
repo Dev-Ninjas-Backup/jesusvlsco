@@ -213,7 +213,6 @@ class IndividualPayrollController extends GetxController {
   }
 
   void selectTimePeriod() {
-    // TODO: Show date picker
     Get.snackbar(
       "Info",
       "Time period selection will be implemented with date picker",
@@ -221,12 +220,10 @@ class IndividualPayrollController extends GetxController {
   }
 
   void exportPayroll() {
-    // TODO: Implement export functionality
     Get.snackbar("Info", "Export functionality will be implemented");
   }
 
   void addPayrollEntry() {
-    // TODO: Implement add new payroll entry
     Get.snackbar("Info", "Add payroll entry functionality will be implemented");
   }
 
@@ -234,7 +231,6 @@ class IndividualPayrollController extends GetxController {
     isSubmitting.value = true;
 
     try {
-      // TODO: Implement API call to submit payroll
       await Future.delayed(const Duration(seconds: 2)); // Simulate API call
       Get.snackbar("Success", "Payroll submitted successfully");
     } catch (e) {
@@ -245,23 +241,19 @@ class IndividualPayrollController extends GetxController {
   }
 
   void cancelRequest(String requestId) {
-    // TODO: Implement cancel request functionality
     myRequests.removeWhere((request) => request.id == requestId);
     Get.snackbar("Success", "Request cancelled successfully");
   }
 
   void selectProject(String date) {
-    // TODO: Implement project selection for specific date
     Get.snackbar("Info", "Project selection for $date will be implemented");
   }
 
   void viewNotes(String date) {
-    // TODO: Implement view notes functionality
     Get.snackbar("Info", "View notes for $date will be implemented");
   }
 
   void chatWithAdmin() {
-    // TODO: Navigate to chat with admin
     Get.snackbar("Info", "Chat with admin functionality will be implemented");
   }
 }

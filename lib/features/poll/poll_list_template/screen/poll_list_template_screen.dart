@@ -48,7 +48,6 @@ class PollListTemplateScreen extends StatelessWidget {
               SearchBarWithFilter(
                 onChanged: (val) => controller.searchQuery.value = val,
                 onFilterTap: () {
-                  // TODO: filter action
                 },
               ),
               const SizedBox(height: 20),
@@ -79,7 +78,6 @@ class PollListTemplateScreen extends StatelessWidget {
                           title: Text(item),
                           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                           onTap: () {
-                            // TODO: Handle item tap
                             Get.to(CreateNewPollScreen());
                           },
                         );
@@ -87,7 +85,7 @@ class PollListTemplateScreen extends StatelessWidget {
                     ),
                   ],
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),

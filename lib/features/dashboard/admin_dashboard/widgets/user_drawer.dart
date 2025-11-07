@@ -10,10 +10,8 @@ import 'package:jesusvlsco/features/recognition/screens/user_recognition_screen.
 import 'package:jesusvlsco/features/user_profile/views/user_profile_screen.dart';
 import 'package:jesusvlsco/features/user_settings/views/user_settings_screen.dart';
 import 'package:jesusvlsco/features/user_survey_poll/user_survey/screen/user_survey_screen.dart';
-import 'package:jesusvlsco/features/user_survey_poll/user_poll/screen/user_poll_screen.dart';
 
 import '../../../../core/services/storage_service.dart';
-import '../../../scheduling_and_time_tracking/screens/views/shift_details_screen.dart';
 
 class UserDrawer extends StatelessWidget {
   const UserDrawer({super.key});

@@ -56,20 +56,19 @@ class SplashController extends GetxController {
       // Check if auth token exists
       String? token = prefs.getString('auth_token');
 
-      String? user_id = prefs.getString('user_id');
+      String? userId = prefs.getString('user_id');
 
       // User is authenticated if they are logged in, verified, and have a token
-      bool isAuthenticated =
-          isLoggedIn && isVerified && (token != null && token.isNotEmpty);
+      bool isAuthenticated = isLoggedIn && isVerified && (token!.isNotEmpty);
 
       print('🔍 Authentication Check:');
       print('   - Is Logged In: $isLoggedIn');
       print('   - Is Verified: $isVerified');
-      print('   - Has Token: ${token != null && token.isNotEmpty}');
+      print('   - Has Token: ${token!.isNotEmpty}');
       print('   - Final Result: $isAuthenticated');
 
       print('✅ User is authenticated: UserToken : $token');
-      print('✅ User is authenticated: User ID : $user_id');
+      print('✅ User is authenticated: User ID : $userId');
 
       return isAuthenticated;
     } catch (e) {
@@ -97,11 +96,8 @@ class SplashController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       String? userData = prefs.getString('user_data');
 
-      if (userData != null) {
-        print('user data $userData');
-        return json.decode(userData) as Map<String, dynamic>;
-      }
-      return null;
+      print('user data $userData');
+      return json.decode(userData!) as Map<String, dynamic>;
     } catch (e) {
       print('🚨 Error getting stored user data: $e');
       return null;

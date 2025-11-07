@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -40,7 +41,9 @@ class User_Taskcontroller extends GetxController {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
         final TaskResponse taskResponse = TaskResponse.fromJson(jsonResponse);
-        print('Fetched ${taskResponse.data} tasks');
+        if (kDebugMode) {
+          print('Fetched ${taskResponse.data} tasks');
+        }
         return taskResponse.data.tasks;
       } else {
         throw Exception('Failed to load tasks: ${response.statusCode}');

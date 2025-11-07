@@ -1,10 +1,7 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -148,7 +145,7 @@ class WeeklyCalender extends StatelessWidget {
               );
               return Padding(
                 padding: EdgeInsets.all(Sizer.wp(16)),
-                child: Container(
+                child: SizedBox(
                   height: Sizer.hp(400),
                   child: WeeklyCalendarView(
                     weekDates: weekDates,
@@ -302,11 +299,11 @@ class WeeklyCalendarView extends StatelessWidget {
   final Function(DateTime) onDateTap;
 
   const WeeklyCalendarView({
-    Key? key,
+    super.key,
     required this.weekDates,
     required this.selectedDate,
     required this.onDateTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

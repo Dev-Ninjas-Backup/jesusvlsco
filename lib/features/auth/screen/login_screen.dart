@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/app_texts.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -10,9 +9,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/utils/device/device_utility.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 import 'package:jesusvlsco/features/auth/screen/Phone_verifymethod.dart';
-import 'package:jesusvlsco/features/auth/screen/email_otpverfication.dart';
 import 'package:jesusvlsco/features/auth/screen/email_verifymethod.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -62,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                     ), // 5% of screen height for spacing
                     ElevatedButton(
                       onPressed: () {
-                     Get.to(Phoneverifymethod());
+                        Get.to(Phoneverifymethod());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary, // ✅ Updated color
@@ -97,8 +94,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: Sizer.hp(16)), // ✅ Updated spacing
                     ElevatedButton(
                       onPressed: () {
-                      Get.to(EmailotpverifyMethod());
-                       
+                        Get.to(EmailotpverifyMethod());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.secondary, // ✅ Updated

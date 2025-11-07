@@ -48,7 +48,7 @@ class HorizontalScrollSlider extends StatelessWidget {
   final bool showShadow;
 
   const HorizontalScrollSlider({
-    Key? key,
+    super.key,
     required this.scrollController,
     required this.scrollPosition,
     required this.maxScrollExtent,
@@ -62,7 +62,7 @@ class HorizontalScrollSlider extends StatelessWidget {
     this.padding,
     this.handlerBorderRadius,
     this.showShadow = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

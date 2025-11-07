@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -240,14 +241,14 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
   }
 
   Widget _buildAnnouncementsList() {
-    final AnnouncementController _announcementController = Get.put(
+    final AnnouncementController announcementController = Get.put(
       AnnouncementController(),
     );
-    return Container(
+    return SizedBox(
       height: Sizer.hp(500),
       child: Obx(() {
         // Fetch paginated announcements from the controller
-        List<AnnouncementModel> pagedAnnouncements = _announcementController
+        List<AnnouncementModel> pagedAnnouncements = announcementController
             .getPagedAnnouncements();
 
         if (pagedAnnouncements.isEmpty) {
@@ -311,7 +312,7 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
 
   void showCategoryChecklistPopup(BuildContext context) {
     // List to store checkbox state for each category
-    List<bool> _checkboxStates = List.generate(
+    List<bool> checkboxStates = List.generate(
       _announcementController.categories.length,
       (index) => false,
     );
@@ -335,9 +336,9 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
               itemBuilder: (context, index) {
                 return CheckboxListTile(
                   title: Text(_announcementController.categories[index]),
-                  value: _checkboxStates[index],
+                  value: checkboxStates[index],
                   onChanged: (bool? value) {
-                    _checkboxStates[index] = value!;
+                    checkboxStates[index] = value!;
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                 );
@@ -536,7 +537,9 @@ class _AnnouncementDashboardState extends State<AnnouncementDashboard> {
               availableCalendarFormats: const {CalendarFormat.month: 'Month'},
               onDaySelected: (selectedDay, focusedDay) {
                 Navigator.of(context).pop();
-                print('Selected date: $selectedDay');
+                if (kDebugMode) {
+                  print('Selected date: $selectedDay');
+                }
               },
               onPageChanged: (focusedDay) {
                 // Optional: Update the calendar's focused day if needed

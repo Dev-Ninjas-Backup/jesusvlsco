@@ -45,8 +45,9 @@ class UserFormWidget extends StatelessWidget {
             'Gender',
             controller.selectedGender.value ?? 'Not specified',
             () {
-              if (!controller.isEditing.value)
+              if (!controller.isEditing.value) {
                 return; // only editable in edit mode
+              }
               List<Map<String, String>> genders = [
                 {'label': 'Male', 'value': 'MALE'},
                 {'label': 'Female', 'value': 'FEMALE'},
@@ -276,38 +277,4 @@ class UserFormWidget extends StatelessWidget {
     return months[month - 1];
   }
 
-  Widget _buildReadOnlyField(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Text(
-            value,
-            style: TextStyle(
-              fontSize: 16,
-              color: value == 'Not specified'
-                  ? Colors.grey.shade500
-                  : Colors.black87,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -73,9 +74,15 @@ Future<void> loginEmail() async {
 
           if (loginResponse.success && loginResponse.data!.user.isVerified) {
             isLoggedIn.value = true;
-            print('👤 User Email: ${loginResponse.data!.user.email}');
-            print('🔑 Token: ${loginResponse.data!.token}');
-            print('📝 Role: ${loginResponse.data!.user.role}');
+            if (kDebugMode) {
+              print('👤 User Email: ${loginResponse.data!.user.email}');
+            }
+            if (kDebugMode) {
+              print('🔑 Token: ${loginResponse.data!.token}');
+            }
+            if (kDebugMode) {
+              print('📝 Role: ${loginResponse.data!.user.role}');
+            }
 
             _showSuccess('Login successful');
           } else {
@@ -96,7 +103,9 @@ Future<void> loginEmail() async {
     }
   } catch (e) {
     _showError('Network error. Please try again.');
-    print('🚨 Error: $e');
+    if (kDebugMode) {
+      print('🚨 Error: $e');
+    }
   } finally {
     isEmailLoading.value = false;
   }

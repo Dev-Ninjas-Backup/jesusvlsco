@@ -227,7 +227,7 @@ class ViewUserFromWidget extends StatelessWidget {
                     },
                   ),
                 )
-                .toList(),
+                ,
           ],
         ),
       ),
@@ -264,7 +264,7 @@ class ViewUserFromWidget extends StatelessWidget {
                     },
                   ),
                 )
-                .toList(),
+                ,
           ],
         ),
       ),
@@ -301,7 +301,7 @@ class ViewUserFromWidget extends StatelessWidget {
                     },
                   ),
                 )
-                .toList(),
+                ,
           ],
         ),
       ),
@@ -338,7 +338,7 @@ class ViewUserFromWidget extends StatelessWidget {
                     },
                   ),
                 )
-                .toList(),
+                ,
           ],
         ),
       ),

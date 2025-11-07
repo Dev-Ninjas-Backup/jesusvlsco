@@ -10,10 +10,10 @@ class BottomNavigationWidget extends StatelessWidget {
   final Function(int)? onTap;
 
   const BottomNavigationWidget({
-    Key? key,
+    super.key,
     this.currentIndex = 3, // Schedule is selected by default
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

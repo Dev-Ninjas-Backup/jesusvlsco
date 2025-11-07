@@ -153,7 +153,7 @@ class _AssignedEmployeeListState extends State<AssignedEmployeeList> {
               child: SingleChildScrollView(
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
-                child: Container(
+                child: SizedBox(
                   width: Sizer.wp(824),
                   child: Column(
                     children: [

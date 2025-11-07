@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes
+
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';

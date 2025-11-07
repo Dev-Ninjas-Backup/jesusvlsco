@@ -2,7 +2,7 @@
 ///
 /// This file provides a clean API for accessing all routing functionality
 /// throughout the application. Import this file to access router and route constants.
-library routing;
+library;
 
 // Main router
 export 'app_router.dart';

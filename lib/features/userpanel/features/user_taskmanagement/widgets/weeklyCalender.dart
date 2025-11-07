@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
@@ -12,11 +13,11 @@ class WeeklyCalendarView extends StatelessWidget {
   final Function(DateTime) onDateTap;
 
   const WeeklyCalendarView({
-    Key? key,
+    super.key,
     required this.weekDates,
     required this.selectedDate,
     required this.onDateTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

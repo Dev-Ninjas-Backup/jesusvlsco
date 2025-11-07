@@ -138,7 +138,7 @@ class SurveyProgressCard extends StatelessWidget {
                 ),
               ],
             ),
-          )).toList(),
+          )),
         ],
       ),
     );

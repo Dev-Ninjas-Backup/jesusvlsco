@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/services/storage_service.dart';
@@ -87,7 +88,9 @@ class AdminListController extends GetxController {
         },
       );
 
-      print('Bearer $token');
+      if (kDebugMode) {
+        print('Bearer $token');
+      }
 
 
       if (response.statusCode == 200) {
@@ -107,12 +110,16 @@ class AdminListController extends GetxController {
           hasMore.value = false;
         }
       } else {
-        print("Failed to load admins: ${response.statusCode}");
+        if (kDebugMode) {
+          print("Failed to load admins: ${response.statusCode}");
+        }
         hasMore.value = false;
       }
     }
   } catch (e) {
-    print("Error fetching admins: $e");
+    if (kDebugMode) {
+      print("Error fetching admins: $e");
+    }
   } finally {
     isLoading.value = false;
   }

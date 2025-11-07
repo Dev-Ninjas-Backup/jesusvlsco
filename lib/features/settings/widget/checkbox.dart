@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatefulWidget {
@@ -9,14 +11,14 @@ class CustomCheckbox extends StatefulWidget {
   final BorderRadius? borderRadius;
 
   const CustomCheckbox({
-    Key? key,
+    super.key,
     required this.value,
     this.onChanged,
     this.activeColor,
     this.checkColor,
     this.size = 24.0,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   _CustomCheckboxState createState() => _CustomCheckboxState();

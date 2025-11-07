@@ -1,3 +1,5 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -80,7 +82,7 @@ class AppColors {
   static const Gradient linearGradient = LinearGradient(
     begin: Alignment(0.0, 0.0),
     end: Alignment(0.707, -0.707),
-    colors: [Color(0xFFFFF9A9E), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
+    colors: [Color(0xfffff9a9e), Color(0xFFFAD0C4), Color(0xFFFAD0C4)],
   );
 
   // Gradient Colors

@@ -28,7 +28,6 @@ class UserUsersController extends GetxController {
 
   /// Populate with mock users. Replace with API call when backend is ready.
   void fetchMockUsers() {
-    // TODO: replace with real API call
     final mock = <UserModel>[
       UserModel(id: '1', name: 'Cody Fisher', avatarUrl: ImagePath.user1),
       UserModel(id: '2', name: 'Leslie Alexander', avatarUrl: ImagePath.user2),
@@ -50,12 +49,10 @@ class UserUsersController extends GetxController {
 
   /// Actions (currently mocked). Replace with navigation / platform channels as needed.
   void callUser(UserModel user) {
-    // TODO: integrate with phone dialer / VOIP
     debugPrint('Call ${user.name}');
   }
 
   void messageUser(UserModel user) {
-    // TODO: navigate to chat screen or open composer
     debugPrint('Message ${user.name}');
   }
 

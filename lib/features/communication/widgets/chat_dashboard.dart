@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
@@ -34,16 +35,28 @@ class ChatDashboard extends StatelessWidget {
       final isLoading = _chatController.isLoading.value;
 
       // Debug logging
-      print('🔍 ChatDashboard Debug:');
-      print('  - isLoading: $isLoading');
-      print('  - conversations count: ${conversations.length}');
-      print('  - searchQuery: "${_chatController.searchQuery.value}"');
+      if (kDebugMode) {
+        print('🔍 ChatDashboard Debug:');
+      }
+      if (kDebugMode) {
+        print('  - isLoading: $isLoading');
+      }
+      if (kDebugMode) {
+        print('  - conversations count: ${conversations.length}');
+      }
+      if (kDebugMode) {
+        print('  - searchQuery: "${_chatController.searchQuery.value}"');
+      }
 
       if (conversations.isNotEmpty) {
-        print(
-          '  - First conversation: ${conversations.first.participant.profile.displayName}',
-        );
-        print('  - Last message: ${conversations.first.lastMessage.content}');
+        if (kDebugMode) {
+          print(
+            '  - First conversation: ${conversations.first.participant.profile.displayName}',
+          );
+        }
+        if (kDebugMode) {
+          print('  - Last message: ${conversations.first.lastMessage.content}');
+        }
       }
 
       if (isLoading && conversations.isEmpty) {
@@ -60,9 +73,11 @@ class ChatDashboard extends StatelessWidget {
           itemCount: conversations.length,
           itemBuilder: (context, index) {
             final conversation = conversations[index];
-            print(
-              '  - Building conversation ${index + 1}: ${conversation.participant.profile.displayName}',
-            );
+            if (kDebugMode) {
+              print(
+                '  - Building conversation ${index + 1}: ${conversation.participant.profile.displayName}',
+              );
+            }
             return _buildConversationItem(conversation);
           },
         ),
@@ -126,7 +141,9 @@ class ChatDashboard extends StatelessWidget {
             // Add refresh button
             ElevatedButton.icon(
               onPressed: () {
-                print('🔄 Manual refresh triggered');
+                if (kDebugMode) {
+                  print('🔄 Manual refresh triggered');
+                }
                 _chatController.refreshChat();
               },
               icon: Icon(Icons.refresh, size: Sizer.wp(18)),
@@ -152,7 +169,9 @@ class ChatDashboard extends StatelessWidget {
   ) {
     // Add safety checks for null data
     if (conversation.participant.profile.displayName.isEmpty) {
-      print('⚠️ Warning: Conversation has empty display name');
+      if (kDebugMode) {
+        print('⚠️ Warning: Conversation has empty display name');
+      }
       return SizedBox.shrink();
     }
 

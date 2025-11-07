@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -108,9 +109,13 @@ class NotificationController extends GetxController {
 
       // Get the FCM token
       String? fcmToken = await FirebaseMessaging.instance.getToken();
-      if (fcmToken != null) print("FCM Token: $fcmToken");
+      if (kDebugMode) {
+        print("FCM Token: $fcmToken");
+      }
     } catch (e) {
-      print("Error requesting permission or getting token: $e");
+      if (kDebugMode) {
+        print("Error requesting permission or getting token: $e");
+      }
     }
   }
 

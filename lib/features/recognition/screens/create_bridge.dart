@@ -118,7 +118,7 @@ class CreateBridge extends StatelessWidget {
 
   // Reusable TextField Widget
   Widget _customTextField(String hintText, {Icon? icon}) {
-    return Container(
+    return SizedBox(
       height: Sizer.hp(45),
       width: Sizer.wp(360),
       child: TextField(

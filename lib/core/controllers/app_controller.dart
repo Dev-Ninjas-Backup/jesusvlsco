@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,13 +19,17 @@ class AppController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    print('AppController is ready');
+    if (kDebugMode) {
+      print('AppController is ready');
+    }
   }
 
   @override
   void onClose() {
     super.onClose();
-    print('AppController is closed');
+    if (kDebugMode) {
+      print('AppController is closed');
+    }
   }
 
   /// Initialize app data
@@ -34,7 +39,9 @@ class AppController extends GetxController {
     // Simulate loading
     Future.delayed(const Duration(seconds: 2), () {
       isLoading.value = false;
-      print('App initialized');
+      if (kDebugMode) {
+        print('App initialized');
+      }
     });
   }
 

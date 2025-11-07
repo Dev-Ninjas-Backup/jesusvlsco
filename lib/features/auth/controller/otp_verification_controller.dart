@@ -4,14 +4,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:jesusvlsco/features/auth/screen/verification_complete.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/auth/controller/login_controller.dart';
 import 'package:jesusvlsco/features/bottom_navigation/screen/admin_bottom_navigation_scaffold.dart';
 import 'package:jesusvlsco/features/bottom_navigation/screen/user_bottom_navigation_scaffold.dart';
 import 'package:jesusvlsco/model/user_loginresponse.dart';
-
 
 class OtpController extends GetxController {
   // UI State
@@ -78,7 +76,8 @@ class OtpController extends GetxController {
   // Handle OTP input and focus change
   void onOtpChanged(int index, String value) {
     if (value.isNotEmpty) {
-      if (index < 5) { // Fixed: should be 5, not 7 for 6-digit OTP
+      if (index < 5) {
+        // Fixed: should be 5, not 7 for 6-digit OTP
         emailfocusNodes[index + 1].requestFocus();
       } else {
         emailfocusNodes[index].unfocus();
@@ -109,36 +108,41 @@ class OtpController extends GetxController {
   Future<void> _saveUserData(LoginResponse loginResponse) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Save authentication token
       await prefs.setString('auth_token', loginResponse.data!.token);
-      
+
       // Save user role
       await prefs.setString('user_role', loginResponse.data!.user.role);
-      
+
       // Save user ID
       await prefs.setString('user_id', loginResponse.data!.user.id);
-      
+
       // Save user email
       await prefs.setString('user_email', loginResponse.data!.user.email);
-      
+
       // Save employee ID
       await prefs.setInt('employee_id', loginResponse.data!.user.employeeID);
-      
+
       // Save verification status
       await prefs.setBool('is_verified', loginResponse.data!.user.isVerified);
-      
+
       // Save login status
       await prefs.setBool('is_logged_in', true);
-      
+
       // Optionally save user profile data as JSON string
-      await prefs.setString('user_profile', json.encode(loginResponse.data!.user.profile?.toJson()));
-      
+      await prefs.setString(
+        'user_profile',
+        json.encode(loginResponse.data!.user.profile?.toJson()),
+      );
+
       // Save full user data as JSON for future use
-      await prefs.setString('user_data', json.encode(loginResponse.data!.user.toJson()));
-      
+      await prefs.setString(
+        'user_data',
+        json.encode(loginResponse.data!.user.toJson()),
+      );
+
       print('✅ User data saved to SharedPreferences successfully');
-      
     } catch (e) {
       print('🚨 Error saving user data: $e');
       throw Exception('Failed to save user data');
@@ -149,7 +153,7 @@ class OtpController extends GetxController {
   Future<void> clearUserData() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       await prefs.remove('auth_token');
       await prefs.remove('user_role');
       await prefs.remove('user_id');
@@ -159,9 +163,8 @@ class OtpController extends GetxController {
       await prefs.remove('is_logged_in');
       await prefs.remove('user_profile');
       await prefs.remove('user_data');
-      
+
       print('✅ User data cleared from SharedPreferences');
-      
     } catch (e) {
       print('🚨 Error clearing user data: $e');
     }
@@ -172,7 +175,6 @@ class OtpController extends GetxController {
     // Small delay to ensure UI updates properly
     Future.delayed(const Duration(milliseconds: 500), () {
       if (userRole == 'ADMIN') {
-    
         Get.offAll(() => AdminBottomNavigationScaffold());
       } else {
         Get.offAll(() => const UserBottomNavigationScaffold());
@@ -207,7 +209,6 @@ class OtpController extends GetxController {
 
         if (decoded != null && decoded is Map<String, dynamic>) {
           final loginResponse = LoginResponse.fromJson(decoded);
-  
 
           if (loginResponse.success && loginResponse.data!.user.isVerified) {
             isVerified.value = true;
@@ -226,7 +227,6 @@ class OtpController extends GetxController {
 
             // Navigate based on user role instead of verification complete
             navigateBasedOnRole(loginResponse.data!.user.role);
-            
           } else {
             _showSnackbar('❌ Error', 'Verification failed. Please try again.');
           }

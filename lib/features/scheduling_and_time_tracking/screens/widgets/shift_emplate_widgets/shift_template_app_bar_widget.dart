@@ -31,7 +31,7 @@ class ShiftTemplateAppBarWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => controller.goBack(),
-            child: Container(
+            child: SizedBox(
               width: Sizer.wp(24),
               height: Sizer.wp(24),
               child: Icon(
@@ -55,7 +55,7 @@ class ShiftTemplateAppBarWidget extends StatelessWidget {
             onTap: () {
               // Show menu options
             },
-            child: Container(
+            child: SizedBox(
               width: Sizer.wp(24),
               height: Sizer.wp(24),
               child: Icon(

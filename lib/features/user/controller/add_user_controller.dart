@@ -615,10 +615,12 @@ class AddUserController extends GetxController {
             userId = data;
           } else if (data is Map) {
             if (data.containsKey('id')) userId = data['id']?.toString();
-            if (userId == null && data.containsKey('_id'))
+            if (userId == null && data.containsKey('_id')) {
               userId = data['_id']?.toString();
-            if (userId == null && data.containsKey('userId'))
+            }
+            if (userId == null && data.containsKey('userId')) {
               userId = data['userId']?.toString();
+            }
           }
         }
         createdUserId = userId;
@@ -677,7 +679,7 @@ class AddUserController extends GetxController {
             (e) => {
               'program': e['program'] ?? '',
               'institution': e['institution'] ?? '',
-              'year': e['year'] ?? null,
+              'year': e['year'],
             },
           )
           .toList(),
@@ -888,7 +890,7 @@ class AddUserController extends GetxController {
     //refreshEmployeeAdmin();
     adminListController.fetchAdmins;
     userListController.fetchEmployeeProfiles;
-    print("info, employee and admin refresh");
+    debugPrint("info, employee and admin refresh");
     Get.snackbar("info", "employee and admin refresh");
   }
 
@@ -917,9 +919,9 @@ class AddUserController extends GetxController {
         int.tryParse(overtimePayRateController.text.trim()) ?? 0;
     int casualLeave = 0;
     final casualFromField = int.tryParse(casualLeaveController.text.trim());
-    if (casualFromField != null)
+    if (casualFromField != null) {
       casualLeave = casualFromField;
-    else if (selectedCasualLeave.value != null &&
+    } else if (selectedCasualLeave.value != null &&
         selectedCasualLeave.value!.isNotEmpty) {
       casualLeave =
           int.tryParse(selectedCasualLeave.value!.split(' ').first) ?? 0;
@@ -927,9 +929,9 @@ class AddUserController extends GetxController {
 
     int sickLeave = 0;
     final sickFromField = int.tryParse(sickLeaveController.text.trim());
-    if (sickFromField != null)
+    if (sickFromField != null) {
       sickLeave = sickFromField;
-    else if (selectedSickLeave.value != null &&
+    } else if (selectedSickLeave.value != null &&
         selectedSickLeave.value!.isNotEmpty) {
       sickLeave = int.tryParse(selectedSickLeave.value!.split(' ').first) ?? 0;
     }
@@ -1176,10 +1178,12 @@ class AddUserController extends GetxController {
     }
 
     final v = uiJob.toLowerCase();
-    if (v.contains('back') || v.contains('back end'))
+    if (v.contains('back') || v.contains('back end')) {
       return 'BACK_END_DEVELOPER';
-    if (v.contains('front') || v.contains('front end'))
+    }
+    if (v.contains('front') || v.contains('front end')) {
       return 'FRONT_END_DEVELOPER';
+    }
     if (v.contains('full')) return 'FULL_STACK_DEVELOPER';
     if (v.contains('mobile')) return 'MOBILE_DEVELOPER';
     if (v.contains('ui')) return 'UI_DEVELOPER';
@@ -1366,7 +1370,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1461,7 +1465,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1502,7 +1506,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1543,7 +1547,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1584,7 +1588,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1625,7 +1629,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),
@@ -1666,7 +1670,7 @@ class AddUserController extends GetxController {
                       },
                     ),
                   )
-                  .toList(),
+                  ,
             ],
           ),
         ),

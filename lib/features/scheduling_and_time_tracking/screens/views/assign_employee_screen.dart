@@ -10,7 +10,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/widgets/employee_card_widget.dart';
 
 import '../../../assign_employee/widgets/projects_selection_dialog.dart';
-import '../../models/assign_shift_model.dart';
 
 class AssignEmployeeScreen extends StatelessWidget {
   const AssignEmployeeScreen({super.key});
@@ -18,7 +17,6 @@ class AssignEmployeeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AssignEmployeeController());
-    final assignShiftModel = AssignShiftModel;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -370,50 +368,6 @@ class AssignEmployeeScreen extends StatelessWidget {
     );
   }
 
-  /// Build search bar
-  Widget _buildSearchBar(AssignEmployeeController controller) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
-      child: Container(
-        height: Sizer.hp(48),
-        padding: EdgeInsets.symmetric(horizontal: Sizer.wp(16)),
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFC8CAE7)),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                onChanged: controller.updateSearchText,
-                style: AppTextStyle.f14W400().copyWith(
-                  color: AppColors.text,
-                  height: 1.45,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Search Employee',
-                  hintStyle: AppTextStyle.f14W400().copyWith(
-                    color: const Color(0xFF949494),
-                    height: 1.45,
-                  ),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.search,
-              size: Sizer.wp(20),
-              color: const Color(0xFF949494),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   /// Build employee list
   Widget _buildEmployeeList(AssignEmployeeController controller) {

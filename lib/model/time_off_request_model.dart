@@ -1,5 +1,5 @@
-/// TimeOffRequestModel handles the API response for time-off requests
-/// This model represents the complete structure including user and profile data
+// ignore_for_file: constant_identifier_names
+
 class TimeOffRequestModel {
   final bool success;
   final String message;

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
@@ -81,9 +82,11 @@ class AnnouncementCard extends StatelessWidget {
                       onChanged: (value) {
                         // Toggle the checkbox state for the specific index
                         announcementcontroller.toggleCheckbox(index);
-                        print(
-                          "Checkbox value for index $index: ${announcementcontroller.announcements[index].isChecked.value}",
-                        );
+                        if (kDebugMode) {
+                          print(
+                            "Checkbox value for index $index: ${announcementcontroller.announcements[index].isChecked.value}",
+                          );
+                        }
                       },
                       activeColor: AppColors.primary,
                       checkColor: Colors.white,
@@ -165,7 +168,9 @@ class AnnouncementCard extends StatelessWidget {
               onResponseTap ??
               () {
                 // Default action
-                print('Response tapped for announcement: ${announcement.id}');
+                if (kDebugMode) {
+                  print('Response tapped for announcement: ${announcement.id}');
+                }
               },
           borderRadius: BorderRadius.circular(Sizer.wp(18)),
           child: Row(

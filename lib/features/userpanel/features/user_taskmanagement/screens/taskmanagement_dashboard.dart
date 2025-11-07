@@ -8,9 +8,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/wide_list.dart';
-import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/activity_log.dart';
 import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/screens/all_task_details.dart';
-import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/widgets/common_button.dart';
 import 'package:jesusvlsco/features/userpanel/features/user_taskmanagement/widgets/user_widelist.dart';
 
 class UserTaskmanagementDashboard extends StatefulWidget {
@@ -259,50 +257,3 @@ Widget _buildSearchTextField() {
   );
 }
 
-Widget _customButton({
-  required Color color,
-  required String text,
-  required VoidCallback onPressed,
-  // required double width,
-}) {
-  return SizedBox(
-    height: Sizer.hp(40),
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.button1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Sizer.wp(8)),
-        ),
-      ),
-      onPressed: onPressed,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            radius: Sizer.wp(5),
-            backgroundColor: AppColors.error,
-            child: Text(
-              '1',
-              style: AppTextStyle.regular().copyWith(
-                fontSize: Sizer.wp(8),
-                color: AppColors.textWhite,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          SizedBox(width: Sizer.wp(8)),
-          Flexible(
-            child: Text(
-              text,
-              style: AppTextStyle.regular().copyWith(
-                fontSize: Sizer.wp(16),
-                color: AppColors.error,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}

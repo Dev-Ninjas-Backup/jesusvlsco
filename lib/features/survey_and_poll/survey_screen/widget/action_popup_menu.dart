@@ -6,11 +6,11 @@ class ActionDialog extends StatelessWidget {
   final void Function()? onDelete;
 
   const ActionDialog({
-    Key? key,
+    super.key,
     this.onView,
     this.onEdit,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

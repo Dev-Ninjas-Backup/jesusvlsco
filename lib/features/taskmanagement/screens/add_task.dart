@@ -192,21 +192,19 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
 }
 
 Widget _buildNewTaskHeader() {
-  return Container(
-    child: Row(
-      children: [
-        Icon(Icons.add, color: AppColors.primary, size: Sizer.wp(20)),
-        SizedBox(width: 8),
-        Text(
-          'New Task',
-          style: AppTextStyle.regular().copyWith(
-            color: AppColors.primary,
-            fontSize: Sizer.wp(18),
-            fontWeight: FontWeight.w600,
-          ),
+  return Row(
+    children: [
+      Icon(Icons.add, color: AppColors.primary, size: Sizer.wp(20)),
+      SizedBox(width: 8),
+      Text(
+        'New Task',
+        style: AppTextStyle.regular().copyWith(
+          color: AppColors.primary,
+          fontSize: Sizer.wp(18),
+          fontWeight: FontWeight.w600,
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 

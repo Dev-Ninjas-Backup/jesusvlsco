@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,7 +52,9 @@ class StorageService {
 
       return userId;
     } catch (e) {
-      print('🚨 Error getting user id: $e');
+      if (kDebugMode) {
+        print('🚨 Error getting user id: $e');
+      }
       return null;
     }
   }
@@ -63,7 +65,9 @@ class StorageService {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getString('auth_token');
     } catch (e) {
-      print('🚨 Error getting auth token: $e');
+      if (kDebugMode) {
+        print('🚨 Error getting auth token: $e');
+      }
       return null;
     }
   }
@@ -83,12 +87,16 @@ class StorageService {
       await prefs.remove('user_profile');
       await prefs.remove('user_data');
 
-      print('✅ User logged out successfully');
+      if (kDebugMode) {
+        print('✅ User logged out successfully');
+      }
 
       // Navigate to login screen
       Get.offAll(() => LoginScreen());
     } catch (e) {
-      print('🚨 Error during logout: $e');
+      if (kDebugMode) {
+        print('🚨 Error during logout: $e');
+      }
     }
   }
 }

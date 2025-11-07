@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/features/splasho_screen/controller/splasho_controller.dart';
@@ -53,10 +54,14 @@ class UserProfileController extends GetxController {
         _setControllers(profile.data); // pass UserData, not Profile
         debugPrint('✅ Profile fetched successfully');
       } else {
-        print('🚨 Failed to fetch profile');
+        if (kDebugMode) {
+          print('🚨 Failed to fetch profile');
+        }
       }
     } else {
-      print('🚨 Token or User ID is null');
+      if (kDebugMode) {
+        print('🚨 Token or User ID is null');
+      }
     }
   }
 
@@ -134,8 +139,6 @@ class UserProfileController extends GetxController {
   String get displayPhone =>
       phoneController.text.isNotEmpty ? phoneController.text : 'No Phone';
 
-  
-
   @override
   void onClose() {
     firstNameController.dispose();
@@ -151,13 +154,13 @@ class UserProfileController extends GetxController {
 
   //for greetings
   String get timeBasedGreeting {
-  final hour = DateTime.now().hour;
+    final hour = DateTime.now().hour;
 
-  if (hour >= 5 && hour < 12) return 'Good morning';
-  if (hour >= 12 && hour < 17) return 'Good afternoon';
-  if (hour >= 17 && hour < 21) return 'Good evening';
-  return 'Good night';
-}
-String get displayFirsName => firstNameController.text.trim() ?? 'No Job Title';
+    if (hour >= 5 && hour < 12) return 'Good morning';
+    if (hour >= 12 && hour < 17) return 'Good afternoon';
+    if (hour >= 17 && hour < 21) return 'Good evening';
+    return 'Good night';
+  }
 
+  String get displayFirsName => firstNameController.text.trim();
 }

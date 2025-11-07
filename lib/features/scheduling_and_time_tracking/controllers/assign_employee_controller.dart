@@ -6,7 +6,6 @@ import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_s
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 import '../../assign_employee/models/project_model.dart';
-import '../../assign_employee/service/project_service.dart';
 import '../screens/widgets/filter_dialog.dart';
 import '../../../core/common/widgets/custom_date_picker_widget.dart';
 import '../routes/scheduling_routes.dart';

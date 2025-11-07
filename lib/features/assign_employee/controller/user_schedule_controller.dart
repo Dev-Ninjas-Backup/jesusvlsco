@@ -67,7 +67,7 @@ class ScheduleController extends GetxController {
   }
 
   Future<void> _initRepository() async {
-    final token = await _splashController.getAuthToken();
+    await _splashController.getAuthToken();
     _assignedUsersService = AssignedUsersService();
     _logger.i("Repository initialized with token");
   }

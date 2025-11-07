@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/assign_shift_model.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_details_screen.dart';
 
 class EmployeeCardWidget extends StatelessWidget {
   final ProjectData projectData;

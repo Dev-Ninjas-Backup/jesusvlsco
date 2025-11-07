@@ -1,4 +1,7 @@
 // task_controller.dart
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +18,7 @@ class TaskController extends GetxController {
   TimeOfDay _dueTime = TimeOfDay(hour: 8, minute: 0);
   
   // Labels
-  List<String> _selectedLabels = ['General Tasks'];
+  final List<String> _selectedLabels = ['General Tasks'];
   final List<String> _availableLabels = [
     'General Tasks', 
     'Work', 
@@ -63,8 +66,7 @@ class TaskController extends GetxController {
                 onPrimary: Colors.white,
                 surface: Colors.white,
                 onSurface: Colors.black,
-              ),
-              dialogBackgroundColor: Colors.white,
+              ), dialogTheme: DialogThemeData(backgroundColor: Colors.white),
             ),
             child: child!,
           );
@@ -75,7 +77,9 @@ class TaskController extends GetxController {
         update();
       }
     } catch (e) {
-      print('Error selecting start date: $e');
+      if (kDebugMode) {
+        print('Error selecting start date: $e');
+      }
       _showSnackBar(context, 'Error selecting date');
     }
   }
@@ -108,7 +112,9 @@ class TaskController extends GetxController {
         update();
       }
     } catch (e) {
-      print('Error selecting start time: $e');
+      if (kDebugMode) {
+        print('Error selecting start time: $e');
+      }
       _showSnackBar(context, 'Error selecting time');
     }
   }
@@ -132,8 +138,7 @@ class TaskController extends GetxController {
                 onPrimary: Colors.white,
                 surface: Colors.white,
                 onSurface: Colors.black,
-              ),
-              dialogBackgroundColor: Colors.white,
+              ), dialogTheme: DialogThemeData(backgroundColor: Colors.white),
             ),
             child: child!,
           );
@@ -144,7 +149,9 @@ class TaskController extends GetxController {
         update();
       }
     } catch (e) {
-      print('Error selecting due date: $e');
+      if (kDebugMode) {
+        print('Error selecting due date: $e');
+      }
       _showSnackBar(context, 'Error selecting date');
     }
   }
@@ -177,7 +184,9 @@ class TaskController extends GetxController {
         update();
       }
     } catch (e) {
-      print('Error selecting due time: $e');
+      if (kDebugMode) {
+        print('Error selecting due time: $e');
+      }
       _showSnackBar(context, 'Error selecting time');
     }
   }

@@ -51,7 +51,7 @@ void showCustomClockDialog(BuildContext context) {
                   padding: EdgeInsets.all(Sizer.wp(4)),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.color2.withOpacity(0.2),
+                    color: AppColors.color2.withValues(alpha: .2),
                   ),
                   child: Icon(Icons.close, color: AppColors.accent, size: 20),
                 ),

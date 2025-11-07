@@ -8,7 +8,6 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/taskmanagement/controller/celendercontroller.dart';
-import 'package:jesusvlsco/features/taskmanagement/screens/weekly_calender.dart';
 import 'package:jesusvlsco/features/taskmanagement/widgets/wide_list.dart';
 
 class SubmittedTask extends StatelessWidget {
@@ -16,7 +15,7 @@ class SubmittedTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CalendarController calendarController = Get.put(CalendarController());
+    Get.put(CalendarController());
     return Scaffold(
       appBar: AppBar(
         shadowColor: AppColors.textWhite,

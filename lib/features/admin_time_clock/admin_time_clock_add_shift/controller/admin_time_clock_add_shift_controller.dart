@@ -78,7 +78,9 @@ class AdminTimeClockAddShiftController extends GetxController {
     if (startDate.value == null ||
         endDate.value == null ||
         startTime.value == null ||
-        endTime.value == null) return '--:--';
+        endTime.value == null) {
+      return '--:--';
+    }
 
     final start = DateTime(
       startDate.value!.year,

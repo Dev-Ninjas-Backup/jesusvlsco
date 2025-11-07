@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:jesusvlsco/routes/config/route_constants.dart';
 
 class UserRoute {
   UserRoute._();

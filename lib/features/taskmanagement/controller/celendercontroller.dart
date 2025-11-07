@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class CalendarController extends GetxController {
   // Observable variables
   var selectedDate = DateTime.now().obs;
@@ -16,7 +15,11 @@ class CalendarController extends GetxController {
   void updateSelectedDate(DateTime date) {
     selectedDate.value = date;
     // Update the start of the week based on the selected date
-    currentWeekStart.value = DateTime(date.year, date.month, date.day).subtract(Duration(days: date.weekday % 7));
+    currentWeekStart.value = DateTime(
+      date.year,
+      date.month,
+      date.day,
+    ).subtract(Duration(days: date.weekday % 7));
   }
 
   // Function to open the date picker and update the selected date
@@ -28,8 +31,8 @@ class CalendarController extends GetxController {
       lastDate: DateTime(2101),
     );
 
-    if (pickedDate != null && pickedDate != selectedDate.value) {
-      updateSelectedDate(pickedDate);
+    if (pickedDate != selectedDate.value) {
+      updateSelectedDate(pickedDate!);
     }
   }
 }

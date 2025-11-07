@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jesusvlsco/core/services/storage_service.dart';
@@ -40,7 +41,9 @@ class UserSurveyController extends GetxController {
         },
       );
 
-      print("Surveys response: ${response.body}");
+      if (kDebugMode) {
+        print("Surveys response: ${response.body}");
+      }
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);

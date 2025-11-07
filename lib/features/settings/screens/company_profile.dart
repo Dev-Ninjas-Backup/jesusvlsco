@@ -235,7 +235,7 @@ class BranchCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: branch.manager,
+            initialValue: branch.manager,
             onChanged: onManagerChanged,
             items: managers.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(value: value, child: Text(value));
