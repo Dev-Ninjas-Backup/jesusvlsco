@@ -27,13 +27,11 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  // Configure EasyLoading
   _configureEasyLoading();
 
   runApp(const Jesusvlsco());
 }
 
-/// Configure EasyLoading settings
 void _configureEasyLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
