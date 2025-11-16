@@ -1,10 +1,10 @@
 import java.util.Properties
 import java.io.FileInputStream
 
-// Load key.properties
+// Load key.properties only if it exists
 val keystoreProperties = Properties().apply {
     val keystorePropertiesFile = rootProject.file("key.properties")
-    if (keystorePropertiesFile.exists()) {
+    if (keystorePropertiesFile.exists() && keystorePropertiesFile.length() > 0) {
         load(FileInputStream(keystorePropertiesFile))
     }
 }
@@ -12,7 +12,6 @@ val keystoreProperties = Properties().apply {
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -24,8 +23,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    // Enable core library desugaring for libraries that require newer java APIs at runtime
-    isCoreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -33,43 +31,55 @@ android {
     }
 
     defaultConfig {
-        
         applicationId = "com.lgc.management"
-
-    // Firebase Auth (and some other libraries) require a minimum SDK of 23.
-    // Override the default Flutter-provided minSdk to ensure manifest merge succeeds.
-    minSdkVersion(flutter.minSdkVersion.toInt())
-
+        minSdkVersion(flutter.minSdkVersion.toInt())
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
-
     }
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
-            storeFile = file(keystoreProperties.getProperty("storeFile") ?: "")
-            storePassword = keystoreProperties.getProperty("storePassword")
+            // Only configure release signing if key.properties exists and has required properties
+            if (keystoreProperties.getProperty("storeFile")?.isNotEmpty() == true) {
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+            }
+        }
+        
+        getByName("debug") {
+            // Use debug signing for debug builds
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storePassword = "android"
+            storeFile = file("${System.getProperty("user.home")}${File.separator}.android${File.separator}debug.keystore")
         }
     }
 
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
+            // Only use release signing if configured, otherwise fall back to debug
+            signingConfig = if (keystoreProperties.getProperty("storeFile")?.isNotEmpty() == true) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
-
 }
 
 flutter {
     source = "../.."
 }
 
-// Add desugaring library required by some AARs (for example flutter_local_notifications)
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }

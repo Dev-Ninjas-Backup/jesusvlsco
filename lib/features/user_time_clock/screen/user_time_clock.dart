@@ -3,16 +3,13 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
-
 import '../widget/show_clock_in_dialog.dart';
 
 class UserTimeClock extends StatelessWidget {
   final UserTimeClockController userTimeClockController = Get.put(
     UserTimeClockController(),
   );
-
   UserTimeClock({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +38,6 @@ class UserTimeClock extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            // Display current coordinates
             Text(
               "Current Location: ${userTimeClockController.currentLocation.value.latitude.toStringAsFixed(6)}, "
               "${userTimeClockController.currentLocation.value.longitude.toStringAsFixed(6)}",
