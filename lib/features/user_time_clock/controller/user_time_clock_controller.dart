@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -49,7 +50,9 @@ class UserTimeClockController extends GetxController {
         );
       },
       onError: (dynamic error) {
-        print('Location Update Error: $error');
+        if (kDebugMode) {
+          print('Location Update Error: $error');
+        }
       },
     );
   }
@@ -88,16 +91,22 @@ class UserTimeClockController extends GetxController {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Clock-in successful: ${response.body}');
+        if (kDebugMode) {
+          print('Clock-in successful: ${response.body}');
+        }
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
         Get.snackbar("error", errorMessage);
-        print('Clock-in failed: ${response.statusCode} - ${response.body}');
+        if (kDebugMode) {
+          print('Clock-in failed: ${response.statusCode} - ${response.body}');
+        }
       }
     } catch (e) {
-      print('Error during clock-in: $e');
+      if (kDebugMode) {
+        print('Error during clock-in: $e');
+      }
     }
   }
 
@@ -129,16 +138,22 @@ class UserTimeClockController extends GetxController {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Clock-in successful: ${response.body}');
+        if (kDebugMode) {
+          print('Clock-in successful: ${response.body}');
+        }
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
         Get.snackbar("error", errorMessage);
-        print('Clock-in failed: ${response.statusCode} - ${response.body}');
+        if (kDebugMode) {
+          print('Clock-in failed: ${response.statusCode} - ${response.body}');
+        }
       }
     } catch (e) {
-      print('Error during clock-in: $e');
+      if (kDebugMode) {
+        print('Error during clock-in: $e');
+      }
     }
   }
 }
