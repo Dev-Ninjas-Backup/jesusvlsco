@@ -6,7 +6,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/app.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
-
 import 'core/services/location_controller.dart';
 import 'core/services/request_handaler.dart';
 import 'core/services/storage_service.dart';
