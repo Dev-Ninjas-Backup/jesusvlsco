@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
@@ -85,9 +84,6 @@ void showCustomClockDialog(BuildContext context) {
                                 isClockInLoading.value = true;
                                 try {
                                   userTimeClockController.clockInNow();
-                                  EasyLoading.showSuccess(
-                                    'Clock In Successful.',
-                                  );
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock In failed: $e');
@@ -133,9 +129,6 @@ void showCustomClockDialog(BuildContext context) {
                                 isClockOutLoading.value = true;
                                 try {
                                   userTimeClockController.clockOutNow();
-                                  EasyLoading.showSuccess(
-                                    'Clock Out Successful.',
-                                  );
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock Out failed: $e');
@@ -144,8 +137,7 @@ void showCustomClockDialog(BuildContext context) {
                                 }
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              AppColors.accent, // Red for Clock Out
+                          backgroundColor: AppColors.accent,
                           foregroundColor: AppColors.textWhite,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(Sizer.wp(8)),

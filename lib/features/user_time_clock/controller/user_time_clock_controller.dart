@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -91,14 +91,15 @@ class UserTimeClockController extends GetxController {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (kDebugMode) {
-          print('Clock-in successful: ${response.body}');
-        }
+        EasyLoading.showSuccess(
+          "Clock In Successful!",
+          duration: Duration(seconds: 2),
+        );
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
-        Get.snackbar("error", errorMessage);
+        Get.snackbar("Error", errorMessage);
         if (kDebugMode) {
           print('Clock-in failed: ${response.statusCode} - ${response.body}');
         }
@@ -139,13 +140,17 @@ class UserTimeClockController extends GetxController {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (kDebugMode) {
-          print('Clock-in successful: ${response.body}');
+          print('Clock-Out successful: ${response.body}');
         }
+        EasyLoading.showSuccess(
+          "Clock Out Successful!",
+          duration: Duration(seconds: 2),
+        );
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         final String errorMessage =
             responseBody['data']?['message'] ?? 'Unknown error';
-        Get.snackbar("error", errorMessage);
+        Get.snackbar("Error", errorMessage);
         if (kDebugMode) {
           print('Clock-in failed: ${response.statusCode} - ${response.body}');
         }
