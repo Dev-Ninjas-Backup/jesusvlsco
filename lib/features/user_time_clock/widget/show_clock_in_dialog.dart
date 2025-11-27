@@ -6,7 +6,7 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
 import '../controller/user_time_clock_controller.dart';
 
-void showCustomClockDialog(BuildContext context) {
+void showCustomClockDialog(BuildContext context, bool isClockedIn) {
   // State to manage loading for each button
   RxBool isClockInLoading = false.obs;
   RxBool isClockOutLoading = false.obs;
@@ -78,9 +78,10 @@ void showCustomClockDialog(BuildContext context) {
                       width: Sizer.wp(100),
                       height: Sizer.hp(48),
                       child: ElevatedButton(
-                        onPressed: isClockInLoading.value
-                            ? null
-                            : () async {
+                        onPressed:
+                            (!isClockedIn &&
+                                !isClockInLoading.value) // CHANGE ADDED
+                            ? () async {
                                 isClockInLoading.value = true;
                                 try {
                                   userTimeClockController.clockInNow();
@@ -90,9 +91,12 @@ void showCustomClockDialog(BuildContext context) {
                                 } finally {
                                   isClockInLoading.value = false;
                                 }
-                              },
+                              }
+                            : null, // DISABLED when isClockedIn == true
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.info,
+                          backgroundColor: Colors.green.withOpacity(
+                            !isClockedIn ? 1 : 0.4, // CHANGE ADDED
+                          ),
                           foregroundColor: AppColors.textWhite,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(Sizer.wp(8)),
@@ -123,9 +127,10 @@ void showCustomClockDialog(BuildContext context) {
                       width: Sizer.wp(100),
                       height: Sizer.hp(48),
                       child: ElevatedButton(
-                        onPressed: isClockOutLoading.value
-                            ? null
-                            : () async {
+                        onPressed:
+                            (isClockedIn &&
+                                !isClockOutLoading.value) // CHANGE ADDED
+                            ? () async {
                                 isClockOutLoading.value = true;
                                 try {
                                   userTimeClockController.clockOutNow();
@@ -135,9 +140,12 @@ void showCustomClockDialog(BuildContext context) {
                                 } finally {
                                   isClockOutLoading.value = false;
                                 }
-                              },
+                              }
+                            : null, // DISABLED when isClockedIn == false
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accent,
+                          backgroundColor: Colors.red.withOpacity(
+                            isClockedIn ? 1 : 0.4, // CHANGE ADDED
+                          ),
                           foregroundColor: AppColors.textWhite,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(Sizer.wp(8)),

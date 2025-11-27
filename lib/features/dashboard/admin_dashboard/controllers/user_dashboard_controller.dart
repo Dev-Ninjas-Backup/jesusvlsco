@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jesusvlsco/core/services/network_caller.dart';
@@ -11,6 +12,8 @@ class UserDashboardController extends GetxController {
   final UserProfileController userProfileController = Get.put(
     UserProfileController(),
   );
+  final RxBool isClockedIn = false.obs;
+
   final RxString alertMessage =
       "Urgent Shift change for tomorrow, your shift starts at 8:00 AM instead of 9:00 AM"
           .obs;
@@ -145,8 +148,14 @@ class UserDashboardController extends GetxController {
 
     final resp = await caller.getRequest(url, token: token);
     if (resp.isSuccess) {
-      // Expecting resp.responseData['data'] to contain an object with 'shift' and 'teamMembers'
       final data = resp.responseData['data'];
+      if (kDebugMode) {
+        print("📌 DATA: $data");
+      }
+      if (kDebugMode) {
+        print("📌 isClockedIn: ${data['isClockedIn']}");
+      }
+      isClockedIn.value = data['isClockedIn'] ?? false;
       if (data != null && data is Map) {
         try {
           final shift = data['shift'];
