@@ -6,105 +6,125 @@ import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
 import '../widget/show_clock_in_dialog.dart';
 
 class UserTimeClock extends StatelessWidget {
+  final bool isClockedIn;
   final UserTimeClockController userTimeClockController = Get.put(
     UserTimeClockController(),
   );
-  UserTimeClock({super.key});
+  UserTimeClock({super.key, required this.isClockedIn});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(
-        () => Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    zoom: 17,
-                    target: userTimeClockController.currentLocation.value,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId("Current Location"),
-                      position: userTimeClockController.currentLocation.value,
-                      infoWindow: const InfoWindow(title: "Current Location"),
-                    ),
-                  },
-                  onMapCreated: (GoogleMapController controller) {
-                    userTimeClockController.setMapController(controller);
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Current Location: ${userTimeClockController.currentLocation.value.latitude.toStringAsFixed(6)}, "
-              "${userTimeClockController.currentLocation.value.longitude.toStringAsFixed(6)}",
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "Nothing Scheduled today",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 16),
-            GestureDetector(
-              onTap: () {
-                showCustomClockDialog(context);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                  color: Colors.blueAccent,
-                  shape: BoxShape.circle,
-                ),
-                child: const Column(
+      body: SingleChildScrollView(
+        child: Obx(
+          () => Column(
+            children: [
+              SizedBox(
+                height: 650,
+                child: Stack(
                   children: [
-                    Icon(Icons.schedule, size: 40, color: Colors.white),
-                    Text(
-                      "Clock in",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    SizedBox.expand(
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          zoom: 17,
+                          target: userTimeClockController.currentLocation.value,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId("Current Location"),
+                            position:
+                                userTimeClockController.currentLocation.value,
+                            infoWindow: const InfoWindow(
+                              title: "Current Location",
+                            ),
+                          ),
+                        },
+                        onMapCreated: (GoogleMapController controller) {
+                          userTimeClockController.setMapController(controller);
+                        },
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        margin: const EdgeInsets.only(top: 50, left: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            GestureDetector(
-              onTap: () {
-                Get.to(UserRequest());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
-                  spacing: 8,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check_circle, color: Colors.amber),
-                    Text("My requests"),
-                  ],
+              const SizedBox(height: 8),
+              Text(
+                "Current Location: ${userTimeClockController.currentLocation.value.latitude.toStringAsFixed(6)}, "
+                "${userTimeClockController.currentLocation.value.longitude.toStringAsFixed(6)}",
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
-            ),
-            const SizedBox(height: 36),
-          ],
+
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  showCustomClockDialog(context, isClockedIn);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: const BoxDecoration(
+                    color: Colors.blueAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Column(
+                    children: [
+                      Icon(Icons.schedule, size: 40, color: Colors.white),
+                      Text(
+                        "Clock In",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              GestureDetector(
+                onTap: () {
+                  Get.to(UserRequest());
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Row(
+                    spacing: 8,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.amber),
+                      Text("My requests"),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 36),
+            ],
+          ),
         ),
       ),
     );
