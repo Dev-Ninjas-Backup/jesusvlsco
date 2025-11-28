@@ -15,11 +15,15 @@ class UserTimeClockController extends GetxController {
     23.780836861126474,
     90.40062738047668,
   ).obs;
+
   final LocationController locationController = Get.put(
     LocationController(),
   ); // Initialize LocationController
+
   GoogleMapController? mapController; // To control the Google Map
+
   final action = ''.obs;
+  RxBool isClockedIn = false.obs;
 
   @override
   void onInit() {
@@ -63,10 +67,9 @@ class UserTimeClockController extends GetxController {
     super.onClose();
   }
 
-  //for clock in
   void clockInNow() {
-    clockInUser(currentLocation.value);
     action.value = 'CLOCK_IN';
+    clockInUser(currentLocation.value);
   }
 
   Future<void> clockInUser(LatLng location) async {
@@ -91,6 +94,8 @@ class UserTimeClockController extends GetxController {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        isClockedIn.value = true;
+
         EasyLoading.showSuccess(
           "Clock In Successful!",
           duration: Duration(seconds: 2),
@@ -111,10 +116,9 @@ class UserTimeClockController extends GetxController {
     }
   }
 
-  //for clock out
   void clockOutNow() {
-    clockOutUser(currentLocation.value);
     action.value = 'CLOCK_OUT';
+    clockOutUser(currentLocation.value);
   }
 
   Future<void> clockOutUser(LatLng location) async {
@@ -142,6 +146,7 @@ class UserTimeClockController extends GetxController {
         if (kDebugMode) {
           print('Clock-Out successful: ${response.body}');
         }
+        isClockedIn.value = false;
         EasyLoading.showSuccess(
           "Clock Out Successful!",
           duration: Duration(seconds: 2),
@@ -152,12 +157,12 @@ class UserTimeClockController extends GetxController {
             responseBody['data']?['message'] ?? 'Unknown error';
         Get.snackbar("Error", errorMessage);
         if (kDebugMode) {
-          print('Clock-in failed: ${response.statusCode} - ${response.body}');
+          print('Clock-out failed: ${response.statusCode} - ${response.body}');
         }
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error during clock-in: $e');
+        print('Error during clock-out: $e');
       }
     }
   }

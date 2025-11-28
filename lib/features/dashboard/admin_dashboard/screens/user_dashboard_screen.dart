@@ -85,9 +85,7 @@ class UserDashboardScreen extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(
-                    UserTimeClock(isClockedIn: controller.isClockedIn.value),
-                  );
+                  Get.to(UserTimeClock());
                 },
                 child: SizedBox(
                   child: Column(
@@ -97,11 +95,7 @@ class UserDashboardScreen extends StatelessWidget {
                           backgroundColor: Colors.green.shade100,
                         ),
                         onPressed: () {
-                          Get.to(
-                            UserTimeClock(
-                              isClockedIn: controller.isClockedIn.value,
-                            ),
-                          );
+                          Get.to(UserTimeClock());
                         },
                         icon: Icon(
                           Icons.watch_later_rounded,
