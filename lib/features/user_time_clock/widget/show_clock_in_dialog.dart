@@ -6,13 +6,11 @@ import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 
 import '../controller/user_time_clock_controller.dart';
 
-void showCustomClockDialog(BuildContext context, bool isClockedIn) {
-  // State to manage loading for each button
+void showCustomClockDialog(BuildContext context) {
+  final controller = Get.find<UserTimeClockController>();
+
   RxBool isClockInLoading = false.obs;
   RxBool isClockOutLoading = false.obs;
-  UserTimeClockController userTimeClockController = Get.put(
-    UserTimeClockController(),
-  );
 
   showDialog(
     context: context,
@@ -58,33 +56,33 @@ void showCustomClockDialog(BuildContext context, bool isClockedIn) {
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Select whether to clock in or clock out",
-                textAlign: TextAlign.center,
-                style: AppTextStyle.regular().copyWith(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
+          content: Obx(() {
+            final isClockedIn = controller.isClockedIn.value;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Select whether to clock in or clock out",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.regular().copyWith(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-              ),
-              SizedBox(height: Sizer.hp(24)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Obx(
-                    () => SizedBox(
+                SizedBox(height: Sizer.hp(24)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
                       width: Sizer.wp(100),
                       height: Sizer.hp(48),
                       child: ElevatedButton(
-                        onPressed:
-                            (!isClockedIn &&
-                                !isClockInLoading.value) // CHANGE ADDED
+                        onPressed: (!isClockedIn && !isClockInLoading.value)
                             ? () async {
                                 isClockInLoading.value = true;
                                 try {
-                                  userTimeClockController.clockInNow();
+                                  controller.clockInNow();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock In failed: $e');
@@ -92,10 +90,11 @@ void showCustomClockDialog(BuildContext context, bool isClockedIn) {
                                   isClockInLoading.value = false;
                                 }
                               }
-                            : null, // DISABLED when isClockedIn == true
+                            : null,
                         style: ElevatedButton.styleFrom(
+                          // ignore: deprecated_member_use
                           backgroundColor: Colors.green.withOpacity(
-                            !isClockedIn ? 1 : 0.4, // CHANGE ADDED
+                            !isClockedIn ? 1 : 0.4,
                           ),
                           foregroundColor: AppColors.textWhite,
                           shape: RoundedRectangleBorder(
@@ -121,19 +120,15 @@ void showCustomClockDialog(BuildContext context, bool isClockedIn) {
                               ),
                       ),
                     ),
-                  ),
-                  Obx(
-                    () => SizedBox(
+                    SizedBox(
                       width: Sizer.wp(100),
                       height: Sizer.hp(48),
                       child: ElevatedButton(
-                        onPressed:
-                            (isClockedIn &&
-                                !isClockOutLoading.value) // CHANGE ADDED
+                        onPressed: (isClockedIn && !isClockOutLoading.value)
                             ? () async {
                                 isClockOutLoading.value = true;
                                 try {
-                                  userTimeClockController.clockOutNow();
+                                  controller.clockOutNow();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock Out failed: $e');
@@ -141,10 +136,11 @@ void showCustomClockDialog(BuildContext context, bool isClockedIn) {
                                   isClockOutLoading.value = false;
                                 }
                               }
-                            : null, // DISABLED when isClockedIn == false
+                            : null,
                         style: ElevatedButton.styleFrom(
+                          // ignore: deprecated_member_use
                           backgroundColor: Colors.red.withOpacity(
-                            isClockedIn ? 1 : 0.4, // CHANGE ADDED
+                            isClockedIn ? 1 : 0.4,
                           ),
                           foregroundColor: AppColors.textWhite,
                           shape: RoundedRectangleBorder(
@@ -170,11 +166,11 @@ void showCustomClockDialog(BuildContext context, bool isClockedIn) {
                               ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  ],
+                ),
+              ],
+            );
+          }),
         ),
       );
     },

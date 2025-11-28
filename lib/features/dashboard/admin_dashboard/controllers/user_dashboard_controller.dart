@@ -1,5 +1,3 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -457,9 +455,11 @@ class UserDashboardController extends GetxController {
 
   Future<void> clockIn({double lat = 0.0, double lng = 0.0}) async {
     await processClock('CLOCK_IN', lat: lat, lng: lng);
+    await loadCurrentClock();
   }
 
   Future<void> clockOut({double lat = 0.0, double lng = 0.0}) async {
     await processClock('CLOCK_OUT', lat: lat, lng: lng);
+    await loadCurrentClock();
   }
 }

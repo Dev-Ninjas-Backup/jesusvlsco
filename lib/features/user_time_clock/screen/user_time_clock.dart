@@ -6,11 +6,10 @@ import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
 import '../widget/show_clock_in_dialog.dart';
 
 class UserTimeClock extends StatelessWidget {
-  final bool isClockedIn;
   final UserTimeClockController userTimeClockController = Get.put(
     UserTimeClockController(),
   );
-  UserTimeClock({super.key, required this.isClockedIn});
+  UserTimeClock({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +73,10 @@ class UserTimeClock extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: () {
-                  showCustomClockDialog(context, isClockedIn);
+                  showCustomClockDialog(context);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(24),
