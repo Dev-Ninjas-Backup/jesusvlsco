@@ -5,12 +5,12 @@ import 'package:jesusvlsco/core/services/network_caller.dart';
 import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/api_constants.dart';
 import 'package:jesusvlsco/features/user_profile/controller/user_profile_controller.dart';
+import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 
 class UserDashboardController extends GetxController {
   final UserProfileController userProfileController = Get.put(
     UserProfileController(),
   );
-  RxBool isClockedIn = false.obs;
 
   final RxString alertMessage =
       "Urgent Shift change for tomorrow, your shift starts at 8:00 AM instead of 9:00 AM"
@@ -145,7 +145,7 @@ class UserDashboardController extends GetxController {
         '${ApiConstants.baseurl}${ApiConstants.currentClock}?date=${DateTime.now().toUtc().toIso8601String()}';
 
     final resp = await caller.getRequest(url, token: token);
-    if (resp.isSuccess && resp.statusCode == 200) {
+    if (resp.isSuccess || resp.statusCode == 200) {
       final data = resp.responseData['data'];
       if (kDebugMode) {
         print("📌 DATA: $data");
@@ -153,12 +153,18 @@ class UserDashboardController extends GetxController {
       if (kDebugMode) {
         print("📌 isClockedIn: ${data['isClockedIn']}");
       }
-      isClockedIn.value = data['isClockedIn'] ?? false;
-      if (kDebugMode) {
-        print(isClockedIn.value);
-      }
       if (data != null && data is Map) {
+        if (!Get.isRegistered<UserTimeClockController>()) {
+          Get.put(UserTimeClockController(), permanent: true);
+        }
         try {
+          final utc = Get.find<UserTimeClockController>();
+          utc.isClockedIn.value = (data['isClockedIn'] == true);
+          if (kDebugMode) {
+            print("DEBUG: UTC isClockedIn = ${utc.isClockedIn.value}");
+            print("DEBUG: Dashboard isClockedIn = ${utc.isClockedIn}");
+          }
+
           final shift = data['shift'];
 
           if (shift != null && shift is Map) {

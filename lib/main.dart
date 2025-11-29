@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/app.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
+import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
 import 'core/services/location_controller.dart';
 import 'core/services/request_handaler.dart';
@@ -14,6 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.init();
   await requestPermissions();
+  Get.put(UserTimeClockController(), permanent: true);
   final locationController = Get.put(LocationController());
   await locationController.initializeService();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
