@@ -26,7 +26,6 @@ class ViewProfileHeaderWidget extends StatelessWidget {
               ),
             ),
           ),
-          const Icon(Icons.menu, color: Colors.black, size: 24),
         ],
       ),
     );

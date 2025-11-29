@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-
-import '../controller/user_time_clock_controller.dart';
+import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 
 void showCustomClockDialog(BuildContext context) {
-  final controller = Get.find<UserTimeClockController>();
+  final dashboardController = Get.find<UserDashboardController>();
 
   RxBool isClockInLoading = false.obs;
   RxBool isClockOutLoading = false.obs;
@@ -57,7 +56,7 @@ void showCustomClockDialog(BuildContext context) {
             ],
           ),
           content: Obx(() {
-            final isClockedIn = controller.isClockedIn.value;
+            final isClockedIn = dashboardController.isClockedIn.value;
 
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -82,7 +81,7 @@ void showCustomClockDialog(BuildContext context) {
                             ? () async {
                                 isClockInLoading.value = true;
                                 try {
-                                  controller.clockInNow();
+                                  await dashboardController.clockIn();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock In failed: $e');
@@ -128,7 +127,7 @@ void showCustomClockDialog(BuildContext context) {
                             ? () async {
                                 isClockOutLoading.value = true;
                                 try {
-                                  controller.clockOutNow();
+                                  await dashboardController.clockOut();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock Out failed: $e');

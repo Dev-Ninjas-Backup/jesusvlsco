@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:jesusvlsco/features/user/screen/chat_setting.dart';
-
 import '../../../core/common/styles/global_text_style.dart';
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/sizer.dart';
-import '../../../routes/config/route_constants.dart';
 import '../../communication/screens/admin_chat_screen.dart';
 import '../../communication/screens/create_new_chat_screen.dart';
 import '../../communication/widgets/chat_dashboard.dart';
@@ -70,28 +66,27 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
                     ),
                     SizedBox(width: Sizer.wp(8)),
 
-                    InkWell(
-                      onTap: () {
-                        Get.to(ChatSetting());
-                      },
-                      child: Container(
-                        height: Sizer.hp(34),
-                        width: Sizer.wp(34),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(Sizer.wp(8)),
-                          child: SvgPicture.asset(
-                            "assets/icons/settings.svg",
-
-                            height: Sizer.hp(18),
-                            width: Sizer.wp(18),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Get.to(ChatSetting());
+                    //   },
+                    //   child: Container(
+                    //     height: Sizer.hp(34),
+                    //     width: Sizer.wp(34),
+                    //     decoration: BoxDecoration(
+                    //       color: AppColors.primary,
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(Sizer.wp(8)),
+                    //       child: SvgPicture.asset(
+                    //         "assets/icons/settings.svg",
+                    //         height: Sizer.hp(18),
+                    //         width: Sizer.wp(18),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
@@ -262,18 +257,6 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
         ),
       ),
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(
-            CupertinoIcons.bars,
-            color: AppColors.backgroundDark,
-            size: Sizer.wp(24),
-          ),
-          onPressed: () {
-            context.pushNamed(RouteNames.drawer);
-          },
-        ),
-      ],
     );
   }
 }

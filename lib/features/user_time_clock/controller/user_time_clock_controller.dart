@@ -23,7 +23,6 @@ class UserTimeClockController extends GetxController {
   GoogleMapController? mapController; // To control the Google Map
 
   final action = ''.obs;
-  RxBool isClockedIn = false.obs;
 
   @override
   void onInit() {
@@ -94,8 +93,6 @@ class UserTimeClockController extends GetxController {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        isClockedIn.value = true;
-
         EasyLoading.showSuccess(
           "Clock In Successful!",
           duration: Duration(seconds: 2),
@@ -146,7 +143,6 @@ class UserTimeClockController extends GetxController {
         if (kDebugMode) {
           print('Clock-Out successful: ${response.body}');
         }
-        isClockedIn.value = false;
         EasyLoading.showSuccess(
           "Clock Out Successful!",
           duration: Duration(seconds: 2),
