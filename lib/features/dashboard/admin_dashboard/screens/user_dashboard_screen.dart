@@ -9,9 +9,7 @@ import 'package:jesusvlsco/features/assign_employee/views/user_assign_employee_s
 import 'package:jesusvlsco/features/bottom_navigation/controller/bottom_navigation_scaffold_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/team_avatar.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/user_drawer.dart';
 import 'package:jesusvlsco/features/user_time_clock/screen/user_time_clock.dart';
-
 import '../../../userpanel/features/user_taskmanagement/screens/taskmanagement_dashboard.dart';
 
 class UserDashboardScreen extends StatelessWidget {
@@ -22,7 +20,7 @@ class UserDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryBackground,
+      backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
       body: Padding(
         padding: EdgeInsets.all(Sizer.wp(16)),
@@ -916,21 +914,21 @@ class UserDashboardScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.notifications, color: AppColors.primary),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {},
+      //   icon: Icon(Icons.notifications, color: AppColors.primary),
+      // ),
       title: Text(
         'Dashboard',
         style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
       ),
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.menu, color: AppColors.textBlackShade),
-          onPressed: () => Get.to(UserDrawer()),
-        ),
-      ],
+      // actions: [
+      //   IconButton(
+      //     icon: Icon(Icons.menu, color: AppColors.textBlackShade),
+      //     onPressed: () => Get.to(UserDrawer()),
+      //   ),
+      // ],
     );
   }
 }

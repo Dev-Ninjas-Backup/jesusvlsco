@@ -145,7 +145,7 @@ class UserDashboardController extends GetxController {
         '${ApiConstants.baseurl}${ApiConstants.currentClock}?date=${DateTime.now().toUtc().toIso8601String()}';
 
     final resp = await caller.getRequest(url, token: token);
-    if (resp.isSuccess) {
+    if (resp.isSuccess && resp.statusCode == 200) {
       final data = resp.responseData['data'];
       if (kDebugMode) {
         print("📌 DATA: $data");
@@ -154,6 +154,9 @@ class UserDashboardController extends GetxController {
         print("📌 isClockedIn: ${data['isClockedIn']}");
       }
       isClockedIn.value = data['isClockedIn'] ?? false;
+      if (kDebugMode) {
+        print(isClockedIn.value);
+      }
       if (data != null && data is Map) {
         try {
           final shift = data['shift'];
@@ -210,6 +213,7 @@ class UserDashboardController extends GetxController {
                   if (fn.isNotEmpty) {
                     initial = fn[0].toUpperCase();
                   } else if (ln.isNotEmpty)
+                    // ignore: curly_braces_in_flow_control_structures
                     initial = ln[0].toUpperCase();
                   teamMembers.add({
                     'initial': initial,
