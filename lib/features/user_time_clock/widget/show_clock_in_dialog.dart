@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/user_dashboard_controller.dart';
+import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 
 void showCustomClockDialog(BuildContext context) {
-  final dashboardController = Get.find<UserDashboardController>();
+  final controller = Get.find<UserTimeClockController>();
 
   RxBool isClockInLoading = false.obs;
   RxBool isClockOutLoading = false.obs;
@@ -56,8 +56,7 @@ void showCustomClockDialog(BuildContext context) {
             ],
           ),
           content: Obx(() {
-            final isClockedIn = dashboardController.isClockedIn.value;
-
+            final isClockedIn = controller.isClockedIn.value;
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -81,7 +80,7 @@ void showCustomClockDialog(BuildContext context) {
                             ? () async {
                                 isClockInLoading.value = true;
                                 try {
-                                  await dashboardController.clockIn();
+                                  controller.clockInNow();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock In failed: $e');
@@ -127,7 +126,7 @@ void showCustomClockDialog(BuildContext context) {
                             ? () async {
                                 isClockOutLoading.value = true;
                                 try {
-                                  await dashboardController.clockOut();
+                                  controller.clockOutNow();
                                   Get.back();
                                 } catch (e) {
                                   Get.snackbar('Error', 'Clock Out failed: $e');
