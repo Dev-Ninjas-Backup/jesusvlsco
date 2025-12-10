@@ -7,62 +7,26 @@ import 'package:jesusvlsco/core/bindings/controller_binder.dart';
 import 'package:jesusvlsco/core/utils/context/app_context.dart';
 import 'package:jesusvlsco/routes/app_router.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/routes/scheduling_routes.dart';
-import 'core/utils/theme/theme.dart';
 
 class Jesusvlsco extends StatelessWidget {
   const Jesusvlsco({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AppContext.init(context); // Initialize AppContext with the current context
+    AppContext.init(context);
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'LGC Global',
-      themeMode: ThemeMode.system,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
       initialBinding: ControllerBinder(),
-
-      // GetX Pages - include scheduling routes for hybrid navigation
       getPages: SchedulingRoutes.pages,
-
-      // GetX specific configurations
-      // defaultTransition: Transition.cupertino,
-      // transitionDuration: const Duration(milliseconds: 300),
-      // enableLog: true,
-      // Use GoRouter with GetX
-
-      // home: SubmittedTask(),
-      //home: CreateNewSurveyPublishScreen(),
       localizationsDelegates: const [
         DefaultCupertinoLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
-
-      // EasyLoading builder - separate from routing
       builder: EasyLoading.init(),
-
-      // Main app routing
       home: Router.withConfig(config: AppRouter.router),
-
-      //  home: AuthRoutes.routes,
-
-      // home: Router.withConfig(config: AppRouter.router),
-
-      // Alternative: You can also use this approach
-      // builder: (context, child) {
-      //   return Router.withConfig(config: AppRouter.router);
-      // },
-      // logWriterCallback: (String text, {bool isError = false}) {
-      //   // Custom logging for GetX (optional)
-      //   if (isError) {
-      //     print('GetX Error: $text');
-      //   } else {
-      //     print('GetX Log: $text');
-      //   }
-      // },
     );
   }
 }
