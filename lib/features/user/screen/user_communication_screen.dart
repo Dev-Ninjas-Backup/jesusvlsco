@@ -238,16 +238,7 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 0.1,
-      leading: IconButton(
-        icon: Icon(
-          CupertinoIcons.arrow_left,
-          color: AppColors.backgroundDark,
-          size: Sizer.wp(24),
-        ),
-        onPressed: () {
-          Get.back();
-        },
-      ),
+
       title: Text(
         'Communication',
         style: TextStyle(

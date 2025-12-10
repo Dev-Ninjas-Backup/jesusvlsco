@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ViewProfileHeaderWidget extends StatelessWidget {
   const ViewProfileHeaderWidget({super.key});
@@ -11,10 +10,6 @@ class ViewProfileHeaderWidget extends StatelessWidget {
       decoration: const BoxDecoration(color: Color(0xFFF8F9FA)),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => Get.back(),
-            child: const Icon(Icons.arrow_back, color: Colors.black, size: 24),
-          ),
           const Expanded(
             child: Text(
               'Profile',

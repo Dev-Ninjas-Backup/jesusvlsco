@@ -51,7 +51,17 @@ class UserProfileScreen extends StatelessWidget {
                         decorationColor: AppColors.primary,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    Container(
+                      height: Sizer.hp(50),
+                      margin: const EdgeInsets.all(15),
+                      child: CustomButton(
+                        textColor: Colors.white,
+                        isExpanded: true,
+                        onPressed: controller.updateProfile,
+                        text: 'Logout',
+                        decorationColor: Colors.red,
+                      ),
+                    ),
                   ],
                 ),
               ),

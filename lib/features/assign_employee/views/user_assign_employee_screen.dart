@@ -22,13 +22,14 @@ class AssignEmployeeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Assign Employee",
+          "Employee Schedul",
           style: AppTextStyle.regular().copyWith(
             fontSize: Sizer.wp(18),
             color: AppColors.primary,
             fontWeight: FontWeight.w700,
           ),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -58,7 +59,7 @@ class AssignEmployeeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              controller.selectedProject.value?.title ?? "Shift Scheduling",
+              controller.selectedProject.value?.title ?? "Shift Checker",
               style: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(18),
                 color: AppColors.primary,
@@ -155,6 +156,7 @@ class AssignEmployeeScreen extends StatelessWidget {
               width: 1,
             ),
           ),
+
           child: Row(
             children: [
               Expanded(
