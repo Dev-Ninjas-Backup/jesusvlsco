@@ -58,6 +58,7 @@ class UserProfileScreen extends StatelessWidget {
                         textColor: Colors.white,
                         isExpanded: true,
                         onPressed: controller.updateProfile,
+                        // onPressed: controller.logout,
                         text: 'Logout',
                         decorationColor: Colors.red,
                       ),
