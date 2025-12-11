@@ -162,5 +162,10 @@ class UserProfileController extends GetxController {
     return 'Good night';
   }
 
+  // void logout() {
+  //   SharedPreferencesHelper.clearAllAppData();
+  //   Get.offAll(() => WelcomeScreen());
+  // }
+
   String get displayFirsName => firstNameController.text.trim();
 }
