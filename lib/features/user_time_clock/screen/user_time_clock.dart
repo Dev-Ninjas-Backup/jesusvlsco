@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 import 'package:jesusvlsco/features/user_time_clock/screen/user_request.dart';
-import '../widget/show_clock_in_dialog.dart';
 
 class UserTimeClock extends StatelessWidget {
   final UserTimeClockController userTimeClockController = Get.put(
@@ -12,10 +11,14 @@ class UserTimeClock extends StatelessWidget {
   UserTimeClock({super.key});
   @override
   Widget build(BuildContext context) {
+    RxBool isClockInLoading = false.obs;
+    RxBool isClockOutLoading = false.obs;
+
     return Scaffold(
       body: SingleChildScrollView(
-        child: Obx(
-          () => Column(
+        child: Obx(() {
+          final isClockedIn = userTimeClockController.isClockedIn.value;
+          return Column(
             children: [
               SizedBox(
                 height: 650,
@@ -75,20 +78,44 @@ class UserTimeClock extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               GestureDetector(
-                onTap: () {
-                  showCustomClockDialog(context);
-                },
+                onTap: isClockedIn
+                    ? (isClockOutLoading.value
+                          ? null
+                          : () async {
+                              isClockOutLoading.value = true;
+                              try {
+                                userTimeClockController.clockOutNow();
+                                Get.back();
+                              } catch (e) {
+                                Get.snackbar('Error', 'Clock Out failed: $e');
+                              } finally {
+                                isClockOutLoading.value = false;
+                              }
+                            })
+                    : (isClockInLoading.value
+                          ? null
+                          : () async {
+                              isClockInLoading.value = true;
+                              try {
+                                userTimeClockController.clockInNow();
+                                Get.back();
+                              } catch (e) {
+                                Get.snackbar('Error', 'Clock In failed: $e');
+                              } finally {
+                                isClockInLoading.value = false;
+                              }
+                            }),
                 child: Container(
                   padding: const EdgeInsets.all(24),
-                  decoration: const BoxDecoration(
-                    color: Colors.blueAccent,
+                  decoration: BoxDecoration(
+                    color: isClockedIn ? Colors.red : Colors.green,
                     shape: BoxShape.circle,
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Icon(Icons.schedule, size: 40, color: Colors.white),
                       Text(
-                        "Clock In",
+                        isClockedIn ? "Clock Out" : "Clock In",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -122,8 +149,8 @@ class UserTimeClock extends StatelessWidget {
               ),
               const SizedBox(height: 36),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
