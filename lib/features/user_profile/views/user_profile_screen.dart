@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_button.dart';
+import 'package:jesusvlsco/core/services/storage_service.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/user_profile/controller/user_profile_controller.dart';
@@ -57,8 +58,10 @@ class UserProfileScreen extends StatelessWidget {
                       child: CustomButton(
                         textColor: Colors.white,
                         isExpanded: true,
-                        onPressed: controller.updateProfile,
-                        // onPressed: controller.logout,
+                        onPressed: () {
+                          StorageService.logout();
+                        },
+
                         text: 'Logout',
                         decorationColor: Colors.red,
                       ),
