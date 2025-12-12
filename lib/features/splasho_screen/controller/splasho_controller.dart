@@ -129,7 +129,6 @@ class SplashController extends GetxController {
     }
   }
 
-  // Method to logout and clear data
   Future<void> logout() async {
     try {
       final prefs = await SharedPreferences.getInstance();

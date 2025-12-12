@@ -143,17 +143,15 @@ class _EmailotpverifyMethodState extends State<EmailotpverifyMethod> {
                                       right: Sizer.wp(24),
                                     ),
                                     child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape:
-                                            WidgetStateProperty.all<
-                                              RoundedRectangleBorder
-                                            >(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                            ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.color1,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8.0,
+                                          ),
+                                        ),
                                       ),
+
                                       onPressed: () {
                                         controller.loginEmail();
                                       },
