@@ -1,4 +1,3 @@
-// controllers/schedule_controller.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -7,10 +6,9 @@ import 'package:jesusvlsco/core/common/widgets/custom_date_picker_widget.dart';
 import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_model.dart';
 import 'package:jesusvlsco/features/assign_employee/service/assigned_users_service.dart';
 import 'package:jesusvlsco/features/assign_employee/service/project_service.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/project_model.dart';
 import 'package:jesusvlsco/features/splasho_screen/controller/splasho_controller.dart';
 import 'package:logger/logger.dart';
-
-import '../models/project_model.dart';
 
 class ScheduleController extends GetxController {
   final Logger _logger = Logger();
@@ -72,6 +70,8 @@ class ScheduleController extends GetxController {
     _logger.i("Repository initialized with token");
   }
 
+  // Inside schedule_controller.dart – replace only this method
+
   Future<void> fetchProjects({bool isRefresh = false}) async {
     try {
       if (isRefresh) {
@@ -88,43 +88,40 @@ class ScheduleController extends GetxController {
         isLoadingMoreProjects.value = true;
       }
 
-      _logger.i(
-        'Fetching projects - Page: ${currentPage.value}, Limit: $pageLimit',
-      ); // Added pageLimit logging
+      _logger.i('Fetching user assigned projects from shift-schedule API');
 
-      final response = await projectService.getAllProjects(
-        page: currentPage.value,
-        limit: pageLimit, // Make sure this is 5
-      );
-
-      _logger.i(
-        'API Response - Success: ${response.success}, Data length: ${response.data.length}',
-      );
-      _logger.i(
-        'Metadata - Page: ${response.metadata.page}, Limit: ${response.metadata.limit}, Total: ${response.metadata.total}, TotalPages: ${response.metadata.totalPage}',
-      );
+      final response = await projectService.getUserAssignedProjects();
 
       if (response.success) {
+        final List<ProjectModel> userProjects = response.data.projectWithShifts
+            .map((item) {
+              final project = item.project;
+              return ProjectModel(
+                id: project.id,
+                title: project.title,
+                projectLocation: project.location,
+                teamId: '', // required field – safe to leave empty
+                // All other fields are now optional – no need to pass them
+              );
+            })
+            .toList();
+
         if (currentPage.value == 1) {
-          projects.value = response.data;
+          projects.value = userProjects;
         } else {
-          projects.addAll(response.data);
+          projects.addAll(userProjects);
         }
 
-        totalProjects.value = response.metadata.total;
-        totalPages.value = response.metadata.totalPage;
+        totalProjects.value = userProjects.length;
+        totalPages.value = 1;
+        hasMoreProjects.value = false;
 
-        // Check if there are more pages
-        hasMoreProjects.value = currentPage.value < response.metadata.totalPage;
-
-        _logger.i('Projects loaded: ${response.data.length}');
-        _logger.i('Total projects in list: ${projects.length}');
-        _logger.i('Has more: ${hasMoreProjects.value}');
+        _logger.i('Loaded ${projects.length} projects for current user');
       } else {
         EasyLoading.showError('Failed to load projects: ${response.message}');
       }
     } catch (e) {
-      _logger.e('Error fetching projects: $e');
+      _logger.e('Error fetching user projects: $e');
       EasyLoading.showError('Failed to load projects');
     } finally {
       isLoading.value = false;

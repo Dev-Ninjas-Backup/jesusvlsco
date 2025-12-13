@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/shift_scheduling_screen.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/add_project_screen.dart';
 import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/access_schedule_screen.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
 
 import '../../config/route_constants.dart';
 
@@ -38,11 +37,11 @@ class AdminScheduleRoutes {
           ),
 
           // Assign Employee route
-          GoRoute(
-            path: 'assign-employee',
-            name: RouteNames.adminAssignEmployee,
-            builder: (context, state) => const AssignEmployeeScreen(),
-          ),
+          // GoRoute(
+          //   path: 'assign-employee',
+          //   name: RouteNames.adminAssignEmployee,
+          //   builder: (context, state) => const AssignEmployeeScreen(),
+          // ),
 
           // Admin Schedule details page
           // GoRoute(

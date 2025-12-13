@@ -149,7 +149,7 @@ class ProjectCardWidget extends StatelessWidget {
 
   /// Build user avatars with up to 4 members + total count
   Widget _buildUserAvatars() {
-    final int totalUsers = project.projectUsers.length;
+    final int totalUsers = project.projectUsers?.length ?? 0;
     final int displayCount = totalUsers > 4
         ? 3
         : totalUsers; // Show 3 if more than 4, else show all

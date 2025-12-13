@@ -9,7 +9,6 @@ import 'package:jesusvlsco/core/utils/helpers/spacing_helper.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/controllers/dashboard_controller.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/dashboard_appbar.dart';
 import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
-import 'package:jesusvlsco/features/scheduling_and_time_tracking/screens/views/assign_employee_screen.dart';
 import 'package:jesusvlsco/features/survey_and_poll/survey_screen/screen/survey_and_poll_screen.dart';
 import 'package:jesusvlsco/features/taskmanagement/screens/add_task.dart';
 import 'package:jesusvlsco/features/time_off_request/time_off_request_project_overView_screen/screen/time_off_request_project_overview_screen.dart';
@@ -681,15 +680,15 @@ class AdminDashboardScreen extends StatelessWidget {
           'Assigned Employees',
           style: AppTextStyle.f18W600().copyWith(color: AppColors.primary),
         ),
-        GestureDetector(
-          onTap: () {
-            Get.to(AssignEmployeeScreen());
-          },
-          child: Text(
-            'View all',
-            style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     Get.to(AssignEmployeeScreen());
+        //   },
+        //   child: Text(
+        //     'View all',
+        //     style: AppTextStyle.f14W400().copyWith(color: AppColors.primary),
+        //   ),
+        // ),
       ],
     );
   }
@@ -931,31 +930,31 @@ class AdminDashboardScreen extends StatelessWidget {
           children: [
             _buildSendUpdateView(),
             SizedBox(width: Sizer.wp(16)),
-            _buildAssignView(),
+            // _buildAssignView(),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildAssignView() {
-    return Expanded(
-      child: CustomButton(
-        onPressed: () {
-          Get.to(AssignEmployeeScreen());
-        },
-        imagePath: 'assets/icons/assign.png',
-        text: 'Assign',
-        fontSize: Sizer.wp(16),
+  // Widget _buildAssignView() {
+  //   return Expanded(
+  //     child: CustomButton(
+  //       onPressed: () {
+  //         Get.to(AssignEmployeeScreen());
+  //       },
+  //       imagePath: 'assets/icons/assign.png',
+  //       text: 'Assign',
+  //       fontSize: Sizer.wp(16),
 
-        fontWeight: FontWeight.w500,
-        decorationColor: AppColors.primary,
-        textColor: AppColors.textWhite,
+  //       fontWeight: FontWeight.w500,
+  //       decorationColor: AppColors.primary,
+  //       textColor: AppColors.textWhite,
 
-        borderRadius: Sizer.wp(8),
-      ),
-    );
-  }
+  //       borderRadius: Sizer.wp(8),
+  //     ),
+  //   );
+  // }
 
   Widget _buildSendUpdateView() {
     return Expanded(
