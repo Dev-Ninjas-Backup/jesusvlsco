@@ -5,8 +5,7 @@ import 'package:jesusvlsco/core/common/styles/global_text_style.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
-
-import '../models/project_model.dart';
+import 'package:jesusvlsco/features/scheduling_and_time_tracking/models/project_model.dart';
 
 class ProjectSelectionDialog extends StatelessWidget {
   const ProjectSelectionDialog({super.key});

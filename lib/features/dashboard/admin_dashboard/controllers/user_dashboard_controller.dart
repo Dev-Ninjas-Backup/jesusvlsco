@@ -219,6 +219,7 @@ class UserDashboardController extends GetxController {
                   if (fn.isNotEmpty) {
                     initial = fn[0].toUpperCase();
                   } else if (ln.isNotEmpty)
+                    // ignore: curly_braces_in_flow_control_structures
                     initial = ln[0].toUpperCase();
                   teamMembers.add({
                     'initial': initial,

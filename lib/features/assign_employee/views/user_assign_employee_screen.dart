@@ -6,7 +6,6 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/features/assign_employee/controller/user_schedule_controller.dart';
 import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_model.dart';
-import 'package:jesusvlsco/features/assign_employee/views/user_add_unavailability_screen.dart';
 import 'package:jesusvlsco/features/assign_employee/widgets/projects_selection_dialog.dart';
 
 class AssignEmployeeScreen extends StatelessWidget {
@@ -41,7 +40,7 @@ class AssignEmployeeScreen extends StatelessWidget {
             SizedBox(height: Sizer.hp(16)),
             _buildProjectSelectionSection(),
             SizedBox(height: Sizer.hp(16)),
-            _buildFilterView(context),
+            // _buildFilterView(context),
             const SizedBox(height: 24),
             _buildEmployeeAvailabilityHeader(),
             SizedBox(height: Sizer.hp(16)),
@@ -59,7 +58,7 @@ class AssignEmployeeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              controller.selectedProject.value?.title ?? "Shift Checker",
+              controller.selectedProject.value?.title ?? "Shift Checking",
               style: AppTextStyle.regular().copyWith(
                 fontSize: Sizer.wp(18),
                 color: AppColors.primary,
@@ -98,7 +97,7 @@ class AssignEmployeeScreen extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Projects *',
+                'Assigned Projects *',
                 style: AppTextStyle.regular().copyWith(
                   fontSize: Sizer.wp(14),
                   color: AppColors.primary,
@@ -185,104 +184,104 @@ class AssignEmployeeScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildFilterView(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildDateRange(),
-        SizedBox(width: Sizer.wp(20)),
-        _buildAvailability(),
-      ],
-    );
-  }
+  // Widget _buildFilterView(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //     children: [
+  //       _buildDateRange(),
+  //       SizedBox(width: Sizer.wp(20)),
+  //       _buildAvailability(),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildAvailability() {
-    return Expanded(
-      child: OutlinedButton(
-        onPressed: () {
-          Get.to(AddUnavailabilityScreen());
-        },
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          side: BorderSide(
-            width: 1,
-            strokeAlign: BorderSide.strokeAlignOutside,
-            color: const Color(0xFF4E53B1),
-          ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        ),
-        child: Center(
-          child: Text(
-            'Availability',
-            style: AppTextStyle.regular().copyWith(
-              fontSize: Sizer.wp(12),
-              color: AppColors.primary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildAvailability() {
+  //   return Expanded(
+  //     child: OutlinedButton(
+  //       onPressed: () {
+  //         Get.to(AddUnavailabilityScreen());
+  //       },
+  //       style: OutlinedButton.styleFrom(
+  //         padding: EdgeInsets.symmetric(vertical: 15),
+  //         side: BorderSide(
+  //           width: 1,
+  //           strokeAlign: BorderSide.strokeAlignOutside,
+  //           color: const Color(0xFF4E53B1),
+  //         ),
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+  //       ),
+  //       child: Center(
+  //         child: Text(
+  //           'Availability',
+  //           style: AppTextStyle.regular().copyWith(
+  //             fontSize: Sizer.wp(12),
+  //             color: AppColors.primary,
+  //             fontWeight: FontWeight.w700,
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildDateRange() {
-    return Expanded(
-      child: Obx(() {
-        return InkWell(
-          onTap: controller.onDateRangePressed,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: Sizer.wp(12),
-              vertical: 15,
-            ),
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 1,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                  color: controller.hasDateRange
-                      ? AppColors.primary
-                      : const Color(0xFF4E53B1),
-                ),
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    controller.dateRangeText,
-                    style: AppTextStyle.regular().copyWith(
-                      fontSize: Sizer.wp(11),
-                      color: controller.hasDateRange
-                          ? AppColors.primary
-                          : AppColors.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (controller.hasDateRange) ...[
-                  SizedBox(width: Sizer.wp(4)),
-                  GestureDetector(
-                    onTap: controller.clearDateRange,
-                    child: Icon(
-                      Icons.clear,
-                      size: Sizer.wp(16),
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        );
-      }),
-    );
-  }
+  // Widget _buildDateRange() {
+  //   return Expanded(
+  //     child: Obx(() {
+  //       return InkWell(
+  //         onTap: controller.onDateRangePressed,
+  //         child: Container(
+  //           padding: EdgeInsets.symmetric(
+  //             horizontal: Sizer.wp(12),
+  //             vertical: 15,
+  //           ),
+  //           decoration: ShapeDecoration(
+  //             shape: RoundedRectangleBorder(
+  //               side: BorderSide(
+  //                 width: 1,
+  //                 strokeAlign: BorderSide.strokeAlignOutside,
+  //                 color: controller.hasDateRange
+  //                     ? AppColors.primary
+  //                     : const Color(0xFF4E53B1),
+  //               ),
+  //               borderRadius: BorderRadius.circular(6),
+  //             ),
+  //           ),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               Expanded(
+  //                 child: Text(
+  //                   controller.dateRangeText,
+  //                   style: AppTextStyle.regular().copyWith(
+  //                     fontSize: Sizer.wp(11),
+  //                     color: controller.hasDateRange
+  //                         ? AppColors.primary
+  //                         : AppColors.primary,
+  //                     fontWeight: FontWeight.w700,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //               ),
+  //               if (controller.hasDateRange) ...[
+  //                 SizedBox(width: Sizer.wp(4)),
+  //                 GestureDetector(
+  //                   onTap: controller.clearDateRange,
+  //                   child: Icon(
+  //                     Icons.clear,
+  //                     size: Sizer.wp(16),
+  //                     color: AppColors.primary,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     }),
+  //   );
+  // }
 
   Widget _buildEmployeeAvailabilityHeader() {
     return Obx(() {

@@ -1,58 +1,54 @@
-/// Project model for handling project data from API
-/// Based on the API response structure from all_project.json
+import 'package:jesusvlsco/features/assign_employee/models/assign_user_response_model.dart';
+
 class ProjectModel {
   final String id;
   final String title;
   final String projectLocation;
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt; // ← Now nullable
+  final String? updatedAt; // ← Now nullable
   final String teamId;
-  final String managerId;
-  final TeamModel team;
-  final ManagerModel manager;
-  final List<ProjectUserModel> projectUsers;
-  final List<TaskModel> tasks;
+  final String? managerId; // ← Now nullable
+  final TeamModel? team; // ← Now nullable
+  final ManagerModel? manager; // ← Now nullable
+  final List<ProjectUserModel>? projectUsers; // ← Now nullable
+  final List<TaskModel>? tasks; // ← Now nullable
 
   ProjectModel({
     required this.id,
     required this.title,
     required this.projectLocation,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     required this.teamId,
-    required this.managerId,
-    required this.team,
-    required this.manager,
-    required this.projectUsers,
-    required this.tasks,
+    this.managerId,
+    this.team,
+    this.manager,
+    this.projectUsers,
+    this.tasks,
   });
 
-  /// Create ProjectModel from JSON
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
     return ProjectModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       projectLocation: json['projectLocation'] ?? '',
-      createdAt: json['createdAt'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
       teamId: json['teamId'] ?? '',
-      managerId: json['managerId'] ?? '',
-      team: TeamModel.fromJson(json['team'] ?? {}),
-      manager: ManagerModel.fromJson(json['manager'] ?? {}),
-      projectUsers:
-          (json['projectUsers'] as List<dynamic>?)
-              ?.map((user) => ProjectUserModel.fromJson(user))
-              .toList() ??
-          [],
-      tasks:
-          (json['tasks'] as List<dynamic>?)
-              ?.map((task) => TaskModel.fromJson(task))
-              .toList() ??
-          [],
+      managerId: json['managerId'],
+      team: json['team'] != null ? TeamModel.fromJson(json['team']) : null,
+      manager: json['manager'] != null
+          ? ManagerModel.fromJson(json['manager'])
+          : null,
+      projectUsers: (json['projectUsers'] as List<dynamic>?)
+          ?.map((user) => ProjectUserModel.fromJson(user))
+          .toList(),
+      tasks: (json['tasks'] as List<dynamic>?)
+          ?.map((task) => TaskModel.fromJson(task))
+          .toList(),
     );
   }
 
-  /// Convert ProjectModel to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -62,14 +58,13 @@ class ProjectModel {
       'updatedAt': updatedAt,
       'teamId': teamId,
       'managerId': managerId,
-      'team': team.toJson(),
-      'manager': manager.toJson(),
-      'projectUsers': projectUsers.map((user) => user.toJson()).toList(),
-      'tasks': tasks.map((task) => task.toJson()).toList(),
+      'team': team?.toJson(),
+      'manager': manager?.toJson(),
+      'projectUsers': projectUsers?.map((user) => user.toJson()).toList(),
+      'tasks': tasks?.map((task) => task.toJson()).toList(),
     };
   }
 
-  /// Create a copy of ProjectModel with updated fields
   ProjectModel copyWith({
     String? id,
     String? title,
@@ -355,5 +350,109 @@ class MetaModel {
   /// Convert MetaModel to JSON
   Map<String, dynamic> toJson() {
     return {'total': total, 'page': page, 'limit': limit, 'pages': pages};
+  }
+}
+
+class UserShiftScheduleResponse {
+  final bool success;
+  final String message;
+  final UserShiftScheduleData data;
+
+  UserShiftScheduleResponse({
+    required this.success,
+    required this.message,
+    required this.data,
+  });
+
+  factory UserShiftScheduleResponse.fromJson(Map<String, dynamic> json) {
+    return UserShiftScheduleResponse(
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      data: UserShiftScheduleData.fromJson(json['data'] ?? {}),
+    );
+  }
+}
+
+class UserShiftScheduleData {
+  final UserData user;
+  final List<ProjectWithShifts> projectWithShifts;
+
+  UserShiftScheduleData({required this.user, required this.projectWithShifts});
+
+  factory UserShiftScheduleData.fromJson(Map<String, dynamic> json) {
+    return UserShiftScheduleData(
+      user: UserData.fromJson(json['user'] ?? {}),
+      projectWithShifts:
+          (json['projectWithShifts'] as List<dynamic>?)
+              ?.map((item) => ProjectWithShifts.fromJson(item))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class UserData {
+  final String id;
+  final String email;
+  final bool isAvailable;
+  final String firstName;
+  final String lastName;
+  final String profileUrl;
+  final List<String> offDay;
+
+  UserData({
+    required this.id,
+    required this.email,
+    required this.isAvailable,
+    required this.firstName,
+    required this.lastName,
+    required this.profileUrl,
+    required this.offDay,
+  });
+
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
+      id: json['id'] ?? '',
+      email: json['email'] ?? '',
+      isAvailable: json['isAvailable'] ?? false,
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profileUrl: json['profileUrl'] ?? '',
+      offDay: (json['offDay'] as List<dynamic>?)?.cast<String>() ?? [],
+    );
+  }
+}
+
+class ProjectWithShifts {
+  final ProjectData project;
+  final List<ShiftModel> shifts;
+
+  ProjectWithShifts({required this.project, required this.shifts});
+
+  factory ProjectWithShifts.fromJson(Map<String, dynamic> json) {
+    return ProjectWithShifts(
+      project: ProjectData.fromJson(json['project'] ?? {}),
+      shifts:
+          (json['shifts'] as List<dynamic>?)
+              ?.map((item) => ShiftModel.fromJson(item))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class ProjectData {
+  final String id;
+  final String title;
+  final String location;
+
+  ProjectData({required this.id, required this.title, required this.location});
+
+  factory ProjectData.fromJson(Map<String, dynamic> json) {
+    return ProjectData(
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
+      location: json['location'] ?? '',
+    );
   }
 }

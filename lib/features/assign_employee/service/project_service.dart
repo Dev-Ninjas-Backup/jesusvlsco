@@ -1,4 +1,3 @@
-// services/project_service.dart
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +14,8 @@ class ProjectService {
 
   Future<Map<String, String>> get _headers async {
     final token = await splashController.getAuthToken();
-    if (token == null) {
-      throw Exception("Auth token is null");
+    if (token == null || token.isEmpty) {
+      throw Exception("Auth token is null or empty");
     }
     return {
       'accept': '*/*',
@@ -25,53 +24,36 @@ class ProjectService {
     };
   }
 
-  Future<ProjectResponse> getAllProjects({int page = 1, int limit = 5}) async {
+  /// New API: Returns only the projects assigned to the current logged-in user
+  Future<UserShiftScheduleResponse> getUserAssignedProjects() async {
     try {
-      _logger.i('Fetching projects - Page: $page, Limit: $limit');
+      _logger.i('Fetching user assigned projects from shift-schedule API');
 
-      final uri = Uri.parse('$_baseUrl/project/all').replace(
-        queryParameters: {'page': page.toString(), 'limit': limit.toString()},
-      );
+      final uri = Uri.parse('$_baseUrl/dashboard/shift-schedule');
 
       _logger.i('Request URL: $uri');
       final headers = await _headers;
       final response = await http.get(uri, headers: headers);
 
-      _logger.i('Projects API Response: ${response.statusCode}');
+      _logger.i('Shift Schedule API Response: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
-        final projectResponse = ProjectResponse.fromJson(jsonData);
+        final scheduleResponse = UserShiftScheduleResponse.fromJson(jsonData);
+
         _logger.i(
-          'Projects fetched successfully: ${projectResponse.data.length} projects',
+          'User projects fetched: ${scheduleResponse.data.projectWithShifts.length} projects',
         );
-        return projectResponse;
+        return scheduleResponse;
       } else {
         _logger.e('API Error: ${response.statusCode} - ${response.body}');
-        throw HttpException(
-          'Failed to fetch projects: ${response.statusCode}',
-          response.statusCode,
+        throw Exception(
+          'Failed to fetch shift schedule: ${response.statusCode}',
         );
       }
-    } on FormatException catch (e) {
-      _logger.e('JSON parsing error: $e');
-      throw Exception('Failed to parse response data');
-    } on HttpException catch (e) {
-      _logger.e('HTTP error: ${e.message}');
-      rethrow;
     } catch (e) {
-      _logger.e('Unexpected error in getAllProjects: $e');
-      throw Exception('Failed to fetch projects: $e');
+      _logger.e('Error in getUserAssignedProjects: $e');
+      rethrow;
     }
   }
-}
-
-class HttpException implements Exception {
-  final String message;
-  final int statusCode;
-
-  HttpException(this.message, this.statusCode);
-
-  @override
-  String toString() => 'HttpException: $message';
 }
