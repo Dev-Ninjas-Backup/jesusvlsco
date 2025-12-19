@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
-import 'package:jesusvlsco/features/dashboard/admin_dashboard/widgets/admin_drawer.dart';
 
 PreferredSizeWidget Custom_appbar({required String title}) {
   return AppBar(
@@ -31,17 +30,5 @@ PreferredSizeWidget Custom_appbar({required String title}) {
       ),
     ),
     centerTitle: true,
-    actions: [
-      IconButton(
-        icon: Icon(
-          CupertinoIcons.bars,
-          color: AppColors.backgroundDark,
-          size: Sizer.wp(24),
-        ),
-        onPressed: () {
-          Get.to(AdminDrawer());
-        },
-      ),
-    ],
   );
 }

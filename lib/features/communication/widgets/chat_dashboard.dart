@@ -10,9 +10,6 @@ import 'package:jesusvlsco/features/communication/model/private_chat_models.dart
     as chat_models;
 import 'package:jesusvlsco/features/communication/screens/admin_chat_screen.dart';
 
-/// Enhanced Chat Dashboard
-/// Displays real private chat conversations using WebSocket data
-/// Provides interface for conversation selection and management
 class ChatDashboard extends StatelessWidget {
   ChatDashboard({super.key});
 
@@ -70,8 +67,17 @@ class ChatDashboard extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () => _chatController.refreshChat(),
         child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
           itemCount: conversations.length,
           itemBuilder: (context, index) {
+            if (index < 0 || index >= conversations.length) {
+              if (kDebugMode) {
+                print(
+                  '⚠️ Invalid index $index ignored (list length: ${conversations.length})',
+                );
+              }
+              return const SizedBox.shrink();
+            }
             final conversation = conversations[index];
             if (kDebugMode) {
               print(
@@ -289,17 +295,25 @@ class ChatDashboard extends StatelessWidget {
   }
 
   /// Get initials from name for avatar placeholder
+  /// Get initials from name for avatar placeholder
   String _getInitials(String name) {
-    final names = name.trim().split(' ');
+    final cleanedName = name.trim();
+    if (cleanedName.isEmpty) {
+      return 'U';
+    }
+
+    // Split on one or more whitespace to avoid empty parts
+    final names = cleanedName.split(RegExp(r'\s+'));
+
     if (names.length >= 2) {
       return '${names[0][0]}${names[1][0]}'.toUpperCase();
     } else if (names.isNotEmpty) {
       return names[0][0].toUpperCase();
     }
+
     return 'U';
   }
 
-  /// Format timestamp for display
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);

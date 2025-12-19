@@ -64,28 +64,6 @@ class _UserCommunicationScreenState extends State<UserCommunicationScreen> {
                       ),
                     ),
                     SizedBox(width: Sizer.wp(8)),
-
-                    // InkWell(
-                    //   onTap: () {
-                    //     Get.to(ChatSetting());
-                    //   },
-                    //   child: Container(
-                    //     height: Sizer.hp(34),
-                    //     width: Sizer.wp(34),
-                    //     decoration: BoxDecoration(
-                    //       color: AppColors.primary,
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(Sizer.wp(8)),
-                    //       child: SvgPicture.asset(
-                    //         "assets/icons/settings.svg",
-                    //         height: Sizer.hp(18),
-                    //         width: Sizer.wp(18),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ],
