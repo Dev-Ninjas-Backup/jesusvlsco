@@ -11,7 +11,6 @@ import 'package:jesusvlsco/core/utils/constants/colors.dart';
 import 'package:jesusvlsco/core/utils/constants/sizer.dart';
 import 'package:jesusvlsco/core/common/widgets/custom_appbar.dart';
 import 'package:jesusvlsco/features/communication/controllers/private_chat_controller.dart';
-import 'package:jesusvlsco/features/user/screen/add_member_screen.dart';
 
 class Admin_chatscreen extends StatefulWidget {
   const Admin_chatscreen({super.key});
@@ -114,16 +113,32 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
   }
 
   /// Generate user initials from display name
-  String _getUserInitials(String displayName) {
-    if (displayName.isEmpty) return 'U';
+  /// Generate user initials from display name – 100% crash-proof
+  String _getUserInitials(String? displayName) {
+    final name = (displayName ?? '').trim();
 
-    final nameParts = displayName.trim().split(' ');
-    if (nameParts.length == 1) {
-      return nameParts[0].substring(0, 1).toUpperCase();
-    } else {
-      return '${nameParts[0].substring(0, 1)}${nameParts[1].substring(0, 1)}'
-          .toUpperCase();
+    if (name.isEmpty) {
+      return 'U';
     }
+
+    // Split on whitespace and filter out empty parts
+    final parts = name
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .toList();
+
+    if (parts.isEmpty) {
+      return 'U';
+    }
+
+    if (parts.length >= 2) {
+      final first = parts[0][0].toUpperCase();
+      final second = parts[1][0].toUpperCase();
+      return '$first$second';
+    }
+
+    // Single name or single valid part
+    return parts[0][0].toUpperCase();
   }
 
   /// Create avatar widget with initials fallback
@@ -448,8 +463,12 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
           final selectedConversation =
               _chatController.selectedConversation.value;
           final participantName =
-              selectedConversation?.participant.profile.displayName ??
-              'Project ABC';
+              selectedConversation?.participant.profile.displayName
+                      .trim()
+                      .isNotEmpty ==
+                  true
+              ? selectedConversation!.participant.profile.displayName
+              : 'User';
           final participantAvatar =
               selectedConversation?.participant.profile.profileUrl;
 
@@ -515,16 +534,6 @@ class Admin_chatscreenState extends State<Admin_chatscreen> {
                   ],
                 ),
               ),
-              // // Action buttons
-              // SvgPicture.asset('assets/icons/Call.svg', width: 24, height: 24),
-              // const SizedBox(width: 8),
-              // SvgPicture.asset(
-              //   'assets/icons/Camera.svg',
-              //   width: 24,
-              //   height: 24,
-              // ),
-              // const SizedBox(width: 8),
-              const MoreVertMenu(),
             ],
           );
         }),
@@ -548,128 +557,4 @@ class ChatMessage {
     this.avatar,
     required this.displayName,
   });
-}
-
-class MoreVertMenu extends StatefulWidget {
-  const MoreVertMenu({super.key});
-
-  @override
-  State<MoreVertMenu> createState() => _MoreVertMenuState();
-}
-
-class _MoreVertMenuState extends State<MoreVertMenu> {
-  void _showPopupMenu(GlobalKey buttonKey) async {
-    final RenderBox button =
-        buttonKey.currentContext!.findRenderObject() as RenderBox;
-    final RenderBox overlay =
-        Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
-
-    // Get position of the button (icon)
-    final Offset buttonTopLeft = button.localToGlobal(
-      Offset.zero,
-      ancestor: overlay,
-    );
-    final Size buttonSize = button.size;
-
-    // Define where the menu should appear: near the top-right
-    const double menuWidth = 120;
-    const double margin = 8; // margin from right edge
-
-    // Calculate top and bottom of the menu
-    final double menuTop = buttonTopLeft.dy + buttonSize.height;
-    final double menuBottom = menuTop + 200; // Estimate height or use actual
-    final double rightEdge = overlay.size.width - margin;
-
-    // Top-left and bottom-right of the menu
-    final Offset topLeft = Offset(rightEdge - menuWidth, buttonTopLeft.dy);
-    final Offset bottomRight = Offset(rightEdge, menuBottom);
-
-    // Create a valid rectangle
-    final Rect rect = Rect.fromPoints(topLeft, bottomRight);
-
-    final RelativeRect position = RelativeRect.fromRect(
-      rect,
-      Offset.zero & overlay.size,
-    );
-
-    final selected = await showMenu(
-      context: context,
-      position: position,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), // 🟩 Rounded corners
-      ),
-      color: Colors.white,
-      elevation: 6,
-      items: [
-        PopupMenuItem(
-          value: 'Chat information',
-          child: GestureDetector(
-            onTap: () => Get.snackbar('Info', 'Chat info feature coming soon!'),
-            child: Row(
-              children: [
-                Icon(Icons.error_outline, color: AppColors.textBlackShade),
-                const SizedBox(width: 15),
-                Text(
-                  'Chat information',
-                  style: TextStyle(color: AppColors.textBlackShade),
-                ),
-              ],
-            ),
-          ),
-        ),
-        PopupMenuItem(
-          value: 'Add member',
-          child: GestureDetector(
-            onTap: () => Get.to(AddMemberScreen()),
-            child: Row(
-              children: [
-                Icon(Icons.add, color: AppColors.textBlackShade),
-                const SizedBox(width: 15),
-                Text(
-                  'Add member',
-                  style: TextStyle(color: AppColors.textBlackShade),
-                ),
-              ],
-            ),
-          ),
-        ),
-        PopupMenuItem(
-          value: 'Delete chat',
-          child: Row(
-            children: [
-              Icon(Icons.delete_forever, color: AppColors.textBlackShade),
-              const SizedBox(width: 15),
-              Text(
-                'Delete chat',
-                style: TextStyle(color: AppColors.textBlackShade),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    if (selected != null) {
-      debugPrint('Selected: $selected');
-    }
-  }
-
-  final GlobalKey _buttonKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      key: _buttonKey,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: GestureDetector(
-        child: SvgPicture.asset(
-          'assets/icons/more_vert.svg',
-          width: 24,
-          height: 24,
-          color: Colors.black,
-        ),
-        onTap: () => _showPopupMenu(_buttonKey),
-      ),
-    );
-  }
 }
