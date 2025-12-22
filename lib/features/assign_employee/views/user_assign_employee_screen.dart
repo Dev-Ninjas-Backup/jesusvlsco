@@ -649,7 +649,7 @@ class AssignEmployeeScreen extends StatelessWidget {
           ),
           SizedBox(height: Sizer.wp(3)),
           Text(
-            shift.formattedTime,
+            shift.formattedViewerTime,
             style: AppTextStyle.regular().copyWith(
               fontSize: Sizer.wp(12),
               color: statusColor.withValues(alpha: 0.8),
