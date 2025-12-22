@@ -1,15 +1,30 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jesusvlsco/app.dart';
 import 'package:jesusvlsco/features/announcements/admin_announcement/controllers/notification_controller.dart';
 import 'package:jesusvlsco/features/user_time_clock/controller/user_time_clock_controller.dart';
 import 'package:jesusvlsco/firebase_options.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'core/services/location_controller.dart';
 import 'core/services/request_handaler.dart';
 import 'core/services/storage_service.dart';
+
+Future<void> _initializeTimeZones() async {
+  tz.initializeTimeZones();
+
+  try {
+    final String currentTimeZone =
+        (await FlutterTimezone.getLocalTimezone()) as String;
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  } catch (e) {
+    tz.setLocalLocation(tz.UTC);
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +42,8 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
+
+  await _initializeTimeZones();
 
   _configureEasyLoading();
 

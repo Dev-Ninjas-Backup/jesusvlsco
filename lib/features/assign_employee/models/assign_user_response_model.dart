@@ -1,5 +1,7 @@
 // models/assigned_users_model.dart
 
+import 'package:timezone/timezone.dart' as tz;
+
 class AssignedUsersResponse {
   final bool success;
   final String message;
@@ -158,12 +160,30 @@ class ShiftModel {
     );
   }
 
-  String get formattedTime {
-    final startHour = startTime.hour.toString().padLeft(2, '0');
-    final startMinute = startTime.minute.toString().padLeft(2, '0');
-    final endHour = endTime.hour.toString().padLeft(2, '0');
-    final endMinute = endTime.minute.toString().padLeft(2, '0');
-    return '$startHour:$startMinute - $endHour:$endMinute';
+  String get formattedViewerTime {
+    // CHANGE THIS to your project's actual timezone (e.g., where shifts are created)
+    const String projectTimeZone =
+        'UTC'; // or 'America/New_York', 'Asia/Dhaka', etc.
+
+    final location = tz.getLocation(projectTimeZone);
+
+    // Convert project-local naive DateTime to TZ-aware
+    final tz.TZDateTime startInProjectTz = tz.TZDateTime.from(
+      startTime,
+      location,
+    );
+    final tz.TZDateTime endInProjectTz = tz.TZDateTime.from(endTime, location);
+
+    // Convert to user's local timezone
+    final tz.TZDateTime startLocal = startInProjectTz.toLocal();
+    final tz.TZDateTime endLocal = endInProjectTz.toLocal();
+
+    final String startStr =
+        '${startLocal.hour.toString().padLeft(2, '0')}:${startLocal.minute.toString().padLeft(2, '0')}';
+    final String endStr =
+        '${endLocal.hour.toString().padLeft(2, '0')}:${endLocal.minute.toString().padLeft(2, '0')}';
+
+    return '$startStr - $endStr';
   }
 
   String get formattedDate {
